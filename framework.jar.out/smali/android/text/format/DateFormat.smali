@@ -1174,12 +1174,8 @@
 
     move-result v7
 
-    if-eqz v7, :cond_lewa_0
+    if-nez v7, :cond_lewa_0
 
-    :goto_0
-    return v0
-
-    :cond_lewa_0
     invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
 
     move-result-object v7
@@ -1212,22 +1208,16 @@
 
     monitor-exit v7
 
-    goto :goto_0
+    .end local v1           #locale:Ljava/util/Locale;
+    :cond_lewa_0
+    :goto_0
+    return v0
 
-    :catchall_0
-    move-exception v6
-
+    .restart local v1       #locale:Ljava/util/Locale;
+    :cond_0
     monitor-exit v7
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
-
-    throw v6
-
-    :cond_0
-    :try_start_1
-    monitor-exit v7
-    :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
     invoke-static {v0, v1}, Ljava/text/DateFormat;->getTimeInstance(ILjava/util/Locale;)Ljava/text/DateFormat;
 
@@ -1265,7 +1255,7 @@
 
     monitor-enter v8
 
-    :try_start_2
+    :try_start_1
     sput-object v1, Landroid/text/format/DateFormat;->sIs24HourLocale:Ljava/util/Locale;
 
     const-string v7, "12"
@@ -1282,8 +1272,8 @@
     sput-boolean v7, Landroid/text/format/DateFormat;->sIs24Hour:Z
 
     monitor-exit v8
-    :try_end_2
-    .catchall {:try_start_2 .. :try_end_2} :catchall_1
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
 
     .end local v1           #locale:Ljava/util/Locale;
     .end local v2           #natural:Ljava/text/DateFormat;
@@ -1304,6 +1294,16 @@
 
     .end local v0           #b24:Z
     .restart local v1       #locale:Ljava/util/Locale;
+    :catchall_0
+    move-exception v6
+
+    :try_start_2
+    monitor-exit v7
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+    throw v6
+
     .restart local v2       #natural:Ljava/text/DateFormat;
     .restart local v3       #pattern:Ljava/lang/String;
     .restart local v4       #sdf:Ljava/text/SimpleDateFormat;
