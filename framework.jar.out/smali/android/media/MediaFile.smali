@@ -848,7 +848,6 @@
     .end annotation
 
     .prologue
-    .line 354
     const-string v0, "LWT"
 
     const/16 v1, 0x384
@@ -857,7 +856,6 @@
 
     invoke-static {v0, v1, v2}, Landroid/media/MediaFile;->addFileType(Ljava/lang/String;ILjava/lang/String;)V
 
-    .line 355
     return-void
 .end method
 

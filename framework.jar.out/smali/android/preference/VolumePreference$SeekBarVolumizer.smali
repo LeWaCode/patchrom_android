@@ -117,7 +117,7 @@
 
     iput-object p3, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mSeekBar:Landroid/widget/SeekBar;
 
-    invoke-virtual {p0, p3, p5}, Landroid/preference/VolumePreference$SeekBarVolumizer;->initSeekBar(Landroid/widget/SeekBar;Landroid/net/Uri;)V
+    invoke-direct {p0, p3, p5}, Landroid/preference/VolumePreference$SeekBarVolumizer;->initSeekBar(Landroid/widget/SeekBar;Landroid/net/Uri;)V
 
     return-void
 .end method
@@ -152,7 +152,7 @@
     return v0
 .end method
 
-.method public initSeekBar(Landroid/widget/SeekBar;Landroid/net/Uri;)V
+.method private initSeekBar(Landroid/widget/SeekBar;Landroid/net/Uri;)V
     .locals 4
     .parameter "seekBar"
     .parameter "defaultUri"
@@ -291,87 +291,6 @@
     return-void
 .end method
 
-.method public initSeekBarAfterDisplay(Landroid/widget/SeekBar;Landroid/net/Uri;)V
-    .locals 4
-    .parameter "seekBar"
-    .parameter "defaultUri"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v0
-
-    sget-object v1, Landroid/provider/Settings$System;->VOLUME_SETTINGS:[Ljava/lang/String;
-
-    iget v2, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mStreamType:I
-
-    aget-object v1, v1, v2
-
-    invoke-static {v1}, Landroid/provider/Settings$System;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
-
-    move-result-object v1
-
-    const/4 v2, 0x0
-
-    iget-object v3, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mVolumeObserver:Landroid/database/ContentObserver;
-
-    invoke-virtual {v0, v1, v2, v3}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;)V
-
-    if-nez p2, :cond_0
-
-    iget v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mStreamType:I
-
-    const/4 v1, 0x2
-
-    if-ne v0, v1, :cond_2
-
-    sget-object p2, Landroid/provider/Settings$System;->DEFAULT_RINGTONE_URI:Landroid/net/Uri;
-
-    :cond_0
-    :goto_0
-    iget-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mContext:Landroid/content/Context;
-
-    invoke-static {v0, p2}, Landroid/media/RingtoneManager;->getRingtone(Landroid/content/Context;Landroid/net/Uri;)Landroid/media/Ringtone;
-
-    move-result-object v0
-
-    iput-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mRingtone:Landroid/media/Ringtone;
-
-    iget-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mRingtone:Landroid/media/Ringtone;
-
-    if-eqz v0, :cond_1
-
-    iget-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mRingtone:Landroid/media/Ringtone;
-
-    iget v1, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mStreamType:I
-
-    invoke-virtual {v0, v1}, Landroid/media/Ringtone;->setStreamType(I)V
-
-    :cond_1
-    return-void
-
-    :cond_2
-    iget v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mStreamType:I
-
-    const/4 v1, 0x5
-
-    if-ne v0, v1, :cond_3
-
-    sget-object p2, Landroid/provider/Settings$System;->DEFAULT_NOTIFICATION_URI:Landroid/net/Uri;
-
-    goto :goto_0
-
-    :cond_3
-    sget-object p2, Landroid/provider/Settings$System;->DEFAULT_ALARM_ALERT_URI:Landroid/net/Uri;
-
-    goto :goto_0
-.end method
-
 .method public getSeekBar()Landroid/widget/SeekBar;
     .locals 1
 
@@ -379,44 +298,6 @@
     iget-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mSeekBar:Landroid/widget/SeekBar;
 
     return-object v0
-.end method
-
-.method public initSeekBarBeforeDisplay(Landroid/widget/SeekBar;Landroid/net/Uri;)V
-    .locals 2
-    .parameter "seekBar"
-    .parameter "defaultUri"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mAudioManager:Landroid/media/AudioManager;
-
-    iget v1, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mStreamType:I
-
-    invoke-virtual {v0, v1}, Landroid/media/AudioManager;->getStreamMaxVolume(I)I
-
-    move-result v0
-
-    invoke-virtual {p1, v0}, Landroid/widget/SeekBar;->setMax(I)V
-
-    iget-object v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mAudioManager:Landroid/media/AudioManager;
-
-    iget v1, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mStreamType:I
-
-    invoke-virtual {v0, v1}, Landroid/media/AudioManager;->getStreamVolume(I)I
-
-    move-result v0
-
-    iput v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mOriginalStreamVolume:I
-
-    iget v0, p0, Landroid/preference/VolumePreference$SeekBarVolumizer;->mOriginalStreamVolume:I
-
-    invoke-virtual {p1, v0}, Landroid/widget/SeekBar;->setProgress(I)V
-
-    invoke-virtual {p1, p0}, Landroid/widget/SeekBar;->setOnSeekBarChangeListener(Landroid/widget/SeekBar$OnSeekBarChangeListener;)V
-
-    return-void
 .end method
 
 .method public isSamplePlaying()Z

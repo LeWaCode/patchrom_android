@@ -10,41 +10,11 @@
 
 .field private static final DBG:Z = false
 
-.field public static final ERROR_ICC_PROVIDER_ADN_LIST_NOT_EXIST:I = -0xb
-
-.field public static final ERROR_ICC_PROVIDER_ANR_TOO_LONG:I = -0x6
-
-.field public static final ERROR_ICC_PROVIDER_EMAIL_FULL:I = -0xc
-
-.field public static final ERROR_ICC_PROVIDER_EMAIL_TOOLONG:I = -0xd
-
-.field public static final ERROR_ICC_PROVIDER_GENERIC_FAILURE:I = -0xa
-
-.field public static final ERROR_ICC_PROVIDER_NOT_READY:I = -0x4
-
-.field public static final ERROR_ICC_PROVIDER_NO_ERROR:I = 0x1
-
-.field public static final ERROR_ICC_PROVIDER_NUMBER_TOO_LONG:I = -0x1
-
-.field public static final ERROR_ICC_PROVIDER_PASSWORD_ERROR:I = -0x5
-
-.field public static final ERROR_ICC_PROVIDER_STORAGE_FULL:I = -0x3
-
-.field public static final ERROR_ICC_PROVIDER_TEXT_TOO_LONG:I = -0x2
-
-.field public static final ERROR_ICC_PROVIDER_UNKNOWN:I = 0x0
-
 .field private static final FDN:I = 0x2
 
 .field private static final SDN:I = 0x3
 
 .field private static final STR_EMAILS:Ljava/lang/String; = "emails"
-
-.field public static final STR_INDEX:Ljava/lang/String; = "index"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field private static final STR_NUMBER:Ljava/lang/String; = "number"
 

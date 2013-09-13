@@ -11,7 +11,8 @@
     value = {
         Landroid/widget/AppSecurityPermissions$1;,
         Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;,
-        Landroid/widget/AppSecurityPermissions$State;
+        Landroid/widget/AppSecurityPermissions$State;,
+        Landroid/widget/AppSecurityPermissions$Injector;
     }
 .end annotation
 
@@ -1982,7 +1983,11 @@
 
     move-result-object v0
 
-    const v1, 0x908004b
+    const v1, 0x1080358
+
+    invoke-static {v1}, Landroid/widget/AppSecurityPermissions$Injector;->resolveResourceId(I)I
+
+    move-result v1
 
     invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
 
@@ -1996,7 +2001,11 @@
 
     move-result-object v0
 
-    const v1, 0x9080045
+    const v1, 0x10802af
+
+    invoke-static {v1}, Landroid/widget/AppSecurityPermissions$Injector;->resolveResourceId(I)I
+
+    move-result v1
 
     invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
 
@@ -2010,7 +2019,11 @@
 
     move-result-object v0
 
-    const v1, 0x9080042
+    const v1, 0x108026b
+
+    invoke-static {v1}, Landroid/widget/AppSecurityPermissions$Injector;->resolveResourceId(I)I
+
+    move-result v1
 
     invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
 
@@ -2024,7 +2037,11 @@
 
     move-result-object v0
 
-    const v1, 0x9080043
+    const v1, 0x1080272
+
+    invoke-static {v1}, Landroid/widget/AppSecurityPermissions$Injector;->resolveResourceId(I)I
+
+    move-result v1
 
     invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
 

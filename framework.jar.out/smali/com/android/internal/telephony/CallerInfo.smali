@@ -248,6 +248,9 @@
     .parameter "context"
     .parameter "contactRef"
     .parameter "cursor"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v4, 0x1
@@ -1187,6 +1190,9 @@
 .method markAsEmergency(Landroid/content/Context;)Lcom/android/internal/telephony/CallerInfo;
     .locals 1
     .parameter "context"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const v0, 0x10402f5
@@ -1196,6 +1202,12 @@
     move-result-object v0
 
     iput-object v0, p0, Lcom/android/internal/telephony/CallerInfo;->phoneNumber:Ljava/lang/String;
+
+    const v0, 0x1080447
+
+    iput v0, p0, Lcom/android/internal/telephony/CallerInfo;->photoResource:I
+
+    invoke-static {p0}, Lcom/android/internal/telephony/CallerInfo$Injector;->setPhoneResource(Lcom/android/internal/telephony/CallerInfo;)V
 
     const/4 v0, 0x1
 

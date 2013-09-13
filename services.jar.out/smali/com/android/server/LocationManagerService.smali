@@ -4079,12 +4079,8 @@
 
     move-result v4
 
-    if-nez v4, :cond_lewa_0
+    if-eqz v4, :cond_lewa_0
 
-    :goto_lewa_0
-    return-void
-
-    :cond_lewa_0
     move-object/from16 v0, p6
 
     iget-object v4, v0, Lcom/android/server/LocationManagerService$Receiver;->mRequiredPermissions:Ljava/lang/String;
@@ -4286,7 +4282,8 @@
     :goto_2
     invoke-static {v13, v14}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 
-    goto/16 :goto_lewa_0
+    :cond_lewa_0
+    return-void
 
     .end local v3           #r:Lcom/android/server/LocationManagerService$UpdateRecord;
     .end local v13           #identity:J

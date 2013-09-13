@@ -6,10 +6,8 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Lcom/android/server/am/ActivityStack$BgRunnable;,
         Lcom/android/server/am/ActivityStack$ScheduleDestroyArgs;,
-        Lcom/android/server/am/ActivityStack$ActivityState;,
-        Lcom/android/server/am/ActivityStack$Injector;
+        Lcom/android/server/am/ActivityStack$ActivityState;
     }
 .end annotation
 
@@ -91,30 +89,6 @@
 
 
 # instance fields
-.field private bgRunnable:Ljava/lang/Runnable;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field ibs:Lcom/android/internal/statusbar/IStatusBarService;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field mBarBinder:Landroid/os/IBinder;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field public mBgRunpkg:Ljava/lang/String;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field mConfigWillChange:Z
 
 .field final mContext:Landroid/content/Context;
@@ -178,12 +152,6 @@
 .field mLastStartedActivity:Lcom/android/server/am/ActivityRecord;
 
 .field final mLaunchingActivity:Landroid/os/PowerManager$WakeLock;
-
-.field private mLockscreens:[Ljava/lang/String;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field final mMainStack:Z
 
@@ -274,28 +242,17 @@
     .parameter "service"
     .parameter "context"
     .parameter "mainStack"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     const/4 v5, 0x1
 
     const/4 v4, -0x1
 
-    const/4 v3, 0x0
-
     const/4 v2, 0x0
 
+    const/4 v3, 0x0
+
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
-
-    iput-object v2, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    new-instance v1, Landroid/os/Binder;
-
-    invoke-direct {v1}, Landroid/os/Binder;-><init>()V
-
-    iput-object v1, p0, Lcom/android/server/am/ActivityStack;->mBarBinder:Landroid/os/IBinder;
 
     new-instance v1, Ljava/util/ArrayList;
 
@@ -385,10 +342,6 @@
 
     iput-object v1, p0, Lcom/android/server/am/ActivityStack;->mHandler:Landroid/os/Handler;
 
-    const-string v1, "com.android.launcher"
-
-    iput-object v1, p0, Lcom/android/server/am/ActivityStack;->mBgRunpkg:Ljava/lang/String;
-
     iput-object p1, p0, Lcom/android/server/am/ActivityStack;->mService:Lcom/android/server/am/ActivityManagerService;
 
     iput-object p2, p0, Lcom/android/server/am/ActivityStack;->mContext:Landroid/content/Context;
@@ -404,18 +357,6 @@
     check-cast v0, Landroid/os/PowerManager;
 
     .local v0, pm:Landroid/os/PowerManager;
-    invoke-static {p0}, Lcom/android/server/am/ActivityStack$Injector;->getService(Lcom/android/server/am/ActivityStack;)Lcom/android/internal/statusbar/IStatusBarService;
-
-    move-result-object v1
-
-    iput-object v1, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    new-instance v1, Lcom/android/server/am/ActivityStack$BgRunnable;
-
-    invoke-direct {v1, p0}, Lcom/android/server/am/ActivityStack$BgRunnable;-><init>(Lcom/android/server/am/ActivityStack;)V
-
-    iput-object v1, p0, Lcom/android/server/am/ActivityStack;->bgRunnable:Ljava/lang/Runnable;
-
     const-string v1, "ActivityManager-Sleep"
 
     invoke-virtual {v0, v5, v1}, Landroid/os/PowerManager;->newWakeLock(ILjava/lang/String;)Landroid/os/PowerManager$WakeLock;
@@ -7337,240 +7278,6 @@
     goto :goto_0
 .end method
 
-.method public makeStatusbarNone(Lcom/android/server/am/ActivityRecord;)V
-    .locals 5
-    .parameter "next"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    if-eqz p1, :cond_2
-
-    iget-boolean v1, p1, Lcom/android/server/am/ActivityRecord;->isHomeActivity:Z
-
-    if-nez v1, :cond_2
-
-    iget-object v1, p0, Lcom/android/server/am/ActivityStack;->mHandler:Landroid/os/Handler;
-
-    iget-object v2, p0, Lcom/android/server/am/ActivityStack;->bgRunnable:Ljava/lang/Runnable;
-
-    invoke-virtual {v1, v2}, Landroid/os/Handler;->removeCallbacks(Ljava/lang/Runnable;)V
-
-    :try_start_0
-    iget-object v1, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    if-nez v1, :cond_0
-
-    invoke-static {p0}, Lcom/android/server/am/ActivityStack$Injector;->getService(Lcom/android/server/am/ActivityStack;)Lcom/android/internal/statusbar/IStatusBarService;
-
-    move-result-object v1
-
-    iput-object v1, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    :cond_0
-    iget-object v1, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    const/4 v2, 0x0
-
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mBarBinder:Landroid/os/IBinder;
-
-    iget-object v4, p1, Lcom/android/server/am/ActivityRecord;->packageName:Ljava/lang/String;
-
-    invoke-interface {v1, v2, v3, v4}, Lcom/android/internal/statusbar/IStatusBarService;->disable(ILandroid/os/IBinder;Ljava/lang/String;)V
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    :cond_1
-    :goto_0
-    return-void
-
-    :catch_0
-    move-exception v0
-
-    .local v0, ex:Ljava/lang/Exception;
-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
-
-    goto :goto_0
-
-    .end local v0           #ex:Ljava/lang/Exception;
-    :cond_2
-    if-eqz p1, :cond_1
-
-    iget-boolean v1, p1, Lcom/android/server/am/ActivityRecord;->isHomeActivity:Z
-
-    if-eqz v1, :cond_1
-
-    iget-object v1, p0, Lcom/android/server/am/ActivityStack;->mHandler:Landroid/os/Handler;
-
-    iget-object v2, p0, Lcom/android/server/am/ActivityStack;->bgRunnable:Ljava/lang/Runnable;
-
-    invoke-virtual {v1, v2}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
-
-    goto :goto_0
-.end method
-
-.method public makeStautsbarTrans(Lcom/android/server/am/ActivityRecord;)V
-    .locals 7
-    .parameter "prev"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-boolean v3, p0, Lcom/android/server/am/ActivityStack;->mMainStack:Z
-
-    if-eqz v3, :cond_1
-
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mHistory:Ljava/util/ArrayList;
-
-    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
-
-    move-result v3
-
-    add-int/lit8 v2, v3, -0x1
-
-    .local v2, pos:I
-    if-ltz v2, :cond_2
-
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mHistory:Ljava/util/ArrayList;
-
-    invoke-virtual {v3, v2}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
-
-    move-result-object v3
-
-    check-cast v3, Lcom/android/server/am/ActivityRecord;
-
-    move-object v1, v3
-
-    .local v1, next:Lcom/android/server/am/ActivityRecord;
-    :goto_0
-    if-eqz v1, :cond_3
-
-    iget-boolean v3, v1, Lcom/android/server/am/ActivityRecord;->isHomeActivity:Z
-
-    if-eqz v3, :cond_3
-
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mHandler:Landroid/os/Handler;
-
-    iget-object v4, p0, Lcom/android/server/am/ActivityStack;->bgRunnable:Ljava/lang/Runnable;
-
-    invoke-virtual {v3, v4}, Landroid/os/Handler;->hasCallbacks(Ljava/lang/Runnable;)Z
-
-    move-result v3
-
-    if-nez v3, :cond_1
-
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mLockscreens:[Ljava/lang/String;
-
-    if-nez v3, :cond_0
-
-    :try_start_0
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v3}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
-
-    move-result-object v3
-
-    const v4, 0x90a0003
-
-    invoke-virtual {v3, v4}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
-
-    move-result-object v3
-
-    iput-object v3, p0, Lcom/android/server/am/ActivityStack;->mLockscreens:[Ljava/lang/String;
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_1
-
-    :goto_1
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mLockscreens:[Ljava/lang/String;
-
-    if-eqz v3, :cond_0
-
-    const/4 v3, 0x1
-
-    iget-object v4, p0, Lcom/android/server/am/ActivityStack;->mLockscreens:[Ljava/lang/String;
-
-    array-length v4, v4
-
-    if-ge v3, v4, :cond_0
-
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mLockscreens:[Ljava/lang/String;
-
-    invoke-static {v3}, Ljava/util/Arrays;->sort([Ljava/lang/Object;)V
-
-    :cond_0
-    iget-object v3, v1, Lcom/android/server/am/ActivityRecord;->packageName:Ljava/lang/String;
-
-    iput-object v3, p0, Lcom/android/server/am/ActivityStack;->mBgRunpkg:Ljava/lang/String;
-
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mHandler:Landroid/os/Handler;
-
-    iget-object v4, p0, Lcom/android/server/am/ActivityStack;->bgRunnable:Ljava/lang/Runnable;
-
-    invoke-virtual {v3, v4}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
-
-    .end local v1           #next:Lcom/android/server/am/ActivityRecord;
-    .end local v2           #pos:I
-    :cond_1
-    :goto_2
-    return-void
-
-    .restart local v2       #pos:I
-    :cond_2
-    const/4 v1, 0x0
-
-    goto :goto_0
-
-    .restart local v1       #next:Lcom/android/server/am/ActivityRecord;
-    :cond_3
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->mHandler:Landroid/os/Handler;
-
-    iget-object v4, p0, Lcom/android/server/am/ActivityStack;->bgRunnable:Ljava/lang/Runnable;
-
-    invoke-virtual {v3, v4}, Landroid/os/Handler;->removeCallbacks(Ljava/lang/Runnable;)V
-
-    :try_start_1
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    if-nez v3, :cond_4
-
-    invoke-static {p0}, Lcom/android/server/am/ActivityStack$Injector;->getService(Lcom/android/server/am/ActivityStack;)Lcom/android/internal/statusbar/IStatusBarService;
-
-    move-result-object v3
-
-    iput-object v3, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    :cond_4
-    iget-object v3, p0, Lcom/android/server/am/ActivityStack;->ibs:Lcom/android/internal/statusbar/IStatusBarService;
-
-    const/4 v4, 0x0
-
-    iget-object v5, p0, Lcom/android/server/am/ActivityStack;->mBarBinder:Landroid/os/IBinder;
-
-    iget-object v6, v1, Lcom/android/server/am/ActivityRecord;->packageName:Ljava/lang/String;
-
-    invoke-interface {v3, v4, v5, v6}, Lcom/android/internal/statusbar/IStatusBarService;->disable(ILandroid/os/IBinder;Ljava/lang/String;)V
-    :try_end_1
-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
-
-    goto :goto_2
-
-    :catch_0
-    move-exception v0
-
-    .local v0, ex:Ljava/lang/Exception;
-    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
-
-    goto :goto_2
-
-    .end local v0           #ex:Ljava/lang/Exception;
-    :catch_1
-    move-exception v3
-
-    goto :goto_1
-.end method
-
 .method final moveHomeToFrontFromLaunchLocked(I)V
     .locals 2
     .parameter "launchFlags"
@@ -9546,6 +9253,10 @@
 
     move-result v0
 
+    invoke-virtual {p0, v0}, Lcom/android/server/am/ActivityStack;->setForegroundProcess(Z)Z
+
+    move-result v0
+
     return v0
 .end method
 
@@ -9567,21 +9278,6 @@
     move-result-object v20
 
     .local v20, next:Lcom/android/server/am/ActivityRecord;
-    if-eqz p1, :cond_lewa_0
-
-    move-object/from16 v0, p1
-
-    iget-boolean v2, v0, Lcom/android/server/am/ActivityRecord;->isHomeActivity:Z
-
-    if-eqz v2, :cond_lewa_0
-
-    move-object/from16 v0, p0
-
-    move-object/from16 v1, v20
-
-    invoke-virtual {v0, v1}, Lcom/android/server/am/ActivityStack;->makeStatusbarNone(Lcom/android/server/am/ActivityRecord;)V
-
-    :cond_lewa_0
     move-object/from16 v0, p0
 
     iget-boolean v0, v0, Lcom/android/server/am/ActivityStack;->mUserLeaving:Z
@@ -11171,6 +10867,45 @@
     invoke-virtual/range {v0 .. v5}, Lcom/android/server/am/ActivityRecord;->addResultLocked(Lcom/android/server/am/ActivityRecord;Ljava/lang/String;IILandroid/content/Intent;)V
 
     goto :goto_0
+.end method
+
+.method setForegroundProcess(Z)Z
+    .locals 3
+    .parameter "resumed"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v1, 0x0
+
+    invoke-virtual {p0, v1}, Lcom/android/server/am/ActivityStack;->topRunningActivityLocked(Lcom/android/server/am/ActivityRecord;)Lcom/android/server/am/ActivityRecord;
+
+    move-result-object v0
+
+    .local v0, next:Lcom/android/server/am/ActivityRecord;
+    if-eqz v0, :cond_0
+
+    if-eqz p1, :cond_0
+
+    const-string v1, "sys.foreground_process"
+
+    iget-object v2, v0, Lcom/android/server/am/ActivityRecord;->processName:Ljava/lang/String;
+
+    invoke-static {v1, v2}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+
+    const-string v1, "sys.foreground_activity"
+
+    iget-object v2, v0, Lcom/android/server/am/ActivityRecord;->realActivity:Landroid/content/ComponentName;
+
+    invoke-virtual {v2}, Landroid/content/ComponentName;->getClassName()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-static {v1, v2}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+
+    :cond_0
+    return p1
 .end method
 
 .method final showAskCompatModeDialogLocked(Lcom/android/server/am/ActivityRecord;)V

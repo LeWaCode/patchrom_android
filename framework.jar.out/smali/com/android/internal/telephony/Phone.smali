@@ -187,19 +187,7 @@
 
 .field public static final REASON_DATA_ENABLED:Ljava/lang/String; = "dataEnabled"
 
-.field public static final REASON_DUALIP_PARTIAL_FAILURE_RETRY:Ljava/lang/String; = "DualIpPartialFailureRetry"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field public static final REASON_LINK_PROPERTIES_CHANGED:Ljava/lang/String; = "linkPropertiesChanged"
-
-.field public static final REASON_NO_SUCH_PDP:Ljava/lang/String; = "noSuchPdp"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field public static final REASON_NW_TYPE_CHANGED:Ljava/lang/String; = "nwTypeChanged"
 
@@ -210,12 +198,6 @@
 .field public static final REASON_PS_RESTRICT_ENABLED:Ljava/lang/String; = "psRestrictEnabled"
 
 .field public static final REASON_RADIO_TURNED_OFF:Ljava/lang/String; = "radioTurnedOff"
-
-.field public static final REASON_RAT_CHANGED:Ljava/lang/String; = "RatChanged"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field public static final REASON_RESTORE_DEFAULT_APN:Ljava/lang/String; = "restoreDefaultApn"
 

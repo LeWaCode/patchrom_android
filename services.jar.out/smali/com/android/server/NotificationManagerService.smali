@@ -6,11 +6,11 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Lcom/android/server/NotificationManagerService$Injector;,
         Lcom/android/server/NotificationManagerService$WorkerHandler;,
         Lcom/android/server/NotificationManagerService$SettingsObserver;,
         Lcom/android/server/NotificationManagerService$ToastRecord;,
-        Lcom/android/server/NotificationManagerService$NotificationRecord;,
-        Lcom/android/server/NotificationManagerService$Injector;
+        Lcom/android/server/NotificationManagerService$NotificationRecord;
     }
 .end annotation
 
@@ -488,6 +488,16 @@
     iput-boolean p1, p0, Lcom/android/server/NotificationManagerService;->mScreenOn:Z
 
     return p1
+.end method
+
+.method static synthetic access$1200(Lcom/android/server/NotificationManagerService;)Z
+    .locals 1
+    .parameter "x0"
+
+    .prologue
+    iget-boolean v0, p0, Lcom/android/server/NotificationManagerService;->mInCall:Z
+
+    return v0
 .end method
 
 .method static synthetic access$1202(Lcom/android/server/NotificationManagerService;Z)Z
@@ -3901,17 +3911,7 @@
 
     if-eqz v5, :cond_lewa_1
 
-    move-object/from16 v0, p0
-
-    iget-boolean v5, v0, Lcom/android/server/NotificationManagerService;->mInCall:Z
-
-    if-nez v5, :cond_lewa_1
-
-    const-string v5, "com.lewa.PIM"
-
-    move-object/from16 v0, p1
-
-    invoke-virtual {v0, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    invoke-static/range {p0 .. p1}, Lcom/android/server/NotificationManagerService$Injector;->isInCall(Lcom/android/server/NotificationManagerService;Ljava/lang/String;)Z
 
     move-result v5
 

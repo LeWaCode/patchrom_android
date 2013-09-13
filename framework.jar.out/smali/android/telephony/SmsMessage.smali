@@ -41,16 +41,10 @@
 # instance fields
 .field public mWrappedSmsMessage:Lcom/android/internal/telephony/SmsMessageBase;
 
-.field public subId:I
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE_AND_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 
 # direct methods
 .method public constructor <init>()V
-    .locals 1
+    .locals 0
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
@@ -58,23 +52,15 @@
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    const/4 v0, 0x0
-
-    iput v0, p0, Landroid/telephony/SmsMessage;->subId:I
-
     return-void
 .end method
 
 .method private constructor <init>(Lcom/android/internal/telephony/SmsMessageBase;)V
-    .locals 1
+    .locals 0
     .parameter "smb"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
-
-    const/4 v0, 0x0
-
-    iput v0, p0, Landroid/telephony/SmsMessage;->subId:I
 
     iput-object p1, p0, Landroid/telephony/SmsMessage;->mWrappedSmsMessage:Lcom/android/internal/telephony/SmsMessageBase;
 
@@ -851,18 +837,6 @@
     return-object v0
 .end method
 
-.method public getMessageSimId()I
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    const/4 v0, -0x1
-
-    return v0
-.end method
-
 .method public getOriginatingAddress()Ljava/lang/String;
     .locals 1
 
@@ -928,80 +902,6 @@
     return-object v0
 .end method
 
-.method public getSmsc()[B
-    .locals 8
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    const/4 v4, 0x0
-
-    const/4 v7, 0x0
-
-    const-string v5, "SMS"
-
-    const-string v6, "call getSmsc"
-
-    invoke-static {v5, v6}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    invoke-virtual {p0}, Landroid/telephony/SmsMessage;->getPdu()[B
-
-    move-result-object v1
-
-    .local v1, pdu:[B
-    if-nez v1, :cond_0
-
-    const-string v5, "SMS"
-
-    const-string v6, "pdu is null"
-
-    invoke-static {v5, v6}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    move-object v2, v4
-
-    :goto_0
-    return-object v2
-
-    :cond_0
-    aget-byte v5, v1, v7
-
-    and-int/lit16 v5, v5, 0xff
-
-    add-int/lit8 v3, v5, 0x1
-
-    .local v3, smsc_len:I
-    new-array v2, v3, [B
-
-    .local v2, smsc:[B
-    const/4 v5, 0x0
-
-    const/4 v6, 0x0
-
-    :try_start_0
-    array-length v7, v2
-
-    invoke-static {v1, v5, v2, v6, v7}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
-    :try_end_0
-    .catch Ljava/lang/ArrayIndexOutOfBoundsException; {:try_start_0 .. :try_end_0} :catch_0
-
-    goto :goto_0
-
-    :catch_0
-    move-exception v0
-
-    .local v0, e:Ljava/lang/ArrayIndexOutOfBoundsException;
-    const-string v5, "SMS"
-
-    const-string v6, "Out of boudns"
-
-    invoke-static {v5, v6}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
-
-    move-object v2, v4
-
-    goto :goto_0
-.end method
-
 .method public getStatus()I
     .locals 1
 
@@ -1043,18 +943,6 @@
     return v0
 .end method
 
-.method public getSubId()I
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget v0, p0, Landroid/telephony/SmsMessage;->subId:I
-
-    return v0
-.end method
-
 .method public getTimestampMillis()J
     .locals 2
 
@@ -1066,83 +954,6 @@
     move-result-wide v0
 
     return-wide v0
-.end method
-
-.method public getTpdu()[B
-    .locals 9
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    const/4 v5, 0x0
-
-    const/4 v8, 0x0
-
-    const-string v6, "SMS"
-
-    const-string v7, "call getTpdu"
-
-    invoke-static {v6, v7}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    invoke-virtual {p0}, Landroid/telephony/SmsMessage;->getPdu()[B
-
-    move-result-object v1
-
-    .local v1, pdu:[B
-    if-nez v1, :cond_0
-
-    const-string v6, "SMS"
-
-    const-string v7, "pdu is null"
-
-    invoke-static {v6, v7}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    move-object v3, v5
-
-    :goto_0
-    return-object v3
-
-    :cond_0
-    aget-byte v6, v1, v8
-
-    and-int/lit16 v6, v6, 0xff
-
-    add-int/lit8 v2, v6, 0x1
-
-    .local v2, smsc_len:I
-    array-length v6, v1
-
-    sub-int v4, v6, v2
-
-    .local v4, tpdu_len:I
-    new-array v3, v4, [B
-
-    .local v3, tpdu:[B
-    const/4 v6, 0x0
-
-    :try_start_0
-    array-length v7, v3
-
-    invoke-static {v1, v2, v3, v6, v7}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
-    :try_end_0
-    .catch Ljava/lang/ArrayIndexOutOfBoundsException; {:try_start_0 .. :try_end_0} :catch_0
-
-    goto :goto_0
-
-    :catch_0
-    move-exception v0
-
-    .local v0, e:Ljava/lang/ArrayIndexOutOfBoundsException;
-    const-string v6, "SMS"
-
-    const-string v7, "Out of boudns"
-
-    invoke-static {v6, v7}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
-
-    move-object v3, v5
-
-    goto :goto_0
 .end method
 
 .method public getUserData()[B
@@ -1260,17 +1071,4 @@
     move-result v0
 
     return v0
-.end method
-
-.method public setSubId(I)V
-    .locals 0
-    .parameter "subId"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iput p1, p0, Landroid/telephony/SmsMessage;->subId:I
-
-    return-void
 .end method

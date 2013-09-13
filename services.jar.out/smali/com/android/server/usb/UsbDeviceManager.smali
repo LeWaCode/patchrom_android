@@ -96,7 +96,7 @@
 
 .field private final mUEventObserver:Landroid/os/UEventObserver;
 
-.field private mUiContext:Landroid/content/Context;
+.field mUiContext:Landroid/content/Context;
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
@@ -352,18 +352,6 @@
     return v0
 .end method
 
-.method static synthetic access$1900(Lcom/android/server/usb/UsbDeviceManager;)Landroid/content/Context;
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    invoke-direct {p0}, Lcom/android/server/usb/UsbDeviceManager;->getUiContext()Landroid/content/Context;
-
-    move-result-object v0
-
-    return-object v0
-.end method
-
 .method static synthetic access$200(Lcom/android/server/usb/UsbDeviceManager;)V
     .locals 0
     .parameter "x0"
@@ -372,17 +360,6 @@
     invoke-direct {p0}, Lcom/android/server/usb/UsbDeviceManager;->startAccessoryMode()V
 
     return-void
-.end method
-
-.method static synthetic access$2002(Lcom/android/server/usb/UsbDeviceManager;Landroid/content/Context;)Landroid/content/Context;
-    .locals 0
-    .parameter "x0"
-    .parameter "x1"
-
-    .prologue
-    iput-object p1, p0, Lcom/android/server/usb/UsbDeviceManager;->mUiContext:Landroid/content/Context;
-
-    return-object p1
 .end method
 
 .method static synthetic access$300(Lcom/android/server/usb/UsbDeviceManager;Ljava/lang/String;)Ljava/lang/String;
@@ -604,7 +581,7 @@
     goto :goto_0
 .end method
 
-.method private getUiContext()Landroid/content/Context;
+.method getUiContext()Landroid/content/Context;
     .locals 1
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;

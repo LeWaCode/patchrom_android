@@ -1908,12 +1908,12 @@
     move-object/from16 v65, v66
 
     .end local v66           #dreamy:Landroid/service/dreams/DreamManagerService;
+    .end local v81           #mountService:Lcom/android/server/MountService;
     .restart local v65       #dreamy:Landroid/service/dreams/DreamManagerService;
     :cond_9
     :goto_37
     invoke-static {v4}, Lcom/android/server/ServerThread$Injector;->registerServices(Landroid/content/Context;)V
 
-    .end local v81           #mountService:Lcom/android/server/MountService;
     :goto_lewa_0
     invoke-virtual/range {v119 .. v119}, Lcom/android/server/wm/WindowManagerService;->detectSafeMode()Z
 
