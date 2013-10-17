@@ -457,6 +457,8 @@
 
     return-void
 
+    nop
+
     :pswitch_data_0
     .packed-switch 0x1
         :pswitch_1

@@ -426,6 +426,95 @@
     goto :goto_0
 .end method
 
+.method private getViewExt(Landroid/view/View;)V
+    .locals 11
+    .parameter "convertView"
+
+    .prologue
+    const/4 v10, 0x0
+
+    instance-of v6, p0, Landroid/preference/PreferenceCategory;
+
+    if-eqz v6, :cond_1
+
+    invoke-virtual {p0}, Landroid/preference/Preference;->getContext()Landroid/content/Context;
+
+    move-result-object v6
+
+    const/4 v7, 0x0
+
+    sget-object v8, Lcom/android/internal/R$styleable;->View:[I
+
+    const v9, 0x1010208
+
+    invoke-virtual {v6, v7, v8, v9, v10}, Landroid/content/Context;->obtainStyledAttributes(Landroid/util/AttributeSet;[III)Landroid/content/res/TypedArray;
+
+    move-result-object v1
+
+    .local v1, a:Landroid/content/res/TypedArray;
+    invoke-virtual {v1}, Landroid/content/res/TypedArray;->getIndexCount()I
+
+    move-result v0
+
+    .local v0, N:I
+    const/4 v4, 0x0
+
+    .local v4, leftPadding:I
+    const/4 v3, 0x0
+
+    .local v3, i:I
+    :goto_0
+    if-ge v3, v0, :cond_0
+
+    invoke-virtual {v1, v3}, Landroid/content/res/TypedArray;->getIndex(I)I
+
+    move-result v2
+
+    .local v2, attr:I
+    const/16 v6, 0xe
+
+    if-ne v2, v6, :cond_2
+
+    const/4 v6, -0x1
+
+    invoke-virtual {v1, v2, v6}, Landroid/content/res/TypedArray;->getDimensionPixelSize(II)I
+
+    move-result v4
+
+    .end local v2           #attr:I
+    :cond_0
+    const v6, 0x1020016
+
+    invoke-virtual {p1, v6}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v5
+
+    check-cast v5, Landroid/widget/TextView;
+
+    .local v5, titleView:Landroid/widget/TextView;
+    if-eqz v5, :cond_1
+
+    invoke-virtual {v5, v4, v10, v10, v10}, Landroid/widget/TextView;->setPadding(IIII)V
+
+    .end local v0           #N:I
+    .end local v1           #a:Landroid/content/res/TypedArray;
+    .end local v3           #i:I
+    .end local v4           #leftPadding:I
+    .end local v5           #titleView:Landroid/widget/TextView;
+    :cond_1
+    return-void
+
+    .restart local v0       #N:I
+    .restart local v1       #a:Landroid/content/res/TypedArray;
+    .restart local v2       #attr:I
+    .restart local v3       #i:I
+    .restart local v4       #leftPadding:I
+    :cond_2
+    add-int/lit8 v3, v3, 0x1
+
+    goto :goto_0
+.end method
+
 .method private registerDependency()V
     .locals 4
 
@@ -1360,6 +1449,9 @@
     .locals 0
     .parameter "convertView"
     .parameter "parent"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     if-nez p1, :cond_0
@@ -1367,6 +1459,8 @@
     invoke-virtual {p0, p2}, Landroid/preference/Preference;->onCreateView(Landroid/view/ViewGroup;)Landroid/view/View;
 
     move-result-object p1
+
+    invoke-direct {p0, p1}, Landroid/preference/Preference;->getViewExt(Landroid/view/View;)V
 
     :cond_0
     invoke-virtual {p0, p1}, Landroid/preference/Preference;->onBindView(Landroid/view/View;)V

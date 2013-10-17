@@ -20,6 +20,48 @@
 # static fields
 .field private static final FADE_DURATION:I = 0xc8
 
+.field private static final INDICATOR_HEIGHT:I = 0x2
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private static final INDICATOR_POSITIONOFFSET:F = 0.6f
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private static final INDICATOR_WIDTH_SCAL_MAX:F = 0.7f
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private static final INDICATOR_WIDTH_SCAL_MIN:F = 1.5f
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field public static final SCROLL_STATE_DRAGGING:I = 0x1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field public static final SCROLL_STATE_IDLE:I = 0x0
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field public static final SCROLL_STATE_SETTLING:I = 0x2
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field private static final TAG:Ljava/lang/String; = "ScrollingTabContainerView"
 
 .field private static final sAlphaInterpolator:Landroid/animation/TimeInterpolator;
@@ -28,13 +70,91 @@
 # instance fields
 .field private mAllowCollapse:Z
 
+.field private mBackground:Landroid/graphics/drawable/Drawable;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field private mContentHeight:I
 
+.field private mCurrentPosition:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mDurationTrans:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mIndicatorHeight:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mIndicatorView:Landroid/widget/ImageView;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mLastPositionOffset:F
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mLastStateScroll:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mMaxIndicatorWidth:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field mMaxTabWidth:I
+
+.field private mMinIndicatorWidth:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mRateDrag:F
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mRootLayout:Landroid/widget/FrameLayout;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mSelectedTabIndex:I
 
 .field mStackedTabMaxWidth:I
+
+.field private mStateIndicator:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field private mStateScroll:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mTabClickListener:Lcom/android/internal/widget/ScrollingTabContainerView$TabClickListener;
 
@@ -43,6 +163,12 @@
 .field mTabSelector:Ljava/lang/Runnable;
 
 .field private mTabSpinner:Landroid/widget/Spinner;
+
+.field private mTabViewWidth:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field protected final mVisAnimListener:Lcom/android/internal/widget/ScrollingTabContainerView$VisibilityAnimListener;
 
@@ -66,8 +192,13 @@
 .method public constructor <init>(Landroid/content/Context;)V
     .locals 5
     .parameter "context"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
+    const/4 v2, 0x0
+
     invoke-direct {p0, p1}, Landroid/widget/HorizontalScrollView;-><init>(Landroid/content/Context;)V
 
     new-instance v1, Lcom/android/internal/widget/ScrollingTabContainerView$VisibilityAnimListener;
@@ -76,9 +207,9 @@
 
     iput-object v1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mVisAnimListener:Lcom/android/internal/widget/ScrollingTabContainerView$VisibilityAnimListener;
 
-    const/4 v1, 0x0
+    iput v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mCurrentPosition:I
 
-    invoke-virtual {p0, v1}, Lcom/android/internal/widget/ScrollingTabContainerView;->setHorizontalScrollBarEnabled(Z)V
+    invoke-virtual {p0, v2}, Lcom/android/internal/widget/ScrollingTabContainerView;->setHorizontalScrollBarEnabled(Z)V
 
     invoke-static {p1}, Lcom/android/internal/view/ActionBarPolicy;->get(Landroid/content/Context;)Lcom/android/internal/view/ActionBarPolicy;
 
@@ -417,6 +548,16 @@
     invoke-virtual {p0, v0}, Lcom/android/internal/widget/ScrollingTabContainerView;->setTabSelected(I)V
 
     goto :goto_0
+.end method
+
+.method private setIndicatorLayout()V
+    .locals 0
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    return-void
 .end method
 
 
@@ -1033,6 +1174,77 @@
     return-void
 .end method
 
+.method public setScrollState(I)V
+    .locals 3
+    .parameter "state"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v2, 0x2
+
+    const/4 v1, 0x1
+
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateScroll:I
+
+    iput v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastStateScroll:I
+
+    iput p1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateScroll:I
+
+    if-eq p1, v2, :cond_0
+
+    iput p1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateIndicator:I
+
+    :cond_0
+    if-eqz p1, :cond_1
+
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastStateScroll:I
+
+    if-ne v0, v2, :cond_3
+
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateScroll:I
+
+    if-ne v0, v1, :cond_3
+
+    :cond_1
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastStateScroll:I
+
+    if-ne v0, v2, :cond_2
+
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateScroll:I
+
+    if-ne v0, v1, :cond_2
+
+    const/4 v0, 0x0
+
+    iput v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateIndicator:I
+
+    :cond_2
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mSelectedTabIndex:I
+
+    iput v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mCurrentPosition:I
+
+    const/4 v0, 0x0
+
+    iput v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    invoke-direct {p0}, Lcom/android/internal/widget/ScrollingTabContainerView;->setIndicatorLayout()V
+
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastStateScroll:I
+
+    if-ne v0, v2, :cond_3
+
+    iget v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateScroll:I
+
+    if-ne v0, v1, :cond_3
+
+    iput v1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateIndicator:I
+
+    :cond_3
+    return-void
+.end method
+
 .method public setTabSelected(I)V
     .locals 5
     .parameter "position"
@@ -1085,6 +1297,19 @@
 
     .end local v0           #child:Landroid/view/View;
     :cond_2
+    return-void
+.end method
+
+.method public smoothScrollTabIndicator(IFI)V
+    .locals 0
+    .parameter "position"
+    .parameter "positionOffset"
+    .parameter "positionOffsetPixels"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
     return-void
 .end method
 

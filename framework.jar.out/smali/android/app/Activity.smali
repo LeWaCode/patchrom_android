@@ -16,7 +16,8 @@
         Landroid/app/Activity$1;,
         Landroid/app/Activity$ManagedCursor;,
         Landroid/app/Activity$NonConfigurationInstances;,
-        Landroid/app/Activity$ManagedDialog;
+        Landroid/app/Activity$ManagedDialog;,
+	Landroid/app/Activity$Injector;
     }
 .end annotation
 
@@ -4641,6 +4642,9 @@
 .method protected onPostCreate(Landroid/os/Bundle;)V
     .locals 3
     .parameter "savedInstanceState"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v2, 0x1
@@ -4662,6 +4666,10 @@
     move-result v1
 
     invoke-virtual {p0, v0, v1}, Landroid/app/Activity;->onTitleChanged(Ljava/lang/CharSequence;I)V
+
+    iget-object v0, p0, Landroid/app/Activity;->mWindow:Landroid/view/Window;
+
+    invoke-static {p0, v0}, Landroid/app/Activity$Injector;->setContentViewForeground(Landroid/content/Context;Landroid/view/Window;)V
 
     :cond_0
     iput-boolean v2, p0, Landroid/app/Activity;->mCalled:Z
@@ -5360,9 +5368,6 @@
 
 .method final performRestart()V
     .locals 7
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     const/4 v6, 0x0

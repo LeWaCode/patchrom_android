@@ -656,9 +656,9 @@
     .end annotation
 
     .prologue
-    const/4 v4, 0x1
-
     const/4 v5, 0x0
+
+    const/4 v4, 0x1
 
     invoke-virtual {p1}, Landroid/view/View;->getContext()Landroid/content/Context;
 
@@ -3007,11 +3007,9 @@
     .parameter "mode"
 
     .prologue
-    const/16 v4, 0x8
-
-    const/4 v3, -0x1
-
     const/4 v1, 0x0
+
+    const/4 v4, -0x1
 
     iget-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mActionView:Lcom/android/internal/widget/ActionBarView;
 
@@ -3074,22 +3072,11 @@
 
     invoke-virtual {p0, v2}, Lcom/android/internal/app/ActionBarImpl;->selectTab(Landroid/app/ActionBar$Tab;)V
 
-    iget-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mActionMode:Lcom/android/internal/app/ActionBarImpl$ActionModeImpl;
-
-    if-eqz v2, :cond_3
-
-    iget-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mActionMode:Lcom/android/internal/app/ActionBarImpl$ActionModeImpl;
-
-    invoke-virtual {v2}, Lcom/android/internal/app/ActionBarImpl$ActionModeImpl;->finish()V
-
-    :cond_3
     iget-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
 
-    invoke-virtual {v2, v4}, Lcom/android/internal/widget/ScrollingTabContainerView;->animateToVisibility(I)V
+    const/16 v3, 0x8
 
-    iget-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
-
-    invoke-virtual {v2, v4}, Lcom/android/internal/widget/ScrollingTabContainerView;->setVisibility(I)V
+    invoke-virtual {v2, v3}, Lcom/android/internal/widget/ScrollingTabContainerView;->setVisibility(I)V
 
     goto :goto_0
 
@@ -3098,25 +3085,19 @@
 
     iget-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
 
-    invoke-virtual {v2, v1}, Lcom/android/internal/widget/ScrollingTabContainerView;->animateToVisibility(I)V
-
-    iget-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
-
     invoke-virtual {v2, v1}, Lcom/android/internal/widget/ScrollingTabContainerView;->setVisibility(I)V
 
     iget v2, p0, Lcom/android/internal/app/ActionBarImpl;->mSavedTabPosition:I
 
-    if-eq v2, v3, :cond_1
+    if-eq v2, v4, :cond_1
 
     iget v2, p0, Lcom/android/internal/app/ActionBarImpl;->mSavedTabPosition:I
 
     invoke-virtual {p0, v2}, Lcom/android/internal/app/ActionBarImpl;->setSelectedNavigationItem(I)V
 
-    iput v3, p0, Lcom/android/internal/app/ActionBarImpl;->mSavedTabPosition:I
+    iput v4, p0, Lcom/android/internal/app/ActionBarImpl;->mSavedTabPosition:I
 
     goto :goto_1
-
-    nop
 
     :pswitch_data_0
     .packed-switch 0x2
@@ -3126,6 +3107,43 @@
     :pswitch_data_1
     .packed-switch 0x2
         :pswitch_1
+    .end packed-switch
+.end method
+
+.method public setScrollState(I)V
+    .locals 2
+    .parameter "state"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mActionView:Lcom/android/internal/widget/ActionBarView;
+
+    invoke-virtual {v0}, Lcom/android/internal/widget/ActionBarView;->getNavigationMode()I
+
+    move-result v0
+
+    packed-switch v0, :pswitch_data_0
+
+    new-instance v0, Ljava/lang/IllegalStateException;
+
+    const-string v1, "setSelectedNavigationIndex not valid for current navigation mode"
+
+    invoke-direct {v0, v1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+
+    :pswitch_0
+    iget-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
+
+    invoke-virtual {v0, p1}, Lcom/android/internal/widget/ScrollingTabContainerView;->setScrollState(I)V
+
+    return-void
+
+    :pswitch_data_0
+    .packed-switch 0x2
+        :pswitch_0
     .end packed-switch
 .end method
 
@@ -3473,6 +3491,45 @@
     invoke-interface {v2, v3}, Landroid/animation/Animator$AnimatorListener;->onAnimationEnd(Landroid/animation/Animator;)V
 
     goto :goto_0
+.end method
+
+.method public smoothScrollTabIndicator(IFI)V
+    .locals 2
+    .parameter "position"
+    .parameter "positionOffset"
+    .parameter "positionOffsetPixels"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mActionView:Lcom/android/internal/widget/ActionBarView;
+
+    invoke-virtual {v0}, Lcom/android/internal/widget/ActionBarView;->getNavigationMode()I
+
+    move-result v0
+
+    packed-switch v0, :pswitch_data_0
+
+    new-instance v0, Ljava/lang/IllegalStateException;
+
+    const-string v1, "setSelectedNavigationIndex not valid for current navigation mode"
+
+    invoke-direct {v0, v1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+
+    :pswitch_0
+    iget-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
+
+    invoke-virtual {v0, p1, p2, p3}, Lcom/android/internal/widget/ScrollingTabContainerView;->smoothScrollTabIndicator(IFI)V
+
+    return-void
+
+    :pswitch_data_0
+    .packed-switch 0x2
+        :pswitch_0
+    .end packed-switch
 .end method
 
 .method public startActionMode(Landroid/view/ActionMode$Callback;)Landroid/view/ActionMode;

@@ -77,6 +77,8 @@
 
 .field private static final VERY_WIDE:I = 0x100000
 
+.field private static isTextChanged:Z
+
 
 # instance fields
 .field private mAllowTransformationLengthChange:Z
@@ -277,6 +279,8 @@
     aput v2, v1, v3
 
     sput-object v1, Landroid/widget/TextView;->MULTILINE_STATE_SET:[I
+
+    sput-boolean v3, Landroid/widget/TextView;->isTextChanged:Z
 
     new-instance v0, Landroid/graphics/Paint;
 
@@ -7124,6 +7128,9 @@
     .parameter "type"
     .parameter "notifyBefore"
     .parameter "oldlen"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     if-nez p1, :cond_0
@@ -7142,6 +7149,8 @@
     move-result-object p1
 
     :cond_1
+    invoke-direct/range {p0 .. p1}, Landroid/widget/TextView;->setTextChanged(Ljava/lang/CharSequence;)V
+
     move-object/from16 v0, p0
 
     iget-boolean v4, v0, Landroid/widget/TextView;->mUserSetTextScaleX:Z
@@ -7768,6 +7777,10 @@
     invoke-direct/range {p0 .. p0}, Landroid/widget/TextView;->checkForRelayout()V
 
     :cond_19
+    sget-boolean v4, Landroid/widget/TextView;->isTextChanged:Z
+
+    if-eqz v4, :cond_lewa_0
+
     const/4 v4, 0x0
 
     move-object/from16 v0, p0
@@ -7780,6 +7793,7 @@
 
     invoke-virtual {v0, v1, v4, v2, v3}, Landroid/widget/TextView;->sendOnTextChanged(Ljava/lang/CharSequence;III)V
 
+    :cond_lewa_0
     const/4 v4, 0x0
 
     move-object/from16 v0, p0
@@ -7814,6 +7828,34 @@
 
     :cond_1b
     return-void
+.end method
+
+.method private setTextChanged(Ljava/lang/CharSequence;)V
+    .locals 1
+    .parameter "text"
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/TextView;->mText:Ljava/lang/CharSequence;
+
+    invoke-virtual {p1, v0}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x1
+
+    sput-boolean v0, Landroid/widget/TextView;->isTextChanged:Z
+
+    :goto_0
+    return-void
+
+    :cond_0
+    const/4 v0, 0x0
+
+    sput-boolean v0, Landroid/widget/TextView;->isTextChanged:Z
+
+    goto :goto_0
 .end method
 
 .method private setTypefaceFromAttrs(Ljava/lang/String;II)V
@@ -9335,6 +9377,20 @@
     const/4 v0, 0x0
 
     goto :goto_0
+.end method
+
+.method public canSelectTextWrap()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-direct {p0}, Landroid/widget/TextView;->canSelectText()Z
+
+    move-result v0
+
+    return v0
 .end method
 
 .method public cancelLongPress()V
@@ -12669,6 +12725,87 @@
     return-object v0
 .end method
 
+.method getTextDirectionHeuristic()Landroid/text/TextDirectionHeuristic;
+    .locals 2
+
+    .prologue
+    const/4 v0, 0x1
+
+    invoke-direct {p0}, Landroid/widget/TextView;->hasPasswordTransformationMethod()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    sget-object v1, Landroid/text/TextDirectionHeuristics;->LOCALE:Landroid/text/TextDirectionHeuristic;
+
+    :goto_0
+    return-object v1
+
+    :cond_0
+    invoke-virtual {p0}, Landroid/widget/TextView;->getLayoutDirection()I
+
+    move-result v1
+
+    if-ne v1, v0, :cond_1
+
+    .local v0, defaultIsRtl:Z
+    :goto_1
+    invoke-virtual {p0}, Landroid/widget/TextView;->getTextDirection()I
+
+    move-result v1
+
+    packed-switch v1, :pswitch_data_0
+
+    if-eqz v0, :cond_2
+
+    sget-object v1, Landroid/text/TextDirectionHeuristics;->FIRSTSTRONG_RTL:Landroid/text/TextDirectionHeuristic;
+
+    goto :goto_0
+
+    .end local v0           #defaultIsRtl:Z
+    :cond_1
+    const/4 v0, 0x0
+
+    goto :goto_1
+
+    .restart local v0       #defaultIsRtl:Z
+    :cond_2
+    sget-object v1, Landroid/text/TextDirectionHeuristics;->FIRSTSTRONG_LTR:Landroid/text/TextDirectionHeuristic;
+
+    goto :goto_0
+
+    :pswitch_0
+    sget-object v1, Landroid/text/TextDirectionHeuristics;->ANYRTL_LTR:Landroid/text/TextDirectionHeuristic;
+
+    goto :goto_0
+
+    :pswitch_1
+    sget-object v1, Landroid/text/TextDirectionHeuristics;->LTR:Landroid/text/TextDirectionHeuristic;
+
+    goto :goto_0
+
+    :pswitch_2
+    sget-object v1, Landroid/text/TextDirectionHeuristics;->RTL:Landroid/text/TextDirectionHeuristic;
+
+    goto :goto_0
+
+    :pswitch_3
+    sget-object v1, Landroid/text/TextDirectionHeuristics;->LOCALE:Landroid/text/TextDirectionHeuristic;
+
+    goto :goto_0
+
+    nop
+
+    :pswitch_data_0
+    .packed-switch 0x2
+        :pswitch_0
+        :pswitch_1
+        :pswitch_2
+        :pswitch_3
+    .end packed-switch
+.end method
+
 .method public getTextForAccessibility()Ljava/lang/CharSequence;
     .locals 2
 
@@ -14033,6 +14170,20 @@
     iget-boolean v1, v1, Landroid/widget/Editor;->mInBatchEditControllers:Z
 
     goto :goto_0
+.end method
+
+.method public isInBatchEditModeWrap()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Landroid/widget/TextView;->isInBatchEditMode()Z
+
+    move-result v0
+
+    return v0
 .end method
 
 .method public isInputMethodTarget()Z
@@ -21911,6 +22062,48 @@
     return-void
 .end method
 
+.method public setCursorDrawableRes(I)V
+    .locals 3
+    .parameter "cursorDrawableRes"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iput p1, p0, Landroid/widget/TextView;->mCursorDrawableRes:I
+
+    const/4 v0, 0x0
+
+    .local v0, i:I
+    :goto_0
+    iget-object v1, p0, Landroid/widget/TextView;->mEditor:Landroid/widget/Editor;
+
+    iget v1, v1, Landroid/widget/Editor;->mCursorCount:I
+
+    if-ge v0, v1, :cond_0
+
+    iget-object v1, p0, Landroid/widget/TextView;->mEditor:Landroid/widget/Editor;
+
+    iget-object v1, v1, Landroid/widget/Editor;->mCursorDrawable:[Landroid/graphics/drawable/Drawable;
+
+    const/4 v2, 0x0
+
+    aput-object v2, v1, v0
+
+    add-int/lit8 v0, v0, 0x1
+
+    goto :goto_0
+
+    :cond_0
+    iget-object v1, p0, Landroid/widget/TextView;->mEditor:Landroid/widget/Editor;
+
+    const/4 v2, 0x0
+
+    iput v2, v1, Landroid/widget/Editor;->mCursorCount:I
+
+    return-void
+.end method
+
 .method protected setCursorPosition_internal(II)V
     .locals 1
     .parameter "start"
@@ -23708,6 +23901,19 @@
     return-void
 .end method
 
+.method public final setSoftInputShownOnFocus(Z)V
+    .locals 0
+    .parameter "show"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0, p1}, Landroid/widget/TextView;->setShowSoftInputOnFocus(Z)V
+
+    return-void
+.end method
+
 .method protected setSpan_internal(Ljava/lang/Object;III)V
     .locals 1
     .parameter "span"
@@ -25097,6 +25303,20 @@
     return v0
 .end method
 
+.method public viewportToContentHorizontalOffsetWrap()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Landroid/widget/TextView;->viewportToContentHorizontalOffset()I
+
+    move-result v0
+
+    return v0
+.end method
+
 .method viewportToContentVerticalOffset()I
     .locals 3
 
@@ -25127,5 +25347,19 @@
     add-int/2addr v0, v1
 
     :cond_0
+    return v0
+.end method
+
+.method public viewportToContentVerticalOffsetWrap()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Landroid/widget/TextView;->viewportToContentVerticalOffset()I
+
+    move-result v0
+
     return v0
 .end method

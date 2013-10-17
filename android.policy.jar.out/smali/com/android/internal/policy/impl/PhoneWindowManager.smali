@@ -14221,6 +14221,10 @@
 
     invoke-static {v1, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 
+    invoke-static {p1, v0}, Lcom/android/internal/policy/impl/PhoneWindowManager$Injector;->getLewaViewLayer(II)I
+
+    move-result v0
+
     goto :goto_0
 
     :pswitch_1

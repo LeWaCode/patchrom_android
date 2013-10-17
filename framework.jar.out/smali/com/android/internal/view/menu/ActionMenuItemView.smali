@@ -9,6 +9,14 @@
 .implements Lcom/android/internal/view/menu/ActionMenuView$ActionMenuChildView;
 
 
+# annotations
+.annotation system Ldalvik/annotation/MemberClasses;
+    value = {
+        Lcom/android/internal/view/menu/ActionMenuItemView$Injector;
+    }
+.end annotation
+
+
 # static fields
 .field private static final TAG:Ljava/lang/String; = "ActionMenuItemView"
 
@@ -105,6 +113,41 @@
     iput v2, p0, Lcom/android/internal/view/menu/ActionMenuItemView;->mSavedPaddingLeft:I
 
     return-void
+.end method
+
+.method private getHeightExt()I
+    .locals 1
+
+    .prologue
+    invoke-virtual {p0}, Lcom/android/internal/view/menu/ActionMenuItemView;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {v0}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    invoke-virtual {p0}, Lcom/android/internal/view/menu/ActionMenuItemView;->getParent()Landroid/view/ViewParent;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/view/View;
+
+    invoke-virtual {v0}, Landroid/view/View;->getHeight()I
+
+    move-result v0
+
+    :goto_0
+    return v0
+
+    :cond_0
+    invoke-virtual {p0}, Lcom/android/internal/view/menu/ActionMenuItemView;->getHeight()I
+
+    move-result v0
+
+    goto :goto_0
 .end method
 
 .method private makelayoutLocation(Z)V
@@ -492,6 +535,9 @@
 .method public onLongClick(Landroid/view/View;)Z
     .locals 12
     .parameter "v"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v9, 0x1
@@ -532,14 +578,14 @@
     move-result v7
 
     .local v7, width:I
-    invoke-virtual {p0}, Lcom/android/internal/view/menu/ActionMenuItemView;->getHeight()I
+    invoke-direct {p0}, Lcom/android/internal/view/menu/ActionMenuItemView;->getHeightExt()I
 
     move-result v3
 
     .local v3, height:I
     aget v10, v5, v9
 
-    div-int/lit8 v11, v3, 0x2
+    div-int/lit8 v11, v3, 0x1
 
     add-int v4, v10, v11
 

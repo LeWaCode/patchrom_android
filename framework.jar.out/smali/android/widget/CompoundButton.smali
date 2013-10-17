@@ -149,6 +149,18 @@
     return-void
 .end method
 
+.method public getOnCheckedChangeListener()Landroid/widget/CompoundButton$OnCheckedChangeListener;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/CompoundButton;->mOnCheckedChangeListener:Landroid/widget/CompoundButton$OnCheckedChangeListener;
+
+    return-object v0
+.end method
+
 .method public isChecked()Z
     .locals 1
     .annotation runtime Landroid/view/ViewDebug$ExportedProperty;

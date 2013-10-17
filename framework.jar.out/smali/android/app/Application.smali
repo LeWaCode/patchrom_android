@@ -14,6 +14,30 @@
 .end annotation
 
 
+# static fields
+.field private static sApplication:Ljava/lang/ref/SoftReference;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/lang/ref/SoftReference",
+            "<",
+            "Landroid/app/Application;",
+            ">;"
+        }
+    .end annotation
+.end field
+
+.field private static sHandler:Ljava/lang/ref/SoftReference;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/lang/ref/SoftReference",
+            "<",
+            "Landroid/os/Handler;",
+            ">;"
+        }
+    .end annotation
+.end field
+
+
 # instance fields
 .field private mActivityLifecycleCallbacks:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
@@ -42,7 +66,7 @@
 
 # direct methods
 .method public constructor <init>()V
-    .locals 1
+    .locals 2
 
     .prologue
     const/4 v0, 0x0
@@ -60,6 +84,22 @@
     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
 
     iput-object v0, p0, Landroid/app/Application;->mActivityLifecycleCallbacks:Ljava/util/ArrayList;
+
+    new-instance v0, Ljava/lang/ref/SoftReference;
+
+    invoke-direct {v0, p0}, Ljava/lang/ref/SoftReference;-><init>(Ljava/lang/Object;)V
+
+    sput-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
+
+    new-instance v0, Ljava/lang/ref/SoftReference;
+
+    new-instance v1, Landroid/os/Handler;
+
+    invoke-direct {v1}, Landroid/os/Handler;-><init>()V
+
+    invoke-direct {v0, v1}, Ljava/lang/ref/SoftReference;-><init>(Ljava/lang/Object;)V
+
+    sput-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
 
     return-void
 .end method
@@ -144,6 +184,56 @@
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     throw v1
+.end method
+
+.method public static getHandler()Landroid/os/Handler;
+    .locals 1
+
+    .prologue
+    sget-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x0
+
+    :goto_0
+    return-object v0
+
+    :cond_0
+    sget-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
+
+    invoke-virtual {v0}, Ljava/lang/ref/SoftReference;->get()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/os/Handler;
+
+    goto :goto_0
+.end method
+
+.method public static getInstance()Landroid/app/Application;
+    .locals 1
+
+    .prologue
+    sget-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x0
+
+    :goto_0
+    return-object v0
+
+    :cond_0
+    sget-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
+
+    invoke-virtual {v0}, Ljava/lang/ref/SoftReference;->get()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/app/Application;
+
+    goto :goto_0
 .end method
 
 

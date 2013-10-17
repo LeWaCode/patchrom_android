@@ -1394,6 +1394,8 @@
 
     invoke-static {v0}, Landroid/content/res/Configuration$Injector;->setDefaultFontScale(F)V
 
+    invoke-static {p0}, Landroid/content/res/Configuration$Injector;->initCutomTheme(Landroid/content/res/Configuration;)V
+
     iput v1, p0, Landroid/content/res/Configuration;->mnc:I
 
     iput v1, p0, Landroid/content/res/Configuration;->mcc:I
@@ -1437,8 +1439,6 @@
     iput v1, p0, Landroid/content/res/Configuration;->layoutDirection:I
 
     iput v1, p0, Landroid/content/res/Configuration;->seq:I
-
-    invoke-static {p0}, Landroid/content/res/Configuration$Injector;->initCutomTheme(Landroid/content/res/Configuration;)V
 
     return-void
 .end method

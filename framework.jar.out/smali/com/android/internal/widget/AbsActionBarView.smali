@@ -531,11 +531,68 @@
 .end method
 
 .method protected positionChild(Landroid/view/View;III)I
+    .locals 9
+    .parameter "child"
+    .parameter "x"
+    .parameter "y"
+    .parameter "contentHeight"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v8
+
+    .local v8, childWidth:I
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredHeight()I
+
+    move-result v6
+
+    .local v6, childHeight:I
+    sub-int v0, p4, v6
+
+    div-int/lit8 v0, v0, 0x2
+
+    add-int v7, p3, v0
+
+    .local v7, childTop:I
+    add-int v0, p2, v8
+
+    add-int v1, v7, v6
+
+    invoke-virtual {p1, p2, v7, v0, v1}, Landroid/view/View;->layout(IIII)V
+
+    const/4 v5, 0x0
+
+    move-object v0, p0
+
+    move-object v1, p1
+
+    move v2, p2
+
+    move v3, p3
+
+    move v4, p4
+
+    invoke-virtual/range {v0 .. v5}, Lcom/android/internal/widget/AbsActionBarView;->positionChild(Landroid/view/View;IIIZ)I
+
+    move-result v0
+
+    return v0
+.end method
+
+.method protected positionChild(Landroid/view/View;IIIZ)I
     .locals 5
     .parameter "child"
     .parameter "x"
     .parameter "y"
     .parameter "contentHeight"
+    .parameter "reverse"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
@@ -555,13 +612,32 @@
     add-int v1, p3, v3
 
     .local v1, childTop:I
+    if-eqz p5, :cond_1
+
+    sub-int v3, p2, v2
+
+    add-int v4, v1, v0
+
+    invoke-virtual {p1, v3, v1, p2, v4}, Landroid/view/View;->layout(IIII)V
+
+    :goto_0
+    if-eqz p5, :cond_0
+
+    neg-int v2, v2
+
+    .end local v2           #childWidth:I
+    :cond_0
+    return v2
+
+    .restart local v2       #childWidth:I
+    :cond_1
     add-int v3, p2, v2
 
     add-int v4, v1, v0
 
     invoke-virtual {p1, p2, v1, v3, v4}, Landroid/view/View;->layout(IIII)V
 
-    return v2
+    goto :goto_0
 .end method
 
 .method protected positionChildInverse(Landroid/view/View;III)I

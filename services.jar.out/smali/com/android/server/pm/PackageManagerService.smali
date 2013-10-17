@@ -168,6 +168,12 @@
 
 .field static final WRITE_SETTINGS_DELAY:I = 0x2710
 
+.field static mIconManager:Llewa/util/IIconManager; = null
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field private static final mProviderInitOrderSorter:Ljava/util/Comparator; = null
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -6855,6 +6861,43 @@
     invoke-static {v4, v5}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
 
     move-object v2, v3
+
+    goto :goto_0
+.end method
+
+.method public static getIconManager()Llewa/util/IIconManager;
+    .locals 2
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    sget-object v1, Lcom/android/server/pm/PackageManagerService;->mIconManager:Llewa/util/IIconManager;
+
+    if-eqz v1, :cond_0
+
+    sget-object v1, Lcom/android/server/pm/PackageManagerService;->mIconManager:Llewa/util/IIconManager;
+
+    .local v0, b:Landroid/os/IBinder;
+    :goto_0
+    return-object v1
+
+    .end local v0           #b:Landroid/os/IBinder;
+    :cond_0
+    const-string v1, "iconmanager"
+
+    invoke-static {v1}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
+
+    move-result-object v0
+
+    .restart local v0       #b:Landroid/os/IBinder;
+    invoke-static {v0}, Llewa/util/IIconManager$Stub;->asInterface(Landroid/os/IBinder;)Llewa/util/IIconManager;
+
+    move-result-object v1
+
+    sput-object v1, Lcom/android/server/pm/PackageManagerService;->mIconManager:Llewa/util/IIconManager;
+
+    sget-object v1, Lcom/android/server/pm/PackageManagerService;->mIconManager:Llewa/util/IIconManager;
 
     goto :goto_0
 .end method

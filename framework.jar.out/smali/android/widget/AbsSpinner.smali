@@ -99,6 +99,9 @@
     .parameter "context"
     .parameter "attrs"
     .parameter "defStyle"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v4, 0x0
@@ -141,11 +144,11 @@
     .local v2, entries:[Ljava/lang/CharSequence;
     if-eqz v2, :cond_0
 
-    new-instance v1, Landroid/widget/ArrayAdapter;
-
     const v3, 0x1090008
 
-    invoke-direct {v1, p1, v3, v2}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;I[Ljava/lang/Object;)V
+    invoke-direct {p0, p1, v3, v2, p2}, Landroid/widget/AbsSpinner;->absSpinnerExt(Landroid/content/Context;I[Ljava/lang/CharSequence;Landroid/util/AttributeSet;)Landroid/widget/ArrayAdapter;
+
+    move-result-object v1
 
     .local v1, adapter:Landroid/widget/ArrayAdapter;,"Landroid/widget/ArrayAdapter<Ljava/lang/CharSequence;>;"
     const v3, 0x1090009
@@ -159,6 +162,53 @@
     invoke-virtual {v0}, Landroid/content/res/TypedArray;->recycle()V
 
     return-void
+.end method
+
+.method private absSpinnerExt(Landroid/content/Context;I[Ljava/lang/CharSequence;Landroid/util/AttributeSet;)Landroid/widget/ArrayAdapter;
+    .locals 3
+    .parameter "context"
+    .parameter "defaultId"
+    .parameter "entries"
+    .parameter "attrs"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Context;",
+            "I[",
+            "Ljava/lang/CharSequence;",
+            "Landroid/util/AttributeSet;",
+            ")",
+            "Landroid/widget/ArrayAdapter",
+            "<",
+            "Ljava/lang/CharSequence;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    invoke-static {p1, p4}, Llewa/util/LewaUiUtil;->isSpinnerV5Style(Landroid/content/Context;Landroid/util/AttributeSet;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    new-instance v0, Landroid/widget/ArrayAdapter;
+
+    const v1, 0x909001c
+
+    const v2, 0x1020014
+
+    invoke-direct {v0, p1, v1, v2, p3}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;II[Ljava/lang/Object;)V
+
+    :goto_0
+    return-object v0
+
+    :cond_0
+    new-instance v0, Landroid/widget/ArrayAdapter;
+
+    invoke-direct {v0, p1, p2, p3}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;I[Ljava/lang/Object;)V
+
+    goto :goto_0
 .end method
 
 .method static synthetic access$100(Landroid/widget/AbsSpinner;Landroid/view/View;Z)V

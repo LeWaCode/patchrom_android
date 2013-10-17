@@ -2475,6 +2475,34 @@
     return v0
 .end method
 
+.method public lewaGetActionItems()Ljava/util/ArrayList;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Lcom/android/internal/view/menu/MenuBuilder;->getActionItems()Ljava/util/ArrayList;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public lewaGetVisibleItems()Ljava/util/ArrayList;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Lcom/android/internal/view/menu/MenuBuilder;->getVisibleItems()Ljava/util/ArrayList;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method onItemActionRequestChanged(Lcom/android/internal/view/menu/MenuItemImpl;)V
     .locals 1
     .parameter "item"

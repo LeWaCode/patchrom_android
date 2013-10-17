@@ -203,6 +203,12 @@
 .method public abstract setNavigationMode(I)V
 .end method
 
+.method public abstract setScrollState(I)V
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end method
+
 .method public abstract setSelectedNavigationItem(I)V
 .end method
 
@@ -238,6 +244,12 @@
 .end method
 
 .method public abstract showSplit()V
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end method
+
+.method public abstract smoothScrollTabIndicator(IFI)V
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation

@@ -6,6 +6,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Landroid/widget/DatePicker$Injector;,
         Landroid/widget/DatePicker$SavedState;,
         Landroid/widget/DatePicker$OnDateChangedListener;
     }
@@ -205,6 +206,12 @@
     move-result-object v8
 
     .local v8, maxDate:Ljava/lang/String;
+    invoke-static/range {p1 .. p1}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v13
+
+    if-nez v13, :cond_lewa_0
+
     const/4 v13, 0x6
 
     const v14, 0x1090035
@@ -214,6 +221,7 @@
     move-result v7
 
     .local v7, layoutResourceId:I
+    :goto_lewa_0
     invoke-virtual {v3}, Landroid/content/res/TypedArray;->recycle()V
 
     const-string v13, "layout_inflater"
@@ -242,6 +250,12 @@
     .local v10, onChangeListener:Landroid/widget/NumberPicker$OnValueChangeListener;
     const v13, 0x102026e
 
+    move-object/from16 v0, p1
+
+    invoke-static {v0, v13}, Landroid/widget/DatePicker$Injector;->getSpinnersResourceId(Landroid/content/Context;I)I
+
+    move-result v13
+
     move-object/from16 v0, p0
 
     invoke-virtual {v0, v13}, Landroid/widget/DatePicker;->findViewById(I)Landroid/view/View;
@@ -255,6 +269,12 @@
     iput-object v13, v0, Landroid/widget/DatePicker;->mSpinners:Landroid/widget/LinearLayout;
 
     const v13, 0x1020272
+
+    move-object/from16 v0, p1
+
+    invoke-static {v0, v13}, Landroid/widget/DatePicker$Injector;->getCalendarViewResourceId(Landroid/content/Context;I)I
+
+    move-result v13
 
     move-object/from16 v0, p0
 
@@ -281,6 +301,12 @@
     invoke-virtual {v13, v14}, Landroid/widget/CalendarView;->setOnDateChangeListener(Landroid/widget/CalendarView$OnDateChangeListener;)V
 
     const v13, 0x1020270
+
+    move-object/from16 v0, p1
+
+    invoke-static {v0, v13}, Landroid/widget/DatePicker$Injector;->getDaySpinnerResourceId(Landroid/content/Context;I)I
+
+    move-result v13
 
     move-object/from16 v0, p0
 
@@ -333,6 +359,12 @@
     iput-object v13, v0, Landroid/widget/DatePicker;->mDaySpinnerInput:Landroid/widget/EditText;
 
     const v13, 0x102026f
+
+    move-object/from16 v0, p1
+
+    invoke-static {v0, v13}, Landroid/widget/DatePicker$Injector;->getMonthSpinnerResourceId(Landroid/content/Context;I)I
+
+    move-result v13
 
     move-object/from16 v0, p0
 
@@ -407,6 +439,12 @@
     iput-object v13, v0, Landroid/widget/DatePicker;->mMonthSpinnerInput:Landroid/widget/EditText;
 
     const v13, 0x1020271
+
+    move-object/from16 v0, p1
+
+    invoke-static {v0, v13}, Landroid/widget/DatePicker$Injector;->getYearSpinnerResourceId(Landroid/content/Context;I)I
+
+    move-result v13
 
     move-object/from16 v0, p0
 
@@ -624,6 +662,17 @@
     :cond_2
     return-void
 
+    .end local v6           #inflater:Landroid/view/LayoutInflater;
+    .end local v7           #layoutResourceId:I
+    .end local v10           #onChangeListener:Landroid/widget/NumberPicker$OnValueChangeListener;
+    :cond_lewa_0
+    const v7, 0x9090013
+
+    goto/16 :goto_lewa_0
+
+    .restart local v6       #inflater:Landroid/view/LayoutInflater;
+    .restart local v7       #layoutResourceId:I
+    .restart local v10       #onChangeListener:Landroid/widget/NumberPicker$OnValueChangeListener;
     :cond_3
     move-object/from16 v0, p0
 
@@ -977,6 +1026,10 @@
     throw v3
 
     :sswitch_0
+    iget-object v3, p0, Landroid/widget/DatePicker;->mDaySpinner:Landroid/widget/NumberPicker;
+
+    invoke-direct {p0, v3, v0, v2}, Landroid/widget/DatePicker;->setPosState(Landroid/widget/NumberPicker;II)V
+
     iget-object v3, p0, Landroid/widget/DatePicker;->mSpinners:Landroid/widget/LinearLayout;
 
     iget-object v4, p0, Landroid/widget/DatePicker;->mDaySpinner:Landroid/widget/NumberPicker;
@@ -993,6 +1046,10 @@
     goto :goto_0
 
     :sswitch_1
+    iget-object v3, p0, Landroid/widget/DatePicker;->mDaySpinner:Landroid/widget/NumberPicker;
+
+    invoke-direct {p0, v3, v0, v2}, Landroid/widget/DatePicker;->setPosState(Landroid/widget/NumberPicker;II)V
+
     iget-object v3, p0, Landroid/widget/DatePicker;->mSpinners:Landroid/widget/LinearLayout;
 
     iget-object v4, p0, Landroid/widget/DatePicker;->mMonthSpinner:Landroid/widget/NumberPicker;
@@ -1006,6 +1063,10 @@
     goto :goto_1
 
     :sswitch_2
+    iget-object v3, p0, Landroid/widget/DatePicker;->mDaySpinner:Landroid/widget/NumberPicker;
+
+    invoke-direct {p0, v3, v0, v2}, Landroid/widget/DatePicker;->setPosState(Landroid/widget/NumberPicker;II)V
+
     iget-object v3, p0, Landroid/widget/DatePicker;->mSpinners:Landroid/widget/LinearLayout;
 
     iget-object v4, p0, Landroid/widget/DatePicker;->mYearSpinner:Landroid/widget/NumberPicker;
@@ -1021,12 +1082,76 @@
     :cond_0
     return-void
 
+    nop
+
     :sswitch_data_0
     .sparse-switch
         0x4d -> :sswitch_1
         0x64 -> :sswitch_0
         0x79 -> :sswitch_2
     .end sparse-switch
+.end method
+
+.method private resetShortMonths()V
+    .locals 3
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v1, p0, Landroid/widget/DatePicker;->mCurrentLocale:Ljava/util/Locale;
+
+    invoke-virtual {v1}, Ljava/util/Locale;->getCountry()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/String;->toUpperCase()Ljava/lang/String;
+
+    move-result-object v1
+
+    const-string v2, "CN"
+
+    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    iget-object v1, p0, Landroid/widget/DatePicker;->mContext:Landroid/content/Context;
+
+    invoke-static {v1}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    const/4 v0, 0x0
+
+    .local v0, i:I
+    :goto_0
+    iget-object v1, p0, Landroid/widget/DatePicker;->mShortMonths:[Ljava/lang/String;
+
+    array-length v1, v1
+
+    if-ge v0, v1, :cond_0
+
+    iget-object v1, p0, Landroid/widget/DatePicker;->mShortMonths:[Ljava/lang/String;
+
+    add-int/lit8 v2, v0, 0x1
+
+    invoke-static {v2}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+
+    move-result-object v2
+
+    aput-object v2, v1, v0
+
+    add-int/lit8 v0, v0, 0x1
+
+    goto :goto_0
+
+    .end local v0           #i:I
+    :cond_0
+    return-void
 .end method
 
 .method private setContentDescriptions()V
@@ -1089,7 +1214,7 @@
 
     if-eqz v1, :cond_1
 
-    :cond_0
+    :goto_lewa_0
     return-void
 
     :cond_1
@@ -1168,6 +1293,11 @@
     add-int/lit8 v0, v0, 0x1
 
     goto :goto_0
+
+    :cond_0
+    invoke-direct {p0}, Landroid/widget/DatePicker;->resetShortMonths()V
+
+    goto :goto_lewa_0
 .end method
 
 .method private setDate(III)V
@@ -1264,6 +1394,34 @@
 
     .restart local v0       #imeOptions:I
     goto :goto_0
+.end method
+
+.method private setPosState(Landroid/widget/NumberPicker;II)V
+    .locals 2
+    .parameter "v"
+    .parameter "pos"
+    .parameter "count"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    instance-of v1, p1, Llewa/internal/v5/widget/NumberPicker;
+
+    if-eqz v1, :cond_0
+
+    move-object v0, p1
+
+    check-cast v0, Llewa/internal/v5/widget/NumberPicker;
+
+    .local v0, numberpicker:Llewa/internal/v5/widget/NumberPicker;
+    const/4 v1, 0x1
+
+    invoke-virtual {v0, v1}, Llewa/internal/v5/widget/NumberPicker;->setPositionState(I)V
+
+    .end local v0           #numberpicker:Llewa/internal/v5/widget/NumberPicker;
+    :cond_0
+    return-void
 .end method
 
 .method private trySetContentDescription(Landroid/view/View;II)V

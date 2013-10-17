@@ -6,11 +6,11 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Lcom/android/server/NotificationManagerService$Injector;,
         Lcom/android/server/NotificationManagerService$WorkerHandler;,
         Lcom/android/server/NotificationManagerService$SettingsObserver;,
         Lcom/android/server/NotificationManagerService$ToastRecord;,
-        Lcom/android/server/NotificationManagerService$NotificationRecord;
+        Lcom/android/server/NotificationManagerService$NotificationRecord;,
+        Lcom/android/server/NotificationManagerService$Injector;
     }
 .end annotation
 
@@ -111,7 +111,11 @@
 
 .field private mHandler:Lcom/android/server/NotificationManagerService$WorkerHandler;
 
-.field private mInCall:Z
+.field mInCall:Z
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mIntentReceiver:Landroid/content/BroadcastReceiver;
 
@@ -488,16 +492,6 @@
     iput-boolean p1, p0, Lcom/android/server/NotificationManagerService;->mScreenOn:Z
 
     return p1
-.end method
-
-.method static synthetic access$1200(Lcom/android/server/NotificationManagerService;)Z
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    iget-boolean v0, p0, Lcom/android/server/NotificationManagerService;->mInCall:Z
-
-    return v0
 .end method
 
 .method static synthetic access$1202(Lcom/android/server/NotificationManagerService;Z)Z

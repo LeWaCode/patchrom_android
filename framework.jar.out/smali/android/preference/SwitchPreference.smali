@@ -7,6 +7,8 @@
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
         Landroid/preference/SwitchPreference$1;,
+        Landroid/preference/SwitchPreference$SlidingButtonListener;,
+        Landroid/preference/SwitchPreference$Injector;,
         Landroid/preference/SwitchPreference$Listener;
     }
 .end annotation
@@ -115,6 +117,36 @@
     return-void
 .end method
 
+.method private setOnBindeViewListener(Landroid/view/View;)V
+    .locals 3
+    .parameter "checkableView"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    instance-of v1, p1, Llewa/internal/v5/widget/SlidingButton;
+
+    if-eqz v1, :cond_0
+
+    move-object v0, p1
+
+    check-cast v0, Llewa/internal/v5/widget/SlidingButton;
+
+    .local v0, slidingButton:Llewa/internal/v5/widget/SlidingButton;
+    new-instance v1, Landroid/preference/SwitchPreference$SlidingButtonListener;
+
+    const/4 v2, 0x0
+
+    invoke-direct {v1, p0, v2}, Landroid/preference/SwitchPreference$SlidingButtonListener;-><init>(Landroid/preference/SwitchPreference;Landroid/preference/SwitchPreference$1;)V
+
+    invoke-virtual {v0, v1}, Llewa/internal/v5/widget/SlidingButton;->setOnCheckedChangedListener(Llewa/internal/v5/widget/SlidingButton$OnCheckedChangedListener;)V
+
+    .end local v0           #slidingButton:Llewa/internal/v5/widget/SlidingButton;
+    :cond_0
+    return-void
+.end method
+
 
 # virtual methods
 .method public getSwitchTextOff()Ljava/lang/CharSequence;
@@ -145,7 +177,15 @@
     .prologue
     invoke-super {p0, p1}, Landroid/preference/TwoStatePreference;->onBindView(Landroid/view/View;)V
 
-    const v2, 0x1020308
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getContext()Landroid/content/Context;
+
+    move-result-object v2
+
+    const v3, 0x1020308
+
+    invoke-static {v2, v3}, Landroid/preference/SwitchPreference$Injector;->getCheckableResourceId(Landroid/content/Context;I)I
+
+    move-result v2
 
     invoke-virtual {p1, v2}, Landroid/view/View;->findViewById(I)Landroid/view/View;
 
@@ -189,17 +229,165 @@
 
     move-result v2
 
-    if-eqz v2, :cond_0
+    if-eqz v2, :cond_lewa_0
 
     iget-object v2, p0, Landroid/preference/SwitchPreference;->mListener:Landroid/preference/SwitchPreference$Listener;
 
     invoke-virtual {v1, v2}, Landroid/widget/Switch;->setOnCheckedChangeListener(Landroid/widget/CompoundButton$OnCheckedChangeListener;)V
 
     .end local v1           #switchView:Landroid/widget/Switch;
+    :cond_lewa_0
+    invoke-direct {p0, v0}, Landroid/preference/SwitchPreference;->setOnBindeViewListener(Landroid/view/View;)V
+
     :cond_0
     invoke-virtual {p0, p1}, Landroid/preference/SwitchPreference;->syncSummaryView(Landroid/view/View;)V
 
     return-void
+.end method
+
+.method protected onCreateView(Landroid/view/ViewGroup;)Landroid/view/View;
+    .locals 7
+    .parameter "parent"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    .local v0, context:Landroid/content/Context;
+    invoke-static {v0}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v5
+
+    if-eqz v5, :cond_2
+
+    const v3, 0x9090012
+
+    .local v3, mWidgetLayoutResId:I
+    const-string v5, "layout_inflater"
+
+    invoke-virtual {v0, v5}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Landroid/view/LayoutInflater;
+
+    .local v2, layoutInflater:Landroid/view/LayoutInflater;
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getLayoutResource()I
+
+    move-result v5
+
+    const/4 v6, 0x0
+
+    invoke-virtual {v2, v5, p1, v6}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;
+
+    move-result-object v1
+
+    .local v1, layout:Landroid/view/View;
+    const v5, 0x1020018
+
+    invoke-virtual {v1, v5}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v4
+
+    check-cast v4, Landroid/view/ViewGroup;
+
+    .local v4, widgetFrame:Landroid/view/ViewGroup;
+    if-eqz v4, :cond_0
+
+    if-eqz v3, :cond_1
+
+    invoke-virtual {v2, v3, v4}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
+
+    .end local v1           #layout:Landroid/view/View;
+    .end local v2           #layoutInflater:Landroid/view/LayoutInflater;
+    .end local v3           #mWidgetLayoutResId:I
+    .end local v4           #widgetFrame:Landroid/view/ViewGroup;
+    :cond_0
+    :goto_0
+    return-object v1
+
+    .restart local v1       #layout:Landroid/view/View;
+    .restart local v2       #layoutInflater:Landroid/view/LayoutInflater;
+    .restart local v3       #mWidgetLayoutResId:I
+    .restart local v4       #widgetFrame:Landroid/view/ViewGroup;
+    :cond_1
+    const/16 v5, 0x8
+
+    invoke-virtual {v4, v5}, Landroid/view/ViewGroup;->setVisibility(I)V
+
+    goto :goto_0
+
+    .end local v1           #layout:Landroid/view/View;
+    .end local v2           #layoutInflater:Landroid/view/LayoutInflater;
+    .end local v3           #mWidgetLayoutResId:I
+    .end local v4           #widgetFrame:Landroid/view/ViewGroup;
+    :cond_2
+    invoke-super {p0, p1}, Landroid/preference/TwoStatePreference;->onCreateView(Landroid/view/ViewGroup;)Landroid/view/View;
+
+    move-result-object v1
+
+    goto :goto_0
+.end method
+
+.method performClick()V
+    .locals 4
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->isEnabled()Z
+
+    move-result v3
+
+    if-nez v3, :cond_1
+
+    :cond_0
+    :goto_0
+    return-void
+
+    :cond_1
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getOnPreferenceClickListener()Landroid/preference/Preference$OnPreferenceClickListener;
+
+    move-result-object v1
+
+    .local v1, onPreferenceClickListener:Landroid/preference/Preference$OnPreferenceClickListener;
+    if-eqz v1, :cond_2
+
+    invoke-interface {v1, p0}, Landroid/preference/Preference$OnPreferenceClickListener;->onPreferenceClick(Landroid/preference/Preference;)Z
+
+    move-result v3
+
+    if-nez v3, :cond_0
+
+    :cond_2
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getPreferenceManager()Landroid/preference/PreferenceManager;
+
+    move-result-object v2
+
+    .local v2, preferenceManager:Landroid/preference/PreferenceManager;
+    if-eqz v2, :cond_0
+
+    invoke-virtual {v2}, Landroid/preference/PreferenceManager;->getOnPreferenceTreeClickListener()Landroid/preference/PreferenceManager$OnPreferenceTreeClickListener;
+
+    move-result-object v0
+
+    .local v0, listener:Landroid/preference/PreferenceManager$OnPreferenceTreeClickListener;
+    if-eqz v0, :cond_0
+
+    const/4 v3, 0x0
+
+    invoke-interface {v0, v3, p0}, Landroid/preference/PreferenceManager$OnPreferenceTreeClickListener;->onPreferenceTreeClick(Landroid/preference/PreferenceScreen;Landroid/preference/Preference;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_0
+
+    goto :goto_0
 .end method
 
 .method public setSwitchTextOff(I)V

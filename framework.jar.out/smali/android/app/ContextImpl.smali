@@ -8,8 +8,7 @@
     value = {
         Landroid/app/ContextImpl$ApplicationContentResolver;,
         Landroid/app/ContextImpl$StaticServiceFetcher;,
-        Landroid/app/ContextImpl$ServiceFetcher;,
-        Landroid/app/ContextImpl$Injector;
+        Landroid/app/ContextImpl$ServiceFetcher;
     }
 .end annotation
 
@@ -427,8 +426,6 @@
     invoke-direct {v1}, Landroid/app/ContextImpl$37;-><init>()V
 
     invoke-static {v0, v1}, Landroid/app/ContextImpl;->registerService(Ljava/lang/String;Landroid/app/ContextImpl$ServiceFetcher;)V
-
-    invoke-static {}, Landroid/app/ContextImpl$Injector;->registerIconManagerService()V
 
     return-void
 .end method
@@ -1205,13 +1202,10 @@
     goto :goto_1
 .end method
 
-.method static registerService(Ljava/lang/String;Landroid/app/ContextImpl$ServiceFetcher;)V
+.method private static registerService(Ljava/lang/String;Landroid/app/ContextImpl$ServiceFetcher;)V
     .locals 2
     .parameter "serviceName"
     .parameter "fetcher"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     instance-of v0, p1, Landroid/app/ContextImpl$StaticServiceFetcher;

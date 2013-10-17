@@ -6,6 +6,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Landroid/widget/NumberPicker$Injector;,
         Landroid/widget/NumberPicker$AccessibilityNodeProviderImpl;,
         Landroid/widget/NumberPicker$BeginSoftInputOnLongPressCommand;,
         Landroid/widget/NumberPicker$CustomEditText;,
@@ -49,6 +50,10 @@
 
 
 # instance fields
+.field private EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+.field private EXTRA_SELECTOR_WHEEL_ITEM_COUNT:I
+
 .field private mAccessibilityNodeProvider:Landroid/widget/NumberPicker$AccessibilityNodeProviderImpl;
 
 .field private final mAdjustScroller:Landroid/widget/Scroller;
@@ -68,6 +73,12 @@
 .field private mDecrementVirtualButtonPressed:Z
 
 .field private mDisplayedValues:[Ljava/lang/String;
+
+.field private mExtraMaxHeight:I
+
+.field private mExtraSelectionDividersDistance:I
+
+.field private mExtraSelectorIndices:[I
 
 .field private final mFlingScroller:Landroid/widget/Scroller;
 
@@ -147,6 +158,8 @@
 .field private final mSelectorWheelPaint:Landroid/graphics/Paint;
 
 .field private mSetSelectionCommand:Landroid/widget/NumberPicker$SetSelectionCommand;
+
+.field private mShowSoftInput:Z
 
 .field private mShowSoftInputOnTap:Z
 
@@ -239,6 +252,40 @@
     .prologue
     invoke-direct/range {p0 .. p3}, Landroid/widget/LinearLayout;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V
 
+    const/4 v14, 0x1
+
+    move-object/from16 v0, p0
+
+    iput-boolean v14, v0, Landroid/widget/NumberPicker;->mShowSoftInput:Z
+
+    const/4 v14, 0x3
+
+    move-object/from16 v0, p0
+
+    iput v14, v0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_WHEEL_ITEM_COUNT:I
+
+    move-object/from16 v0, p0
+
+    iget v14, v0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_WHEEL_ITEM_COUNT:I
+
+    div-int/lit8 v14, v14, 0x2
+
+    move-object/from16 v0, p0
+
+    iput v14, v0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    const/4 v14, 0x0
+
+    move-object/from16 v0, p0
+
+    iput v14, v0, Landroid/widget/NumberPicker;->mSelectionDividersDistance:I
+
+    const/4 v14, 0x0
+
+    move-object/from16 v0, p0
+
+    iput v14, v0, Landroid/widget/NumberPicker;->mMaxHeight:I
+
     const-wide/16 v14, 0x12c
 
     move-object/from16 v0, p0
@@ -260,6 +307,16 @@
     move-object/from16 v0, p0
 
     iput-object v14, v0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+
+    move-object/from16 v0, p0
+
+    iget v14, v0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_WHEEL_ITEM_COUNT:I
+
+    new-array v14, v14, [I
+
+    move-object/from16 v0, p0
+
+    iput-object v14, v0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     const/high16 v14, -0x8000
 
@@ -386,7 +443,7 @@
 
     move-object/from16 v0, p0
 
-    iput v14, v0, Landroid/widget/NumberPicker;->mSelectionDividersDistance:I
+    iput v14, v0, Landroid/widget/NumberPicker;->mExtraSelectionDividersDistance:I
 
     const/4 v14, 0x5
 
@@ -410,7 +467,7 @@
 
     move-object/from16 v0, p0
 
-    iput v14, v0, Landroid/widget/NumberPicker;->mMaxHeight:I
+    iput v14, v0, Landroid/widget/NumberPicker;->mExtraMaxHeight:I
 
     move-object/from16 v0, p0
 
@@ -422,7 +479,7 @@
 
     move-object/from16 v0, p0
 
-    iget v14, v0, Landroid/widget/NumberPicker;->mMaxHeight:I
+    iget v14, v0, Landroid/widget/NumberPicker;->mExtraMaxHeight:I
 
     const/4 v15, -0x1
 
@@ -434,7 +491,7 @@
 
     move-object/from16 v0, p0
 
-    iget v15, v0, Landroid/widget/NumberPicker;->mMaxHeight:I
+    iget v15, v0, Landroid/widget/NumberPicker;->mExtraMaxHeight:I
 
     if-le v14, v15, :cond_1
 
@@ -1181,7 +1238,7 @@
     .parameter "x0"
 
     .prologue
-    invoke-direct {p0}, Landroid/widget/NumberPicker;->showSoftInput()V
+    invoke-direct {p0}, Landroid/widget/NumberPicker;->showSoftInputExt()V
 
     return-void
 .end method
@@ -2236,7 +2293,7 @@
     .prologue
     invoke-direct {p0}, Landroid/widget/NumberPicker;->initializeSelectorWheelIndices()V
 
-    iget-object v1, p0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v1, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     .local v1, selectorIndices:[I
     array-length v5, v1
@@ -2297,7 +2354,9 @@
     .local v0, editTextTextPosition:I
     iget v5, p0, Landroid/widget/NumberPicker;->mSelectorElementHeight:I
 
-    mul-int/lit8 v5, v5, 0x1
+    iget v6, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    mul-int/2addr v5, v6
 
     sub-int v5, v0, v5
 
@@ -2320,7 +2379,7 @@
 
     invoke-virtual {v4}, Landroid/util/SparseArray;->clear()V
 
-    iget-object v3, p0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v3, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     .local v3, selectorIndices:[I
     invoke-virtual {p0}, Landroid/widget/NumberPicker;->getValue()I
@@ -2332,13 +2391,15 @@
 
     .local v1, i:I
     :goto_0
-    iget-object v4, p0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v4, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     array-length v4, v4
 
     if-ge v1, v4, :cond_1
 
-    add-int/lit8 v4, v1, -0x1
+    iget v4, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    sub-int v4, v1, v4
 
     add-int v2, v0, v4
 
@@ -2907,6 +2968,45 @@
 
     invoke-virtual {v0, v1, v2}, Landroid/view/inputmethod/InputMethodManager;->showSoftInput(Landroid/view/View;I)Z
 
+    :cond_1
+    return-void
+.end method
+
+.method private showSoftInputExt()V
+    .locals 3
+
+    .prologue
+    const/4 v2, 0x0
+
+    iget-boolean v1, p0, Landroid/widget/NumberPicker;->mShowSoftInput:Z
+
+    if-eqz v1, :cond_1
+
+    invoke-static {}, Landroid/view/inputmethod/InputMethodManager;->peekInstance()Landroid/view/inputmethod/InputMethodManager;
+
+    move-result-object v0
+
+    .local v0, inputMethodManager:Landroid/view/inputmethod/InputMethodManager;
+    if-eqz v0, :cond_1
+
+    iget-boolean v1, p0, Landroid/widget/NumberPicker;->mHasSelectorWheel:Z
+
+    if-eqz v1, :cond_0
+
+    iget-object v1, p0, Landroid/widget/NumberPicker;->mInputText:Landroid/widget/EditText;
+
+    invoke-virtual {v1, v2}, Landroid/widget/EditText;->setVisibility(I)V
+
+    :cond_0
+    iget-object v1, p0, Landroid/widget/NumberPicker;->mInputText:Landroid/widget/EditText;
+
+    invoke-virtual {v1}, Landroid/widget/EditText;->requestFocus()Z
+
+    iget-object v1, p0, Landroid/widget/NumberPicker;->mInputText:Landroid/widget/EditText;
+
+    invoke-virtual {v0, v1, v2}, Landroid/view/inputmethod/InputMethodManager;->showSoftInput(Landroid/view/View;I)Z
+
+    .end local v0           #inputMethodManager:Landroid/view/inputmethod/InputMethodManager;
     :cond_1
     return-void
 .end method
@@ -3579,6 +3679,42 @@
     return v0
 .end method
 
+.method protected getBottomSelectionDividerBottom()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/widget/NumberPicker;->mBottomSelectionDividerBottom:I
+
+    return v0
+.end method
+
+.method protected getCurrentScrollOffset()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/widget/NumberPicker;->mCurrentScrollOffset:I
+
+    return v0
+.end method
+
+.method protected getDecrementVirtualBUttonPressed()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-boolean v0, p0, Landroid/widget/NumberPicker;->mDecrementVirtualButtonPressed:Z
+
+    return v0
+.end method
+
 .method public getDisplayedValues()[Ljava/lang/String;
     .locals 1
 
@@ -3586,6 +3722,42 @@
     iget-object v0, p0, Landroid/widget/NumberPicker;->mDisplayedValues:[Ljava/lang/String;
 
     return-object v0
+.end method
+
+.method protected getEditText()Landroid/widget/EditText;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/NumberPicker;->mInputText:Landroid/widget/EditText;
+
+    return-object v0
+.end method
+
+.method protected getIncrementVirtualButtonPressed()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-boolean v0, p0, Landroid/widget/NumberPicker;->mIncrementVirtualButtonPressed:Z
+
+    return v0
+.end method
+
+.method protected getInitialScrollOffset()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/widget/NumberPicker;->mInitialScrollOffset:I
+
+    return v0
 .end method
 
 .method public getMaxValue()I
@@ -3606,6 +3778,78 @@
     return v0
 .end method
 
+.method protected getMinWidth()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/widget/NumberPicker;->mMinWidth:I
+
+    return v0
+.end method
+
+.method protected getScrollState()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/widget/NumberPicker;->mScrollState:I
+
+    return v0
+.end method
+
+.method protected getSelectorElementHeight()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/widget/NumberPicker;->mSelectorElementHeight:I
+
+    return v0
+.end method
+
+.method protected getSelectorIndexToStringCache()Landroid/util/SparseArray;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/NumberPicker;->mSelectorIndexToStringCache:Landroid/util/SparseArray;
+
+    return-object v0
+.end method
+
+.method protected getSelectorIndices()[I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
+
+    return-object v0
+.end method
+
+.method protected getSelectorWheelPaint()Landroid/graphics/Paint;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/NumberPicker;->mSelectorWheelPaint:Landroid/graphics/Paint;
+
+    return-object v0
+.end method
+
 .method public getSolidColor()I
     .locals 1
 
@@ -3624,6 +3868,18 @@
     return v0
 .end method
 
+.method protected getTopSelectionDividerTop()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/widget/NumberPicker;->mTopSelectionDividerTop:I
+
+    return v0
+.end method
+
 .method public getValue()I
     .locals 1
 
@@ -3633,11 +3889,35 @@
     return v0
 .end method
 
+.method protected getVirtualButtonPressedDrawable()Landroid/graphics/drawable/Drawable;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/NumberPicker;->mVirtualButtonPressedDrawable:Landroid/graphics/drawable/Drawable;
+
+    return-object v0
+.end method
+
 .method public getWrapSelectorWheel()Z
     .locals 1
 
     .prologue
     iget-boolean v0, p0, Landroid/widget/NumberPicker;->mWrapSelectorWheel:Z
+
+    return v0
+.end method
+
+.method protected hasSelectorWheel()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-boolean v0, p0, Landroid/widget/NumberPicker;->mHasSelectorWheel:Z
 
     return v0
 .end method
@@ -3789,7 +4069,7 @@
     :cond_3
     move-object/from16 v0, p0
 
-    iget-object v6, v0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v6, v0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     .local v6, selectorIndices:[I
     const/4 v3, 0x0
@@ -3814,7 +4094,9 @@
     check-cast v4, Ljava/lang/String;
 
     .local v4, scrollSelectorValue:Ljava/lang/String;
-    const/4 v11, 0x1
+    move-object/from16 v0, p0
+
+    iget v11, v0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
 
     if-ne v3, v11, :cond_4
 
@@ -4058,11 +4340,13 @@
 
     :cond_2
     :goto_1
+    iget-object v3, p0, Landroid/widget/NumberPicker;->mContext:Landroid/content/Context;
+
     invoke-virtual {p0}, Landroid/widget/NumberPicker;->getParent()Landroid/view/ViewParent;
 
-    move-result-object v3
+    move-result-object v4
 
-    invoke-interface {v3, v1}, Landroid/view/ViewParent;->requestDisallowInterceptTouchEvent(Z)V
+    invoke-static {v3, v4}, Landroid/widget/NumberPicker$Injector;->requestDisallowInterceptTouchEvent(Landroid/content/Context;Landroid/view/ViewParent;)V
 
     iget-object v3, p0, Landroid/widget/NumberPicker;->mFlingScroller:Landroid/widget/Scroller;
 
@@ -4259,7 +4543,7 @@
 
     move-result v8
 
-    iget v9, p0, Landroid/widget/NumberPicker;->mSelectionDividersDistance:I
+    iget v9, p0, Landroid/widget/NumberPicker;->mExtraSelectionDividersDistance:I
 
     sub-int/2addr v8, v9
 
@@ -4279,7 +4563,7 @@
 
     add-int/2addr v8, v9
 
-    iget v9, p0, Landroid/widget/NumberPicker;->mSelectionDividersDistance:I
+    iget v9, p0, Landroid/widget/NumberPicker;->mExtraSelectionDividersDistance:I
 
     add-int/2addr v8, v9
 
@@ -4311,7 +4595,7 @@
     move-result v2
 
     .local v2, newWidthMeasureSpec:I
-    iget v4, p0, Landroid/widget/NumberPicker;->mMaxHeight:I
+    iget v4, p0, Landroid/widget/NumberPicker;->mExtraMaxHeight:I
 
     invoke-direct {p0, p2, v4}, Landroid/widget/NumberPicker;->makeMeasureSpec(II)I
 
@@ -4563,7 +4847,7 @@
 
     iput-boolean v10, p0, Landroid/widget/NumberPicker;->mShowSoftInputOnTap:Z
 
-    invoke-direct {p0}, Landroid/widget/NumberPicker;->showSoftInput()V
+    invoke-direct {p0}, Landroid/widget/NumberPicker;->showSoftInputExt()V
 
     :cond_7
     :goto_4
@@ -4578,7 +4862,9 @@
 
     div-int v10, v6, v10
 
-    add-int/lit8 v8, v10, -0x1
+    iget v11, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    sub-int v8, v10, v11
 
     .local v8, selectorIndexOffset:I
     if-lez v8, :cond_9
@@ -4625,6 +4911,54 @@
     .end packed-switch
 .end method
 
+.method protected reInitiate(IIIZ)V
+    .locals 1
+    .parameter "selectorWheelItemCount"
+    .parameter "maxHeight"
+    .parameter "selectionDividersDistance"
+    .parameter "showSoftInput"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iput p1, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_WHEEL_ITEM_COUNT:I
+
+    iget v0, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_WHEEL_ITEM_COUNT:I
+
+    div-int/lit8 v0, v0, 0x2
+
+    iput v0, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    iget v0, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_WHEEL_ITEM_COUNT:I
+
+    new-array v0, v0, [I
+
+    iput-object v0, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
+
+    iput p2, p0, Landroid/widget/NumberPicker;->mExtraMaxHeight:I
+
+    iput p3, p0, Landroid/widget/NumberPicker;->mExtraSelectionDividersDistance:I
+
+    iput-boolean p4, p0, Landroid/widget/NumberPicker;->mShowSoftInput:Z
+
+    return-void
+.end method
+
+.method protected remeasureMaxWidth()V
+    .locals 0
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-direct {p0}, Landroid/widget/NumberPicker;->tryComputeMaxWidth()V
+
+    invoke-virtual {p0}, Landroid/widget/NumberPicker;->invalidate()V
+
+    return-void
+.end method
+
 .method public scrollBy(II)V
     .locals 4
     .parameter "x"
@@ -4633,7 +4967,7 @@
     .prologue
     const/4 v3, 0x1
 
-    iget-object v0, p0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v0, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     .local v0, selectorIndices:[I
     iget-boolean v1, p0, Landroid/widget/NumberPicker;->mWrapSelectorWheel:Z
@@ -4642,7 +4976,9 @@
 
     if-lez p2, :cond_1
 
-    aget v1, v0, v3
+    iget v1, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    aget v1, v0, v1
 
     iget v2, p0, Landroid/widget/NumberPicker;->mMinValue:I
 
@@ -4663,7 +4999,9 @@
 
     if-gez p2, :cond_2
 
-    aget v1, v0, v3
+    iget v1, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    aget v1, v0, v1
 
     iget v2, p0, Landroid/widget/NumberPicker;->mMaxValue:I
 
@@ -4704,7 +5042,9 @@
 
     invoke-direct {p0, v0}, Landroid/widget/NumberPicker;->decrementSelectorIndices([I)V
 
-    aget v1, v0, v3
+    iget v1, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    aget v1, v0, v1
 
     invoke-direct {p0, v1, v3}, Landroid/widget/NumberPicker;->setValueInternal(IZ)V
 
@@ -4712,7 +5052,9 @@
 
     if-nez v1, :cond_3
 
-    aget v1, v0, v3
+    iget v1, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    aget v1, v0, v1
 
     iget v2, p0, Landroid/widget/NumberPicker;->mMinValue:I
 
@@ -4748,7 +5090,9 @@
 
     invoke-direct {p0, v0}, Landroid/widget/NumberPicker;->incrementSelectorIndices([I)V
 
-    aget v1, v0, v3
+    iget v1, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    aget v1, v0, v1
 
     invoke-direct {p0, v1, v3}, Landroid/widget/NumberPicker;->setValueInternal(IZ)V
 
@@ -4756,7 +5100,9 @@
 
     if-nez v1, :cond_4
 
-    aget v1, v0, v3
+    iget v1, p0, Landroid/widget/NumberPicker;->EXTRA_SELECTOR_MIDDLE_ITEM_INDEX:I
+
+    aget v1, v0, v1
 
     iget v2, p0, Landroid/widget/NumberPicker;->mMaxValue:I
 
@@ -4910,7 +5256,7 @@
 
     sub-int/2addr v1, v2
 
-    iget-object v2, p0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v2, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     array-length v2, v2
 
@@ -4982,7 +5328,7 @@
 
     sub-int/2addr v1, v2
 
-    iget-object v2, p0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v2, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     array-length v2, v2
 
@@ -5064,7 +5410,7 @@
 
     sub-int/2addr v1, v2
 
-    iget-object v2, p0, Landroid/widget/NumberPicker;->mSelectorIndices:[I
+    iget-object v2, p0, Landroid/widget/NumberPicker;->mExtraSelectorIndices:[I
 
     array-length v2, v2
 

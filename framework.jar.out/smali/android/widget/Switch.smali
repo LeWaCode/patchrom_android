@@ -1084,7 +1084,7 @@
 
     move-result v13
 
-    if-eqz v13, :cond_1
+    if-eqz v13, :cond_2
 
     move-object/from16 v0, p0
 
@@ -1092,6 +1092,8 @@
 
     .local v8, switchText:Landroid/text/Layout;
     :goto_0
+    if-eqz v8, :cond_1
+
     add-int v13, v10, v12
 
     div-int/lit8 v13, v13, 0x2
@@ -1128,12 +1130,13 @@
 
     invoke-virtual {v8, v0}, Landroid/text/Layout;->draw(Landroid/graphics/Canvas;)V
 
+    :cond_1
     invoke-virtual/range {p1 .. p1}, Landroid/graphics/Canvas;->restore()V
 
     return-void
 
     .end local v8           #switchText:Landroid/text/Layout;
-    :cond_1
+    :cond_2
     move-object/from16 v0, p0
 
     iget-object v8, v0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;

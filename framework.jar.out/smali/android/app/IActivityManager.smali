@@ -187,12 +187,6 @@
 
 .field public static final PEEK_SERVICE_TRANSACTION:I = 0x55
 
-.field public static final PERFORM_APP_GCS:I = 0x12d
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field public static final PROFILE_CONTROL_TRANSACTION:I = 0x56
 
 .field public static final PUBLISH_CONTENT_PROVIDERS_TRANSACTION:I = 0x1e
@@ -1038,18 +1032,6 @@
 .end method
 
 .method public abstract peekService(Landroid/content/Intent;Ljava/lang/String;)Landroid/os/IBinder;
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
-.method public abstract performAppGcs()V
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;

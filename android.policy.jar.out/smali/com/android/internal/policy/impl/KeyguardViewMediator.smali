@@ -68,7 +68,7 @@
 
 .field private mBroadCastReceiver:Landroid/content/BroadcastReceiver;
 
-.field private mCallback:Lcom/android/internal/policy/impl/LewaPhoneWindowManager;
+.field private mCallback:Lcom/android/internal/policy/impl/PhoneWindowManager;
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
@@ -319,10 +319,7 @@
 
     iput-object v0, p0, Lcom/android/internal/policy/impl/KeyguardViewMediator;->mAlarmManager:Landroid/app/AlarmManager;
 
-    check-cast p2, Lcom/android/internal/policy/impl/LewaPhoneWindowManager;
-
-    .end local p2
-    iput-object p2, p0, Lcom/android/internal/policy/impl/KeyguardViewMediator;->mCallback:Lcom/android/internal/policy/impl/LewaPhoneWindowManager;
+    iput-object p2, p0, Lcom/android/internal/policy/impl/KeyguardViewMediator;->mCallback:Lcom/android/internal/policy/impl/PhoneWindowManager;
 
     new-instance v0, Lcom/android/internal/policy/impl/KeyguardUpdateMonitor;
 

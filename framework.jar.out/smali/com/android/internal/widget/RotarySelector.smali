@@ -2491,7 +2491,7 @@
 
     iput-boolean v0, p0, Lcom/android/internal/widget/RotarySelector;->mLenseMode:Z
 
-    const v0, 0x9080061
+    const v0, 0x908009b
 
     invoke-direct {p0, v0}, Lcom/android/internal/widget/RotarySelector;->getBitmapFor(I)Landroid/graphics/Bitmap;
 
@@ -2527,7 +2527,7 @@
 
     if-eqz v0, :cond_1
 
-    const v0, 0x908004e
+    const v0, 0x9080088
 
     invoke-direct {p0, v0}, Lcom/android/internal/widget/RotarySelector;->getBitmapFor(I)Landroid/graphics/Bitmap;
 
@@ -2536,7 +2536,7 @@
     iput-object v0, p0, Lcom/android/internal/widget/RotarySelector;->mBackground:Landroid/graphics/Bitmap;
 
     :goto_0
-    const v0, 0x9080050
+    const v0, 0x908008a
 
     invoke-direct {p0, v0}, Lcom/android/internal/widget/RotarySelector;->getBitmapFor(I)Landroid/graphics/Bitmap;
 
@@ -2544,7 +2544,7 @@
 
     iput-object v0, p0, Lcom/android/internal/widget/RotarySelector;->mDimple:Landroid/graphics/Bitmap;
 
-    const v0, 0x908004f
+    const v0, 0x9080089
 
     invoke-direct {p0, v0}, Lcom/android/internal/widget/RotarySelector;->getBitmapFor(I)Landroid/graphics/Bitmap;
 
@@ -2558,7 +2558,7 @@
     return-void
 
     :cond_1
-    const v0, 0x908004d
+    const v0, 0x9080087
 
     invoke-direct {p0, v0}, Lcom/android/internal/widget/RotarySelector;->getBitmapFor(I)Landroid/graphics/Bitmap;
 

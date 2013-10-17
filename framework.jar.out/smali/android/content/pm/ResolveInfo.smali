@@ -640,6 +640,8 @@
     .end annotation
 
     .prologue
+    const/4 v5, 0x0
+
     iget-object v3, p0, Landroid/content/pm/ResolveInfo;->resolvePackageName:Ljava/lang/String;
 
     if-eqz v3, :cond_1
@@ -652,9 +654,7 @@
 
     iget v4, p0, Landroid/content/pm/ResolveInfo;->icon:I
 
-    const/4 v5, 0x0
-
-    invoke-static {p0, p1, v3, v4, v5}, Landroid/content/pm/ResolveInfo$Injector;->getIconDrawable(Landroid/content/pm/ResolveInfo;Landroid/content/pm/PackageManager;Ljava/lang/String;ILandroid/content/pm/ApplicationInfo;)Landroid/graphics/drawable/Drawable;
+    invoke-virtual {p1, v3, v4, v5}, Landroid/content/pm/PackageManager;->getDrawable(Ljava/lang/String;ILandroid/content/pm/ApplicationInfo;)Landroid/graphics/drawable/Drawable;
 
     move-result-object v2
 
@@ -667,6 +667,17 @@
     return-object v2
 
     :cond_1
+    iget-object v3, p0, Landroid/content/pm/ResolveInfo;->resolvePackageName:Ljava/lang/String;
+
+    iget v4, p0, Landroid/content/pm/ResolveInfo;->icon:I
+
+    invoke-static {p0, p1, v3, v4, v5}, Landroid/content/pm/ResolveInfo$Injector;->getIconDrawable(Landroid/content/pm/ResolveInfo;Landroid/content/pm/PackageManager;Ljava/lang/String;ILandroid/content/pm/ApplicationInfo;)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v2
+
+    .restart local v2       #dr:Landroid/graphics/drawable/Drawable;
+    if-nez v2, :cond_0
+
     iget-object v3, p0, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
 
     if-eqz v3, :cond_3

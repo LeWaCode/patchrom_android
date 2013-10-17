@@ -135,6 +135,12 @@
 .method public abstract setCustomView(Landroid/view/View;)V
 .end method
 
+.method public abstract setRightActionButtonDrawable(Landroid/graphics/drawable/Drawable;)V
+.end method
+
+.method public abstract setRightActionButtonResource(I)V
+.end method
+
 .method public setSelectionMode(I)V
     .locals 1
     .parameter "mode"
