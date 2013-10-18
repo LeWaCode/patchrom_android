@@ -2772,6 +2772,10 @@
 
     .end local v3           #steps:I
     :cond_2
+    invoke-static {p0, v0}, Lcom/android/server/PowerManagerService$Injector;->adjustButtonValue(Lcom/android/server/PowerManagerService;I)I
+
+    move-result v0
+
     iget v4, p0, Lcom/android/server/PowerManagerService;->mButtonBrightnessOverride:I
 
     if-gez v4, :cond_3
@@ -2781,8 +2785,6 @@
     invoke-virtual {v4, v0}, Lcom/android/server/LightsService$Light;->setBrightness(I)V
 
     :cond_3
-    invoke-static {p0, v0}, Lcom/android/server/PowerManagerService$Injector;->setButtonValue(Lcom/android/server/PowerManagerService;I)V
-
     iget v4, p0, Lcom/android/server/PowerManagerService;->mButtonBrightnessOverride:I
 
     if-ltz v4, :cond_4
