@@ -17,6 +17,12 @@ local-lewa-apps     :=
 # All apps need to be removed from original ZIP file
 local-remove-apps   :=
 
+# Set ro.sys.partner in build.prop for lewa partner
+local-lewa-partner :=
+
+# Set ro.lewa.device in build.prop for lewa partner
+local-lewa-device :=
+
 # To include the local targets before and after zip the final ZIP file, 
 # and the local-targets should:
 # (1) be defined after including porting.mk if using any global variable(see porting.mk)

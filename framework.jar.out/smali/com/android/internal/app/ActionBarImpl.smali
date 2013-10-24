@@ -3111,7 +3111,7 @@
 .end method
 
 .method public setScrollState(I)V
-    .locals 2
+    .locals 1
     .parameter "state"
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
@@ -3126,20 +3126,15 @@
 
     packed-switch v0, :pswitch_data_0
 
-    new-instance v0, Ljava/lang/IllegalStateException;
-
-    const-string v1, "setSelectedNavigationIndex not valid for current navigation mode"
-
-    invoke-direct {v0, v1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
-
-    throw v0
+    :goto_0
+    return-void
 
     :pswitch_0
     iget-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
 
     invoke-virtual {v0, p1}, Lcom/android/internal/widget/ScrollingTabContainerView;->setScrollState(I)V
 
-    return-void
+    goto :goto_0
 
     :pswitch_data_0
     .packed-switch 0x2
@@ -3494,7 +3489,7 @@
 .end method
 
 .method public smoothScrollTabIndicator(IFI)V
-    .locals 2
+    .locals 1
     .parameter "position"
     .parameter "positionOffset"
     .parameter "positionOffsetPixels"
@@ -3511,20 +3506,15 @@
 
     packed-switch v0, :pswitch_data_0
 
-    new-instance v0, Ljava/lang/IllegalStateException;
-
-    const-string v1, "setSelectedNavigationIndex not valid for current navigation mode"
-
-    invoke-direct {v0, v1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
-
-    throw v0
+    :goto_0
+    return-void
 
     :pswitch_0
     iget-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
 
     invoke-virtual {v0, p1, p2, p3}, Lcom/android/internal/widget/ScrollingTabContainerView;->smoothScrollTabIndicator(IFI)V
 
-    return-void
+    goto :goto_0
 
     :pswitch_data_0
     .packed-switch 0x2

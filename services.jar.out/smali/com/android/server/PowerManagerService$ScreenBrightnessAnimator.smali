@@ -420,7 +420,7 @@
 
     move-result-object v2
 
-    invoke-virtual {v2, p1}, Lcom/android/server/LightsService$Light;->setBrightness(I)V
+    #invoke-virtual {v2, p1}, Lcom/android/server/LightsService$Light;->setBrightness(I)V
 
     :cond_0
     and-int/lit8 v2, p3, 0x8
