@@ -403,7 +403,7 @@
     :try_start_0
     iget-object v3, p0, Lcom/android/server/PowerManagerService$ScreenBrightnessAnimator;->this$0:Lcom/android/server/PowerManagerService;
 
-    invoke-static {v3, p3, p1}, Lcom/android/server/PowerManagerService$Injector;->_setButtonBrightness(Lcom/android/server/PowerManagerService;II)V
+    invoke-virtual {v3, p3, p1}, Lcom/android/server/PowerManagerService;->setButtonBrightnessEx(II)V
 
     and-int/lit8 v3, p3, 0x2
 

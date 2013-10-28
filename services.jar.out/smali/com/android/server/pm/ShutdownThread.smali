@@ -115,7 +115,7 @@
     return-void
 .end method
 
-.method private static beginShutdownSequence(Landroid/content/Context;)V
+.method static beginShutdownSequence(Landroid/content/Context;)V
     .locals 7
     .parameter "context"
     .annotation build Landroid/annotation/LewaHook;

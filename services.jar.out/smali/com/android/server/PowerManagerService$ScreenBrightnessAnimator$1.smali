@@ -112,7 +112,7 @@
 
     iget-object v11, v11, Lcom/android/server/PowerManagerService$ScreenBrightnessAnimator;->this$0:Lcom/android/server/PowerManagerService;
 
-    invoke-static {v11, v4, v8}, Lcom/android/server/PowerManagerService$Injector;->setButtonBrightness(Lcom/android/server/PowerManagerService;II)V
+    invoke-virtual {v11, v4, v8}, Lcom/android/server/PowerManagerService;->setButtonBrightness(II)V
 
     and-int/lit8 v11, v4, 0x4
 
