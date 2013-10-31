@@ -1212,6 +1212,40 @@
     goto :goto_4
 .end method
 
+.method private isNeedShowMenu(Lcom/android/internal/policy/impl/PhoneWindow$PanelFeatureState;)Z
+    .locals 2
+    .parameter "st"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v0, 0x0
+
+    iget-object v1, p1, Lcom/android/internal/policy/impl/PhoneWindow$PanelFeatureState;->menu:Lcom/android/internal/view/menu/MenuBuilder;
+
+    if-eqz v1, :cond_0
+
+    iget-object v1, p1, Lcom/android/internal/policy/impl/PhoneWindow$PanelFeatureState;->menu:Lcom/android/internal/view/menu/MenuBuilder;
+
+    invoke-virtual {v1}, Lcom/android/internal/view/menu/MenuBuilder;->getNonActionItemsExt()Ljava/util/ArrayList;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    if-gtz v1, :cond_0
+
+    iput-boolean v0, p1, Lcom/android/internal/policy/impl/PhoneWindow$PanelFeatureState;->isPrepared:Z
+
+    const/4 v0, 0x1
+
+    :cond_0
+    return v0
+.end method
+
 .method private launchDefaultSearch()Z
     .locals 2
 
@@ -1311,6 +1345,9 @@
     .locals 18
     .parameter "st"
     .parameter "event"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     move-object/from16 v0, p1
@@ -1447,6 +1484,12 @@
     move-result v4
 
     if-eqz v4, :cond_0
+
+    invoke-direct/range {p0 .. p1}, Lcom/android/internal/policy/impl/PhoneWindow;->isNeedShowMenu(Lcom/android/internal/policy/impl/PhoneWindow$PanelFeatureState;)Z
+
+    move-result v4
+
+    if-nez v4, :cond_0
 
     const/4 v3, -0x1
 

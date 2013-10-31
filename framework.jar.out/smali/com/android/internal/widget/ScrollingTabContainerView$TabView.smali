@@ -80,6 +80,18 @@
     return-object v0
 .end method
 
+.method public getTextView()Landroid/widget/TextView;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;->mTextView:Landroid/widget/TextView;
+
+    return-object v0
+.end method
+
 .method public onMeasure(II)V
     .locals 2
     .parameter "widthMeasureSpec"

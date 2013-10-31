@@ -35,13 +35,21 @@
 
 .field private mContext:Landroid/content/Context;
 
-.field private mContextDisplayMode:I
+.field mContextDisplayMode:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mContextView:Lcom/android/internal/widget/ActionBarContextView;
 
 .field private mCurWindowVisibility:I
 
-.field private mCurrentShowAnim:Landroid/animation/Animator;
+.field mCurrentShowAnim:Landroid/animation/Animator;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field mDeferredDestroyActionMode:Landroid/view/ActionMode;
 
@@ -94,7 +102,11 @@
     .end annotation
 .end field
 
-.field private mSplitView:Lcom/android/internal/widget/ActionBarContainer;
+.field mSplitView:Lcom/android/internal/widget/ActionBarContainer;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mTabScrollView:Lcom/android/internal/widget/ScrollingTabContainerView;
 

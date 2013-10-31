@@ -59,7 +59,11 @@
 
 .field private final mBroadcastReceiver:Landroid/content/BroadcastReceiver;
 
-.field private final mContext:Landroid/content/Context;
+.field final mContext:Landroid/content/Context;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private final mDisabledProviders:Ljava/util/Set;
     .annotation system Ldalvik/annotation/Signature;

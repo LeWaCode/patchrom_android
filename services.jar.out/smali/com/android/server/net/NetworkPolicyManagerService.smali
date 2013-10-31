@@ -149,7 +149,11 @@
 
 .field private mConnReceiver:Landroid/content/BroadcastReceiver;
 
-.field private final mContext:Landroid/content/Context;
+.field final mContext:Landroid/content/Context;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mDataActivedSimId:J
     .annotation build Landroid/annotation/LewaHook;
@@ -187,7 +191,11 @@
 
 .field private final mNetworkManager:Landroid/os/INetworkManagementService;
 
-.field private mNetworkPolicy:Ljava/util/HashMap;
+.field mNetworkPolicy:Ljava/util/HashMap;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/HashMap",
@@ -1309,7 +1317,7 @@
     .local v14, title:Ljava/lang/CharSequence;
     const v1, 0x10404d8
 
-    const v4, 0x9040026
+    const v4, 0x9040010
 
     move-object/from16 v0, p0
 
@@ -2334,6 +2342,33 @@
 
     :cond_1
     const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
+.method private makeNetworkTemplateEnabled(Landroid/net/NetworkPolicy;Z)V
+    .locals 1
+    .parameter "policy"
+    .parameter "networkEnabled"
+
+    .prologue
+    if-eqz p2, :cond_0
+
+    iget-boolean v0, p1, Landroid/net/NetworkPolicy;->ignore:Z
+
+    if-eqz v0, :cond_0
+
+    const/4 v0, 0x0
+
+    iput-boolean v0, p1, Landroid/net/NetworkPolicy;->ignore:Z
+
+    :goto_0
+    return-void
+
+    :cond_0
+    iget-object v0, p1, Landroid/net/NetworkPolicy;->template:Landroid/net/NetworkTemplate;
+
+    invoke-direct {p0, v0, p2}, Lcom/android/server/net/NetworkPolicyManagerService;->setNetworkTemplateEnabled(Landroid/net/NetworkTemplate;Z)V
 
     goto :goto_0
 .end method
@@ -4299,7 +4334,7 @@
     :goto_2
     move-object/from16 v0, p0
 
-    invoke-static {v0, v12, v10}, Lcom/android/server/net/NetworkPolicyManagerService$Injector;->makeNetworkTemplateEnabled(Lcom/android/server/net/NetworkPolicyManagerService;Landroid/net/NetworkPolicy;Z)V
+    invoke-direct {v0, v12, v10}, Lcom/android/server/net/NetworkPolicyManagerService;->makeNetworkTemplateEnabled(Landroid/net/NetworkPolicy;Z)V
 
     goto :goto_0
 

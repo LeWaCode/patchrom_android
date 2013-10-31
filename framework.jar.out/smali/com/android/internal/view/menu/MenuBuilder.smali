@@ -2281,6 +2281,30 @@
     return-object v0
 .end method
 
+.method public getNonActionItemsExt()Ljava/util/ArrayList;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "()",
+            "Ljava/util/ArrayList",
+            "<",
+            "Lcom/android/internal/view/menu/MenuItemImpl;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Lcom/android/internal/view/menu/MenuBuilder;->getNonActionItems()Ljava/util/ArrayList;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method getOptionalIconsVisible()Z
     .locals 1
 

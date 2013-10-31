@@ -165,7 +165,11 @@
 
 .field private mButtonLight:Lcom/android/server/LightsService$Light;
 
-.field private mContext:Landroid/content/Context;
+.field mContext:Landroid/content/Context;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mDimDelay:I
 
@@ -9229,7 +9233,7 @@
 .end method
 
 .method public rebootConfirm(Ljava/lang/String;Z)V
-    .locals 5
+    .locals 3
     .parameter "reason"
     .parameter "confirm"
     .annotation build Landroid/annotation/LewaHook;
@@ -9237,45 +9241,39 @@
     .end annotation
 
     .prologue
-    iget-object v2, p0, Lcom/android/server/PowerManagerService;->mContext:Landroid/content/Context;
+    iget-object v0, p0, Lcom/android/server/PowerManagerService;->mContext:Landroid/content/Context;
 
-    const-string v3, "android.permission.REBOOT"
+    const-string v1, "android.permission.REBOOT"
 
-    const/4 v4, 0x0
+    const/4 v2, 0x0
 
-    invoke-virtual {v2, v3, v4}, Landroid/content/Context;->enforceCallingOrSelfPermission(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-virtual {v0, v1, v2}, Landroid/content/Context;->enforceCallingOrSelfPermission(Ljava/lang/String;Ljava/lang/String;)V
 
-    iget-object v2, p0, Lcom/android/server/PowerManagerService;->mHandler:Landroid/os/Handler;
+    iget-object v0, p0, Lcom/android/server/PowerManagerService;->mHandler:Landroid/os/Handler;
 
-    if-eqz v2, :cond_0
+    if-eqz v0, :cond_0
 
     invoke-static {}, Landroid/app/ActivityManagerNative;->isSystemReady()Z
 
-    move-result v2
+    move-result v0
 
-    if-nez v2, :cond_1
+    if-nez v0, :cond_1
 
     :cond_0
-    new-instance v2, Ljava/lang/IllegalStateException;
+    new-instance v0, Ljava/lang/IllegalStateException;
 
-    const-string v3, "Too early to call reboot()"
+    const-string v1, "Too early to call reboot()"
 
-    invoke-direct {v2, v3}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
+    invoke-direct {v0, v1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
 
-    throw v2
+    throw v0
 
     :cond_1
-    move-object v0, p1
+    iget-object v0, p0, Lcom/android/server/PowerManagerService;->mContext:Landroid/content/Context;
 
-    .local v0, finalReason:Ljava/lang/String;
-    new-instance v1, Lcom/android/server/PowerManagerService$14;
+    iget-object v1, p0, Lcom/android/server/PowerManagerService;->mHandler:Landroid/os/Handler;
 
-    invoke-direct {v1, p0, v0, p2}, Lcom/android/server/PowerManagerService$14;-><init>(Lcom/android/server/PowerManagerService;Ljava/lang/String;Z)V
-
-    .local v1, runnable:Ljava/lang/Runnable;
-    iget-object v2, p0, Lcom/android/server/PowerManagerService;->mHandler:Landroid/os/Handler;
-
-    invoke-virtual {v2, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+    invoke-static {p1, p2, v0, v1}, Lcom/android/server/ExtraPowerManagerService;->rebootOrShutdownConfirm(Ljava/lang/String;ZLandroid/content/Context;Landroid/os/Handler;)V
 
     return-void
 .end method

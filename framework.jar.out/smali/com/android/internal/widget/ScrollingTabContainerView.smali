@@ -234,7 +234,9 @@
 
     iput-object v1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
 
-    iget-object v1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
+    invoke-direct {p0, p1}, Lcom/android/internal/widget/ScrollingTabContainerView;->ScrollingTabContainerViewExt(Landroid/content/Context;)V
+
+    iget-object v1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mRootLayout:Landroid/widget/FrameLayout;
 
     new-instance v2, Landroid/view/ViewGroup$LayoutParams;
 
@@ -245,6 +247,111 @@
     invoke-direct {v2, v3, v4}, Landroid/view/ViewGroup$LayoutParams;-><init>(II)V
 
     invoke-virtual {p0, v1, v2}, Lcom/android/internal/widget/ScrollingTabContainerView;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
+
+    return-void
+.end method
+
+.method private ScrollingTabContainerViewExt(Landroid/content/Context;)V
+    .locals 6
+    .parameter "context"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v5, -0x1
+
+    invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v2
+
+    iget v0, v2, Landroid/util/DisplayMetrics;->density:F
+
+    .local v0, density:F
+    const/high16 v2, 0x4000
+
+    mul-float/2addr v2, v0
+
+    float-to-int v2, v2
+
+    iput v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorHeight:I
+
+    invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    const v3, 0x908007d
+
+    invoke-virtual {v2, v3}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
+
+    move-result-object v2
+
+    iput-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mBackground:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {p0}, Lcom/android/internal/widget/ScrollingTabContainerView;->createRootLayout()Landroid/widget/FrameLayout;
+
+    move-result-object v2
+
+    iput-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mRootLayout:Landroid/widget/FrameLayout;
+
+    iget-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mRootLayout:Landroid/widget/FrameLayout;
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
+
+    new-instance v4, Landroid/view/ViewGroup$LayoutParams;
+
+    invoke-direct {v4, v5, v5}, Landroid/view/ViewGroup$LayoutParams;-><init>(II)V
+
+    invoke-virtual {v2, v3, v4}, Landroid/widget/FrameLayout;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
+
+    new-instance v2, Landroid/widget/ImageView;
+
+    invoke-virtual {p0}, Lcom/android/internal/widget/ScrollingTabContainerView;->getContext()Landroid/content/Context;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Landroid/widget/ImageView;-><init>(Landroid/content/Context;)V
+
+    iput-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    new-instance v1, Landroid/widget/FrameLayout$LayoutParams;
+
+    const/4 v2, 0x0
+
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorHeight:I
+
+    invoke-direct {v1, v2, v3}, Landroid/widget/FrameLayout$LayoutParams;-><init>(II)V
+
+    .local v1, lp:Landroid/widget/FrameLayout$LayoutParams;
+    const/16 v2, 0x50
+
+    iput v2, v1, Landroid/widget/FrameLayout$LayoutParams;->gravity:I
+
+    iget-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    invoke-virtual {v2, v1}, Landroid/widget/ImageView;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
+
+    iget-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    sget-object v3, Landroid/widget/ImageView$ScaleType;->FIT_XY:Landroid/widget/ImageView$ScaleType;
+
+    invoke-virtual {v2, v3}, Landroid/widget/ImageView;->setScaleType(Landroid/widget/ImageView$ScaleType;)V
+
+    iget-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mBackground:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v2, v3}, Landroid/widget/ImageView;->setImageDrawable(Landroid/graphics/drawable/Drawable;)V
+
+    iget-object v2, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mRootLayout:Landroid/widget/FrameLayout;
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    invoke-virtual {v2, v3}, Landroid/widget/FrameLayout;->addView(Landroid/view/View;)V
 
     return-void
 .end method
@@ -551,12 +658,161 @@
 .end method
 
 .method private setIndicatorLayout()V
-    .locals 0
+    .locals 6
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
 
     .prologue
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateIndicator:I
+
+    if-nez v3, :cond_0
+
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mSelectedTabIndex:I
+
+    iput v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mCurrentPosition:I
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
+
+    iget v4, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mSelectedTabIndex:I
+
+    invoke-virtual {v3, v4}, Landroid/widget/LinearLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v1
+
+    check-cast v1, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+
+    .local v1, tabView:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    invoke-virtual {v1}, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;->getMeasuredWidth()I
+
+    move-result v3
+
+    iput v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabViewWidth:I
+
+    invoke-virtual {v1}, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;->getTextView()Landroid/widget/TextView;
+
+    move-result-object v2
+
+    .local v2, textView:Landroid/widget/TextView;
+    invoke-virtual {v2}, Landroid/widget/TextView;->getMeasuredWidth()I
+
+    move-result v3
+
+    int-to-float v3, v3
+
+    const/high16 v4, 0x3fc0
+
+    mul-float/2addr v3, v4
+
+    float-to-int v3, v3
+
+    iput v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMinIndicatorWidth:I
+
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabViewWidth:I
+
+    int-to-float v3, v3
+
+    const v4, 0x3f333333
+
+    mul-float/2addr v3, v4
+
+    float-to-int v3, v3
+
+    iput v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    invoke-virtual {v3}, Landroid/widget/ImageView;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/FrameLayout$LayoutParams;
+
+    .local v0, lp:Landroid/widget/FrameLayout$LayoutParams;
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMinIndicatorWidth:I
+
+    iput v3, v0, Landroid/widget/FrameLayout$LayoutParams;->width:I
+
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mSelectedTabIndex:I
+
+    iget v4, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabViewWidth:I
+
+    mul-int/2addr v3, v4
+
+    iget v4, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabViewWidth:I
+
+    iget v5, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMinIndicatorWidth:I
+
+    sub-int/2addr v4, v5
+
+    div-int/lit8 v4, v4, 0x2
+
+    add-int/2addr v3, v4
+
+    iput v3, v0, Landroid/widget/FrameLayout$LayoutParams;->leftMargin:I
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    invoke-virtual {v3, v0}, Landroid/widget/ImageView;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    const/4 v4, 0x0
+
+    invoke-virtual {v3, v4}, Landroid/widget/ImageView;->setTranslationX(F)V
+
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    const/high16 v4, 0x3f80
+
+    invoke-virtual {v3, v4}, Landroid/widget/ImageView;->setScaleX(F)V
+
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMinIndicatorWidth:I
+
+    if-eqz v3, :cond_0
+
+    iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    int-to-float v3, v3
+
+    iget v4, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMinIndicatorWidth:I
+
+    int-to-float v4, v4
+
+    sub-float/2addr v3, v4
+
+    iget v4, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMinIndicatorWidth:I
+
+    int-to-float v4, v4
+
+    div-float/2addr v3, v4
+
+    const v4, 0x3f19999a
+
+    div-float/2addr v3, v4
+
+    iput v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mRateDrag:F
+
+    .end local v0           #lp:Landroid/widget/FrameLayout$LayoutParams;
+    .end local v1           #tabView:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    .end local v2           #textView:Landroid/widget/TextView;
+    :cond_0
+    return-void
+.end method
+
+.method private setIndicatorLayoutExt(I)V
+    .locals 0
+    .parameter "childCount"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    if-lez p1, :cond_0
+
+    invoke-direct {p0}, Lcom/android/internal/widget/ScrollingTabContainerView;->setIndicatorLayout()V
+
+    :cond_0
     return-void
 .end method
 
@@ -808,6 +1064,35 @@
     goto :goto_0
 .end method
 
+.method public createRootLayout()Landroid/widget/FrameLayout;
+    .locals 4
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    new-instance v0, Landroid/widget/FrameLayout;
+
+    invoke-virtual {p0}, Lcom/android/internal/widget/ScrollingTabContainerView;->getContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    invoke-direct {v0, v1}, Landroid/widget/FrameLayout;-><init>(Landroid/content/Context;)V
+
+    .local v0, layout:Landroid/widget/FrameLayout;
+    new-instance v1, Landroid/view/ViewGroup$LayoutParams;
+
+    const/4 v2, -0x2
+
+    const/4 v3, -0x1
+
+    invoke-direct {v1, v2, v3}, Landroid/view/ViewGroup$LayoutParams;-><init>(II)V
+
+    invoke-virtual {v0, v1}, Landroid/widget/FrameLayout;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
+
+    return-object v0
+.end method
+
 .method public onAttachedToWindow()V
     .locals 1
 
@@ -911,6 +1196,9 @@
     .locals 11
     .parameter "widthMeasureSpec"
     .parameter "heightMeasureSpec"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/high16 v10, 0x4000
@@ -1036,6 +1324,8 @@
     invoke-virtual {p0, v6}, Lcom/android/internal/widget/ScrollingTabContainerView;->setTabSelected(I)V
 
     :cond_1
+    invoke-direct {p0, v1}, Lcom/android/internal/widget/ScrollingTabContainerView;->setIndicatorLayoutExt(I)V
+
     return-void
 
     .end local v0           #canCollapse:Z
@@ -1248,6 +1538,9 @@
 .method public setTabSelected(I)V
     .locals 5
     .parameter "position"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     iput p1, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mSelectedTabIndex:I
@@ -1284,6 +1577,8 @@
 
     invoke-virtual {p0, p1}, Lcom/android/internal/widget/ScrollingTabContainerView;->animateToTab(I)V
 
+    invoke-direct {p0}, Lcom/android/internal/widget/ScrollingTabContainerView;->setIndicatorLayout()V
+
     :cond_0
     add-int/lit8 v1, v1, 0x1
 
@@ -1301,7 +1596,7 @@
 .end method
 
 .method public smoothScrollTabIndicator(IFI)V
-    .locals 0
+    .locals 17
     .parameter "position"
     .parameter "positionOffset"
     .parameter "positionOffsetPixels"
@@ -1310,7 +1605,508 @@
     .end annotation
 
     .prologue
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    invoke-virtual {v10}, Landroid/widget/ImageView;->getMeasuredWidth()I
+
+    move-result v7
+
+    .local v7, width:I
+    move-object/from16 v0, p0
+
+    iget v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateIndicator:I
+
+    const/4 v11, 0x1
+
+    if-ne v10, v11, :cond_0
+
+    const/4 v10, 0x0
+
+    cmpl-float v10, p2, v10
+
+    if-eqz v10, :cond_0
+
+    move-object/from16 v0, p0
+
+    iget v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mCurrentPosition:I
+
+    move/from16 v0, p1
+
+    if-ne v10, v0, :cond_2
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
+
+    move/from16 v0, p1
+
+    invoke-virtual {v10, v0}, Landroid/widget/LinearLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v3
+
+    check-cast v3, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+
+    .local v3, tabViewCurr:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    invoke-virtual {v3}, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;->getTextView()Landroid/widget/TextView;
+
+    move-result-object v5
+
+    .local v5, textViewCurr:Landroid/widget/TextView;
+    invoke-virtual {v5}, Landroid/widget/TextView;->getMeasuredWidth()I
+
+    move-result v10
+
+    int-to-float v10, v10
+
+    const/high16 v11, 0x3fc0
+
+    mul-float v8, v10, v11
+
+    .local v8, widthCurr:F
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
+
+    add-int/lit8 v11, p1, 0x1
+
+    invoke-virtual {v10, v11}, Landroid/widget/LinearLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v4
+
+    check-cast v4, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+
+    .local v4, tabViewNext:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    invoke-virtual {v4}, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;->getTextView()Landroid/widget/TextView;
+
+    move-result-object v6
+
+    .local v6, textViewNext:Landroid/widget/TextView;
+    invoke-virtual {v6}, Landroid/widget/TextView;->getMeasuredWidth()I
+
+    move-result v10
+
+    int-to-float v10, v10
+
+    const/high16 v11, 0x3fc0
+
+    mul-float v9, v10, v11
+
+    .local v9, widthNext:F
+    const v10, 0x3f19999a
+
+    cmpg-float v10, p2, v10
+
+    if-gtz v10, :cond_1
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    const/4 v11, 0x0
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setPivotX(F)V
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    const/high16 v11, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v12, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mRateDrag:F
+
+    mul-float v12, v12, p2
+
+    add-float/2addr v11, v12
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setScaleX(F)V
+
+    move/from16 v0, p2
+
+    move-object/from16 v1, p0
+
+    iput v0, v1, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    move-object/from16 v0, p0
+
+    iget v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabViewWidth:I
+
+    int-to-float v10, v10
+
+    const/high16 v11, 0x4000
+
+    div-float v11, v8, v11
+
+    add-float/2addr v10, v11
+
+    const/high16 v11, 0x4000
+
+    div-float v11, v9, v11
+
+    add-float/2addr v10, v11
+
+    move-object/from16 v0, p0
+
+    iget v11, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    int-to-float v11, v11
+
+    sub-float/2addr v10, v11
+
+    float-to-int v10, v10
+
+    move-object/from16 v0, p0
+
+    iput v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mDurationTrans:I
+
+    .end local v3           #tabViewCurr:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    .end local v4           #tabViewNext:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    .end local v5           #textViewCurr:Landroid/widget/TextView;
+    .end local v6           #textViewNext:Landroid/widget/TextView;
+    .end local v8           #widthCurr:F
+    .end local v9           #widthNext:F
+    :cond_0
+    :goto_0
     return-void
+
+    .restart local v3       #tabViewCurr:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    .restart local v4       #tabViewNext:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    .restart local v5       #textViewCurr:Landroid/widget/TextView;
+    .restart local v6       #textViewNext:Landroid/widget/TextView;
+    .restart local v8       #widthCurr:F
+    .restart local v9       #widthNext:F
+    :cond_1
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    int-to-float v11, v7
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setPivotX(F)V
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    div-float v11, v9, v8
+
+    move-object/from16 v0, p0
+
+    iget v12, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    int-to-float v12, v12
+
+    sub-float/2addr v12, v9
+
+    div-float/2addr v12, v8
+
+    const/high16 v13, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v14, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    sub-float v14, p2, v14
+
+    const/high16 v15, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v0, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    move/from16 v16, v0
+
+    sub-float v15, v15, v16
+
+    div-float/2addr v14, v15
+
+    sub-float/2addr v13, v14
+
+    mul-float/2addr v12, v13
+
+    add-float/2addr v11, v12
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setScaleX(F)V
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    move-object/from16 v0, p0
+
+    iget v11, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    int-to-float v11, v11
+
+    sub-float/2addr v11, v8
+
+    move-object/from16 v0, p0
+
+    iget v12, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    sub-float v12, p2, v12
+
+    const/high16 v13, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v14, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    sub-float/2addr v13, v14
+
+    div-float/2addr v12, v13
+
+    move-object/from16 v0, p0
+
+    iget v13, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mDurationTrans:I
+
+    int-to-float v13, v13
+
+    mul-float/2addr v12, v13
+
+    add-float/2addr v11, v12
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setTranslationX(F)V
+
+    goto :goto_0
+
+    .end local v3           #tabViewCurr:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    .end local v4           #tabViewNext:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    .end local v5           #textViewCurr:Landroid/widget/TextView;
+    .end local v6           #textViewNext:Landroid/widget/TextView;
+    .end local v8           #widthCurr:F
+    .end local v9           #widthNext:F
+    :cond_2
+    const/high16 v10, 0x3f80
+
+    sub-float v2, v10, p2
+
+    .local v2, realPositionOffset:F
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
+
+    add-int/lit8 v11, p1, 0x1
+
+    invoke-virtual {v10, v11}, Landroid/widget/LinearLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v3
+
+    check-cast v3, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+
+    .restart local v3       #tabViewCurr:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    invoke-virtual {v3}, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;->getTextView()Landroid/widget/TextView;
+
+    move-result-object v5
+
+    .restart local v5       #textViewCurr:Landroid/widget/TextView;
+    invoke-virtual {v5}, Landroid/widget/TextView;->getMeasuredWidth()I
+
+    move-result v10
+
+    int-to-float v10, v10
+
+    const/high16 v11, 0x3fc0
+
+    mul-float v8, v10, v11
+
+    .restart local v8       #widthCurr:F
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabLayout:Landroid/widget/LinearLayout;
+
+    move/from16 v0, p1
+
+    invoke-virtual {v10, v0}, Landroid/widget/LinearLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v4
+
+    check-cast v4, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+
+    .restart local v4       #tabViewNext:Lcom/android/internal/widget/ScrollingTabContainerView$TabView;
+    invoke-virtual {v4}, Lcom/android/internal/widget/ScrollingTabContainerView$TabView;->getTextView()Landroid/widget/TextView;
+
+    move-result-object v6
+
+    .restart local v6       #textViewNext:Landroid/widget/TextView;
+    invoke-virtual {v6}, Landroid/widget/TextView;->getMeasuredWidth()I
+
+    move-result v10
+
+    int-to-float v10, v10
+
+    const/high16 v11, 0x3fc0
+
+    mul-float v9, v10, v11
+
+    .restart local v9       #widthNext:F
+    const v10, 0x3f19999a
+
+    cmpg-float v10, v2, v10
+
+    if-gtz v10, :cond_3
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    int-to-float v11, v7
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setPivotX(F)V
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    const/high16 v11, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v12, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mRateDrag:F
+
+    mul-float/2addr v12, v2
+
+    add-float/2addr v11, v12
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setScaleX(F)V
+
+    move-object/from16 v0, p0
+
+    iput v2, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    move-object/from16 v0, p0
+
+    iget v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mTabViewWidth:I
+
+    int-to-float v10, v10
+
+    const/high16 v11, 0x4000
+
+    div-float v11, v8, v11
+
+    add-float/2addr v10, v11
+
+    const/high16 v11, 0x4000
+
+    div-float v11, v9, v11
+
+    add-float/2addr v10, v11
+
+    move-object/from16 v0, p0
+
+    iget v11, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    int-to-float v11, v11
+
+    sub-float/2addr v10, v11
+
+    float-to-int v10, v10
+
+    move-object/from16 v0, p0
+
+    iput v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mDurationTrans:I
+
+    goto/16 :goto_0
+
+    :cond_3
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    const/4 v11, 0x0
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setPivotX(F)V
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    div-float v11, v9, v8
+
+    move-object/from16 v0, p0
+
+    iget v12, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    int-to-float v12, v12
+
+    sub-float/2addr v12, v9
+
+    div-float/2addr v12, v8
+
+    const/high16 v13, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v14, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    sub-float v14, v2, v14
+
+    const/high16 v15, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v0, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    move/from16 v16, v0
+
+    sub-float v15, v15, v16
+
+    div-float/2addr v14, v15
+
+    sub-float/2addr v13, v14
+
+    mul-float/2addr v12, v13
+
+    add-float/2addr v11, v12
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setScaleX(F)V
+
+    move-object/from16 v0, p0
+
+    iget-object v10, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mIndicatorView:Landroid/widget/ImageView;
+
+    move-object/from16 v0, p0
+
+    iget v11, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mMaxIndicatorWidth:I
+
+    int-to-float v11, v11
+
+    sub-float/2addr v11, v8
+
+    move-object/from16 v0, p0
+
+    iget v12, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    sub-float v12, v2, v12
+
+    const/high16 v13, 0x3f80
+
+    move-object/from16 v0, p0
+
+    iget v14, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mLastPositionOffset:F
+
+    sub-float/2addr v13, v14
+
+    div-float/2addr v12, v13
+
+    move-object/from16 v0, p0
+
+    iget v13, v0, Lcom/android/internal/widget/ScrollingTabContainerView;->mDurationTrans:I
+
+    int-to-float v13, v13
+
+    mul-float/2addr v12, v13
+
+    add-float/2addr v11, v12
+
+    neg-float v11, v11
+
+    invoke-virtual {v10, v11}, Landroid/widget/ImageView;->setTranslationX(F)V
+
+    goto/16 :goto_0
 .end method
 
 .method public updateTab(I)V

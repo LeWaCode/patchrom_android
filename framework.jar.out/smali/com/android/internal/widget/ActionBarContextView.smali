@@ -234,7 +234,7 @@
     move-result-object v1
 
     .local v1, inflater:Landroid/view/LayoutInflater;
-    const v4, 0x9090021
+    const v4, 0x909001e
 
     invoke-virtual {v1, v4, p0}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
 
@@ -1123,11 +1123,11 @@
     invoke-virtual {v4}, Lcom/android/internal/view/menu/ActionMenuPresenter;->dismissPopupMenus()Z
 
     :cond_1
-    new-instance v4, Lcom/android/internal/view/menu/ActionMenuPresenter;
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mContext:Landroid/content/Context;
 
-    iget-object v5, p0, Lcom/android/internal/widget/ActionBarContextView;->mContext:Landroid/content/Context;
+    invoke-static {v4}, Lcom/android/internal/widget/ActionBarContextView$Injector;->newMenuPresenter(Landroid/content/Context;)Lcom/android/internal/view/menu/ActionMenuPresenter;
 
-    invoke-direct {v4, v5}, Lcom/android/internal/view/menu/ActionMenuPresenter;-><init>(Landroid/content/Context;)V
+    move-result-object v4
 
     iput-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mActionMenuPresenter:Lcom/android/internal/view/menu/ActionMenuPresenter;
 

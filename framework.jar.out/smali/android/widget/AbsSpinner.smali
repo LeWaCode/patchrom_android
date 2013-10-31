@@ -194,7 +194,7 @@
 
     new-instance v0, Landroid/widget/ArrayAdapter;
 
-    const v1, 0x909001c
+    const v1, 0x909001a
 
     const v2, 0x1020014
 
