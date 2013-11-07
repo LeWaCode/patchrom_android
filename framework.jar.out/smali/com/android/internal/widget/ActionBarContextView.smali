@@ -212,6 +212,42 @@
     goto :goto_0
 .end method
 
+.method private getPositionSize(Landroid/view/View;III)I
+    .locals 6
+    .parameter "child"
+    .parameter "x"
+    .parameter "y"
+    .parameter "contentHeight"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v1, p0, Lcom/android/internal/widget/ActionBarContextView;->mMenuView:Lcom/android/internal/view/menu/ActionMenuView;
+
+    invoke-virtual {p0}, Lcom/android/internal/widget/ActionBarContextView;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-static {v0, p4}, Lcom/android/internal/widget/ActionBarContextView$Injector;->getContextMenuViewHeight(Landroid/content/Context;I)I
+
+    move-result v4
+
+    const/4 v5, 0x1
+
+    move-object v0, p0
+
+    move v2, p2
+
+    move v3, p3
+
+    invoke-virtual/range {v0 .. v5}, Lcom/android/internal/widget/ActionBarContextView;->positionChild(Landroid/view/View;IIIZ)I
+
+    move-result v0
+
+    return v0
+.end method
+
 .method private initLewaTitle()V
     .locals 7
     .annotation build Landroid/annotation/LewaHook;
@@ -1625,11 +1661,11 @@
 
     iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mMenuView:Lcom/android/internal/view/menu/ActionMenuView;
 
-    invoke-virtual {p0, v4, v2, v3, v0}, Lcom/android/internal/widget/ActionBarContextView;->positionChildInverse(Landroid/view/View;III)I
+    invoke-direct {p0, v4, v2, v3, v0}, Lcom/android/internal/widget/ActionBarContextView;->getPositionSize(Landroid/view/View;III)I
 
     move-result v4
 
-    sub-int/2addr v2, v4
+    add-int/2addr v2, v4
 
     :cond_3
     return-void

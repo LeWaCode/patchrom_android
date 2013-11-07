@@ -6,6 +6,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Lcom/android/internal/app/ActionBarImpl$SplitHideListener;,
         Lcom/android/internal/app/ActionBarImpl$TabImpl;,
         Lcom/android/internal/app/ActionBarImpl$ActionModeImpl;
     }
@@ -98,7 +99,7 @@
 
 .field final mSplitHideListener:Landroid/animation/Animator$AnimatorListener;
     .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_CLASS:Landroid/annotation/LewaHook$LewaHookType;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
 .end field
 
@@ -178,9 +179,9 @@
 
     iput-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mShowListener:Landroid/animation/Animator$AnimatorListener;
 
-    new-instance v2, Lcom/android/internal/app/ActionBarImpl$3;
+    new-instance v2, Lcom/android/internal/app/ActionBarImpl$SplitHideListener;
 
-    invoke-direct {v2, p0}, Lcom/android/internal/app/ActionBarImpl$3;-><init>(Lcom/android/internal/app/ActionBarImpl;)V
+    invoke-direct {v2, p0}, Lcom/android/internal/app/ActionBarImpl$SplitHideListener;-><init>(Lcom/android/internal/app/ActionBarImpl;)V
 
     iput-object v2, p0, Lcom/android/internal/app/ActionBarImpl;->mSplitHideListener:Landroid/animation/Animator$AnimatorListener;
 
@@ -273,9 +274,9 @@
 
     iput-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mShowListener:Landroid/animation/Animator$AnimatorListener;
 
-    new-instance v0, Lcom/android/internal/app/ActionBarImpl$3;
+    new-instance v0, Lcom/android/internal/app/ActionBarImpl$SplitHideListener;
 
-    invoke-direct {v0, p0}, Lcom/android/internal/app/ActionBarImpl$3;-><init>(Lcom/android/internal/app/ActionBarImpl;)V
+    invoke-direct {v0, p0}, Lcom/android/internal/app/ActionBarImpl$SplitHideListener;-><init>(Lcom/android/internal/app/ActionBarImpl;)V
 
     iput-object v0, p0, Lcom/android/internal/app/ActionBarImpl;->mSplitHideListener:Landroid/animation/Animator$AnimatorListener;
 

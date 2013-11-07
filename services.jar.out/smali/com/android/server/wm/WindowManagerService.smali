@@ -10,6 +10,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Lcom/android/server/wm/WindowManagerService$ThemeChangeReceiver;,
         Lcom/android/server/wm/WindowManagerService$OnHardKeyboardStatusChangeListener;,
         Lcom/android/server/wm/WindowManagerService$H;,
         Lcom/android/server/wm/WindowManagerService$PolicyThread;,
@@ -562,7 +563,7 @@
 
 .field private mThemeChangeReceiver:Landroid/content/BroadcastReceiver;
     .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_CLASS:Landroid/annotation/LewaHook$LewaHookType;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
 .end field
 
@@ -590,7 +591,7 @@
 
 .field mTurnOnScreen:Z
 
-.field private mUiContext:Landroid/content/Context;
+.field mUiContext:Landroid/content/Context;
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
@@ -1174,9 +1175,11 @@
 
     iput-boolean v3, p0, Lcom/android/server/wm/WindowManagerService;->mInLayout:Z
 
-    new-instance v3, Lcom/android/server/wm/WindowManagerService$5;
+    new-instance v3, Lcom/android/server/wm/WindowManagerService$ThemeChangeReceiver;
 
-    invoke-direct {v3, p0}, Lcom/android/server/wm/WindowManagerService$5;-><init>(Lcom/android/server/wm/WindowManagerService;)V
+    const/4 v4, 0x0
+
+    invoke-direct {v3, p0, v4}, Lcom/android/server/wm/WindowManagerService$ThemeChangeReceiver;-><init>(Lcom/android/server/wm/WindowManagerService;Lcom/android/server/wm/WindowManagerService$1;)V
 
     iput-object v3, p0, Lcom/android/server/wm/WindowManagerService;->mThemeChangeReceiver:Landroid/content/BroadcastReceiver;
 
@@ -1470,17 +1473,6 @@
     iput-boolean p1, p0, Lcom/android/server/wm/WindowManagerService;->mKeyguardDisabled:Z
 
     return p1
-.end method
-
-.method static synthetic access$1602(Lcom/android/server/wm/WindowManagerService;Landroid/content/Context;)Landroid/content/Context;
-    .locals 0
-    .parameter "x0"
-    .parameter "x1"
-
-    .prologue
-    iput-object p1, p0, Lcom/android/server/wm/WindowManagerService;->mUiContext:Landroid/content/Context;
-
-    return-object p1
 .end method
 
 .method static synthetic access$202(Lcom/android/server/wm/WindowManagerService;I)I

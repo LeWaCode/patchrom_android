@@ -10,6 +10,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Lcom/android/server/am/ActivityManagerService$ThemeChangeReceiver;,
         Lcom/android/server/am/ActivityManagerService$ServiceMap;,
         Lcom/android/server/am/ActivityManagerService$ServiceRestarter;,
         Lcom/android/server/am/ActivityManagerService$ServiceLookupResult;,
@@ -718,7 +719,7 @@
 
 .field private mThemeChangeReceiver:Landroid/content/BroadcastReceiver;
     .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_CLASS:Landroid/annotation/LewaHook$LewaHookType;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
 .end field
 
@@ -1288,9 +1289,9 @@
 
     iput-object v2, p0, Lcom/android/server/am/ActivityManagerService;->mLoggedInUsers:Landroid/util/SparseIntArray;
 
-    new-instance v2, Lcom/android/server/am/ActivityManagerService$15;
+    new-instance v2, Lcom/android/server/am/ActivityManagerService$ThemeChangeReceiver;
 
-    invoke-direct {v2, p0}, Lcom/android/server/am/ActivityManagerService$15;-><init>(Lcom/android/server/am/ActivityManagerService;)V
+    invoke-direct {v2, p0, v4}, Lcom/android/server/am/ActivityManagerService$ThemeChangeReceiver;-><init>(Lcom/android/server/am/ActivityManagerService;Lcom/android/server/am/ActivityManagerService$1;)V
 
     iput-object v2, p0, Lcom/android/server/am/ActivityManagerService;->mThemeChangeReceiver:Landroid/content/BroadcastReceiver;
 
