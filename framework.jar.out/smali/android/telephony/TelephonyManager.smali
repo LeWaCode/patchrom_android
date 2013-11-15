@@ -1387,7 +1387,7 @@
     return-object v0
 .end method
 
-.method public getPhoneCount()I
+.method public getPhoneCountExt()I
     .locals 1
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
