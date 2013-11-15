@@ -44,7 +44,7 @@
 
 .field static final TRANSACTION_reboot:I = 0xf
 
-.field static final TRANSACTION_rebootConfirm:I = 0x14
+.field static final TRANSACTION_rebootConfirm:I = 0x50
 
 .field static final TRANSACTION_releaseWakeLock:I = 0x5
 
@@ -655,7 +655,7 @@
 
     goto/16 :goto_0
 
-    :sswitch_14
+    :sswitch_lewa_0
     const-string v9, "android.os.IPowerManager"
 
     invoke-virtual {p2, v9}, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
@@ -712,7 +712,7 @@
         0x11 -> :sswitch_11
         0x12 -> :sswitch_12
         0x13 -> :sswitch_13
-        0x14 -> :sswitch_14
+        0x50 -> :sswitch_lewa_0
         0x5f4e5446 -> :sswitch_0
     .end sparse-switch
 .end method

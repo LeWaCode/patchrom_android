@@ -612,6 +612,46 @@
     goto :goto_1
 .end method
 
+.method private getOverridePlmn(Ljava/lang/String;)Ljava/lang/String;
+    .locals 3
+    .parameter "plmn"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-static {}, Lcom/android/internal/telephony/gsm/LewaSpnOverride;->getInstance()Lcom/android/internal/telephony/gsm/LewaSpnOverride;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/android/internal/telephony/cdma/CdmaServiceStateTracker;->ss:Landroid/telephony/ServiceState;
+
+    invoke-virtual {v2}, Landroid/telephony/ServiceState;->getOperatorNumeric()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v2}, Lcom/android/internal/telephony/gsm/LewaSpnOverride;->getSpn(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    .local v0, overridePlmn:Ljava/lang/String;
+    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    .end local v0           #overridePlmn:Ljava/lang/String;
+    :goto_0
+    return-object v0
+
+    .restart local v0       #overridePlmn:Ljava/lang/String;
+    :cond_0
+    move-object v0, p1
+
+    goto :goto_0
+.end method
+
 .method private getSubscriptionInfoAndStartPollingThreads()V
     .locals 2
 
@@ -6879,6 +6919,9 @@
 
 .method protected pollStateDone()V
     .locals 27
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     new-instance v23, Ljava/lang/StringBuilder;
@@ -7504,6 +7547,14 @@
     move-object/from16 v25, v0
 
     invoke-virtual/range {v25 .. v25}, Landroid/telephony/ServiceState;->getOperatorAlphaLong()Ljava/lang/String;
+
+    move-result-object v25
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v25
+
+    invoke-direct {v0, v1}, Lcom/android/internal/telephony/cdma/CdmaServiceStateTracker;->getOverridePlmn(Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v25
 
@@ -8305,6 +8356,9 @@
 
 .method protected updateSpnDisplay()V
     .locals 8
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v3, 0x1
@@ -8314,6 +8368,10 @@
     iget-object v5, p0, Lcom/android/internal/telephony/cdma/CdmaServiceStateTracker;->ss:Landroid/telephony/ServiceState;
 
     invoke-virtual {v5}, Landroid/telephony/ServiceState;->getOperatorAlphaLong()Ljava/lang/String;
+
+    move-result-object v5
+
+    invoke-direct {p0, v5}, Lcom/android/internal/telephony/cdma/CdmaServiceStateTracker;->getOverridePlmn(Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v1
 
