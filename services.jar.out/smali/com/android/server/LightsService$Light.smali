@@ -68,6 +68,41 @@
     return-void
 .end method
 
+.method private calibrateBrightnessButtonLight(I)I
+    .locals 4
+    .parameter "brightness"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    move v0, p1
+
+    .local v0, calibratedBrightness:I
+    iget v1, p0, Lcom/android/server/LightsService$Light;->mId:I
+
+    const/4 v2, 0x2
+
+    if-ne v1, v2, :cond_0
+
+    const/4 v1, 0x1
+
+    const-string v2, "persist.sys.disable_btn_light"
+
+    const/4 v3, 0x0
+
+    invoke-static {v2, v3}, Landroid/os/SystemProperties;->getInt(Ljava/lang/String;I)I
+
+    move-result v2
+
+    if-ne v1, v2, :cond_0
+
+    const/4 v0, 0x0
+
+    :cond_0
+    return v0
+.end method
+
 .method private setLightLocked(IIIII)V
     .locals 7
     .parameter "color"
@@ -251,8 +286,15 @@
 .method public setBrightness(I)V
     .locals 1
     .parameter "brightness"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
+    invoke-direct {p0, p1}, Lcom/android/server/LightsService$Light;->calibrateBrightnessButtonLight(I)I
+
+    move-result p1
+
     const/4 v0, 0x0
 
     invoke-virtual {p0, p1, v0}, Lcom/android/server/LightsService$Light;->setBrightness(II)V

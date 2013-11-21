@@ -18,6 +18,7 @@
         Landroid/widget/TextView$CharWrapper;,
         Landroid/widget/TextView$SavedState;,
         Landroid/widget/TextView$BufferType;,
+        Landroid/widget/TextView$Injector;,
         Landroid/widget/TextView$OnEditorActionListener;,
         Landroid/widget/TextView$Drawables;
     }
@@ -78,6 +79,16 @@
 .field private static final VERY_WIDE:I = 0x100000
 
 .field private static isTextChanged:Z
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field static mTypeface:Landroid/graphics/Typeface;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 
 # instance fields
@@ -281,6 +292,10 @@
     sput-object v1, Landroid/widget/TextView;->MULTILINE_STATE_SET:[I
 
     sput-boolean v3, Landroid/widget/TextView;->isTextChanged:Z
+
+    const/4 v1, 0x0
+
+    sput-object v1, Landroid/widget/TextView;->mTypeface:Landroid/graphics/Typeface;
 
     new-instance v0, Landroid/graphics/Paint;
 
@@ -24764,7 +24779,7 @@
 
     invoke-virtual {v2, v3}, Landroid/text/TextPaint;->setTextSkewX(F)V
 
-    invoke-static {p1}, Landroid/graphics/LewaTypeface;->getDefaultTypeface(Landroid/graphics/Typeface;)Landroid/graphics/Typeface;
+    invoke-static {p0, p1}, Landroid/widget/TextView$Injector;->getDefaultTypeface(Landroid/widget/TextView;Landroid/graphics/Typeface;)Landroid/graphics/Typeface;
 
     move-result-object p1
 
