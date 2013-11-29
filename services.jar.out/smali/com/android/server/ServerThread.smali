@@ -547,11 +547,11 @@
 
     invoke-static {v3, v9}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
 
-    new-instance v75, Lcom/android/server/LightsService;
+    new-instance v75, Lcom/android/server/LewaLightsService;
 
     move-object/from16 v0, v75
 
-    invoke-direct {v0, v4}, Lcom/android/server/LightsService;-><init>(Landroid/content/Context;)V
+    invoke-direct {v0, v4}, Lcom/android/server/LewaLightsService;-><init>(Landroid/content/Context;)V
     :try_end_6
     .catch Ljava/lang/RuntimeException; {:try_start_6 .. :try_end_6} :catch_1
 
