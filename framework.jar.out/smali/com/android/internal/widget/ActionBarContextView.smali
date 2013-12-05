@@ -229,7 +229,9 @@
 
     move-result-object v0
 
-    invoke-static {v0, p4}, Lcom/android/internal/widget/ActionBarContextView$Injector;->getContextMenuViewHeight(Landroid/content/Context;I)I
+    iget-boolean v2, p0, Lcom/android/internal/widget/ActionBarContextView;->mSplitActionBar:Z
+
+    invoke-static {v0, v2, p4}, Lcom/android/internal/widget/ActionBarContextView$Injector;->getContextMenuViewHeight(Landroid/content/Context;ZI)I
 
     move-result v4
 
@@ -1161,7 +1163,9 @@
     :cond_1
     iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mContext:Landroid/content/Context;
 
-    invoke-static {v4}, Lcom/android/internal/widget/ActionBarContextView$Injector;->newMenuPresenter(Landroid/content/Context;)Lcom/android/internal/view/menu/ActionMenuPresenter;
+    iget-boolean v5, p0, Lcom/android/internal/widget/ActionBarContextView;->mSplitActionBar:Z
+
+    invoke-static {v4, v5}, Lcom/android/internal/widget/ActionBarContextView$Injector;->newMenuPresenter(Landroid/content/Context;Z)Lcom/android/internal/view/menu/ActionMenuPresenter;
 
     move-result-object v4
 
@@ -2333,6 +2337,9 @@
 .method public onTouchEvent(Landroid/view/MotionEvent;)Z
     .locals 1
     .parameter "ev"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     invoke-super {p0, p1}, Lcom/android/internal/widget/AbsActionBarView;->onTouchEvent(Landroid/view/MotionEvent;)Z
@@ -2394,6 +2401,17 @@
 .method public setRightActionButtonDrawable(Landroid/graphics/drawable/Drawable;)V
     .locals 0
     .parameter "drawable"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    return-void
+.end method
+
+.method public setRightActionButtonVisibility(I)V
+    .locals 0
+    .parameter "visibility"
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation

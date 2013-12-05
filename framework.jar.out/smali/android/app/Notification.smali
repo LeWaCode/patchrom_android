@@ -119,18 +119,6 @@
 
 .field public priority:I
 
-.field public simId:J
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field public simInfoType:I
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field public sound:Landroid/net/Uri;
 
 .field public tickerText:Ljava/lang/CharSequence;

@@ -26,9 +26,17 @@
 
 .field private mExpandedFormat:Z
 
-.field private mIcon:Landroid/graphics/drawable/Drawable;
+.field mIcon:Landroid/graphics/drawable/Drawable;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
-.field private mItemData:Lcom/android/internal/view/menu/MenuItemImpl;
+.field mItemData:Lcom/android/internal/view/menu/MenuItemImpl;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mItemInvoker:Lcom/android/internal/view/menu/MenuBuilder$ItemInvoker;
 
@@ -768,6 +776,8 @@
     .end local v4           #w:I
     :cond_2
     invoke-direct {p0, v3}, Lcom/android/internal/view/menu/ActionMenuItemView;->makelayoutLocation(Z)V
+
+    invoke-static {p0}, Lcom/android/internal/view/menu/ActionMenuItemView$Injector;->setIconColorFilter(Lcom/android/internal/view/menu/ActionMenuItemView;)V
 
     return-void
 

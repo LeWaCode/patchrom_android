@@ -877,6 +877,8 @@
 
     if-eqz v0, :cond_0
 
+    invoke-static {p0}, Lcom/android/internal/widget/ActionBarView$Injector;->resetTitleLayoutPadding(Lcom/android/internal/widget/ActionBarView;)V
+
     invoke-static {p1, p2, p3, v1}, Lcom/android/internal/widget/ActionBarView$Injector;->measureTitleView(Landroid/view/View;III)I
 
     move-result v0
@@ -1164,7 +1166,7 @@
 .end method
 
 .method private newMenuPresenterExt(Landroid/content/Context;)Lcom/android/internal/view/menu/ActionMenuPresenter;
-    .locals 1
+    .locals 2
     .parameter "context"
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
@@ -1173,18 +1175,24 @@
     .prologue
     invoke-static {p1}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
 
-    move-result v0
+    move-result v1
 
-    if-eqz v0, :cond_0
+    if-eqz v1, :cond_0
 
-    iget-boolean v0, p0, Lcom/android/internal/widget/ActionBarView;->mSplitActionBar:Z
+    iget-boolean v1, p0, Lcom/android/internal/widget/ActionBarView;->mSplitActionBar:Z
 
-    if-eqz v0, :cond_0
+    if-eqz v1, :cond_0
 
     new-instance v0, Llewa/internal/v5/view/menu/LewaActionMenuPresenter;
 
     invoke-direct {v0, p1}, Llewa/internal/v5/view/menu/LewaActionMenuPresenter;-><init>(Landroid/content/Context;)V
 
+    .local v0, presenter:Lcom/android/internal/view/menu/ActionMenuPresenter;
+    const/4 v1, 0x0
+
+    invoke-virtual {v0, v1}, Lcom/android/internal/view/menu/ActionMenuPresenter;->setReserveOverflow(Z)V
+
+    .end local v0           #presenter:Lcom/android/internal/view/menu/ActionMenuPresenter;
     :goto_0
     return-object v0
 
@@ -1427,6 +1435,18 @@
     return-object p1
 .end method
 
+.method getCustomNavView()Landroid/view/View;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/widget/ActionBarView;->mCustomNavView:Landroid/view/View;
+
+    return-object v0
+.end method
+
 .method public getCustomNavigationView()Landroid/view/View;
     .locals 1
 
@@ -1490,6 +1510,18 @@
 
     .prologue
     iget-object v0, p0, Lcom/android/internal/widget/ActionBarView;->mTitle:Ljava/lang/CharSequence;
+
+    return-object v0
+.end method
+
+.method getTitleLayout()Landroid/widget/LinearLayout;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/widget/ActionBarView;->mTitleLayout:Landroid/widget/LinearLayout;
 
     return-object v0
 .end method

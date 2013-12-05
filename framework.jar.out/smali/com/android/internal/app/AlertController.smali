@@ -21,19 +21,31 @@
 
 .field mButtonHandler:Landroid/view/View$OnClickListener;
 
-.field private mButtonNegative:Landroid/widget/Button;
+.field mButtonNegative:Landroid/widget/Button;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mButtonNegativeMessage:Landroid/os/Message;
 
 .field private mButtonNegativeText:Ljava/lang/CharSequence;
 
-.field private mButtonNeutral:Landroid/widget/Button;
+.field mButtonNeutral:Landroid/widget/Button;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mButtonNeutralMessage:Landroid/os/Message;
 
 .field private mButtonNeutralText:Ljava/lang/CharSequence;
 
-.field private mButtonPositive:Landroid/widget/Button;
+.field mButtonPositive:Landroid/widget/Button;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mButtonPositiveMessage:Landroid/os/Message;
 
@@ -909,6 +921,9 @@
 
 .method private setupButtons()Z
     .locals 8
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/16 v7, 0x8
@@ -1036,6 +1051,10 @@
 
     :cond_0
     :goto_3
+    iget-object v4, p0, Lcom/android/internal/app/AlertController;->mContext:Landroid/content/Context;
+
+    invoke-static {p0, v4, v3}, Lcom/android/internal/app/AlertController$Injector;->setSingleButtonBackground(Lcom/android/internal/app/AlertController;Landroid/content/Context;I)V
+
     if-eqz v3, :cond_6
 
     const/4 v4, 0x1
@@ -1091,7 +1110,7 @@
     :cond_4
     if-ne v3, v0, :cond_5
 
-    iget-object v4, p0, Lcom/android/internal/app/AlertController;->mButtonNeutral:Landroid/widget/Button;
+    iget-object v4, p0, Lcom/android/internal/app/AlertController;->mButtonNegative:Landroid/widget/Button;
 
     invoke-direct {p0, v4}, Lcom/android/internal/app/AlertController;->centerButton(Landroid/widget/Button;)V
 
@@ -1414,14 +1433,6 @@
     iget-object v0, p0, Lcom/android/internal/app/AlertController;->mCustomTitleView:Landroid/view/View;
 
     if-nez v0, :cond_0
-
-    iget-object v0, p0, Lcom/android/internal/app/AlertController;->mContext:Landroid/content/Context;
-
-    invoke-static {v0}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
-
-    move-result v0
-
-    if-eqz v0, :cond_0
 
     iget-object v0, p0, Lcom/android/internal/app/AlertController;->mIconView:Landroid/widget/ImageView;
 
