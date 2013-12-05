@@ -32,7 +32,7 @@
 .method public abstract monitorInput(Ljava/lang/String;)Landroid/view/InputChannel;
 .end method
 
-.method public abstract reboot()V
+.method public abstract rebootEx()V
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
