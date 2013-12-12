@@ -125,6 +125,9 @@
     .parameter "position"
     .parameter "id"
     .parameter "checked"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     iget-object v0, p0, Landroid/widget/AbsListView$MultiChoiceModeWrapper;->mWrapped:Landroid/widget/AbsListView$MultiChoiceModeListener;
@@ -146,6 +149,14 @@
     move-result v0
 
     if-nez v0, :cond_0
+
+    iget-object v0, p0, Landroid/widget/AbsListView$MultiChoiceModeWrapper;->this$0:Landroid/widget/AbsListView;
+
+    invoke-static {v0}, Landroid/widget/AbsListView$Injector;->isNeedFinishActionMode(Landroid/widget/AbsListView;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
 
     invoke-virtual {p1}, Landroid/view/ActionMode;->finish()V
 

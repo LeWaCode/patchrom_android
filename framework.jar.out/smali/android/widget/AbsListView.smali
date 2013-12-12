@@ -13,6 +13,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Landroid/widget/AbsListView$Injector;,
         Landroid/widget/AbsListView$RecycleBin;,
         Landroid/widget/AbsListView$RecyclerListener;,
         Landroid/widget/AbsListView$LayoutParams;,

@@ -339,7 +339,19 @@
     goto :goto_1
 
     :cond_lewa_1
-    add-int/lit8 v7, v6, -0x5
+    iget-object v7, p0, Landroid/widget/Spinner$DropdownPopup;->this$0:Landroid/widget/Spinner;
+
+    invoke-virtual {v7}, Landroid/widget/Spinner;->getContext()Landroid/content/Context;
+
+    move-result-object v7
+
+    const/high16 v8, 0x4150
+
+    invoke-static {v7, v8}, Llewa/util/LewaUiUtil;->dip2px(Landroid/content/Context;F)I
+
+    move-result v7
+
+    sub-int v7, v6, v7
 
     invoke-virtual {p0, v7}, Landroid/widget/Spinner$DropdownPopup;->setContentWidth(I)V
 

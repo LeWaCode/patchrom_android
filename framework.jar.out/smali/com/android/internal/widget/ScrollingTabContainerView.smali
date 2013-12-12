@@ -664,6 +664,14 @@
     .end annotation
 
     .prologue
+    iget-object v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mContext:Landroid/content/Context;
+
+    invoke-static {v3}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_0
+
     iget v3, p0, Lcom/android/internal/widget/ScrollingTabContainerView;->mStateIndicator:I
 
     if-nez v3, :cond_0

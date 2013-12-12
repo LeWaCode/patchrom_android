@@ -10,6 +10,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Landroid/preference/PreferenceScreen$Injector;,
         Landroid/preference/PreferenceScreen$SavedState;
     }
 .end annotation
@@ -40,6 +41,9 @@
 .method private showDialog(Landroid/os/Bundle;)V
     .locals 7
     .parameter "state"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v6, 0x0
@@ -134,7 +138,11 @@
 
     invoke-virtual {v5, v2}, Landroid/preference/PreferenceManager;->addPreferencesScreen(Landroid/content/DialogInterface;)V
 
-    invoke-virtual {v2}, Landroid/app/Dialog;->show()V
+    invoke-static {p0, v1, p1, v0}, Landroid/preference/PreferenceScreen$Injector;->showPreferenceDialog(Landroid/preference/PreferenceScreen;Landroid/content/Context;Landroid/os/Bundle;Landroid/view/View;)Landroid/app/Dialog;
+
+    move-result-object v5
+
+    iput-object v5, p0, Landroid/preference/PreferenceScreen;->mDialog:Landroid/app/Dialog;
 
     return-void
 

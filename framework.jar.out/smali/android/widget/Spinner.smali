@@ -358,18 +358,11 @@
     return-object v0
 .end method
 
-.method static synthetic access$400(Landroid/widget/Spinner;)Landroid/content/Context;
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    iget-object v0, p0, Landroid/widget/Spinner;->mContext:Landroid/content/Context;
-
-    return-object v0
-.end method
-
 .method private hideInputField()V
     .locals 3
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     sget-boolean v1, Landroid/widget/Spinner;->isHideInputKeyBoard:Z
