@@ -26,17 +26,9 @@
 
 .field private mExpandedFormat:Z
 
-.field mIcon:Landroid/graphics/drawable/Drawable;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
+.field private mIcon:Landroid/graphics/drawable/Drawable;
 
-.field mItemData:Lcom/android/internal/view/menu/MenuItemImpl;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
+.field private mItemData:Lcom/android/internal/view/menu/MenuItemImpl;
 
 .field private mItemInvoker:Lcom/android/internal/view/menu/MenuBuilder$ItemInvoker;
 
@@ -125,6 +117,9 @@
 
 .method private getHeightExt()I
     .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     invoke-virtual {p0}, Lcom/android/internal/view/menu/ActionMenuItemView;->getContext()Landroid/content/Context;
@@ -394,6 +389,18 @@
     const/4 v0, 0x1
 
     return v0
+.end method
+
+.method getIcon()Landroid/graphics/drawable/Drawable;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/view/menu/ActionMenuItemView;->mIcon:Landroid/graphics/drawable/Drawable;
+
+    return-object v0
 .end method
 
 .method public getItemData()Lcom/android/internal/view/menu/MenuItemImpl;

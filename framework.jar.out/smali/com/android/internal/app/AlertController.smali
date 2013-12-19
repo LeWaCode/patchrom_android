@@ -21,31 +21,19 @@
 
 .field mButtonHandler:Landroid/view/View$OnClickListener;
 
-.field mButtonNegative:Landroid/widget/Button;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
+.field private mButtonNegative:Landroid/widget/Button;
 
 .field private mButtonNegativeMessage:Landroid/os/Message;
 
 .field private mButtonNegativeText:Ljava/lang/CharSequence;
 
-.field mButtonNeutral:Landroid/widget/Button;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
+.field private mButtonNeutral:Landroid/widget/Button;
 
 .field private mButtonNeutralMessage:Landroid/os/Message;
 
 .field private mButtonNeutralText:Ljava/lang/CharSequence;
 
-.field mButtonPositive:Landroid/widget/Button;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
+.field private mButtonPositive:Landroid/widget/Button;
 
 .field private mButtonPositiveMessage:Landroid/os/Message;
 
@@ -1420,6 +1408,9 @@
 
 .method private setupTitleExt()V
     .locals 2
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     iget-object v0, p0, Lcom/android/internal/app/AlertController;->mTitle:Ljava/lang/CharSequence;
@@ -1734,6 +1725,42 @@
         :pswitch_1
         :pswitch_0
     .end packed-switch
+.end method
+
+.method getButtonNegative()Landroid/widget/Button;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/app/AlertController;->mButtonNegative:Landroid/widget/Button;
+
+    return-object v0
+.end method
+
+.method getButtonNeutral()Landroid/widget/Button;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/app/AlertController;->mButtonNeutral:Landroid/widget/Button;
+
+    return-object v0
+.end method
+
+.method getButtonPositive()Landroid/widget/Button;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/app/AlertController;->mButtonPositive:Landroid/widget/Button;
+
+    return-object v0
 .end method
 
 .method public getListView()Landroid/widget/ListView;
