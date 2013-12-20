@@ -28082,7 +28082,7 @@
     goto :goto_1
 .end method
 
-.method public reboot()V
+.method public rebootEx()V
     .locals 3
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
