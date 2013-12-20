@@ -1082,8 +1082,6 @@
     :cond_0
     return-void
 
-    nop
-
     :sswitch_data_0
     .sparse-switch
         0x4d -> :sswitch_1

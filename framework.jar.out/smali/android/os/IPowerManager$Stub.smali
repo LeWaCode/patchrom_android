@@ -641,12 +641,12 @@
 
     move-result v8
 
-    if-eqz v8, :cond_9
+    if-eqz v8, :cond_lewa_0
 
     move v2, v7
 
     .local v2, _arg1:Z
-    :goto_8
+    :goto_lewa_0
     invoke-virtual {p0, v0, v2}, Landroid/os/IPowerManager$Stub;->rebootConfirm(Ljava/lang/String;Z)V
 
     invoke-virtual {p3}, Landroid/os/Parcel;->writeNoException()V
@@ -654,10 +654,10 @@
     goto/16 :goto_0
 
     .end local v2           #_arg1:Z
-    :cond_9
+    :cond_lewa_0
     move v2, v6
 
-    goto :goto_8
+    goto :goto_lewa_0
 
     :sswitch_data_0
     .sparse-switch
