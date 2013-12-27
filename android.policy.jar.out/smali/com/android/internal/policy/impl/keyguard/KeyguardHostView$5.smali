@@ -87,6 +87,9 @@
 .method public setPendingIntent(Landroid/content/Intent;)V
     .locals 0
     .parameter "intent"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     return-void

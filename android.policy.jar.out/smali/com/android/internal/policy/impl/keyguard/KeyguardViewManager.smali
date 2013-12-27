@@ -6,7 +6,6 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager$Injector;,
         Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager$ViewManagerHost;,
         Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager$ShowListener;
     }
@@ -53,12 +52,6 @@
 
 .field private mWindowLayoutParams:Landroid/view/WindowManager$LayoutParams;
 
-.field private nLewaLockscreen:Z
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 
 # direct methods
 .method static constructor <clinit>()V
@@ -91,8 +84,6 @@
     iput-boolean v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mNeedsInput:Z
 
     iput-boolean v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mScreenOn:Z
-
-    iput-boolean v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->nLewaLockscreen:Z
 
     new-instance v0, Landroid/util/SparseArray;
 
@@ -264,74 +255,11 @@
     return-void
 .end method
 
-.method private isNeedUpdateLayout()Z
-    .locals 6
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    const/4 v2, 0x1
-
-    const/4 v3, 0x0
-
-    iget-object v4, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v4}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v4
-
-    const-string v5, "lockscreen_changed"
-
-    invoke-static {v4, v5, v3}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
-
-    move-result v4
-
-    if-eqz v4, :cond_0
-
-    move v0, v2
-
-    .local v0, lewaChange:Z
-    :goto_0
-    iget-object v4, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mContext:Landroid/content/Context;
-
-    invoke-static {v4}, Lcom/android/internal/policy/impl/keyguard/LewaKeyguardUtils;->isLewaLockscreen(Landroid/content/Context;)Z
-
-    move-result v1
-
-    .local v1, lewaLockscreen:Z
-    if-eqz v0, :cond_1
-
-    iget-boolean v4, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->nLewaLockscreen:Z
-
-    if-eqz v4, :cond_1
-
-    :goto_1
-    return v2
-
-    .end local v0           #lewaChange:Z
-    .end local v1           #lewaLockscreen:Z
-    :cond_0
-    move v0, v3
-
-    goto :goto_0
-
-    .restart local v0       #lewaChange:Z
-    .restart local v1       #lewaLockscreen:Z
-    :cond_1
-    move v2, v3
-
-    goto :goto_1
-.end method
-
 .method private maybeCreateKeyguardLocked(ZZLandroid/os/Bundle;)V
     .locals 9
     .parameter "enableScreenRotation"
     .parameter "force"
     .parameter "options"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     const/high16 v8, 0x100
@@ -366,7 +294,7 @@
 
     iput-object v2, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mKeyguardHost:Landroid/widget/FrameLayout;
 
-    const v4, 0x110500
+    const v4, 0x110900
 
     .local v4, flags:I
     iget-boolean v2, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mNeedsInput:Z
@@ -477,13 +405,7 @@
 
     iget-object v1, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mKeyguardView:Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;
 
-    if-eqz v1, :cond_6
-
-    invoke-direct {p0}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->isNeedUpdateLayout()Z
-
-    move-result v1
-
-    if-eqz v1, :cond_7
+    if-nez v1, :cond_7
 
     :cond_6
     invoke-direct {p0, p3}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->inflateKeyguardView(Landroid/os/Bundle;)V
@@ -491,8 +413,6 @@
     iget-object v1, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mKeyguardView:Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;
 
     invoke-virtual {v1}, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;->requestFocus()Z
-
-    invoke-direct {p0}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->setLewaLockScreenValue()V
 
     :cond_7
     invoke-direct {p0}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->updateUserActivityTimeoutInWindowLayoutParams()V
@@ -560,24 +480,6 @@
     iput v1, v0, Landroid/view/WindowManager$LayoutParams;->screenOrientation:I
 
     goto :goto_0
-.end method
-
-.method private setLewaLockScreenValue()V
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mContext:Landroid/content/Context;
-
-    invoke-static {v0}, Lcom/android/internal/policy/impl/keyguard/LewaKeyguardUtils;->isLewaLockscreen(Landroid/content/Context;)Z
-
-    move-result v0
-
-    iput-boolean v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->nLewaLockscreen:Z
-
-    return-void
 .end method
 
 .method private shouldEnableScreenRotation()Z
@@ -687,42 +589,6 @@
     throw v0
 .end method
 
-.method getKeyguardView()Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mKeyguardView:Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;
-
-    return-object v0
-.end method
-
-.method getMyContext()Landroid/content/Context;
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mContext:Landroid/content/Context;
-
-    return-object v0
-.end method
-
-.method getWindowLayoutParams()Landroid/view/WindowManager$LayoutParams;
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mWindowLayoutParams:Landroid/view/WindowManager$LayoutParams;
-
-    return-object v0
-.end method
-
 .method public declared-synchronized hide()V
     .locals 5
 
@@ -779,31 +645,6 @@
     monitor-exit p0
 
     throw v1
-.end method
-
-.method public isLewaLockscreen()Z
-    .locals 1
-
-    .prologue
-    iget-boolean v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->nLewaLockscreen:Z
-
-    return v0
-.end method
-
-.method isSecure()Z
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
-
-    invoke-virtual {v0}, Lcom/android/internal/widget/LockPatternUtils;->isSecure()Z
-
-    move-result v0
-
-    return v0
 .end method
 
 .method public declared-synchronized isShowing()Z
@@ -1079,9 +920,6 @@
 .method public declared-synchronized show(Landroid/os/Bundle;)V
     .locals 5
     .parameter "options"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     monitor-enter p0
@@ -1098,16 +936,14 @@
 
     invoke-direct {p0, v0}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->maybeEnableScreenRotation(Z)V
 
-    const/high16 v1, 0x60
+    const/high16 v1, 0x20
 
     .local v1, visFlags:I
     iget-object v2, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mKeyguardHost:Landroid/widget/FrameLayout;
 
-    const/high16 v3, 0x60
+    const/high16 v3, 0x20
 
     invoke-virtual {v2, v3}, Landroid/widget/FrameLayout;->setSystemUiVisibility(I)V
-
-    invoke-static {p0}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager$Injector;->updateDisplayDesktopFlag(Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;)V
 
     iget-object v2, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->mViewManager:Landroid/view/ViewManager;
 

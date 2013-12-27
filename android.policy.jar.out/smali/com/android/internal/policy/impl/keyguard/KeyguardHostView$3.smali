@@ -167,59 +167,14 @@
 .end method
 
 .method public setPendingIntent(Landroid/content/Intent;)V
-    .locals 8
+    .locals 0
     .parameter "intent"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
-    const-wide/16 v6, 0x0
-
-    const/4 v4, 0x0
-
-    const/4 v2, 0x0
-
-    if-eqz p1, :cond_1
-
-    invoke-virtual {p1}, Landroid/content/Intent;->getFlags()I
-
-    move-result v0
-
-    const/high16 v1, 0x1
-
-    and-int/2addr v0, v1
-
-    if-eqz v0, :cond_0
-
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView$3;->this$0:Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;
-
-    invoke-virtual {v0, v2}, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;->enableWindowExitAnimation(Z)V
-
-    :cond_0
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView$3;->this$0:Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;
-
-    #getter for: Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;->mActivityLauncher:Lcom/android/internal/policy/impl/keyguard/KeyguardActivityLauncher;
-    invoke-static {v0}, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;->access$1800(Lcom/android/internal/policy/impl/keyguard/KeyguardHostView;)Lcom/android/internal/policy/impl/keyguard/KeyguardActivityLauncher;
-
-    move-result-object v0
-
-    const/4 v3, 0x1
-
-    move-object v1, p1
-
-    move-object v5, v4
-
-    invoke-virtual/range {v0 .. v5}, Lcom/android/internal/policy/impl/keyguard/KeyguardActivityLauncher;->launchActivity(Landroid/content/Intent;ZZLandroid/os/Handler;Ljava/lang/Runnable;)V
-
-    invoke-virtual {p0, v6, v7}, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView$3;->userActivity(J)V
-
-    :goto_0
     return-void
-
-    :cond_1
-    invoke-virtual {p0, v6, v7}, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView$3;->userActivity(J)V
-
-    invoke-virtual {p0, v2}, Lcom/android/internal/policy/impl/keyguard/KeyguardHostView$3;->dismiss(Z)V
-
-    goto :goto_0
 .end method
 
 .method public showBackupSecurity()V

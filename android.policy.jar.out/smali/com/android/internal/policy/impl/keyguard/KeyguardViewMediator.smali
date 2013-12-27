@@ -45,12 +45,6 @@
 
 .field private static final RESET:I = 0x4
 
-.field public static final RESET_LEWALOCKSCREEN:Ljava/lang/String; = "reset_lewalockscreen"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field private static final SET_HIDDEN:I = 0xc
 
 .field private static final SHOW:I = 0x2
@@ -98,12 +92,6 @@
 .field private mLockSounds:Landroid/media/SoundPool;
 
 .field private mMasterStreamType:I
-
-.field private mMode:I
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field private mNeedToReshowWhenReenabled:Z
 
@@ -176,8 +164,6 @@
     iput-boolean v6, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mWaitingUntilKeyguardVisible:Z
 
     iput-boolean v6, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mKeyguardDonePending:Z
-
-    iput v6, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mMode:I
 
     new-instance v4, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator$1;
 
@@ -1475,9 +1461,6 @@
 .method private handleShow(Landroid/os/Bundle;)V
     .locals 2
     .parameter "options"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     monitor-enter p0
@@ -1526,20 +1509,11 @@
     .catch Landroid/os/RemoteException; {:try_start_1 .. :try_end_1} :catch_0
 
     :goto_1
-    :try_start_2
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mContext:Landroid/content/Context;
-
-    invoke-static {v0}, Lcom/android/internal/policy/impl/keyguard/LewaKeyguardUtils;->isLewaLockscreen(Landroid/content/Context;)Z
-
-    move-result v0
-
-    if-nez v0, :cond_lewa_0
-
     const/4 v0, 0x1
 
+    :try_start_2
     invoke-direct {p0, v0}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->playSounds(Z)V
 
-    :cond_lewa_0
     iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mShowKeyguardWakeLock:Landroid/os/PowerManager$WakeLock;
 
     invoke-virtual {v0}, Landroid/os/PowerManager$WakeLock;->release()V
@@ -2070,18 +2044,6 @@
     return-void
 .end method
 
-.method public getLockScreenMode()I
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mMode:I
-
-    return v0
-.end method
-
 .method public handleShowAssistant()V
     .locals 1
 
@@ -2528,45 +2490,6 @@
     throw v0
 .end method
 
-.method onSimStateChangedExt(Landroid/os/Bundle;)V
-    .locals 2
-    .parameter "options"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mKeyguardViewManager:Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;
-
-    invoke-virtual {v0}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewManager;->isLewaLockscreen()Z
-
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    new-instance p1, Landroid/os/Bundle;
-
-    .end local p1
-    invoke-direct {p1}, Landroid/os/Bundle;-><init>()V
-
-    .restart local p1
-    const-string v0, "reset_lewalockscreen"
-
-    const/4 v1, 0x1
-
-    invoke-virtual {p1, v0, v1}, Landroid/os/Bundle;->putBoolean(Ljava/lang/String;Z)V
-
-    invoke-direct {p0, p1}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->resetStateLocked(Landroid/os/Bundle;)V
-
-    :goto_0
-    return-void
-
-    :cond_0
-    invoke-direct {p0, p1}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->resetStateLocked(Landroid/os/Bundle;)V
-
-    goto :goto_0
-.end method
-
 .method public onSystemReady()V
     .locals 2
 
@@ -2859,19 +2782,6 @@
     .catchall {:try_start_3 .. :try_end_3} :catchall_0
 
     goto :goto_2
-.end method
-
-.method public setLockScreenMode(I)V
-    .locals 0
-    .parameter "mode"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iput p1, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->mMode:I
-
-    return-void
 .end method
 
 .method public showAssistant()V

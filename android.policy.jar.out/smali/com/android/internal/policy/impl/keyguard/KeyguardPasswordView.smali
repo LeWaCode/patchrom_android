@@ -8,27 +8,7 @@
 .implements Landroid/text/TextWatcher;
 
 
-# static fields
-.field private static final TAG:Ljava/lang/String; = "KeyguardPasswordView"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-
 # instance fields
-.field private final DEFAULT_IME:Ljava/lang/String;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field private mIme:Ljava/lang/String;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field mImm:Landroid/view/inputmethod/InputMethodManager;
 
 .field private final mShowImeAtScreenOn:Z
@@ -54,14 +34,6 @@
 
     .prologue
     invoke-direct {p0, p1, p2}, Lcom/android/internal/policy/impl/keyguard/KeyguardAbsKeyInputView;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;)V
-
-    const-string v0, "com.android.inputmethod.latin/.LatinIME"
-
-    iput-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->DEFAULT_IME:Ljava/lang/String;
-
-    const/4 v0, 0x0
-
-    iput-object v0, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mIme:Ljava/lang/String;
 
     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
 
@@ -252,9 +224,6 @@
 
 .method protected onFinishInflate()V
     .locals 7
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     const/4 v6, 0x0
@@ -312,7 +281,7 @@
 
     invoke-virtual {v4}, Landroid/widget/TextView;->requestFocus()Z
 
-    const/4 v4, -0x1
+    const v4, 0x10202be
 
     invoke-virtual {p0, v4}, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->findViewById(I)Landroid/view/View;
 
@@ -340,8 +309,6 @@
     invoke-virtual {v3, v4}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
     :cond_0
-    invoke-virtual {p0}, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->onFinishInflateExt()V
-
     if-nez v0, :cond_1
 
     iget-object v4, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mPasswordEntry:Landroid/widget/TextView;
@@ -368,82 +335,6 @@
 
     .end local v1           #mlp:Landroid/view/ViewGroup$MarginLayoutParams;
     .end local v2           #params:Landroid/view/ViewGroup$LayoutParams;
-    :cond_1
-    return-void
-.end method
-
-.method onFinishInflateExt()V
-    .locals 6
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v3, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mImm:Landroid/view/inputmethod/InputMethodManager;
-
-    invoke-virtual {v3}, Landroid/view/inputmethod/InputMethodManager;->getEnabledInputMethodList()Ljava/util/List;
-
-    move-result-object v0
-
-    .local v0, enabledImis:Ljava/util/List;,"Ljava/util/List<Landroid/view/inputmethod/InputMethodInfo;>;"
-    invoke-interface {v0}, Ljava/util/List;->iterator()Ljava/util/Iterator;
-
-    move-result-object v1
-
-    .local v1, i$:Ljava/util/Iterator;
-    :cond_0
-    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v3
-
-    if-eqz v3, :cond_1
-
-    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-
-    move-result-object v2
-
-    check-cast v2, Landroid/view/inputmethod/InputMethodInfo;
-
-    .local v2, info:Landroid/view/inputmethod/InputMethodInfo;
-    invoke-virtual {v2}, Landroid/view/inputmethod/InputMethodInfo;->getId()Ljava/lang/String;
-
-    move-result-object v3
-
-    const-string v4, "com.android.inputmethod.latin/.LatinIME"
-
-    invoke-virtual {v3, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v3
-
-    if-eqz v3, :cond_0
-
-    iget-object v3, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v3}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v3
-
-    const-string v4, "default_input_method"
-
-    invoke-static {v3, v4}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v3
-
-    iput-object v3, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mIme:Ljava/lang/String;
-
-    iget-object v3, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v3}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v3
-
-    const-string v4, "default_input_method"
-
-    const-string v5, "com.android.inputmethod.latin/.LatinIME"
-
-    invoke-static {v3, v4, v5}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
-
-    .end local v2           #info:Landroid/view/inputmethod/InputMethodInfo;
     :cond_1
     return-void
 .end method
@@ -522,53 +413,5 @@
     .locals 0
 
     .prologue
-    return-void
-.end method
-
-.method protected verifyPasswordAndUnlock()V
-    .locals 4
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v1, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mPasswordEntry:Landroid/widget/TextView;
-
-    invoke-virtual {v1}, Landroid/widget/TextView;->getText()Ljava/lang/CharSequence;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Ljava/lang/Object;->toString()Ljava/lang/String;
-
-    move-result-object v0
-
-    .local v0, entry:Ljava/lang/String;
-    iget-object v1, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mLockPatternUtils:Lcom/android/internal/widget/LockPatternUtils;
-
-    invoke-virtual {v1, v0}, Lcom/android/internal/widget/LockPatternUtils;->checkPassword(Ljava/lang/String;)Z
-
-    move-result v1
-
-    if-eqz v1, :cond_0
-
-    iget-object v1, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mIme:Ljava/lang/String;
-
-    if-eqz v1, :cond_0
-
-    iget-object v1, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-
-    move-result-object v1
-
-    const-string v2, "default_input_method"
-
-    iget-object v3, p0, Lcom/android/internal/policy/impl/keyguard/KeyguardPasswordView;->mIme:Ljava/lang/String;
-
-    invoke-static {v1, v2, v3}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
-
-    :cond_0
-    invoke-super {p0}, Lcom/android/internal/policy/impl/keyguard/KeyguardAbsKeyInputView;->verifyPasswordAndUnlock()V
-
     return-void
 .end method

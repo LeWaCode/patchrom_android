@@ -110,9 +110,6 @@
 .method public onSimStateChanged(Lcom/android/internal/telephony/IccCardConstants$State;)V
     .locals 2
     .parameter "simState"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     sget-object v0, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator$5;->$SwitchMap$com$android$internal$telephony$IccCardConstants$State:[I
@@ -223,7 +220,8 @@
 
     const/4 v1, 0x0
 
-    invoke-virtual {v0, v1}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->onSimStateChangedExt(Landroid/os/Bundle;)V
+    #calls: Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->resetStateLocked(Landroid/os/Bundle;)V
+    invoke-static {v0, v1}, Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;->access$000(Lcom/android/internal/policy/impl/keyguard/KeyguardViewMediator;Landroid/os/Bundle;)V
     :try_end_3
     .catchall {:try_start_3 .. :try_end_3} :catchall_1
 
