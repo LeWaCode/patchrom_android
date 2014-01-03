@@ -258,6 +258,12 @@
     .prologue
     const/4 v5, 0x0
 
+    invoke-virtual {p0}, Lcom/android/internal/widget/ActionBarContextView;->lewaInitTitle()Z
+
+    move-result v4
+
+    if-nez v4, :cond_1
+
     iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
 
     if-nez v4, :cond_0
@@ -351,13 +357,29 @@
 
     invoke-virtual {v4, v6}, Landroid/widget/Button;->setText(Ljava/lang/CharSequence;)V
 
+    :cond_1
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mContext:Landroid/content/Context;
+
+    invoke-static {v4}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v4
+
+    if-eqz v4, :cond_2
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleView:Landroid/widget/TextView;
+
+    iget-object v6, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitle:Ljava/lang/CharSequence;
+
+    invoke-virtual {v4, v6}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    :cond_2
     iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitle:Ljava/lang/CharSequence;
 
     invoke-static {v4}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 
     move-result v4
 
-    if-nez v4, :cond_2
+    if-nez v4, :cond_4
 
     const/4 v0, 0x1
 
@@ -365,7 +387,7 @@
     :goto_0
     iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
 
-    if-eqz v0, :cond_3
+    if-eqz v0, :cond_5
 
     :goto_1
     invoke-virtual {v4, v5}, Landroid/widget/LinearLayout;->setVisibility(I)V
@@ -376,23 +398,23 @@
 
     move-result-object v4
 
-    if-nez v4, :cond_1
+    if-nez v4, :cond_3
 
     iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
 
     invoke-virtual {p0, v4}, Lcom/android/internal/widget/ActionBarContextView;->addView(Landroid/view/View;)V
 
-    :cond_1
+    :cond_3
     return-void
 
     .end local v0           #hasTitle:Z
-    :cond_2
+    :cond_4
     move v0, v5
 
     goto :goto_0
 
     .restart local v0       #hasTitle:Z
-    :cond_3
+    :cond_5
     const/16 v5, 0x8
 
     goto :goto_1
@@ -721,7 +743,7 @@
     .end local v5           #i:I
     .end local v6           #j:I
     :cond_0
-    invoke-direct {p0, v1}, Lcom/android/internal/widget/ActionBarContextView;->makeOutAnimation(Landroid/animation/AnimatorSet$Builder;)V
+    invoke-direct {p0, v1}, Lcom/android/internal/widget/ActionBarContextView;->makeInAnimation(Landroid/animation/AnimatorSet$Builder;)V
 
     return-object v7
 
@@ -732,6 +754,27 @@
         0x0t 0x0t 0x0t 0x0t
         0x0t 0x0t 0x80t 0x3ft
     .end array-data
+.end method
+
+.method private makeInAnimation(Landroid/animation/AnimatorSet$Builder;)V
+    .locals 1
+    .parameter "b"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Lcom/android/internal/widget/ActionBarContextView;->makeRightButtonInAnimation()Landroid/animation/ObjectAnimator;
+
+    move-result-object v0
+
+    .local v0, rightBbuttonAnimator:Landroid/animation/ObjectAnimator;
+    if-eqz v0, :cond_0
+
+    invoke-virtual {p1, v0}, Landroid/animation/AnimatorSet$Builder;->with(Landroid/animation/Animator;)Landroid/animation/AnimatorSet$Builder;
+
+    :cond_0
+    return-void
 .end method
 
 .method private makeOutAnimation()Landroid/animation/Animator;
