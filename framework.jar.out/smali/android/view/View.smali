@@ -12,6 +12,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Landroid/view/View$Injector;,
         Landroid/view/View$AccessibilityDelegate;,
         Landroid/view/View$SendViewScrolledAccessibilityEvent;,
         Landroid/view/View$ScrollabilityCache;,
@@ -508,6 +509,18 @@
 
 .field public static final SYSTEM_UI_FLAG_LOW_PROFILE:I = 0x1
 
+.field public static final SYSTEM_UI_FLAG_TRANSIENT_BAR:I = 0x1000000
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field public static final SYSTEM_UI_FLAG_TRANSPARENT_STATUS_BAR:I = 0x10000000
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field public static final SYSTEM_UI_FLAG_VISIBLE:I = 0x0
 
 .field public static final SYSTEM_UI_LAYOUT_FLAGS:I = 0x600
@@ -684,6 +697,12 @@
 .field mAccessibilityDelegate:Landroid/view/View$AccessibilityDelegate;
 
 .field mAccessibilityViewId:I
+
+.field mAdditionalState:I
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
 
 .field private mAnimator:Landroid/view/ViewPropertyAnimator;
 
@@ -1732,6 +1751,8 @@
     :goto_0
     iput-object v0, p0, Landroid/view/View;->mInputEventConsistencyVerifier:Landroid/view/InputEventConsistencyVerifier;
 
+    iput v2, p0, Landroid/view/View;->mAdditionalState:I
+
     iput-object v1, p0, Landroid/view/View;->mResources:Landroid/content/res/Resources;
 
     return-void
@@ -1807,6 +1828,8 @@
 
     :goto_0
     iput-object v0, p0, Landroid/view/View;->mInputEventConsistencyVerifier:Landroid/view/InputEventConsistencyVerifier;
+
+    iput v3, p0, Landroid/view/View;->mAdditionalState:I
 
     iput-object p1, p0, Landroid/view/View;->mContext:Landroid/content/Context;
 
@@ -1887,6 +1910,9 @@
     .parameter "context"
     .parameter "attrs"
     .parameter "defStyle"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     invoke-direct/range {p0 .. p1}, Landroid/view/View;-><init>(Landroid/content/Context;)V
@@ -3272,6 +3298,14 @@
 
     :cond_b
     invoke-virtual/range {p0 .. p0}, Landroid/view/View;->computeOpaqueFlags()V
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, p2
+
+    move/from16 v2, p3
+
+    invoke-static {v0, v1, v2}, Landroid/view/View$Injector;->initializeChildrenSequenceStates(Landroid/view/View;Landroid/util/AttributeSet;I)V
 
     return-void
 
@@ -13246,6 +13280,31 @@
     return-void
 .end method
 
+.method fillAdditionalState([I)[I
+    .locals 2
+    .parameter "states"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    move-object v0, p1
+
+    .local v0, newStates:[I
+    iget v1, p0, Landroid/view/View;->mAdditionalState:I
+
+    if-eqz v1, :cond_0
+
+    iget v1, p0, Landroid/view/View;->mAdditionalState:I
+
+    invoke-static {v0, v1}, Llewa/util/LewaUiUtil;->getViewStates([II)[I
+
+    move-result-object v0
+
+    :cond_0
+    return-object v0
+.end method
+
 .method public findFocus()Landroid/view/View;
     .locals 1
 
@@ -20461,6 +20520,9 @@
 .method protected onCreateDrawableState(I)[I
     .locals 8
     .parameter "extraSpace"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/high16 v7, 0x40
@@ -20598,6 +20660,10 @@
     aget-object v0, v5, v4
 
     .local v0, drawableState:[I
+    invoke-virtual {p0, v0}, Landroid/view/View;->fillAdditionalState([I)[I
+
+    move-result-object v0
+
     if-eqz p1, :cond_0
 
     if-eqz v0, :cond_c
@@ -25484,6 +25550,30 @@
     move v0, v1
 
     goto :goto_1
+.end method
+
+.method public setAdditionalState(I)V
+    .locals 1
+    .parameter "state"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/view/View;->mAdditionalState:I
+
+    if-eq p1, v0, :cond_0
+
+    iput p1, p0, Landroid/view/View;->mAdditionalState:I
+
+    const/4 v0, 0x1
+
+    invoke-virtual {p0, v0}, Landroid/view/View;->invalidate(Z)V
+
+    invoke-virtual {p0}, Landroid/view/View;->refreshDrawableState()V
+
+    :cond_0
+    return-void
 .end method
 
 .method public setAlpha(F)V

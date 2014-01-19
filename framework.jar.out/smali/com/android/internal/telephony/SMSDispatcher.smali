@@ -6,6 +6,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Lcom/android/internal/telephony/SMSDispatcher$LewaResultReceiver;,
         Lcom/android/internal/telephony/SMSDispatcher$ConfirmDialogListener;,
         Lcom/android/internal/telephony/SMSDispatcher$SmsTracker;
     }
@@ -26,6 +27,8 @@
 .field protected static final EVENT_SEND_SMS_COMPLETE:I = 0x2
 
 .field static final EVENT_STOP_SENDING:I = 0x7
+
+.field private static final LEWA_SMS_RECEIVED_ACTION:Ljava/lang/String; = "android.provider.Telephony.LEWA_SMS_RECEIVED"
 
 .field private static final MAX_SEND_RETRIES:I = 0x3
 
@@ -75,6 +78,8 @@
 .field protected final mCm:Lcom/android/internal/telephony/CommandsInterface;
 
 .field protected final mContext:Landroid/content/Context;
+
+.field private mLewaResultReceiver:Landroid/content/BroadcastReceiver;
 
 .field private mPendingTrackerCount:I
 
@@ -195,6 +200,12 @@
     invoke-direct {v0, p0}, Lcom/android/internal/telephony/SMSDispatcher$1;-><init>(Lcom/android/internal/telephony/SMSDispatcher;)V
 
     iput-object v0, p0, Lcom/android/internal/telephony/SMSDispatcher;->mResultReceiver:Landroid/content/BroadcastReceiver;
+
+    new-instance v0, Lcom/android/internal/telephony/SMSDispatcher$LewaResultReceiver;
+
+    invoke-direct {v0, p0}, Lcom/android/internal/telephony/SMSDispatcher$LewaResultReceiver;-><init>(Lcom/android/internal/telephony/SMSDispatcher;)V
+
+    iput-object v0, p0, Lcom/android/internal/telephony/SMSDispatcher;->mLewaResultReceiver:Landroid/content/BroadcastReceiver;
 
     iput-object p1, p0, Lcom/android/internal/telephony/SMSDispatcher;->mPhone:Lcom/android/internal/telephony/Phone;
 
@@ -438,6 +449,61 @@
     const/4 v1, 0x0
 
     goto :goto_1
+.end method
+
+.method private dispatchLewaPdus([[B)V
+    .locals 8
+    .parameter "pdus"
+
+    .prologue
+    const/4 v6, 0x0
+
+    new-instance v1, Landroid/content/Intent;
+
+    const-string v0, "android.provider.Telephony.LEWA_SMS_RECEIVED"
+
+    invoke-direct {v1, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .local v1, intent:Landroid/content/Intent;
+    const-string v0, "pdus"
+
+    invoke-virtual {v1, v0, p1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/io/Serializable;)Landroid/content/Intent;
+
+    const-string v0, "subscription"
+
+    const/4 v2, 0x0
+
+    invoke-virtual {v1, v0, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;I)Landroid/content/Intent;
+
+    iget-object v0, p0, Lcom/android/internal/telephony/SMSDispatcher;->mWakeLock:Landroid/os/PowerManager$WakeLock;
+
+    const-wide/16 v2, 0x1388
+
+    invoke-virtual {v0, v2, v3}, Landroid/os/PowerManager$WakeLock;->acquire(J)V
+
+    const-string v0, "format"
+
+    invoke-virtual {p0}, Lcom/android/internal/telephony/SMSDispatcher;->getFormat()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v0, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
+
+    iget-object v0, p0, Lcom/android/internal/telephony/SMSDispatcher;->mContext:Landroid/content/Context;
+
+    const-string v2, "android.permission.RECEIVE_SMS"
+
+    iget-object v3, p0, Lcom/android/internal/telephony/SMSDispatcher;->mLewaResultReceiver:Landroid/content/BroadcastReceiver;
+
+    const/4 v5, -0x1
+
+    move-object v4, p0
+
+    move-object v7, v6
+
+    invoke-virtual/range {v0 .. v7}, Landroid/content/Context;->sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+
+    return-void
 .end method
 
 .method private getAppLabel(Ljava/lang/String;)Ljava/lang/CharSequence;
@@ -961,32 +1027,11 @@
 .end method
 
 .method protected dispatchPdus([[B)V
-    .locals 3
+    .locals 0
     .parameter "pdus"
 
     .prologue
-    new-instance v0, Landroid/content/Intent;
-
-    const-string v1, "android.provider.Telephony.SMS_RECEIVED"
-
-    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    .local v0, intent:Landroid/content/Intent;
-    const-string v1, "pdus"
-
-    invoke-virtual {v0, v1, p1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/io/Serializable;)Landroid/content/Intent;
-
-    const-string v1, "format"
-
-    invoke-virtual {p0}, Lcom/android/internal/telephony/SMSDispatcher;->getFormat()Ljava/lang/String;
-
-    move-result-object v2
-
-    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
-
-    const-string v1, "android.permission.RECEIVE_SMS"
-
-    invoke-virtual {p0, v0, v1}, Lcom/android/internal/telephony/SMSDispatcher;->dispatch(Landroid/content/Intent;Ljava/lang/String;)V
+    invoke-direct {p0, p1}, Lcom/android/internal/telephony/SMSDispatcher;->dispatchLewaPdus([[B)V
 
     return-void
 .end method

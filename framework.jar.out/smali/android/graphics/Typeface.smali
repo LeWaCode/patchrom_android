@@ -16,6 +16,12 @@
 
 .field public static final MONOSPACE:Landroid/graphics/Typeface;
 
+.field public static final NEOSANS:Landroid/graphics/Typeface;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field public static final NORMAL:I
 
 .field public static final SANS_SERIF:Landroid/graphics/Typeface;
@@ -108,6 +114,14 @@
     move-result-object v0
 
     sput-object v0, Landroid/graphics/Typeface;->MONOSPACE:Landroid/graphics/Typeface;
+
+    const-string v0, "neosans"
+
+    invoke-static {v0, v3}, Landroid/graphics/Typeface;->create(Ljava/lang/String;I)Landroid/graphics/Typeface;
+
+    move-result-object v0
+
+    sput-object v0, Landroid/graphics/Typeface;->NEOSANS:Landroid/graphics/Typeface;
 
     const/4 v0, 0x4
 

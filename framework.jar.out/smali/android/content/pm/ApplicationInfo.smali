@@ -1239,6 +1239,18 @@
     return-object p0
 .end method
 
+.method public getPackageName()Ljava/lang/String;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
+
+    return-object v0
+.end method
+
 .method public hasRtlSupport()Z
     .locals 2
 

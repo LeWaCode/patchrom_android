@@ -11027,8 +11027,13 @@
     .locals 3
     .parameter "pid"
     .parameter "uid"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
+    invoke-static {p0, p2}, Lcom/android/server/am/ActivityManagerService$Injector;->checkFlashlightState(Lcom/android/server/am/ActivityManagerService;I)V
+
     iget-object v2, p0, Lcom/android/server/am/ActivityManagerService;->mProcessObservers:Landroid/os/RemoteCallbackList;
 
     invoke-virtual {v2}, Landroid/os/RemoteCallbackList;->beginBroadcast()I
@@ -21677,6 +21682,12 @@
     iget v6, v1, Lcom/android/server/am/ContentProviderConnection;->stableCount:I
 
     if-lez v6, :cond_5
+
+    invoke-static {p2}, Lcom/android/server/am/ActivityManagerService$Injector;->skipForLewa(Lcom/android/server/am/ContentProviderRecord;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_5
 
     iget-boolean v6, v0, Lcom/android/server/am/ProcessRecord;->persistent:Z
 
@@ -45030,6 +45041,18 @@
     return-object v0
 .end method
 
+.method getContext()Landroid/content/Context;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
+
+    return-object v0
+.end method
+
 .method public getCurrentUser()Landroid/content/pm/UserInfo;
     .locals 3
     .annotation system Ldalvik/annotation/Throws;
@@ -61952,8 +61975,13 @@
 .method public systemReady(Ljava/lang/Runnable;)V
     .locals 34
     .parameter "goingCallback"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
+    invoke-static/range {p0 .. p0}, Lcom/android/server/am/ActivityManagerService$Injector;->setTorchState(Lcom/android/server/am/ActivityManagerService;)V
+
     monitor-enter p0
 
     :try_start_0

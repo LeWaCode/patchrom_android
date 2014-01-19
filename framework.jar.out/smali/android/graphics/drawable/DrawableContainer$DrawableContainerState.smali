@@ -13,6 +13,12 @@
     name = "DrawableContainerState"
 .end annotation
 
+.annotation system Ldalvik/annotation/MemberClasses;
+    value = {
+        Landroid/graphics/drawable/DrawableContainer$DrawableContainerState$Injector;
+    }
+.end annotation
+
 
 # instance fields
 .field mCanConstantState:Z
@@ -68,6 +74,9 @@
     .parameter "orig"
     .parameter "owner"
     .parameter "res"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v5, 0x1
@@ -213,6 +222,8 @@
     iget-boolean v3, p1, Landroid/graphics/drawable/DrawableContainer$DrawableContainerState;->mHaveOpacity:Z
 
     iput-boolean v3, p0, Landroid/graphics/drawable/DrawableContainer$DrawableContainerState;->mHaveOpacity:Z
+
+    invoke-static {p0, p1}, Landroid/graphics/drawable/DrawableContainer$DrawableContainerState$Injector;->init(Landroid/graphics/drawable/DrawableContainer$DrawableContainerState;Landroid/graphics/drawable/DrawableContainer$DrawableContainerState;)V
 
     iget v3, p1, Landroid/graphics/drawable/DrawableContainer$DrawableContainerState;->mOpacity:I
 
@@ -796,6 +807,18 @@
     iput-boolean v4, p0, Landroid/graphics/drawable/DrawableContainer$DrawableContainerState;->mHaveOpacity:Z
 
     goto :goto_0
+.end method
+
+.method public final getVariablePadding()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-boolean v0, p0, Landroid/graphics/drawable/DrawableContainer$DrawableContainerState;->mVariablePadding:Z
+
+    return v0
 .end method
 
 .method public growArray(II)V
