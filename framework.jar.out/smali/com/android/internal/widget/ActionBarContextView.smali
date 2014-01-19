@@ -2538,6 +2538,17 @@
     return-void
 .end method
 
+.method public setRightActionButtonVisibility(I)V
+    .locals 0
+    .parameter "visibility"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    return-void
+.end method
+
 .method public setSplitActionBar(Z)V
     .locals 6
     .parameter "split"

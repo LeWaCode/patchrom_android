@@ -10644,8 +10644,13 @@
     .locals 3
     .parameter "pid"
     .parameter "uid"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
+    invoke-static {p0, p2}, Lcom/android/server/am/ActivityManagerService$Injector;->checkFlashlightState(Lcom/android/server/am/ActivityManagerService;I)V
+
     iget-object v2, p0, Lcom/android/server/am/ActivityManagerService;->mProcessObservers:Landroid/os/RemoteCallbackList;
 
     invoke-virtual {v2}, Landroid/os/RemoteCallbackList;->beginBroadcast()I
@@ -20287,6 +20292,12 @@
     iget v6, v1, Lcom/android/server/am/ContentProviderConnection;->stableCount:I
 
     if-lez v6, :cond_5
+
+    invoke-static {p2}, Lcom/android/server/am/ActivityManagerService$Injector;->skipForLewa(Lcom/android/server/am/ContentProviderRecord;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_5
 
     iget-boolean v6, v0, Lcom/android/server/am/ProcessRecord;->persistent:Z
 
@@ -41642,6 +41653,18 @@
     return-object v0
 .end method
 
+.method getContext()Landroid/content/Context;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
+
+    return-object v0
+.end method
+
 .method public getCurrentUser()Landroid/content/pm/UserInfo;
     .locals 3
 
@@ -45338,7 +45361,7 @@
 .end method
 
 .method getUiContext()Landroid/content/Context;
-    .locals 1
+    .locals 2
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
@@ -45346,48 +45369,58 @@
     .prologue
     monitor-enter p0
 
+    const/4 v0, 0x0
+
+    .local v0, context:Landroid/content/Context;
     :try_start_0
-    iget-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mUiContext:Landroid/content/Context;
+    iget-object v1, p0, Lcom/android/server/am/ActivityManagerService;->mUiContext:Landroid/content/Context;
 
-    if-nez v0, :cond_0
+    if-nez v1, :cond_0
 
-    iget-boolean v0, p0, Lcom/android/server/am/ActivityManagerService;->mBooted:Z
+    iget-boolean v1, p0, Lcom/android/server/am/ActivityManagerService;->mBooted:Z
 
-    if-eqz v0, :cond_0
+    if-eqz v1, :cond_0
 
-    iget-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
+    iget-object v1, p0, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
 
-    invoke-static {v0}, Lcom/android/internal/app/ThemeUtils;->createUiContext(Landroid/content/Context;)Landroid/content/Context;
+    invoke-static {v1}, Lcom/android/internal/app/ThemeUtils;->createUiContext(Landroid/content/Context;)Landroid/content/Context;
 
-    move-result-object v0
+    move-result-object v1
 
-    iput-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mUiContext:Landroid/content/Context;
+    iput-object v1, p0, Lcom/android/server/am/ActivityManagerService;->mUiContext:Landroid/content/Context;
 
     :cond_0
-    iget-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mUiContext:Landroid/content/Context;
+    iget-object v1, p0, Lcom/android/server/am/ActivityManagerService;->mUiContext:Landroid/content/Context;
 
-    if-eqz v0, :cond_1
+    if-eqz v1, :cond_2
 
     iget-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mUiContext:Landroid/content/Context;
 
     :goto_0
+    if-eqz v0, :cond_1
+
+    const v1, 0x9030010
+
+    invoke-virtual {v0, v1}, Landroid/content/Context;->setTheme(I)V
+
+    :cond_1
     monitor-exit p0
 
     return-object v0
 
-    :cond_1
+    :cond_2
     iget-object v0, p0, Lcom/android/server/am/ActivityManagerService;->mContext:Landroid/content/Context;
 
     goto :goto_0
 
     :catchall_0
-    move-exception v0
+    move-exception v1
 
     monitor-exit p0
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    throw v0
+    throw v1
 .end method
 
 .method public getUidForIntentSender(Landroid/content/IIntentSender;)I
@@ -58840,8 +58873,13 @@
 .method public systemReady(Ljava/lang/Runnable;)V
     .locals 44
     .parameter "goingCallback"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
+    invoke-static/range {p0 .. p0}, Lcom/android/server/am/ActivityManagerService$Injector;->setTorchState(Lcom/android/server/am/ActivityManagerService;)V
+
     monitor-enter p0
 
     :try_start_0

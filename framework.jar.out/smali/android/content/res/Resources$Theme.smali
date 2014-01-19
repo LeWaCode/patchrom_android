@@ -1,15 +1,19 @@
-.class public final Landroid/content/res/Resources$Theme;
+.class public Landroid/content/res/Resources$Theme;
 .super Ljava/lang/Object;
 .source "Resources.java"
 
 
 # annotations
+.annotation build Landroid/annotation/LewaHook;
+    value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+.end annotation
+
 .annotation system Ldalvik/annotation/EnclosingClass;
     value = Landroid/content/res/Resources;
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
-    accessFlags = 0x11
+    accessFlags = 0x1
     name = "Theme"
 .end annotation
 

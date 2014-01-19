@@ -354,6 +354,21 @@
     return-void
 .end method
 
+.method public setRightActionButtonVisibility(I)V
+    .locals 1
+    .parameter "visibility"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Lcom/android/internal/view/StandaloneActionMode;->mContextView:Lcom/android/internal/widget/ActionBarContextView;
+
+    invoke-virtual {v0, p1}, Lcom/android/internal/widget/ActionBarContextView;->setRightActionButtonVisibility(I)V
+
+    return-void
+.end method
+
 .method public setSubtitle(I)V
     .locals 1
     .parameter "resId"

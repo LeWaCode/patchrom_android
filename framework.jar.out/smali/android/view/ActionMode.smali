@@ -147,6 +147,12 @@
     .end annotation
 .end method
 
+.method public abstract setRightActionButtonVisibility(I)V
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end method
+
 .method public setSelectionMode(I)V
     .locals 1
     .parameter "mode"

@@ -505,12 +505,6 @@
     .prologue
     const/4 v6, 0x0
 
-    const-string v0, "lishun"
-
-    const-string v2, "dispatchLewaPdus!!!!!!!!!!!!!!!!!!!!"
-
-    invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
     new-instance v1, Landroid/content/Intent;
 
     const-string v0, "android.provider.Telephony.LEWA_SMS_RECEIVED"
