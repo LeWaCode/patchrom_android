@@ -49,12 +49,34 @@
 
     move-result v0
 
-    if-nez v0, :cond_0
+    if-nez v0, :cond_lewa_0
 
     iget-object v0, p0, Landroid/widget/Spinner$DropdownPopup$2;->this$1:Landroid/widget/Spinner$DropdownPopup;
 
     invoke-virtual {v0}, Landroid/widget/Spinner$DropdownPopup;->dismiss()V
 
+    iget-object v0, p0, Landroid/widget/Spinner$DropdownPopup$2;->this$1:Landroid/widget/Spinner$DropdownPopup;
+
+    iget-object v0, v0, Landroid/widget/Spinner$DropdownPopup;->this$0:Landroid/widget/Spinner;
+
+    invoke-static {v0}, Landroid/widget/Spinner$Injector;->setSpinnerBackGround(Landroid/widget/Spinner;)V
+
     :cond_0
+    :goto_lewa_0
     return-void
+
+    :cond_lewa_0
+    iget-object v0, p0, Landroid/widget/Spinner$DropdownPopup$2;->this$1:Landroid/widget/Spinner$DropdownPopup;
+
+    invoke-virtual {v0}, Landroid/widget/Spinner$DropdownPopup;->isShowing()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, p0, Landroid/widget/Spinner$DropdownPopup$2;->this$1:Landroid/widget/Spinner$DropdownPopup;
+
+    invoke-virtual {v0}, Landroid/widget/Spinner$DropdownPopup;->show()V
+
+    goto :goto_lewa_0
 .end method

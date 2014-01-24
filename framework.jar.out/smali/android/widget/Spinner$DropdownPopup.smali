@@ -20,6 +20,12 @@
 # instance fields
 .field private mAdapter:Landroid/widget/ListAdapter;
 
+.field mGlobalLayoutListenerIsSet:Z
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field private mHintText:Ljava/lang/CharSequence;
 
 .field final synthetic this$0:Landroid/widget/Spinner;
@@ -42,6 +48,8 @@
     iput-object p1, p0, Landroid/widget/Spinner$DropdownPopup;->this$0:Landroid/widget/Spinner;
 
     invoke-direct {p0, p2, p3, v1, p4}, Landroid/widget/ListPopupWindow;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;II)V
+
+    iput-boolean v1, p0, Landroid/widget/Spinner$DropdownPopup;->mGlobalLayoutListenerIsSet:Z
 
     invoke-virtual {p0, p1}, Landroid/widget/Spinner$DropdownPopup;->setAnchorView(Landroid/view/View;)V
 
@@ -68,6 +76,57 @@
     iget-object v0, p0, Landroid/widget/Spinner$DropdownPopup;->mAdapter:Landroid/widget/ListAdapter;
 
     return-object v0
+.end method
+
+.method private setContentWidth(III)V
+    .locals 3
+    .parameter "spinnerWidth"
+    .parameter "spinnerPaddingLeft"
+    .parameter "spinnerPaddingRight"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    sget-boolean v0, Landroid/widget/Spinner;->isSpinnerV5Style:Z
+
+    if-nez v0, :cond_0
+
+    sub-int v0, p1, p2
+
+    sub-int/2addr v0, p3
+
+    invoke-virtual {p0, v0}, Landroid/widget/Spinner$DropdownPopup;->setContentWidth(I)V
+
+    :goto_0
+    return-void
+
+    :cond_0
+    int-to-float v0, p1
+
+    iget-object v1, p0, Landroid/widget/Spinner$DropdownPopup;->this$0:Landroid/widget/Spinner;
+
+    invoke-virtual {v1}, Landroid/widget/Spinner;->getContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v1
+
+    const v2, 0x90b000d
+
+    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getDimension(I)F
+
+    move-result v1
+
+    sub-float/2addr v0, v1
+
+    float-to-int v0, v0
+
+    invoke-virtual {p0, v0}, Landroid/widget/Spinner$DropdownPopup;->setContentWidth(I)V
+
+    goto :goto_0
 .end method
 
 
@@ -104,12 +163,14 @@
 .end method
 
 .method public show()V
-    .locals 12
+    .locals 13
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
 
     .prologue
+    const/4 v12, 0x1
+
     invoke-virtual {p0}, Landroid/widget/Spinner$DropdownPopup;->getBackground()Landroid/graphics/drawable/Drawable;
 
     move-result-object v0
@@ -306,12 +367,18 @@
     .local v8, vto:Landroid/view/ViewTreeObserver;
     if-eqz v8, :cond_1
 
+    iget-boolean v9, p0, Landroid/widget/Spinner$DropdownPopup;->mGlobalLayoutListenerIsSet:Z
+
+    if-nez v9, :cond_1
+
     new-instance v4, Landroid/widget/Spinner$DropdownPopup$2;
 
     invoke-direct {v4, p0}, Landroid/widget/Spinner$DropdownPopup$2;-><init>(Landroid/widget/Spinner$DropdownPopup;)V
 
     .local v4, layoutListener:Landroid/view/ViewTreeObserver$OnGlobalLayoutListener;
     invoke-virtual {v8, v4}, Landroid/view/ViewTreeObserver;->addOnGlobalLayoutListener(Landroid/view/ViewTreeObserver$OnGlobalLayoutListener;)V
+
+    iput-boolean v12, p0, Landroid/widget/Spinner$DropdownPopup;->mGlobalLayoutListenerIsSet:Z
 
     new-instance v9, Landroid/widget/Spinner$DropdownPopup$3;
 
@@ -376,36 +443,9 @@
 
     if-ne v9, v10, :cond_5
 
-    sget-boolean v9, Landroid/widget/Spinner;->isSpinnerV5Style:Z
-
-    if-nez v9, :cond_lewa_1
-
-    sub-int v9, v7, v5
-
-    sub-int/2addr v9, v6
-
-    invoke-virtual {p0, v9}, Landroid/widget/Spinner$DropdownPopup;->setContentWidth(I)V
+    invoke-direct {p0, v7, v5, v6}, Landroid/widget/Spinner$DropdownPopup;->setContentWidth(III)V
 
     goto :goto_1
-
-    :cond_lewa_1
-    iget-object v9, p0, Landroid/widget/Spinner$DropdownPopup;->this$0:Landroid/widget/Spinner;
-
-    invoke-virtual {v9}, Landroid/widget/Spinner;->getContext()Landroid/content/Context;
-
-    move-result-object v9
-
-    const/high16 v10, 0x4150
-
-    invoke-static {v9, v10}, Llewa/util/LewaUiUtil;->dip2px(Landroid/content/Context;F)I
-
-    move-result v9
-
-    sub-int v9, v7, v9
-
-    invoke-virtual {p0, v9}, Landroid/widget/Spinner$DropdownPopup;->setContentWidth(I)V
-
-    goto/16 :goto_1
 
     :cond_5
     iget-object v9, p0, Landroid/widget/Spinner$DropdownPopup;->this$0:Landroid/widget/Spinner;
