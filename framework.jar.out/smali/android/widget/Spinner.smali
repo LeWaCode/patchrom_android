@@ -607,6 +607,20 @@
 
 
 # virtual methods
+.method callIsVisibleToUser()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Landroid/widget/Spinner;->isVisibleToUser()Z
+
+    move-result v0
+
+    return v0
+.end method
+
 .method public getBaseline()I
     .locals 5
 
@@ -717,6 +731,18 @@
     iget v0, p0, Landroid/widget/Spinner;->mGravity:I
 
     return v0
+.end method
+
+.method getPopup()Landroid/widget/Spinner$SpinnerPopup;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/Spinner;->mPopup:Landroid/widget/Spinner$SpinnerPopup;
+
+    return-object v0
 .end method
 
 .method public getPopupBackground()Landroid/graphics/drawable/Drawable;
@@ -1248,21 +1274,7 @@
 
     invoke-interface {v1}, Landroid/widget/Spinner$SpinnerPopup;->show()V
 
-    sget-boolean v1, Landroid/widget/Spinner;->isSpinnerV5Style:Z
-
-    if-eqz v1, :cond_0
-
-    invoke-direct {p0}, Landroid/widget/Spinner;->hideInputField()V
-
-    invoke-static {p0}, Landroid/widget/Spinner$Injector;->storeSpinnerPadding(Landroid/widget/Spinner;)V
-
-    const v1, 0x9080042
-
-    invoke-virtual {p0, v1}, Landroid/widget/Spinner;->setBackgroundResource(I)V
-
-    invoke-static {p0}, Landroid/widget/Spinner$Injector;->setSpinnerPadding(Landroid/widget/Spinner;)V
-
-    invoke-static {p0}, Landroid/widget/Spinner$Injector;->setArrow(Landroid/widget/Spinner;)V
+    invoke-static {p0}, Landroid/widget/Spinner$Injector;->setSpinnerBackGround(Landroid/widget/Spinner;)V
 
     :cond_0
     return v0
