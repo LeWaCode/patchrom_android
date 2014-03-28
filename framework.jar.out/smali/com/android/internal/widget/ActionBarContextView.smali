@@ -250,6 +250,177 @@
     return v0
 .end method
 
+.method private initLewaTitle()V
+    .locals 7
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v5, 0x0
+
+    invoke-virtual {p0}, Lcom/android/internal/widget/ActionBarContextView;->lewaInitTitle()Z
+
+    move-result v4
+
+    if-nez v4, :cond_1
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
+
+    if-nez v4, :cond_0
+
+    invoke-virtual {p0}, Lcom/android/internal/widget/ActionBarContextView;->getContext()Landroid/content/Context;
+
+    move-result-object v4
+
+    invoke-static {v4}, Landroid/view/LayoutInflater;->from(Landroid/content/Context;)Landroid/view/LayoutInflater;
+
+    move-result-object v1
+
+    .local v1, inflater:Landroid/view/LayoutInflater;
+    const v4, 0x909001e
+
+    invoke-virtual {v1, v4, p0}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
+
+    invoke-virtual {p0}, Lcom/android/internal/widget/ActionBarContextView;->getChildCount()I
+
+    move-result v4
+
+    add-int/lit8 v4, v4, -0x1
+
+    invoke-virtual {p0, v4}, Lcom/android/internal/widget/ActionBarContextView;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v4
+
+    check-cast v4, Landroid/widget/LinearLayout;
+
+    iput-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
+
+    const v6, 0x902002e
+
+    invoke-virtual {v4, v6}, Landroid/widget/LinearLayout;->findViewById(I)Landroid/view/View;
+
+    move-result-object v4
+
+    check-cast v4, Landroid/widget/Button;
+
+    iput-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mSpinner:Landroid/widget/Button;
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mSpinner:Landroid/widget/Button;
+
+    const-string v6, "One item selected"
+
+    invoke-virtual {v4, v6}, Landroid/widget/Button;->setText(Ljava/lang/CharSequence;)V
+
+    new-instance v3, Landroid/widget/PopupMenu;
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mContext:Landroid/content/Context;
+
+    iget-object v6, p0, Lcom/android/internal/widget/ActionBarContextView;->mSpinner:Landroid/widget/Button;
+
+    invoke-direct {v3, v4, v6}, Landroid/widget/PopupMenu;-><init>(Landroid/content/Context;Landroid/view/View;)V
+
+    .local v3, popMenu:Landroid/widget/PopupMenu;
+    invoke-virtual {v3}, Landroid/widget/PopupMenu;->getMenu()Landroid/view/Menu;
+
+    move-result-object v2
+
+    .local v2, menu:Landroid/view/Menu;
+    const v4, 0x102001f
+
+    const v6, 0x104000d
+
+    invoke-interface {v2, v5, v4, v5, v6}, Landroid/view/Menu;->add(IIII)Landroid/view/MenuItem;
+
+    new-instance v4, Lcom/android/internal/widget/ActionBarContextView$2;
+
+    invoke-direct {v4, p0, v2}, Lcom/android/internal/widget/ActionBarContextView$2;-><init>(Lcom/android/internal/widget/ActionBarContextView;Landroid/view/Menu;)V
+
+    invoke-virtual {v3, v4}, Landroid/widget/PopupMenu;->setOnMenuItemClickListener(Landroid/widget/PopupMenu$OnMenuItemClickListener;)V
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mSpinner:Landroid/widget/Button;
+
+    new-instance v6, Lcom/android/internal/widget/ActionBarContextView$3;
+
+    invoke-direct {v6, p0, v3}, Lcom/android/internal/widget/ActionBarContextView$3;-><init>(Lcom/android/internal/widget/ActionBarContextView;Landroid/widget/PopupMenu;)V
+
+    invoke-virtual {v4, v6}, Landroid/widget/Button;->setOnClickListener(Landroid/view/View$OnClickListener;)V
+
+    .end local v1           #inflater:Landroid/view/LayoutInflater;
+    .end local v2           #menu:Landroid/view/Menu;
+    .end local v3           #popMenu:Landroid/widget/PopupMenu;
+    :cond_0
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mSpinner:Landroid/widget/Button;
+
+    iget-object v6, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitle:Ljava/lang/CharSequence;
+
+    invoke-virtual {v4, v6}, Landroid/widget/Button;->setText(Ljava/lang/CharSequence;)V
+
+    :cond_1
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mContext:Landroid/content/Context;
+
+    invoke-static {v4}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v4
+
+    if-eqz v4, :cond_2
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleView:Landroid/widget/TextView;
+
+    iget-object v6, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitle:Ljava/lang/CharSequence;
+
+    invoke-virtual {v4, v6}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    :cond_2
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitle:Ljava/lang/CharSequence;
+
+    invoke-static {v4}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v4
+
+    if-nez v4, :cond_4
+
+    const/4 v0, 0x1
+
+    .local v0, hasTitle:Z
+    :goto_0
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
+
+    if-eqz v0, :cond_5
+
+    :goto_1
+    invoke-virtual {v4, v5}, Landroid/widget/LinearLayout;->setVisibility(I)V
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
+
+    invoke-virtual {v4}, Landroid/widget/LinearLayout;->getParent()Landroid/view/ViewParent;
+
+    move-result-object v4
+
+    if-nez v4, :cond_3
+
+    iget-object v4, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitleLayout:Landroid/widget/LinearLayout;
+
+    invoke-virtual {p0, v4}, Lcom/android/internal/widget/ActionBarContextView;->addView(Landroid/view/View;)V
+
+    :cond_3
+    return-void
+
+    .end local v0           #hasTitle:Z
+    :cond_4
+    move v0, v5
+
+    goto :goto_0
+
+    .restart local v0       #hasTitle:Z
+    :cond_5
+    const/16 v5, 0x8
+
+    goto :goto_1
+.end method
+
 .method private initTitle()V
     .locals 9
 
@@ -2456,7 +2627,7 @@
     .prologue
     iput-object p1, p0, Lcom/android/internal/widget/ActionBarContextView;->mSubtitle:Ljava/lang/CharSequence;
 
-    invoke-static {p0}, Lcom/android/internal/widget/ActionBarContextView$Injector;->initLewaTitle(Lcom/android/internal/widget/ActionBarContextView;)V
+    invoke-direct {p0}, Lcom/android/internal/widget/ActionBarContextView;->initLewaTitle()V
 
     return-void
 .end method
@@ -2468,7 +2639,7 @@
     .prologue
     iput-object p1, p0, Lcom/android/internal/widget/ActionBarContextView;->mTitle:Ljava/lang/CharSequence;
 
-    invoke-static {p0}, Lcom/android/internal/widget/ActionBarContextView$Injector;->initLewaTitle(Lcom/android/internal/widget/ActionBarContextView;)V
+    invoke-direct {p0}, Lcom/android/internal/widget/ActionBarContextView;->initLewaTitle()V
 
     return-void
 .end method
