@@ -7,7 +7,8 @@
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
         Landroid/widget/PopupWindow$PopupViewContainer;,
-        Landroid/widget/PopupWindow$OnDismissListener;
+        Landroid/widget/PopupWindow$OnDismissListener;,
+        Landroid/widget/PopupWindow$Injector;
     }
 .end annotation
 
@@ -23,6 +24,12 @@
 
 
 # instance fields
+.field private isSpinnerV5Style:Z
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field private mAboveAnchor:Z
 
 .field private mAboveAnchorBackgroundDrawable:Landroid/graphics/drawable/Drawable;
@@ -210,6 +217,9 @@
     .parameter "attrs"
     .parameter "defStyleAttr"
     .parameter "defStyleRes"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -393,6 +403,12 @@
     :cond_2
     :goto_1
     invoke-virtual {v0}, Landroid/content/res/TypedArray;->recycle()V
+
+    invoke-static {p1, p2}, Landroid/widget/PopupWindow$Injector;->isSpinnerV5Style(Landroid/content/Context;Landroid/util/AttributeSet;)Z
+
+    move-result v7
+
+    iput-boolean v7, p0, Landroid/widget/PopupWindow;->isSpinnerV5Style:Z
 
     return-void
 
@@ -658,6 +674,10 @@
 
     if-eqz v0, :cond_1
 
+    iget-boolean v0, p0, Landroid/widget/PopupWindow;->isSpinnerV5Style:Z
+
+    if-nez v0, :cond_1
+
     iget-boolean v0, p0, Landroid/widget/PopupWindow;->mAboveAnchor:Z
 
     if-eqz v0, :cond_0
@@ -891,6 +911,9 @@
     .parameter "p"
     .parameter "xoff"
     .parameter "yoff"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     invoke-virtual/range {p1 .. p1}, Landroid/view/View;->getHeight()I
@@ -1119,6 +1142,10 @@
     const/4 v4, 0x1
 
     :goto_0
+    iget-boolean v12, p0, Landroid/widget/PopupWindow;->isSpinnerV5Style:Z
+
+    if-nez v12, :cond_lewa_0
+
     if-eqz v4, :cond_7
 
     const v12, 0x800053
@@ -1211,6 +1238,10 @@
     iput v12, v0, Landroid/view/WindowManager$LayoutParams;->width:I
 
     :cond_4
+    iget-boolean v12, p0, Landroid/widget/PopupWindow;->isSpinnerV5Style:Z
+
+    if-nez v12, :cond_5
+
     if-eqz v4, :cond_8
 
     iget-object v12, p0, Landroid/widget/PopupWindow;->mScreenLocation:[I
@@ -1282,6 +1313,27 @@
     iput v12, v0, Landroid/view/WindowManager$LayoutParams;->y:I
 
     goto :goto_1
+
+    :cond_lewa_0
+    iget-object v12, p0, Landroid/widget/PopupWindow;->mDrawingLocation:[I
+
+    const/4 v13, 0x1
+
+    aget v12, v12, v13
+
+    invoke-virtual/range {p1 .. p1}, Landroid/view/View;->getHeight()I
+
+    move-result v13
+
+    add-int/2addr v12, v13
+
+    add-int v12, v12, p4
+
+    move-object/from16 v0, p2
+
+    iput v12, v0, Landroid/view/WindowManager$LayoutParams;->y:I
+
+    goto/16 :goto_1
 
     .restart local v3       #displayFrameWidth:I
     .restart local v7       #right:I
@@ -2005,6 +2057,9 @@
     .parameter "anchor"
     .parameter "yOffset"
     .parameter "ignoreBottomDecorations"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     const/4 v9, 0x1
@@ -2065,11 +2120,16 @@
     add-int v4, v7, p2
 
     .local v4, distanceToTop:I
+    iget-boolean v7, p0, Landroid/widget/PopupWindow;->isSpinnerV5Style:Z
+
+    if-nez v7, :cond_2
+
     invoke-static {v3, v4}, Ljava/lang/Math;->max(II)I
 
     move-result v6
 
     .local v6, returnedHeight:I
+    :goto_0
     iget-object v7, p0, Landroid/widget/PopupWindow;->mBackground:Landroid/graphics/drawable/Drawable;
 
     if-eqz v7, :cond_1
@@ -2094,6 +2154,13 @@
 
     :cond_1
     return v6
+
+    .end local v6           #returnedHeight:I
+    :cond_2
+    move v6, v3
+
+    .restart local v6       #returnedHeight:I
+    goto :goto_0
 .end method
 
 .method public getSoftInputMode()I
