@@ -110,6 +110,12 @@
 
 .field static final EMPTY_STRING_ARRAY:[Ljava/lang/String; = null
 
+.field public static final ENABLE_FEATRUE_KEEP_LAUNCHER_RESIDENT:Z = true
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
 .field static final FINALIZE_PENDING_INTENT_MSG:I = 0x17
 
 .field static final FIRST_ACTIVITY_STACK_MSG:I = 0x64
@@ -8445,8 +8451,15 @@
 
     move-object/from16 v1, p3
 
-    if-ne v0, v1, :cond_16
+    if-eq v0, v1, :cond_lewa_1
 
+    invoke-static/range {p0 .. p1}, Lcom/android/server/am/ActivityManagerService$Injector;->isKeepLauncherResident(Lcom/android/server/am/ActivityManagerService;Lcom/android/server/am/ProcessRecord;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_16
+
+    :cond_lewa_1
     const/4 v11, 0x0
 
     .local v11, adj:I
