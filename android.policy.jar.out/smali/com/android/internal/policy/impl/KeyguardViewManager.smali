@@ -468,7 +468,7 @@
     const/4 v8, -0x1
 
     .local v8, stretch:I
-    const v4, 0x100900
+    const v4, 0x100500
 
     .local v4, flags:I
     iget-boolean v1, p0, Lcom/android/internal/policy/impl/KeyguardViewManager;->mNeedsInput:Z

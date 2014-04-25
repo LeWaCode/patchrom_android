@@ -1012,8 +1012,6 @@
     .end annotation
 
     .prologue
-    const/4 v3, 0x1
-
     invoke-direct {p0, p1}, Landroid/content/ContentProvider$Transport;->enforceReadPermission(Landroid/net/Uri;)V
 
     iget-object v0, p0, Landroid/content/ContentProvider$Transport;->this$0:Landroid/content/ContentProvider;
@@ -1022,29 +1020,16 @@
 
     move-result v0
 
-    if-eqz v0, :cond_1
+    if-eqz v0, :cond_lewa_0
 
-    new-instance v0, Landroid/database/MatrixCursor;
+    invoke-static {p2}, Landroid/content/ContentProvider$Injector;->getFackCursor([Ljava/lang/String;)Landroid/database/Cursor;
 
-    if-nez p2, :cond_0
+    move-result-object v0
 
-    new-array p2, v3, [Ljava/lang/String;
-
-    .end local p2
-    const/4 v1, 0x0
-
-    const-string v2, "fake"
-
-    aput-object v2, p2, v1
-
-    :cond_0
-    invoke-direct {v0, p2, v3}, Landroid/database/MatrixCursor;-><init>([Ljava/lang/String;I)V
-
-    :goto_0
+    :goto_lewa_0
     return-object v0
 
-    .restart local p2
-    :cond_1
+    :cond_lewa_0
     iget-object v0, p0, Landroid/content/ContentProvider$Transport;->this$0:Landroid/content/ContentProvider;
 
     invoke-static {p6}, Landroid/os/CancellationSignal;->fromTransport(Landroid/os/ICancellationSignal;)Landroid/os/CancellationSignal;
@@ -1065,7 +1050,7 @@
 
     move-result-object v0
 
-    goto :goto_0
+    goto :goto_lewa_0
 .end method
 
 .method public update(Landroid/net/Uri;Landroid/content/ContentValues;Ljava/lang/String;[Ljava/lang/String;)I

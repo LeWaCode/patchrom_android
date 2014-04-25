@@ -192,11 +192,11 @@
     move-result-object v0
 
     .local v0, checkableView:Landroid/view/View;
-    if-eqz v0, :cond_1
+    if-eqz v0, :cond_0
 
     instance-of v2, v0, Landroid/widget/Checkable;
 
-    if-eqz v2, :cond_1
+    if-eqz v2, :cond_0
 
     move-object v2, v0
 
@@ -229,17 +229,17 @@
 
     move-result v2
 
-    if-eqz v2, :cond_0
+    if-eqz v2, :cond_lewa_0
 
     iget-object v2, p0, Landroid/preference/SwitchPreference;->mListener:Landroid/preference/SwitchPreference$Listener;
 
     invoke-virtual {v1, v2}, Landroid/widget/Switch;->setOnCheckedChangeListener(Landroid/widget/CompoundButton$OnCheckedChangeListener;)V
 
     .end local v1           #switchView:Landroid/widget/Switch;
-    :cond_0
+    :cond_lewa_0
     invoke-direct {p0, v0}, Landroid/preference/SwitchPreference;->setOnBindeViewListener(Landroid/view/View;)V
 
-    :cond_1
+    :cond_0
     invoke-virtual {p0, p1}, Landroid/preference/SwitchPreference;->syncSummaryView(Landroid/view/View;)V
 
     return-void

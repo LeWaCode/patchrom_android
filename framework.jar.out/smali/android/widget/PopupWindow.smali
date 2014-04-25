@@ -1142,11 +1142,11 @@
     const/4 v4, 0x1
 
     :goto_0
+    if-eqz v4, :cond_7
+
     iget-boolean v12, p0, Landroid/widget/PopupWindow;->isSpinnerV5Style:Z
 
-    if-nez v12, :cond_lewa_0
-
-    if-eqz v4, :cond_7
+    if-nez v12, :cond_7
 
     const v12, 0x800053
 
@@ -1313,27 +1313,6 @@
     iput v12, v0, Landroid/view/WindowManager$LayoutParams;->y:I
 
     goto :goto_1
-
-    :cond_lewa_0
-    iget-object v12, p0, Landroid/widget/PopupWindow;->mDrawingLocation:[I
-
-    const/4 v13, 0x1
-
-    aget v12, v12, v13
-
-    invoke-virtual/range {p1 .. p1}, Landroid/view/View;->getHeight()I
-
-    move-result v13
-
-    add-int/2addr v12, v13
-
-    add-int v12, v12, p4
-
-    move-object/from16 v0, p2
-
-    iput v12, v0, Landroid/view/WindowManager$LayoutParams;->y:I
-
-    goto/16 :goto_1
 
     .restart local v3       #displayFrameWidth:I
     .restart local v7       #right:I
@@ -2122,14 +2101,14 @@
     .local v4, distanceToTop:I
     iget-boolean v7, p0, Landroid/widget/PopupWindow;->isSpinnerV5Style:Z
 
-    if-nez v7, :cond_2
+    if-nez v7, :cond_lewa_0
 
     invoke-static {v3, v4}, Ljava/lang/Math;->max(II)I
 
     move-result v6
 
     .local v6, returnedHeight:I
-    :goto_0
+    :goto_lewa_0
     iget-object v7, p0, Landroid/widget/PopupWindow;->mBackground:Landroid/graphics/drawable/Drawable;
 
     if-eqz v7, :cond_1
@@ -2156,11 +2135,11 @@
     return v6
 
     .end local v6           #returnedHeight:I
-    :cond_2
+    :cond_lewa_0
     move v6, v3
 
     .restart local v6       #returnedHeight:I
-    goto :goto_0
+    goto :goto_lewa_0
 .end method
 
 .method public getSoftInputMode()I
