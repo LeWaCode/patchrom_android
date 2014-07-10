@@ -1086,6 +1086,30 @@
     goto :goto_0
 .end method
 
+.method public getCustomTheme()Landroid/content/res/CustomTheme;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/content/res/Configuration;->customTheme:Landroid/content/res/CustomTheme;
+
+    return-object v0
+.end method
+
+.method public getFontChange()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget v0, p0, Landroid/content/res/Configuration;->fontChanged:I
+
+    return v0
+.end method
+
 .method public getLayoutDirection()I
     .locals 1
 
@@ -1492,6 +1516,32 @@
     const/4 v0, 0x0
 
     goto :goto_0
+.end method
+
+.method public setCustomTheme(Landroid/content/res/CustomTheme;)V
+    .locals 0
+    .parameter "customTheme"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iput-object p1, p0, Landroid/content/res/Configuration;->customTheme:Landroid/content/res/CustomTheme;
+
+    return-void
+.end method
+
+.method public setFontChanged(I)V
+    .locals 0
+    .parameter "fontChanged"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iput p1, p0, Landroid/content/res/Configuration;->fontChanged:I
+
+    return-void
 .end method
 
 .method public setLayoutDirection(Ljava/util/Locale;)V
