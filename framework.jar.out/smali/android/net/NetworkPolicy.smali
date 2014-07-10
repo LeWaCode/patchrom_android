@@ -598,6 +598,30 @@
 .end method
 
 .method public getAdjustBytes()J
+    .locals 2
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-wide v0, p0, Landroid/net/NetworkPolicy;->adjustBytes:J
+
+    return-wide v0
+.end method
+
+.method public getAdjustTime()J
+    .locals 2
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-wide v0, p0, Landroid/net/NetworkPolicy;->adjustTime:J
+
+    return-wide v0
+.end method
+
+.method public getOverAdjustBytes()J
     .locals 4
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
@@ -842,6 +866,26 @@
     const/4 v0, 0x0
 
     goto :goto_0
+.end method
+
+.method public setAdjustBytes(J)V
+    .locals 0
+    .parameter "adjustBytes"
+
+    .prologue
+    iput-wide p1, p0, Landroid/net/NetworkPolicy;->adjustBytes:J
+
+    return-void
+.end method
+
+.method public setAdjustTime(J)V
+    .locals 0
+    .parameter "adjustTime"
+
+    .prologue
+    iput-wide p1, p0, Landroid/net/NetworkPolicy;->adjustTime:J
+
+    return-void
 .end method
 
 .method public final snapToNextCycleDay()J
