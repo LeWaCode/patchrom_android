@@ -621,6 +621,18 @@
     return-wide v0
 .end method
 
+.method public getNetActive()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-boolean v0, p0, Landroid/net/NetworkPolicy;->active:Z
+
+    return v0
+.end method
+
 .method public getOverAdjustBytes()J
     .locals 4
     .annotation build Landroid/annotation/LewaHook;
@@ -884,6 +896,19 @@
 
     .prologue
     iput-wide p1, p0, Landroid/net/NetworkPolicy;->adjustTime:J
+
+    return-void
+.end method
+
+.method public setNetActive(Z)V
+    .locals 0
+    .parameter "active"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iput-boolean p1, p0, Landroid/net/NetworkPolicy;->active:Z
 
     return-void
 .end method
