@@ -4,19 +4,9 @@
 
 
 # static fields
-#the value of this static final field might be set in the static constructor
-.field public static final OMAP_COMPAT:Z = false
-
-#the value of this static final field might be set in the static constructor
-.field public static final OMAP_ENHANCEMENT:Z = false
-
 .field public static final PROP_NAME_MAX:I = 0x1f
 
 .field public static final PROP_VALUE_MAX:I = 0x5b
-
-.field public static final QCOM_HARDWARE:Z
-
-.field public static final QCOM_HDMI_OUT:Z
 
 .field private static final sChangeCallbacks:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
@@ -32,43 +22,9 @@
 
 # direct methods
 .method static constructor <clinit>()V
-    .locals 2
+    .locals 1
 
     .prologue
-    const/4 v1, 0x0
-
-    const-string v0, "com.ti.omap_enhancement"
-
-    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
-
-    move-result v0
-
-    sput-boolean v0, Landroid/os/SystemProperties;->OMAP_ENHANCEMENT:Z
-
-    const-string v0, "com.ti.omap_compat"
-
-    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
-
-    move-result v0
-
-    sput-boolean v0, Landroid/os/SystemProperties;->OMAP_COMPAT:Z
-
-    const-string v0, "com.qc.hardware"
-
-    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
-
-    move-result v0
-
-    sput-boolean v0, Landroid/os/SystemProperties;->QCOM_HARDWARE:Z
-
-    const-string v0, "com.qc.hdmi_out"
-
-    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
-
-    move-result v0
-
-    sput-boolean v0, Landroid/os/SystemProperties;->QCOM_HDMI_OUT:Z
-
     new-instance v0, Ljava/util/ArrayList;
 
     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V

@@ -8,12 +8,6 @@
 
 
 # annotations
-.annotation system Ldalvik/annotation/MemberClasses;
-    value = {
-        Landroid/content/res/Configuration$Injector;
-    }
-.end annotation
-
 .annotation system Ldalvik/annotation/Signature;
     value = {
         "Ljava/lang/Object;",
@@ -506,6 +500,20 @@
     or-int/lit8 v0, v0, 0x24
 
     return v0
+.end method
+
+.method private setDefaultFontScale()V
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/high16 v0, 0x3f80
+
+    iput v0, p0, Landroid/content/res/Configuration;->fontScale:F
+
+    return-void
 .end method
 
 
@@ -1863,7 +1871,7 @@
 
     invoke-virtual {v0}, Llewa/content/res/ExtraConfiguration;->setToDefaults()V
 
-    invoke-static {p0}, Landroid/content/res/Configuration$Injector;->setDefaultFontScale(Landroid/content/res/Configuration;)V
+    invoke-direct {p0}, Landroid/content/res/Configuration;->setDefaultFontScale()V
 
     return-void
 .end method
