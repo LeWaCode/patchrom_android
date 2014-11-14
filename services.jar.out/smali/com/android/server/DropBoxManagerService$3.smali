@@ -34,7 +34,7 @@
 
 # virtual methods
 .method public handleMessage(Landroid/os/Message;)V
-    .locals 3
+    .locals 4
     .parameter "msg"
 
     .prologue
@@ -55,9 +55,11 @@
 
     check-cast v0, Landroid/content/Intent;
 
-    const-string v2, "android.permission.READ_LOGS"
+    sget-object v2, Landroid/os/UserHandle;->OWNER:Landroid/os/UserHandle;
 
-    invoke-virtual {v1, v0, v2}, Landroid/content/Context;->sendBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
+    const-string v3, "android.permission.READ_LOGS"
+
+    invoke-virtual {v1, v0, v2, v3}, Landroid/content/Context;->sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;)V
 
     :cond_0
     return-void

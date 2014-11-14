@@ -646,47 +646,75 @@
     goto :goto_0
 .end method
 
-.method public applyToConfiguration(Landroid/content/res/Configuration;)V
-    .locals 1
+.method public applyToConfiguration(ILandroid/content/res/Configuration;)V
+    .locals 3
+    .parameter "displayDensity"
     .parameter "inoutConfig"
 
     .prologue
     invoke-virtual {p0}, Landroid/content/res/CompatibilityInfo;->supportsScreen()Z
 
-    move-result v0
+    move-result v1
 
-    if-nez v0, :cond_0
+    if-nez v1, :cond_0
 
-    iget v0, p1, Landroid/content/res/Configuration;->screenLayout:I
+    iget v1, p2, Landroid/content/res/Configuration;->screenLayout:I
 
-    and-int/lit8 v0, v0, -0x10
+    and-int/lit8 v1, v1, -0x10
 
-    or-int/lit8 v0, v0, 0x2
+    or-int/lit8 v1, v1, 0x2
 
-    iput v0, p1, Landroid/content/res/Configuration;->screenLayout:I
+    iput v1, p2, Landroid/content/res/Configuration;->screenLayout:I
 
-    iget v0, p1, Landroid/content/res/Configuration;->compatScreenWidthDp:I
+    iget v1, p2, Landroid/content/res/Configuration;->compatScreenWidthDp:I
 
-    iput v0, p1, Landroid/content/res/Configuration;->screenWidthDp:I
+    iput v1, p2, Landroid/content/res/Configuration;->screenWidthDp:I
 
-    iget v0, p1, Landroid/content/res/Configuration;->compatScreenHeightDp:I
+    iget v1, p2, Landroid/content/res/Configuration;->compatScreenHeightDp:I
 
-    iput v0, p1, Landroid/content/res/Configuration;->screenHeightDp:I
+    iput v1, p2, Landroid/content/res/Configuration;->screenHeightDp:I
 
-    iget v0, p1, Landroid/content/res/Configuration;->compatSmallestScreenWidthDp:I
+    iget v1, p2, Landroid/content/res/Configuration;->compatSmallestScreenWidthDp:I
 
-    iput v0, p1, Landroid/content/res/Configuration;->smallestScreenWidthDp:I
+    iput v1, p2, Landroid/content/res/Configuration;->smallestScreenWidthDp:I
 
     :cond_0
+    iput p1, p2, Landroid/content/res/Configuration;->densityDpi:I
+
+    invoke-virtual {p0}, Landroid/content/res/CompatibilityInfo;->isScalingRequired()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    iget v0, p0, Landroid/content/res/CompatibilityInfo;->applicationInvertedScale:F
+
+    .local v0, invertedRatio:F
+    iget v1, p2, Landroid/content/res/Configuration;->densityDpi:I
+
+    int-to-float v1, v1
+
+    mul-float/2addr v1, v0
+
+    const/high16 v2, 0x3f00
+
+    add-float/2addr v1, v2
+
+    float-to-int v1, v1
+
+    iput v1, p2, Landroid/content/res/Configuration;->densityDpi:I
+
+    .end local v0           #invertedRatio:F
+    :cond_1
     return-void
 .end method
 
 .method public applyToDisplayMetrics(Landroid/util/DisplayMetrics;)V
-    .locals 4
+    .locals 3
     .parameter "inoutDm"
 
     .prologue
-    const/high16 v3, 0x3f00
+    const/high16 v2, 0x3f00
 
     invoke-virtual {p0}, Landroid/content/res/CompatibilityInfo;->supportsScreen()Z
 
@@ -712,13 +740,13 @@
 
     iput v1, p1, Landroid/util/DisplayMetrics;->density:F
 
-    iget v1, p1, Landroid/util/DisplayMetrics;->density:F
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatDensityDpi:I
 
-    const/high16 v2, 0x4320
+    int-to-float v1, v1
 
-    mul-float/2addr v1, v2
+    mul-float/2addr v1, v0
 
-    add-float/2addr v1, v3
+    add-float/2addr v1, v2
 
     float-to-int v1, v1
 
@@ -748,7 +776,7 @@
 
     mul-float/2addr v1, v0
 
-    add-float/2addr v1, v3
+    add-float/2addr v1, v2
 
     float-to-int v1, v1
 
@@ -760,7 +788,7 @@
 
     mul-float/2addr v1, v0
 
-    add-float/2addr v1, v3
+    add-float/2addr v1, v2
 
     float-to-int v1, v1
 
@@ -792,12 +820,21 @@
 .end method
 
 .method public equals(Ljava/lang/Object;)Z
-    .locals 6
+    .locals 7
     .parameter "o"
 
     .prologue
-    const/4 v3, 0x0
+    const/4 v3, 0x1
 
+    const/4 v4, 0x0
+
+    if-ne p0, p1, :cond_1
+
+    :cond_0
+    :goto_0
+    return v3
+
+    :cond_1
     :try_start_0
     move-object v0, p1
 
@@ -806,44 +843,52 @@
     move-object v2, v0
 
     .local v2, oc:Landroid/content/res/CompatibilityInfo;
-    iget v4, p0, Landroid/content/res/CompatibilityInfo;->mCompatibilityFlags:I
+    iget v5, p0, Landroid/content/res/CompatibilityInfo;->mCompatibilityFlags:I
 
-    iget v5, v2, Landroid/content/res/CompatibilityInfo;->mCompatibilityFlags:I
+    iget v6, v2, Landroid/content/res/CompatibilityInfo;->mCompatibilityFlags:I
 
-    if-eq v4, v5, :cond_1
+    if-eq v5, v6, :cond_2
 
-    .end local v2           #oc:Landroid/content/res/CompatibilityInfo;
-    :cond_0
-    :goto_0
-    return v3
+    move v3, v4
 
-    .restart local v2       #oc:Landroid/content/res/CompatibilityInfo;
-    :cond_1
-    iget v4, p0, Landroid/content/res/CompatibilityInfo;->applicationDensity:I
+    goto :goto_0
 
-    iget v5, v2, Landroid/content/res/CompatibilityInfo;->applicationDensity:I
+    :cond_2
+    iget v5, p0, Landroid/content/res/CompatibilityInfo;->applicationDensity:I
 
-    if-ne v4, v5, :cond_0
+    iget v6, v2, Landroid/content/res/CompatibilityInfo;->applicationDensity:I
 
-    iget v4, p0, Landroid/content/res/CompatibilityInfo;->applicationScale:F
+    if-eq v5, v6, :cond_3
 
-    iget v5, v2, Landroid/content/res/CompatibilityInfo;->applicationScale:F
+    move v3, v4
 
-    cmpl-float v4, v4, v5
+    goto :goto_0
 
-    if-nez v4, :cond_0
+    :cond_3
+    iget v5, p0, Landroid/content/res/CompatibilityInfo;->applicationScale:F
 
-    iget v4, p0, Landroid/content/res/CompatibilityInfo;->applicationInvertedScale:F
+    iget v6, v2, Landroid/content/res/CompatibilityInfo;->applicationScale:F
 
-    iget v5, v2, Landroid/content/res/CompatibilityInfo;->applicationInvertedScale:F
+    cmpl-float v5, v5, v6
+
+    if-eqz v5, :cond_4
+
+    move v3, v4
+
+    goto :goto_0
+
+    :cond_4
+    iget v5, p0, Landroid/content/res/CompatibilityInfo;->applicationInvertedScale:F
+
+    iget v6, v2, Landroid/content/res/CompatibilityInfo;->applicationInvertedScale:F
     :try_end_0
     .catch Ljava/lang/ClassCastException; {:try_start_0 .. :try_end_0} :catch_0
 
-    cmpl-float v4, v4, v5
+    cmpl-float v5, v5, v6
 
-    if-nez v4, :cond_0
+    if-eqz v5, :cond_0
 
-    const/4 v3, 0x1
+    move v3, v4
 
     goto :goto_0
 
@@ -852,6 +897,8 @@
     move-exception v1
 
     .local v1, e:Ljava/lang/ClassCastException;
+    move v3, v4
+
     goto :goto_0
 .end method
 

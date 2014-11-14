@@ -14,37 +14,63 @@
 # static fields
 .field public static final ACTION_CLEAN_EXTERNAL_STORAGE:Ljava/lang/String; = "android.content.pm.CLEAN_EXTERNAL_STORAGE"
 
+.field public static final ACTION_REQUEST_PERMISSION:Ljava/lang/String; = "android.content.pm.action.REQUEST_PERMISSION"
+
 .field public static final COMPONENT_ENABLED_STATE_DEFAULT:I = 0x0
 
 .field public static final COMPONENT_ENABLED_STATE_DISABLED:I = 0x2
+
+.field public static final COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED:I = 0x4
 
 .field public static final COMPONENT_ENABLED_STATE_DISABLED_USER:I = 0x3
 
 .field public static final COMPONENT_ENABLED_STATE_ENABLED:I = 0x1
 
+.field public static final DELETE_ALL_USERS:I = 0x2
+
 .field public static final DELETE_FAILED_DEVICE_POLICY_MANAGER:I = -0x2
 
 .field public static final DELETE_FAILED_INTERNAL_ERROR:I = -0x1
 
+.field public static final DELETE_FAILED_USER_RESTRICTED:I = -0x3
+
+.field public static final DELETE_KEEP_DATA:I = 0x1
+
 .field public static final DELETE_SUCCEEDED:I = 0x1
 
-.field public static final DONT_DELETE_DATA:I = 0x1
+.field public static final DELETE_SYSTEM_APP:I = 0x4
 
 .field public static final DONT_KILL_APP:I = 0x1
+
+.field public static final EXTRA_REQUEST_PERMISSION_PERMISSION_LIST:Ljava/lang/String; = "android.content.pm.extra.PERMISSION_LIST"
 
 .field public static final EXTRA_VERIFICATION_ID:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_ID"
 
 .field public static final EXTRA_VERIFICATION_INSTALLER_PACKAGE:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_INSTALLER_PACKAGE"
 
+.field public static final EXTRA_VERIFICATION_INSTALLER_UID:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_INSTALLER_UID"
+
 .field public static final EXTRA_VERIFICATION_INSTALL_FLAGS:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_INSTALL_FLAGS"
 
+.field public static final EXTRA_VERIFICATION_PACKAGE_NAME:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_PACKAGE_NAME"
+
+.field public static final EXTRA_VERIFICATION_RESULT:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_RESULT"
+
 .field public static final EXTRA_VERIFICATION_URI:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_URI"
+
+.field public static final EXTRA_VERIFICATION_VERSION_CODE:Ljava/lang/String; = "android.content.pm.extra.VERIFICATION_VERSION_CODE"
+
+.field public static final FEATURE_APP_WIDGETS:Ljava/lang/String; = "android.software.app_widgets"
 
 .field public static final FEATURE_AUDIO_LOW_LATENCY:Ljava/lang/String; = "android.hardware.audio.low_latency"
 
 .field public static final FEATURE_BLUETOOTH:Ljava/lang/String; = "android.hardware.bluetooth"
 
+.field public static final FEATURE_BLUETOOTH_LE:Ljava/lang/String; = "android.hardware.bluetooth_le"
+
 .field public static final FEATURE_CAMERA:Ljava/lang/String; = "android.hardware.camera"
+
+.field public static final FEATURE_CAMERA_ANY:Ljava/lang/String; = "android.hardware.camera.any"
 
 .field public static final FEATURE_CAMERA_AUTOFOCUS:Ljava/lang/String; = "android.hardware.camera.autofocus"
 
@@ -52,11 +78,19 @@
 
 .field public static final FEATURE_CAMERA_FRONT:Ljava/lang/String; = "android.hardware.camera.front"
 
+.field public static final FEATURE_CONSUMER_IR:Ljava/lang/String; = "android.hardware.consumerir"
+
+.field public static final FEATURE_DEVICE_ADMIN:Ljava/lang/String; = "android.software.device_admin"
+
 .field public static final FEATURE_FAKETOUCH:Ljava/lang/String; = "android.hardware.faketouch"
 
 .field public static final FEATURE_FAKETOUCH_MULTITOUCH_DISTINCT:Ljava/lang/String; = "android.hardware.faketouch.multitouch.distinct"
 
 .field public static final FEATURE_FAKETOUCH_MULTITOUCH_JAZZHAND:Ljava/lang/String; = "android.hardware.faketouch.multitouch.jazzhand"
+
+.field public static final FEATURE_HOME_SCREEN:Ljava/lang/String; = "android.software.home_screen"
+
+.field public static final FEATURE_INPUT_METHODS:Ljava/lang/String; = "android.software.input_methods"
 
 .field public static final FEATURE_LIVE_WALLPAPER:Ljava/lang/String; = "android.software.live_wallpaper"
 
@@ -69,6 +103,10 @@
 .field public static final FEATURE_MICROPHONE:Ljava/lang/String; = "android.hardware.microphone"
 
 .field public static final FEATURE_NFC:Ljava/lang/String; = "android.hardware.nfc"
+
+.field public static final FEATURE_NFC_HCE:Ljava/lang/String; = "android.hardware.nfc.hce"
+
+.field public static final FEATURE_NFC_HOST_CARD_EMULATION:Ljava/lang/String; = "android.hardware.nfc.hce"
 
 .field public static final FEATURE_SCREEN_LANDSCAPE:Ljava/lang/String; = "android.hardware.screen.landscape"
 
@@ -85,6 +123,10 @@
 .field public static final FEATURE_SENSOR_LIGHT:Ljava/lang/String; = "android.hardware.sensor.light"
 
 .field public static final FEATURE_SENSOR_PROXIMITY:Ljava/lang/String; = "android.hardware.sensor.proximity"
+
+.field public static final FEATURE_SENSOR_STEP_COUNTER:Ljava/lang/String; = "android.hardware.sensor.stepcounter"
+
+.field public static final FEATURE_SENSOR_STEP_DETECTOR:Ljava/lang/String; = "android.hardware.sensor.stepdetector"
 
 .field public static final FEATURE_SIP:Ljava/lang/String; = "android.software.sip"
 
@@ -120,6 +162,8 @@
 
 .field public static final GET_DISABLED_COMPONENTS:I = 0x200
 
+.field public static final GET_DISABLED_UNTIL_USED_COMPONENTS:I = 0x8000
+
 .field public static final GET_GIDS:I = 0x100
 
 .field public static final GET_INSTRUMENTATION:I = 0x10
@@ -146,7 +190,11 @@
 
 .field public static final GET_URI_PERMISSION_PATTERNS:I = 0x800
 
+.field public static final INSTALL_ALLOW_DOWNGRADE:I = 0x80
+
 .field public static final INSTALL_ALLOW_TEST:I = 0x4
+
+.field public static final INSTALL_ALL_USERS:I = 0x40
 
 .field public static final INSTALL_EXTERNAL:I = 0x8
 
@@ -196,9 +244,13 @@
 
 .field public static final INSTALL_FAILED_UPDATE_INCOMPATIBLE:I = -0x7
 
+.field public static final INSTALL_FAILED_USER_RESTRICTED:I = -0x6f
+
 .field public static final INSTALL_FAILED_VERIFICATION_FAILURE:I = -0x16
 
 .field public static final INSTALL_FAILED_VERIFICATION_TIMEOUT:I = -0x15
+
+.field public static final INSTALL_FAILED_VERSION_DOWNGRADE:I = -0x19
 
 .field public static final INSTALL_FORWARD_LOCK:I = 0x1
 
@@ -231,6 +283,8 @@
 .field public static final INSTALL_SUCCEEDED:I = 0x1
 
 .field public static final MATCH_DEFAULT_ONLY:I = 0x10000
+
+.field public static final MAXIMUM_VERIFICATION_TIMEOUT:J = 0x36ee80L
 
 .field public static final MOVE_EXTERNAL_MEDIA:I = 0x2
 
@@ -352,6 +406,90 @@
     .end annotation
 .end method
 
+.method public addPreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;I)V
+    .locals 2
+    .parameter "filter"
+    .parameter "match"
+    .parameter "set"
+    .parameter "activity"
+    .parameter "userId"
+
+    .prologue
+    new-instance v0, Ljava/lang/RuntimeException;
+
+    const-string v1, "Not implemented. Must override in a subclass."
+
+    invoke-direct {v0, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+.end method
+
+.method public varargs buildPermissionRequestIntent([Ljava/lang/String;)Landroid/content/Intent;
+    .locals 7
+    .parameter "permissions"
+
+    .prologue
+    if-nez p1, :cond_0
+
+    new-instance v5, Ljava/lang/NullPointerException;
+
+    const-string v6, "permissions cannot be null"
+
+    invoke-direct {v5, v6}, Ljava/lang/NullPointerException;-><init>(Ljava/lang/String;)V
+
+    throw v5
+
+    :cond_0
+    move-object v0, p1
+
+    .local v0, arr$:[Ljava/lang/String;
+    array-length v3, v0
+
+    .local v3, len$:I
+    const/4 v2, 0x0
+
+    .local v2, i$:I
+    :goto_0
+    if-ge v2, v3, :cond_2
+
+    aget-object v4, v0, v2
+
+    .local v4, permission:Ljava/lang/String;
+    if-nez v4, :cond_1
+
+    new-instance v5, Ljava/lang/IllegalArgumentException;
+
+    const-string v6, "permissions cannot contain null"
+
+    invoke-direct {v5, v6}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+
+    throw v5
+
+    :cond_1
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_0
+
+    .end local v4           #permission:Ljava/lang/String;
+    :cond_2
+    new-instance v1, Landroid/content/Intent;
+
+    const-string v5, "android.content.pm.action.REQUEST_PERMISSION"
+
+    invoke-direct {v1, v5}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    .local v1, i:Landroid/content/Intent;
+    const-string v5, "android.content.pm.extra.PERMISSION_LIST"
+
+    invoke-virtual {v1, v5, p1}, Landroid/content/Intent;->putExtra(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;
+
+    const-string v5, "com.android.packageinstaller"
+
+    invoke-virtual {v1, v5}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
+
+    return-object v1
+.end method
+
 .method public abstract canonicalToCurrentPackageNames([Ljava/lang/String;)[Ljava/lang/String;
 .end method
 
@@ -370,9 +508,6 @@
 .method public abstract clearPackagePreferredActivities(Ljava/lang/String;)V
 .end method
 
-.method public abstract createUser(Ljava/lang/String;I)Landroid/content/pm/UserInfo;
-.end method
-
 .method public abstract currentToCanonicalPackageNames([Ljava/lang/String;)[Ljava/lang/String;
 .end method
 
@@ -380,6 +515,9 @@
 .end method
 
 .method public abstract deletePackage(Ljava/lang/String;Landroid/content/pm/IPackageDeleteObserver;I)V
+.end method
+
+.method public abstract extendVerificationTimeout(IIJ)V
 .end method
 
 .method public abstract freeStorage(JLandroid/content/IntentSender;)V
@@ -440,6 +578,9 @@
     .end annotation
 .end method
 
+.method public abstract getApplicationBlockedSettingAsUser(Ljava/lang/String;Landroid/os/UserHandle;)Z
+.end method
+
 .method public abstract getApplicationEnabledSetting(Ljava/lang/String;)I
 .end method
 
@@ -485,6 +626,19 @@
 .method public abstract getDrawable(Ljava/lang/String;ILandroid/content/pm/ApplicationInfo;)Landroid/graphics/drawable/Drawable;
 .end method
 
+.method public abstract getHomeActivities(Ljava/util/List;)Landroid/content/ComponentName;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;)",
+            "Landroid/content/ComponentName;"
+        }
+    .end annotation
+.end method
+
 .method public abstract getInstalledApplications(I)Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -501,6 +655,18 @@
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "(I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/PackageInfo;",
+            ">;"
+        }
+    .end annotation
+.end method
+
+.method public abstract getInstalledPackages(II)Ljava/util/List;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(II)",
             "Ljava/util/List",
             "<",
             "Landroid/content/pm/PackageInfo;",
@@ -527,35 +693,35 @@
 .end method
 
 .method public getPackageArchiveInfo(Ljava/lang/String;I)Landroid/content/pm/PackageInfo;
-    .locals 13
+    .locals 12
     .parameter "archiveFilePath"
     .parameter "flags"
 
     .prologue
     const-wide/16 v3, 0x0
 
+    const/4 v5, 0x0
+
     const/4 v1, 0x0
 
-    const/4 v8, 0x0
+    new-instance v10, Landroid/content/pm/PackageParser;
 
-    new-instance v11, Landroid/content/pm/PackageParser;
+    invoke-direct {v10, p1}, Landroid/content/pm/PackageParser;-><init>(Ljava/lang/String;)V
 
-    invoke-direct {v11, p1}, Landroid/content/pm/PackageParser;-><init>(Ljava/lang/String;)V
+    .local v10, packageParser:Landroid/content/pm/PackageParser;
+    new-instance v9, Landroid/util/DisplayMetrics;
 
-    .local v11, packageParser:Landroid/content/pm/PackageParser;
-    new-instance v10, Landroid/util/DisplayMetrics;
+    invoke-direct {v9}, Landroid/util/DisplayMetrics;-><init>()V
 
-    invoke-direct {v10}, Landroid/util/DisplayMetrics;-><init>()V
+    .local v9, metrics:Landroid/util/DisplayMetrics;
+    invoke-virtual {v9}, Landroid/util/DisplayMetrics;->setToDefaults()V
 
-    .local v10, metrics:Landroid/util/DisplayMetrics;
-    invoke-virtual {v10}, Landroid/util/DisplayMetrics;->setToDefaults()V
+    new-instance v11, Ljava/io/File;
 
-    new-instance v12, Ljava/io/File;
+    invoke-direct {v11, p1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
-    invoke-direct {v12, p1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
-
-    .local v12, sourceFile:Ljava/io/File;
-    invoke-virtual {v11, v12, p1, v10, v8}, Landroid/content/pm/PackageParser;->parsePackage(Ljava/io/File;Ljava/lang/String;Landroid/util/DisplayMetrics;I)Landroid/content/pm/PackageParser$Package;
+    .local v11, sourceFile:Ljava/io/File;
+    invoke-virtual {v10, v11, p1, v9, v5}, Landroid/content/pm/PackageParser;->parsePackage(Ljava/io/File;Ljava/lang/String;Landroid/util/DisplayMetrics;I)Landroid/content/pm/PackageParser$Package;
 
     move-result-object v0
 
@@ -570,18 +736,21 @@
 
     if-eqz v2, :cond_1
 
-    invoke-virtual {v11, v0, v8}, Landroid/content/pm/PackageParser;->collectCertificates(Landroid/content/pm/PackageParser$Package;I)Z
+    invoke-virtual {v10, v0, v5}, Landroid/content/pm/PackageParser;->collectCertificates(Landroid/content/pm/PackageParser$Package;I)Z
 
     :cond_1
+    new-instance v8, Landroid/content/pm/PackageUserState;
+
+    invoke-direct {v8}, Landroid/content/pm/PackageUserState;-><init>()V
+
+    .local v8, state:Landroid/content/pm/PackageUserState;
     move v2, p2
 
     move-wide v5, v3
 
     move-object v7, v1
 
-    move v9, v8
-
-    invoke-static/range {v0 .. v9}, Landroid/content/pm/PackageParser;->generatePackageInfo(Landroid/content/pm/PackageParser$Package;[IIJJLjava/util/HashSet;ZI)Landroid/content/pm/PackageInfo;
+    invoke-static/range {v0 .. v8}, Landroid/content/pm/PackageParser;->generatePackageInfo(Landroid/content/pm/PackageParser$Package;[IIJJLjava/util/HashSet;Landroid/content/pm/PackageUserState;)Landroid/content/pm/PackageInfo;
 
     move-result-object v1
 
@@ -604,10 +773,47 @@
     .end annotation
 .end method
 
-.method public abstract getPackageSizeInfo(Ljava/lang/String;Landroid/content/pm/IPackageStatsObserver;)V
+.method public abstract getPackageSizeInfo(Ljava/lang/String;ILandroid/content/pm/IPackageStatsObserver;)V
+.end method
+
+.method public getPackageSizeInfo(Ljava/lang/String;Landroid/content/pm/IPackageStatsObserver;)V
+    .locals 1
+    .parameter "packageName"
+    .parameter "observer"
+
+    .prologue
+    invoke-static {}, Landroid/os/UserHandle;->myUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, v0, p2}, Landroid/content/pm/PackageManager;->getPackageSizeInfo(Ljava/lang/String;ILandroid/content/pm/IPackageStatsObserver;)V
+
+    return-void
+.end method
+
+.method public abstract getPackageUid(Ljava/lang/String;I)I
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
 .end method
 
 .method public abstract getPackagesForUid(I)[Ljava/lang/String;
+.end method
+
+.method public abstract getPackagesHoldingPermissions([Ljava/lang/String;I)Ljava/util/List;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "([",
+            "Ljava/lang/String;",
+            "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/PackageInfo;",
+            ">;"
+        }
+    .end annotation
 .end method
 
 .method public abstract getPermissionGroupInfo(Ljava/lang/String;I)Landroid/content/pm/PermissionGroupInfo;
@@ -696,6 +902,14 @@
     .end annotation
 .end method
 
+.method public abstract getResourcesForApplicationAsUser(Ljava/lang/String;I)Landroid/content/res/Resources;
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
+.end method
+
 .method public abstract getServiceInfo(Landroid/content/ComponentName;I)Landroid/content/pm/ServiceInfo;
     .annotation system Ldalvik/annotation/Throws;
         value = {
@@ -721,21 +935,6 @@
     .end annotation
 .end method
 
-.method public abstract getUser(I)Landroid/content/pm/UserInfo;
-.end method
-
-.method public abstract getUsers()Ljava/util/List;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "()",
-            "Ljava/util/List",
-            "<",
-            "Landroid/content/pm/UserInfo;",
-            ">;"
-        }
-    .end annotation
-.end method
-
 .method public abstract getVerifierDeviceIdentity()Landroid/content/pm/VerifierDeviceIdentity;
 .end method
 
@@ -748,10 +947,21 @@
 .method public abstract hasSystemFeature(Ljava/lang/String;)Z
 .end method
 
+.method public abstract installExistingPackage(Ljava/lang/String;)I
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
+.end method
+
 .method public abstract installPackage(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;)V
 .end method
 
 .method public abstract installPackageWithVerification(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;Landroid/net/Uri;Landroid/content/pm/ManifestDigest;Landroid/content/pm/ContainerEncryptionParams;)V
+.end method
+
+.method public abstract installPackageWithVerificationAndEncryption(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;Landroid/content/pm/VerificationParams;Landroid/content/pm/ContainerEncryptionParams;)V
 .end method
 
 .method public abstract isSafeMode()Z
@@ -766,6 +976,20 @@
             "(",
             "Landroid/content/Intent;",
             "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+.end method
+
+.method public abstract queryBroadcastReceivers(Landroid/content/Intent;II)Ljava/util/List;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
             "Ljava/util/List",
             "<",
             "Landroid/content/pm/ResolveInfo;",
@@ -816,6 +1040,20 @@
     .end annotation
 .end method
 
+.method public abstract queryIntentActivitiesAsUser(Landroid/content/Intent;II)Ljava/util/List;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+.end method
+
 .method public abstract queryIntentActivityOptions(Landroid/content/ComponentName;[Landroid/content/Intent;Landroid/content/Intent;I)Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -833,12 +1071,54 @@
     .end annotation
 .end method
 
+.method public abstract queryIntentContentProviders(Landroid/content/Intent;I)Ljava/util/List;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+.end method
+
+.method public abstract queryIntentContentProvidersAsUser(Landroid/content/Intent;II)Ljava/util/List;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+.end method
+
 .method public abstract queryIntentServices(Landroid/content/Intent;I)Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "(",
             "Landroid/content/Intent;",
             "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+.end method
+
+.method public abstract queryIntentServicesAsUser(Landroid/content/Intent;II)Ljava/util/List;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
             "Ljava/util/List",
             "<",
             "Landroid/content/pm/ResolveInfo;",
@@ -875,15 +1155,15 @@
 .method public abstract removePermission(Ljava/lang/String;)V
 .end method
 
-.method public abstract removeUser(I)Z
-.end method
-
 .method public abstract replacePreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;)V
     .annotation runtime Ljava/lang/Deprecated;
     .end annotation
 .end method
 
 .method public abstract resolveActivity(Landroid/content/Intent;I)Landroid/content/pm/ResolveInfo;
+.end method
+
+.method public abstract resolveActivityAsUser(Landroid/content/Intent;II)Landroid/content/pm/ResolveInfo;
 .end method
 
 .method public abstract resolveContentProvider(Ljava/lang/String;I)Landroid/content/pm/ProviderInfo;
@@ -895,6 +1175,9 @@
 .method public abstract revokePermission(Ljava/lang/String;Ljava/lang/String;)V
 .end method
 
+.method public abstract setApplicationBlockedSettingAsUser(Ljava/lang/String;ZLandroid/os/UserHandle;)Z
+.end method
+
 .method public abstract setApplicationEnabledSetting(Ljava/lang/String;II)V
 .end method
 
@@ -902,12 +1185,6 @@
 .end method
 
 .method public abstract setInstallerPackageName(Ljava/lang/String;Ljava/lang/String;)V
-.end method
-
-.method public abstract updateUserFlags(II)V
-.end method
-
-.method public abstract updateUserName(ILjava/lang/String;)V
 .end method
 
 .method public abstract verifyPendingInstall(II)V

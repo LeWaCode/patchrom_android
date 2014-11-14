@@ -26,15 +26,15 @@
 # static fields
 .field private static final DESCRIPTOR:Ljava/lang/String; = "android.net.INetworkPolicyManager"
 
-.field static final TRANSACTION_getAppPolicy:I = 0x2
-
-.field static final TRANSACTION_getAppsWithPolicy:I = 0x3
-
 .field static final TRANSACTION_getNetworkPolicies:I = 0x8
 
 .field static final TRANSACTION_getNetworkQuotaInfo:I = 0xc
 
 .field static final TRANSACTION_getRestrictBackground:I = 0xb
+
+.field static final TRANSACTION_getUidPolicy:I = 0x2
+
+.field static final TRANSACTION_getUidsWithPolicy:I = 0x3
 
 .field static final TRANSACTION_isNetworkMetered:I = 0xd
 
@@ -42,11 +42,11 @@
 
 .field static final TRANSACTION_registerListener:I = 0x5
 
-.field static final TRANSACTION_setAppPolicy:I = 0x1
-
 .field static final TRANSACTION_setNetworkPolicies:I = 0x7
 
 .field static final TRANSACTION_setRestrictBackground:I = 0xa
+
+.field static final TRANSACTION_setUidPolicy:I = 0x1
 
 .field static final TRANSACTION_snoozeLimit:I = 0x9
 
@@ -163,7 +163,7 @@
     move-result v1
 
     .local v1, _arg1:I
-    invoke-virtual {p0, v0, v1}, Landroid/net/INetworkPolicyManager$Stub;->setAppPolicy(II)V
+    invoke-virtual {p0, v0, v1}, Landroid/net/INetworkPolicyManager$Stub;->setUidPolicy(II)V
 
     invoke-virtual {p3}, Landroid/os/Parcel;->writeNoException()V
 
@@ -181,7 +181,7 @@
     move-result v0
 
     .restart local v0       #_arg0:I
-    invoke-virtual {p0, v0}, Landroid/net/INetworkPolicyManager$Stub;->getAppPolicy(I)I
+    invoke-virtual {p0, v0}, Landroid/net/INetworkPolicyManager$Stub;->getUidPolicy(I)I
 
     move-result v2
 
@@ -204,7 +204,7 @@
     move-result v0
 
     .restart local v0       #_arg0:I
-    invoke-virtual {p0, v0}, Landroid/net/INetworkPolicyManager$Stub;->getAppsWithPolicy(I)[I
+    invoke-virtual {p0, v0}, Landroid/net/INetworkPolicyManager$Stub;->getUidsWithPolicy(I)[I
 
     move-result-object v2
 

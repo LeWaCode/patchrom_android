@@ -9,6 +9,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
+        Landroid/app/Application$OnProvideAssistDataListener;,
         Landroid/app/Application$ActivityLifecycleCallbacks;
     }
 .end annotation
@@ -50,6 +51,17 @@
     .end annotation
 .end field
 
+.field private mAssistCallbacks:Ljava/util/ArrayList;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/util/ArrayList",
+            "<",
+            "Landroid/app/Application$OnProvideAssistDataListener;",
+            ">;"
+        }
+    .end annotation
+.end field
+
 .field private mComponentCallbacks:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -69,9 +81,9 @@
     .locals 2
 
     .prologue
-    const/4 v0, 0x0
+    const/4 v1, 0x0
 
-    invoke-direct {p0, v0}, Landroid/content/ContextWrapper;-><init>(Landroid/content/Context;)V
+    invoke-direct {p0, v1}, Landroid/content/ContextWrapper;-><init>(Landroid/content/Context;)V
 
     new-instance v0, Ljava/util/ArrayList;
 
@@ -85,21 +97,9 @@
 
     iput-object v0, p0, Landroid/app/Application;->mActivityLifecycleCallbacks:Ljava/util/ArrayList;
 
-    new-instance v0, Ljava/lang/ref/SoftReference;
+    iput-object v1, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
 
-    invoke-direct {v0, p0}, Ljava/lang/ref/SoftReference;-><init>(Ljava/lang/Object;)V
-
-    sput-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
-
-    new-instance v0, Ljava/lang/ref/SoftReference;
-
-    new-instance v1, Landroid/os/Handler;
-
-    invoke-direct {v1}, Landroid/os/Handler;-><init>()V
-
-    invoke-direct {v0, v1}, Ljava/lang/ref/SoftReference;-><init>(Ljava/lang/Object;)V
-
-    sput-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
+    invoke-direct {p0}, Landroid/app/Application;->init()V
 
     return-void
 .end method
@@ -184,56 +184,6 @@
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     throw v1
-.end method
-
-.method public static getHandler()Landroid/os/Handler;
-    .locals 1
-
-    .prologue
-    sget-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
-
-    if-nez v0, :cond_0
-
-    const/4 v0, 0x0
-
-    :goto_0
-    return-object v0
-
-    :cond_0
-    sget-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
-
-    invoke-virtual {v0}, Ljava/lang/ref/SoftReference;->get()Ljava/lang/Object;
-
-    move-result-object v0
-
-    check-cast v0, Landroid/os/Handler;
-
-    goto :goto_0
-.end method
-
-.method public static getInstance()Landroid/app/Application;
-    .locals 1
-
-    .prologue
-    sget-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
-
-    if-nez v0, :cond_0
-
-    const/4 v0, 0x0
-
-    :goto_0
-    return-object v0
-
-    :cond_0
-    sget-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
-
-    invoke-virtual {v0}, Ljava/lang/ref/SoftReference;->get()Ljava/lang/Object;
-
-    move-result-object v0
-
-    check-cast v0, Landroid/app/Application;
-
-    goto :goto_0
 .end method
 
 
@@ -503,6 +453,69 @@
     return-void
 .end method
 
+.method dispatchOnProvideAssistData(Landroid/app/Activity;Landroid/os/Bundle;)V
+    .locals 3
+    .parameter "activity"
+    .parameter "data"
+
+    .prologue
+    monitor-enter p0
+
+    :try_start_0
+    iget-object v2, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
+
+    if-nez v2, :cond_1
+
+    monitor-exit p0
+
+    :cond_0
+    return-void
+
+    :cond_1
+    iget-object v2, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
+
+    invoke-virtual {v2}, Ljava/util/ArrayList;->toArray()[Ljava/lang/Object;
+
+    move-result-object v0
+
+    .local v0, callbacks:[Ljava/lang/Object;
+    monitor-exit p0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    if-eqz v0, :cond_0
+
+    const/4 v1, 0x0
+
+    .local v1, i:I
+    :goto_0
+    array-length v2, v0
+
+    if-ge v1, v2, :cond_0
+
+    aget-object v2, v0, v1
+
+    check-cast v2, Landroid/app/Application$OnProvideAssistDataListener;
+
+    invoke-interface {v2, p1, p2}, Landroid/app/Application$OnProvideAssistDataListener;->onProvideAssistData(Landroid/app/Activity;Landroid/os/Bundle;)V
+
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_0
+
+    .end local v0           #callbacks:[Ljava/lang/Object;
+    .end local v1           #i:I
+    :catchall_0
+    move-exception v2
+
+    :try_start_1
+    monitor-exit p0
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    throw v2
+.end method
+
 .method public onConfigurationChanged(Landroid/content/res/Configuration;)V
     .locals 3
     .parameter "newConfig"
@@ -684,6 +697,43 @@
     throw v0
 .end method
 
+.method public registerOnProvideAssistDataListener(Landroid/app/Application$OnProvideAssistDataListener;)V
+    .locals 1
+    .parameter "callback"
+
+    .prologue
+    monitor-enter p0
+
+    :try_start_0
+    iget-object v0, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
+
+    if-nez v0, :cond_0
+
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v0, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
+
+    :cond_0
+    iget-object v0, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
+
+    invoke-virtual {v0, p1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    monitor-exit p0
+
+    return-void
+
+    :catchall_0
+    move-exception v0
+
+    monitor-exit p0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
+.end method
+
 .method public unregisterActivityLifecycleCallbacks(Landroid/app/Application$ActivityLifecycleCallbacks;)V
     .locals 2
     .parameter "callback"
@@ -738,4 +788,108 @@
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     throw v0
+.end method
+
+.method public unregisterOnProvideAssistDataListener(Landroid/app/Application$OnProvideAssistDataListener;)V
+    .locals 1
+    .parameter "callback"
+
+    .prologue
+    monitor-enter p0
+
+    :try_start_0
+    iget-object v0, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, p0, Landroid/app/Application;->mAssistCallbacks:Ljava/util/ArrayList;
+
+    invoke-virtual {v0, p1}, Ljava/util/ArrayList;->remove(Ljava/lang/Object;)Z
+
+    :cond_0
+    monitor-exit p0
+
+    return-void
+
+    :catchall_0
+    move-exception v0
+
+    monitor-exit p0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
+.end method
+
+.method public static getHandler()Landroid/os/Handler;
+    .locals 1
+
+    .prologue
+    sget-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x0
+
+    :goto_0
+    return-object v0
+
+    :cond_0
+    sget-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
+
+    invoke-virtual {v0}, Ljava/lang/ref/SoftReference;->get()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/os/Handler;
+
+    goto :goto_0
+.end method
+
+.method public static getInstance()Landroid/app/Application;
+    .locals 1
+
+    .prologue
+    sget-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x0
+
+    :goto_0
+    return-object v0
+
+    :cond_0
+    sget-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
+
+    invoke-virtual {v0}, Ljava/lang/ref/SoftReference;->get()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/app/Application;
+
+    goto :goto_0
+.end method
+
+.method private init()V
+    .locals 2
+
+    .prologue
+    new-instance v0, Ljava/lang/ref/SoftReference;
+
+    invoke-direct {v0, p0}, Ljava/lang/ref/SoftReference;-><init>(Ljava/lang/Object;)V
+
+    sput-object v0, Landroid/app/Application;->sApplication:Ljava/lang/ref/SoftReference;
+
+    new-instance v0, Ljava/lang/ref/SoftReference;
+
+    new-instance v1, Landroid/os/Handler;
+
+    invoke-direct {v1}, Landroid/os/Handler;-><init>()V
+
+    invoke-direct {v0, v1}, Ljava/lang/ref/SoftReference;-><init>(Ljava/lang/Object;)V
+
+    sput-object v0, Landroid/app/Application;->sHandler:Ljava/lang/ref/SoftReference;
+
+    return-void
 .end method

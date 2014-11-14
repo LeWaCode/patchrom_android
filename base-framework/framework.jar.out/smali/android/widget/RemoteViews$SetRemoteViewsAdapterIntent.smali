@@ -23,8 +23,6 @@
 
 .field final synthetic this$0:Landroid/widget/RemoteViews;
 
-.field viewId:I
-
 
 # direct methods
 .method public constructor <init>(Landroid/widget/RemoteViews;ILandroid/content/Intent;)V
@@ -207,6 +205,8 @@
 
     invoke-virtual {v2, v3}, Landroid/widget/AbsListView;->setRemoteViewsAdapter(Landroid/content/Intent;)V
 
+    invoke-virtual {v2, p3}, Landroid/widget/AbsListView;->setRemoteViewsOnClickHandler(Landroid/widget/RemoteViews$OnClickHandler;)V
+
     goto :goto_0
 
     .end local v2           #v:Landroid/widget/AbsListView;
@@ -224,7 +224,18 @@
 
     invoke-virtual {v2, v3}, Landroid/widget/AdapterViewAnimator;->setRemoteViewsAdapter(Landroid/content/Intent;)V
 
+    invoke-virtual {v2, p3}, Landroid/widget/AdapterViewAnimator;->setRemoteViewsOnClickHandler(Landroid/widget/RemoteViews$OnClickHandler;)V
+
     goto :goto_0
+.end method
+
+.method public getActionName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    const-string v0, "SetRemoteViewsAdapterIntent"
+
+    return-object v0
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V

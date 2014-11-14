@@ -24,7 +24,11 @@
 # static fields
 .field public static final ACTION_GET_MULTIPLE_PHONES:Ljava/lang/String; = "com.android.contacts.action.GET_MULTIPLE_PHONES"
 
+.field public static final ACTION_PROFILE_CHANGED:Ljava/lang/String; = "android.provider.Contacts.PROFILE_CHANGED"
+
 .field public static final ATTACH_IMAGE:Ljava/lang/String; = "com.android.contacts.action.ATTACH_IMAGE"
+
+.field public static final CONTACTS_DATABASE_CREATED:Ljava/lang/String; = "android.provider.Contacts.DATABASE_CREATED"
 
 .field public static final EXTRA_CREATE_DESCRIPTION:Ljava/lang/String; = "com.android.contacts.action.CREATE_DESCRIPTION"
 

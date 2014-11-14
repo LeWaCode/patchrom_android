@@ -31,8 +31,6 @@
 
 .field final synthetic this$0:Landroid/widget/RemoteViews;
 
-.field viewId:I
-
 
 # direct methods
 .method public constructor <init>(Landroid/widget/RemoteViews;IZIILandroid/graphics/PorterDuff$Mode;I)V
@@ -250,6 +248,15 @@
     move-result-object v2
 
     goto :goto_1
+.end method
+
+.method public getActionName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    const-string v0, "SetDrawableParameters"
+
+    return-object v0
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V

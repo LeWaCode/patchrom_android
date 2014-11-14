@@ -46,7 +46,11 @@
 
 .field mOldPaint:Landroid/graphics/Paint;
 
+.field private mOnClickHandler:Landroid/widget/RemoteViews$OnClickHandler;
+
 .field mRemoteContext:Landroid/content/Context;
+
+.field private mUser:Landroid/os/UserHandle;
 
 .field mView:Landroid/view/View;
 
@@ -110,9 +114,32 @@
 
     iput-object p1, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
 
+    invoke-static {}, Landroid/os/Process;->myUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v0
+
+    iput-object v0, p0, Landroid/appwidget/AppWidgetHostView;->mUser:Landroid/os/UserHandle;
+
     const/4 v0, 0x1
 
     invoke-virtual {p0, v0}, Landroid/appwidget/AppWidgetHostView;->setIsRootNamespace(Z)V
+
+    return-void
+.end method
+
+.method public constructor <init>(Landroid/content/Context;Landroid/widget/RemoteViews$OnClickHandler;)V
+    .locals 2
+    .parameter "context"
+    .parameter "handler"
+
+    .prologue
+    const/high16 v0, 0x10a
+
+    const v1, 0x10a0001
+
+    invoke-direct {p0, p1, v0, v1}, Landroid/appwidget/AppWidgetHostView;-><init>(Landroid/content/Context;II)V
+
+    iput-object p2, p0, Landroid/appwidget/AppWidgetHostView;->mOnClickHandler:Landroid/widget/RemoteViews$OnClickHandler;
 
     return-void
 .end method
@@ -185,7 +212,7 @@
     move-result-object v3
 
     .local v3, r:Landroid/content/res/Resources;
-    const v4, 0x105004b
+    const v4, 0x1050050
 
     invoke-virtual {v3, v4}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
 
@@ -193,7 +220,7 @@
 
     iput v4, p2, Landroid/graphics/Rect;->left:I
 
-    const v4, 0x105004d
+    const v4, 0x1050052
 
     invoke-virtual {v3, v4}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
 
@@ -201,7 +228,7 @@
 
     iput v4, p2, Landroid/graphics/Rect;->right:I
 
-    const v4, 0x105004c
+    const v4, 0x1050051
 
     invoke-virtual {v3, v4}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
 
@@ -209,7 +236,7 @@
 
     iput v4, p2, Landroid/graphics/Rect;->top:I
 
-    const v4, 0x105004e
+    const v4, 0x1050053
 
     invoke-virtual {v3, v4}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
 
@@ -258,7 +285,9 @@
 
     const/4 v3, 0x4
 
-    invoke-virtual {v2, v1, v3}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+    iget-object v4, p0, Landroid/appwidget/AppWidgetHostView;->mUser:Landroid/os/UserHandle;
+
+    invoke-virtual {v2, v1, v3, v4}, Landroid/content/Context;->createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
     :try_end_0
     .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -306,7 +335,7 @@
 
 # virtual methods
 .method protected dispatchRestoreInstanceState(Landroid/util/SparseArray;)V
-    .locals 3
+    .locals 6
     .parameter
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -322,43 +351,101 @@
     .local p1, container:Landroid/util/SparseArray;,"Landroid/util/SparseArray<Landroid/os/Parcelable;>;"
     invoke-direct {p0}, Landroid/appwidget/AppWidgetHostView;->generateId()I
 
-    move-result v2
+    move-result v3
 
-    invoke-virtual {p1, v2}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
+    invoke-virtual {p1, v3}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
 
-    move-result-object v1
+    move-result-object v2
 
-    check-cast v1, Landroid/os/Parcelable;
+    check-cast v2, Landroid/os/Parcelable;
 
-    .local v1, parcelable:Landroid/os/Parcelable;
-    const/4 v0, 0x0
+    .local v2, parcelable:Landroid/os/Parcelable;
+    const/4 v1, 0x0
 
-    .local v0, jail:Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
-    if-eqz v1, :cond_0
-
-    instance-of v2, v1, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
-
+    .local v1, jail:Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
     if-eqz v2, :cond_0
 
-    move-object v0, v1
+    instance-of v3, v2, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
 
-    check-cast v0, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
+    if-eqz v3, :cond_0
+
+    move-object v1, v2
+
+    check-cast v1, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
 
     :cond_0
-    if-nez v0, :cond_1
+    if-nez v1, :cond_1
 
-    new-instance v0, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
+    new-instance v1, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
 
-    .end local v0           #jail:Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
-    const/4 v2, 0x0
+    .end local v1           #jail:Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
+    const/4 v3, 0x0
 
-    invoke-direct {v0, v2}, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;-><init>(Landroid/appwidget/AppWidgetHostView$1;)V
+    invoke-direct {v1, v3}, Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;-><init>(Landroid/appwidget/AppWidgetHostView$1;)V
 
-    .restart local v0       #jail:Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
+    .restart local v1       #jail:Landroid/appwidget/AppWidgetHostView$ParcelableSparseArray;
     :cond_1
-    invoke-super {p0, v0}, Landroid/widget/FrameLayout;->dispatchRestoreInstanceState(Landroid/util/SparseArray;)V
+    :try_start_0
+    invoke-super {p0, v1}, Landroid/widget/FrameLayout;->dispatchRestoreInstanceState(Landroid/util/SparseArray;)V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
+    :goto_0
     return-void
+
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Ljava/lang/Exception;
+    const-string v4, "AppWidgetHostView"
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v5, "failed to restoreInstanceState for widget id: "
+
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    iget v5, p0, Landroid/appwidget/AppWidgetHostView;->mAppWidgetId:I
+
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    const-string v5, ", "
+
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v5
+
+    iget-object v3, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+
+    if-nez v3, :cond_2
+
+    const-string v3, "null"
+
+    :goto_1
+    invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-static {v4, v3, v0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    goto :goto_0
+
+    :cond_2
+    iget-object v3, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+
+    iget-object v3, v3, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    goto :goto_1
 .end method
 
 .method protected dispatchSaveInstanceState(Landroid/util/SparseArray;)V
@@ -465,151 +552,220 @@
 .end method
 
 .method protected getDefaultView()Landroid/view/View;
-    .locals 8
+    .locals 14
 
     .prologue
-    const/4 v0, 0x0
+    const/4 v1, 0x0
 
-    .local v0, defaultView:Landroid/view/View;
-    const/4 v2, 0x0
+    .local v1, defaultView:Landroid/view/View;
+    const/4 v3, 0x0
 
-    .local v2, exception:Ljava/lang/Exception;
+    .local v3, exception:Ljava/lang/Exception;
     :try_start_0
-    iget-object v5, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+    iget-object v10, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
 
-    if-eqz v5, :cond_2
+    if-eqz v10, :cond_4
 
-    iget-object v5, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
+    iget-object v10, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
 
-    iget-object v6, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+    iget-object v11, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
 
-    iget-object v6, v6, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+    iget-object v11, v11, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
 
-    invoke-virtual {v6}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
+    invoke-virtual {v11}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
 
-    move-result-object v6
+    move-result-object v11
 
-    const/4 v7, 0x4
+    const/4 v12, 0x4
 
-    invoke-virtual {v5, v6, v7}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+    iget-object v13, p0, Landroid/appwidget/AppWidgetHostView;->mUser:Landroid/os/UserHandle;
+
+    invoke-virtual {v10, v11, v12, v13}, Landroid/content/Context;->createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
+
+    move-result-object v9
+
+    .local v9, theirContext:Landroid/content/Context;
+    iput-object v9, p0, Landroid/appwidget/AppWidgetHostView;->mRemoteContext:Landroid/content/Context;
+
+    const-string v10, "layout_inflater"
+
+    invoke-virtual {v9, v10}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
 
     move-result-object v4
 
-    .local v4, theirContext:Landroid/content/Context;
-    iput-object v4, p0, Landroid/appwidget/AppWidgetHostView;->mRemoteContext:Landroid/content/Context;
+    check-cast v4, Landroid/view/LayoutInflater;
 
-    const-string v5, "layout_inflater"
+    .local v4, inflater:Landroid/view/LayoutInflater;
+    invoke-virtual {v4, v9}, Landroid/view/LayoutInflater;->cloneInContext(Landroid/content/Context;)Landroid/view/LayoutInflater;
 
-    invoke-virtual {v4, v5}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+    move-result-object v4
 
-    move-result-object v3
+    sget-object v10, Landroid/appwidget/AppWidgetHostView;->sInflaterFilter:Landroid/view/LayoutInflater$Filter;
 
-    check-cast v3, Landroid/view/LayoutInflater;
+    invoke-virtual {v4, v10}, Landroid/view/LayoutInflater;->setFilter(Landroid/view/LayoutInflater$Filter;)V
 
-    .local v3, inflater:Landroid/view/LayoutInflater;
-    invoke-virtual {v3, v4}, Landroid/view/LayoutInflater;->cloneInContext(Landroid/content/Context;)Landroid/view/LayoutInflater;
+    iget-object v10, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
 
-    move-result-object v3
+    invoke-static {v10}, Landroid/appwidget/AppWidgetManager;->getInstance(Landroid/content/Context;)Landroid/appwidget/AppWidgetManager;
 
-    sget-object v5, Landroid/appwidget/AppWidgetHostView;->sInflaterFilter:Landroid/view/LayoutInflater$Filter;
+    move-result-object v7
 
-    invoke-virtual {v3, v5}, Landroid/view/LayoutInflater;->setFilter(Landroid/view/LayoutInflater$Filter;)V
+    .local v7, manager:Landroid/appwidget/AppWidgetManager;
+    iget v10, p0, Landroid/appwidget/AppWidgetHostView;->mAppWidgetId:I
 
-    iget-object v5, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+    invoke-virtual {v7, v10}, Landroid/appwidget/AppWidgetManager;->getAppWidgetOptions(I)Landroid/os/Bundle;
 
-    iget v5, v5, Landroid/appwidget/AppWidgetProviderInfo;->initialLayout:I
+    move-result-object v8
 
-    const/4 v6, 0x0
+    .local v8, options:Landroid/os/Bundle;
+    iget-object v10, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
 
-    invoke-virtual {v3, v5, p0, v6}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;
+    iget v6, v10, Landroid/appwidget/AppWidgetProviderInfo;->initialLayout:I
+
+    .local v6, layoutId:I
+    const-string v10, "appWidgetCategory"
+
+    invoke-virtual {v8, v10}, Landroid/os/Bundle;->containsKey(Ljava/lang/String;)Z
+
+    move-result v10
+
+    if-eqz v10, :cond_0
+
+    const-string v10, "appWidgetCategory"
+
+    invoke-virtual {v8, v10}, Landroid/os/Bundle;->getInt(Ljava/lang/String;)I
+
+    move-result v0
+
+    .local v0, category:I
+    const/4 v10, 0x2
+
+    if-ne v0, v10, :cond_0
+
+    iget-object v10, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+
+    iget v5, v10, Landroid/appwidget/AppWidgetProviderInfo;->initialKeyguardLayout:I
+
+    .local v5, kgLayoutId:I
+    if-nez v5, :cond_3
+
+    .end local v0           #category:I
+    .end local v5           #kgLayoutId:I
+    :cond_0
+    :goto_0
+    const/4 v10, 0x0
+
+    invoke-virtual {v4, v6, p0, v10}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;
     :try_end_0
     .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
     .catch Ljava/lang/RuntimeException; {:try_start_0 .. :try_end_0} :catch_1
 
-    move-result-object v0
+    move-result-object v1
 
-    .end local v3           #inflater:Landroid/view/LayoutInflater;
-    .end local v4           #theirContext:Landroid/content/Context;
-    :goto_0
-    if-eqz v2, :cond_0
+    .end local v4           #inflater:Landroid/view/LayoutInflater;
+    .end local v6           #layoutId:I
+    .end local v7           #manager:Landroid/appwidget/AppWidgetManager;
+    .end local v8           #options:Landroid/os/Bundle;
+    .end local v9           #theirContext:Landroid/content/Context;
+    :goto_1
+    if-eqz v3, :cond_1
 
-    const-string v5, "AppWidgetHostView"
+    const-string v10, "AppWidgetHostView"
 
-    new-instance v6, Ljava/lang/StringBuilder;
+    new-instance v11, Ljava/lang/StringBuilder;
 
-    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+    invoke-direct {v11}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v7, "Error inflating AppWidget "
+    const-string v12, "Error inflating AppWidget "
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v11, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v6
+    move-result-object v11
 
-    iget-object v7, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+    iget-object v12, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+    invoke-virtual {v11, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 
-    move-result-object v6
+    move-result-object v11
 
-    const-string v7, ": "
+    const-string v12, ": "
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v11, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v6
+    move-result-object v11
 
-    invoke-virtual {v2}, Ljava/lang/Exception;->toString()Ljava/lang/String;
+    invoke-virtual {v3}, Ljava/lang/Exception;->toString()Ljava/lang/String;
 
-    move-result-object v7
+    move-result-object v12
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v11, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v6
+    move-result-object v11
 
-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    invoke-virtual {v11}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
-    move-result-object v6
+    move-result-object v11
 
-    invoke-static {v5, v6}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
+    invoke-static {v10, v11}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
 
-    :cond_0
-    if-nez v0, :cond_1
+    :cond_1
+    if-nez v1, :cond_2
 
     invoke-virtual {p0}, Landroid/appwidget/AppWidgetHostView;->getErrorView()Landroid/view/View;
 
-    move-result-object v0
-
-    :cond_1
-    return-object v0
+    move-result-object v1
 
     :cond_2
+    return-object v1
+
+    .restart local v0       #category:I
+    .restart local v4       #inflater:Landroid/view/LayoutInflater;
+    .restart local v5       #kgLayoutId:I
+    .restart local v6       #layoutId:I
+    .restart local v7       #manager:Landroid/appwidget/AppWidgetManager;
+    .restart local v8       #options:Landroid/os/Bundle;
+    .restart local v9       #theirContext:Landroid/content/Context;
+    :cond_3
+    move v6, v5
+
+    goto :goto_0
+
+    .end local v0           #category:I
+    .end local v4           #inflater:Landroid/view/LayoutInflater;
+    .end local v5           #kgLayoutId:I
+    .end local v6           #layoutId:I
+    .end local v7           #manager:Landroid/appwidget/AppWidgetManager;
+    .end local v8           #options:Landroid/os/Bundle;
+    .end local v9           #theirContext:Landroid/content/Context;
+    :cond_4
     :try_start_1
-    const-string v5, "AppWidgetHostView"
+    const-string v10, "AppWidgetHostView"
 
-    const-string v6, "can\'t inflate defaultView because mInfo is missing"
+    const-string v11, "can\'t inflate defaultView because mInfo is missing"
 
-    invoke-static {v5, v6}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
+    invoke-static {v10, v11}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
     :try_end_1
     .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_1 .. :try_end_1} :catch_0
     .catch Ljava/lang/RuntimeException; {:try_start_1 .. :try_end_1} :catch_1
 
-    goto :goto_0
+    goto :goto_1
 
     :catch_0
-    move-exception v1
+    move-exception v2
 
-    .local v1, e:Landroid/content/pm/PackageManager$NameNotFoundException;
-    move-object v2, v1
+    .local v2, e:Landroid/content/pm/PackageManager$NameNotFoundException;
+    move-object v3, v2
 
-    goto :goto_0
+    goto :goto_1
 
-    .end local v1           #e:Landroid/content/pm/PackageManager$NameNotFoundException;
+    .end local v2           #e:Landroid/content/pm/PackageManager$NameNotFoundException;
     :catch_1
-    move-exception v1
+    move-exception v2
 
-    .local v1, e:Ljava/lang/RuntimeException;
-    move-object v2, v1
+    .local v2, e:Ljava/lang/RuntimeException;
+    move-object v3, v2
 
-    goto :goto_0
+    goto :goto_1
 .end method
 
 .method protected getErrorView()Landroid/view/View;
@@ -625,7 +781,7 @@
     invoke-direct {v0, v1}, Landroid/widget/TextView;-><init>(Landroid/content/Context;)V
 
     .local v0, tv:Landroid/widget/TextView;
-    const v1, 0x1040464
+    const v1, 0x104049d
 
     invoke-virtual {v0, v1}, Landroid/widget/TextView;->setText(I)V
 
@@ -741,19 +897,47 @@
 
     invoke-virtual {p0, v1, v2, v3, v4}, Landroid/appwidget/AppWidgetHostView;->setPadding(IIII)V
 
+    iget-object v1, p2, Landroid/appwidget/AppWidgetProviderInfo;->label:Ljava/lang/String;
+
+    invoke-virtual {p0, v1}, Landroid/appwidget/AppWidgetHostView;->setContentDescription(Ljava/lang/CharSequence;)V
+
     .end local v0           #padding:Landroid/graphics/Rect;
     :cond_0
     return-void
 .end method
 
+.method public setOnClickHandler(Landroid/widget/RemoteViews$OnClickHandler;)V
+    .locals 0
+    .parameter "handler"
+
+    .prologue
+    iput-object p1, p0, Landroid/appwidget/AppWidgetHostView;->mOnClickHandler:Landroid/widget/RemoteViews$OnClickHandler;
+
+    return-void
+.end method
+
+.method public setUserId(I)V
+    .locals 1
+    .parameter "userId"
+
+    .prologue
+    new-instance v0, Landroid/os/UserHandle;
+
+    invoke-direct {v0, p1}, Landroid/os/UserHandle;-><init>(I)V
+
+    iput-object v0, p0, Landroid/appwidget/AppWidgetHostView;->mUser:Landroid/os/UserHandle;
+
+    return-void
+.end method
+
 .method public updateAppWidget(Landroid/widget/RemoteViews;)V
-    .locals 8
+    .locals 9
     .parameter "remoteViews"
 
     .prologue
     const/4 v6, 0x3
 
-    const/4 v7, 0x2
+    const/4 v8, 0x2
 
     const/4 v4, 0x0
 
@@ -790,7 +974,7 @@
 
     iget v5, p0, Landroid/appwidget/AppWidgetHostView;->mViewMode:I
 
-    if-eq v5, v7, :cond_0
+    if-eq v5, v8, :cond_0
 
     const-string v5, "AppWidgetHostView"
 
@@ -802,7 +986,7 @@
 
     move-result-object v0
 
-    iput v7, p0, Landroid/appwidget/AppWidgetHostView;->mViewMode:I
+    iput v8, p0, Landroid/appwidget/AppWidgetHostView;->mViewMode:I
 
     :cond_2
     if-nez v4, :cond_3
@@ -847,7 +1031,9 @@
 
     iget-object v6, p0, Landroid/appwidget/AppWidgetHostView;->mView:Landroid/view/View;
 
-    invoke-virtual {p1, v5, v6}, Landroid/widget/RemoteViews;->reapply(Landroid/content/Context;Landroid/view/View;)V
+    iget-object v7, p0, Landroid/appwidget/AppWidgetHostView;->mOnClickHandler:Landroid/widget/RemoteViews$OnClickHandler;
+
+    invoke-virtual {p1, v5, v6, v7}, Landroid/widget/RemoteViews;->reapply(Landroid/content/Context;Landroid/view/View;Landroid/widget/RemoteViews$OnClickHandler;)V
 
     iget-object v0, p0, Landroid/appwidget/AppWidgetHostView;->mView:Landroid/view/View;
     :try_end_0
@@ -862,7 +1048,9 @@
     :try_start_1
     iget-object v5, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
 
-    invoke-virtual {p1, v5, p0}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;)Landroid/view/View;
+    iget-object v6, p0, Landroid/appwidget/AppWidgetHostView;->mOnClickHandler:Landroid/widget/RemoteViews$OnClickHandler;
+
+    invoke-virtual {p1, v5, p0, v6}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/view/View;
     :try_end_1
     .catch Ljava/lang/RuntimeException; {:try_start_1 .. :try_end_1} :catch_1
 
@@ -915,12 +1103,41 @@
 .end method
 
 .method public updateAppWidgetSize(Landroid/os/Bundle;IIII)V
-    .locals 6
-    .parameter "options"
+    .locals 7
+    .parameter "newOptions"
     .parameter "minWidth"
     .parameter "minHeight"
     .parameter "maxWidth"
     .parameter "maxHeight"
+
+    .prologue
+    const/4 v6, 0x0
+
+    move-object v0, p0
+
+    move-object v1, p1
+
+    move v2, p2
+
+    move v3, p3
+
+    move v4, p4
+
+    move v5, p5
+
+    invoke-virtual/range {v0 .. v6}, Landroid/appwidget/AppWidgetHostView;->updateAppWidgetSize(Landroid/os/Bundle;IIIIZ)V
+
+    return-void
+.end method
+
+.method public updateAppWidgetSize(Landroid/os/Bundle;IIIIZ)V
+    .locals 13
+    .parameter "newOptions"
+    .parameter "minWidth"
+    .parameter "minHeight"
+    .parameter "maxWidth"
+    .parameter "maxHeight"
+    .parameter "ignorePadding"
 
     .prologue
     if-nez p1, :cond_0
@@ -932,90 +1149,192 @@
 
     .restart local p1
     :cond_0
-    new-instance v1, Landroid/graphics/Rect;
+    new-instance v7, Landroid/graphics/Rect;
 
-    invoke-direct {v1}, Landroid/graphics/Rect;-><init>()V
+    invoke-direct {v7}, Landroid/graphics/Rect;-><init>()V
 
-    .local v1, padding:Landroid/graphics/Rect;
-    iget-object v4, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+    .local v7, padding:Landroid/graphics/Rect;
+    iget-object v11, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
 
-    if-eqz v4, :cond_1
+    if-eqz v11, :cond_1
 
-    iget-object v4, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
+    iget-object v11, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
 
-    iget-object v5, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
+    iget-object v12, p0, Landroid/appwidget/AppWidgetHostView;->mInfo:Landroid/appwidget/AppWidgetProviderInfo;
 
-    iget-object v5, v5, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+    iget-object v12, v12, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
 
-    invoke-static {v4, v5, v1}, Landroid/appwidget/AppWidgetHostView;->getDefaultPaddingForWidget(Landroid/content/Context;Landroid/content/ComponentName;Landroid/graphics/Rect;)Landroid/graphics/Rect;
+    invoke-static {v11, v12, v7}, Landroid/appwidget/AppWidgetHostView;->getDefaultPaddingForWidget(Landroid/content/Context;Landroid/content/ComponentName;Landroid/graphics/Rect;)Landroid/graphics/Rect;
 
-    move-result-object v1
+    move-result-object v7
 
     :cond_1
     invoke-virtual {p0}, Landroid/appwidget/AppWidgetHostView;->getResources()Landroid/content/res/Resources;
 
-    move-result-object v4
+    move-result-object v11
 
-    invoke-virtual {v4}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+    invoke-virtual {v11}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
 
-    move-result-object v4
+    move-result-object v11
 
-    iget v0, v4, Landroid/util/DisplayMetrics;->density:F
+    iget v0, v11, Landroid/util/DisplayMetrics;->density:F
 
     .local v0, density:F
-    iget v4, v1, Landroid/graphics/Rect;->left:I
+    iget v11, v7, Landroid/graphics/Rect;->left:I
 
-    iget v5, v1, Landroid/graphics/Rect;->right:I
+    iget v12, v7, Landroid/graphics/Rect;->right:I
 
-    add-int/2addr v4, v5
+    add-int/2addr v11, v12
 
-    int-to-float v4, v4
+    int-to-float v11, v11
 
-    div-float/2addr v4, v0
+    div-float/2addr v11, v0
 
-    float-to-int v2, v4
+    float-to-int v9, v11
 
-    .local v2, xPaddingDips:I
-    iget v4, v1, Landroid/graphics/Rect;->top:I
+    .local v9, xPaddingDips:I
+    iget v11, v7, Landroid/graphics/Rect;->top:I
 
-    iget v5, v1, Landroid/graphics/Rect;->bottom:I
+    iget v12, v7, Landroid/graphics/Rect;->bottom:I
 
-    add-int/2addr v4, v5
+    add-int/2addr v11, v12
 
-    int-to-float v4, v4
+    int-to-float v11, v11
 
-    div-float/2addr v4, v0
+    div-float/2addr v11, v0
 
-    float-to-int v3, v4
+    float-to-int v10, v11
 
-    .local v3, yPaddingDips:I
-    const-string v4, "appWidgetMinWidth"
+    .local v10, yPaddingDips:I
+    if-eqz p6, :cond_7
 
-    sub-int v5, p2, v2
+    const/4 v11, 0x0
 
-    invoke-virtual {p1, v4, v5}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
+    :goto_0
+    sub-int v5, p2, v11
 
-    const-string v4, "appWidgetMinHeight"
+    .local v5, newMinWidth:I
+    if-eqz p6, :cond_8
 
-    sub-int v5, p3, v3
+    const/4 v11, 0x0
 
-    invoke-virtual {p1, v4, v5}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
+    :goto_1
+    sub-int v4, p3, v11
 
-    const-string v4, "appWidgetMaxWidth"
+    .local v4, newMinHeight:I
+    if-eqz p6, :cond_2
 
-    sub-int v5, p4, v2
+    const/4 v9, 0x0
 
-    invoke-virtual {p1, v4, v5}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
+    .end local v9           #xPaddingDips:I
+    :cond_2
+    sub-int v3, p4, v9
 
-    const-string v4, "appWidgetMaxHeight"
+    .local v3, newMaxWidth:I
+    if-eqz p6, :cond_3
 
-    sub-int v5, p5, v3
+    const/4 v10, 0x0
 
-    invoke-virtual {p1, v4, v5}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
+    .end local v10           #yPaddingDips:I
+    :cond_3
+    sub-int v2, p5, v10
+
+    .local v2, newMaxHeight:I
+    iget-object v11, p0, Landroid/appwidget/AppWidgetHostView;->mContext:Landroid/content/Context;
+
+    invoke-static {v11}, Landroid/appwidget/AppWidgetManager;->getInstance(Landroid/content/Context;)Landroid/appwidget/AppWidgetManager;
+
+    move-result-object v8
+
+    .local v8, widgetManager:Landroid/appwidget/AppWidgetManager;
+    iget v11, p0, Landroid/appwidget/AppWidgetHostView;->mAppWidgetId:I
+
+    invoke-virtual {v8, v11}, Landroid/appwidget/AppWidgetManager;->getAppWidgetOptions(I)Landroid/os/Bundle;
+
+    move-result-object v6
+
+    .local v6, oldOptions:Landroid/os/Bundle;
+    const/4 v1, 0x0
+
+    .local v1, needsUpdate:Z
+    const-string v11, "appWidgetMinWidth"
+
+    invoke-virtual {v6, v11}, Landroid/os/Bundle;->getInt(Ljava/lang/String;)I
+
+    move-result v11
+
+    if-ne v5, v11, :cond_4
+
+    const-string v11, "appWidgetMinHeight"
+
+    invoke-virtual {v6, v11}, Landroid/os/Bundle;->getInt(Ljava/lang/String;)I
+
+    move-result v11
+
+    if-ne v4, v11, :cond_4
+
+    const-string v11, "appWidgetMaxWidth"
+
+    invoke-virtual {v6, v11}, Landroid/os/Bundle;->getInt(Ljava/lang/String;)I
+
+    move-result v11
+
+    if-ne v3, v11, :cond_4
+
+    const-string v11, "appWidgetMaxHeight"
+
+    invoke-virtual {v6, v11}, Landroid/os/Bundle;->getInt(Ljava/lang/String;)I
+
+    move-result v11
+
+    if-eq v2, v11, :cond_5
+
+    :cond_4
+    const/4 v1, 0x1
+
+    :cond_5
+    if-eqz v1, :cond_6
+
+    const-string v11, "appWidgetMinWidth"
+
+    invoke-virtual {p1, v11, v5}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
+
+    const-string v11, "appWidgetMinHeight"
+
+    invoke-virtual {p1, v11, v4}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
+
+    const-string v11, "appWidgetMaxWidth"
+
+    invoke-virtual {p1, v11, v3}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
+
+    const-string v11, "appWidgetMaxHeight"
+
+    invoke-virtual {p1, v11, v2}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
 
     invoke-virtual {p0, p1}, Landroid/appwidget/AppWidgetHostView;->updateAppWidgetOptions(Landroid/os/Bundle;)V
 
+    :cond_6
     return-void
+
+    .end local v1           #needsUpdate:Z
+    .end local v2           #newMaxHeight:I
+    .end local v3           #newMaxWidth:I
+    .end local v4           #newMinHeight:I
+    .end local v5           #newMinWidth:I
+    .end local v6           #oldOptions:Landroid/os/Bundle;
+    .end local v8           #widgetManager:Landroid/appwidget/AppWidgetManager;
+    .restart local v9       #xPaddingDips:I
+    .restart local v10       #yPaddingDips:I
+    :cond_7
+    move v11, v9
+
+    goto :goto_0
+
+    .restart local v5       #newMinWidth:I
+    :cond_8
+    move v11, v10
+
+    goto :goto_1
 .end method
 
 .method viewDataChanged(I)V

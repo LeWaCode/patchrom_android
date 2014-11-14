@@ -6,18 +6,18 @@
 # instance fields
 .field BSSID:Ljava/lang/String;
 
-.field SSID:Ljava/lang/String;
-
 .field networkId:I
 
 .field state:Landroid/net/wifi/SupplicantState;
 
+.field wifiSsid:Landroid/net/wifi/WifiSsid;
+
 
 # direct methods
-.method constructor <init>(ILjava/lang/String;Ljava/lang/String;Landroid/net/wifi/SupplicantState;)V
+.method constructor <init>(ILandroid/net/wifi/WifiSsid;Ljava/lang/String;Landroid/net/wifi/SupplicantState;)V
     .locals 0
     .parameter "networkId"
-    .parameter "SSID"
+    .parameter "wifiSsid"
     .parameter "BSSID"
     .parameter "state"
 
@@ -26,7 +26,7 @@
 
     iput-object p4, p0, Landroid/net/wifi/StateChangeResult;->state:Landroid/net/wifi/SupplicantState;
 
-    iput-object p2, p0, Landroid/net/wifi/StateChangeResult;->SSID:Ljava/lang/String;
+    iput-object p2, p0, Landroid/net/wifi/StateChangeResult;->wifiSsid:Landroid/net/wifi/WifiSsid;
 
     iput-object p3, p0, Landroid/net/wifi/StateChangeResult;->BSSID:Ljava/lang/String;
 

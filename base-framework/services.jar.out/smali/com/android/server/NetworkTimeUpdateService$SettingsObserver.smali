@@ -50,7 +50,7 @@
     .local v0, resolver:Landroid/content/ContentResolver;
     const-string v1, "auto_time"
 
-    invoke-static {v1}, Landroid/provider/Settings$System;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
+    invoke-static {v1}, Landroid/provider/Settings$Global;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v1
 

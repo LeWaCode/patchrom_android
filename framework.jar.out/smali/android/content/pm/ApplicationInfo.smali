@@ -9,7 +9,8 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Landroid/content/pm/ApplicationInfo$DisplayNameComparator;
+        Landroid/content/pm/ApplicationInfo$DisplayNameComparator;,
+        Landroid/content/pm/ApplicationInfo$Injector;
     }
 .end annotation
 
@@ -32,11 +33,13 @@
 
 .field public static final FLAG_ALLOW_TASK_REPARENTING:I = 0x20
 
+.field public static final FLAG_BLOCKED:I = 0x8000000
+
 .field public static final FLAG_CANT_SAVE_STATE:I = 0x10000000
 
 .field public static final FLAG_DEBUGGABLE:I = 0x2
 
-.field public static final FLAG_DISABLE_AUTOSTART:I = 0x40000000
+.field public static final FLAG_DISABLE_AUTOSTART:I = -0x80000000
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
@@ -50,11 +53,17 @@
 
 .field public static final FLAG_HAS_CODE:I = 0x4
 
+.field public static final FLAG_INSTALLED:I = 0x800000
+
+.field public static final FLAG_IS_DATA_ONLY:I = 0x1000000
+
 .field public static final FLAG_KILL_AFTER_RESTORE:I = 0x10000
 
 .field public static final FLAG_LARGE_HEAP:I = 0x100000
 
 .field public static final FLAG_PERSISTENT:I = 0x8
+
+.field public static final FLAG_PRIVILEGED:I = 0x40000000
 
 .field public static final FLAG_RESIZEABLE_FOR_SCREENS:I = 0x1000
 
@@ -78,27 +87,11 @@
 
 .field public static final FLAG_TEST_ONLY:I = 0x100
 
+.field public static final FLAG_UNINSTALL_APP:I = 0x1
+
 .field public static final FLAG_UPDATED_SYSTEM_APP:I = 0x80
 
 .field public static final FLAG_VM_SAFE_MODE:I = 0x4000
-
-.field public static final PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME:Ljava/lang/String; = "handleThemeConfigChanges"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field public static final PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME:Ljava/lang/String; = "isThemeable"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field private static final PLUTO_SCHEMA:Ljava/lang/String; = "http://www.w3.org/2001/pluto.html"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 
 # instance fields
@@ -141,6 +134,8 @@
 .field public requiresSmallestWidthDp:I
 
 .field public resourceDirs:[Ljava/lang/String;
+
+.field public seinfo:Ljava/lang/String;
 
 .field public sharedLibraryFiles:[Ljava/lang/String;
 
@@ -290,6 +285,10 @@
 
     iput-object v0, p0, Landroid/content/pm/ApplicationInfo;->resourceDirs:[Ljava/lang/String;
 
+    iget-object v0, p1, Landroid/content/pm/ApplicationInfo;->seinfo:Ljava/lang/String;
+
+    iput-object v0, p0, Landroid/content/pm/ApplicationInfo;->seinfo:Ljava/lang/String;
+
     iget-object v0, p1, Landroid/content/pm/ApplicationInfo;->sharedLibraryFiles:[Ljava/lang/String;
 
     iput-object v0, p0, Landroid/content/pm/ApplicationInfo;->sharedLibraryFiles:[Ljava/lang/String;
@@ -330,9 +329,11 @@
 
     iput v0, p0, Landroid/content/pm/ApplicationInfo;->uiOptions:I
 
-    iget-boolean v0, p1, Landroid/content/pm/ApplicationInfo;->isThemeable:Z
+    iget-object v0, p1, Landroid/content/pm/ApplicationInfo;->backupAgentName:Ljava/lang/String;
 
-    iput-boolean v0, p0, Landroid/content/pm/ApplicationInfo;->isThemeable:Z
+    iput-object v0, p0, Landroid/content/pm/ApplicationInfo;->backupAgentName:Ljava/lang/String;
+
+    invoke-static {p0, p1}, Landroid/content/pm/ApplicationInfo$Injector;->readFromOrig(Landroid/content/pm/ApplicationInfo;Landroid/content/pm/ApplicationInfo;)V
 
     return-void
 .end method
@@ -449,6 +450,12 @@
 
     iput-object v2, p0, Landroid/content/pm/ApplicationInfo;->resourceDirs:[Ljava/lang/String;
 
+    invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
+
+    move-result-object v2
+
+    iput-object v2, p0, Landroid/content/pm/ApplicationInfo;->seinfo:Ljava/lang/String;
+
     invoke-virtual {p1}, Landroid/os/Parcel;->readStringArray()[Ljava/lang/String;
 
     move-result-object v2
@@ -518,7 +525,7 @@
 
     iput v0, p0, Landroid/content/pm/ApplicationInfo;->uiOptions:I
 
-    invoke-virtual {p0, p1}, Landroid/content/pm/ApplicationInfo;->setThemeable(Landroid/os/Parcel;)V
+    invoke-static {p0, p1}, Landroid/content/pm/ApplicationInfo$Injector;->readFromParcel(Landroid/content/pm/ApplicationInfo;Landroid/os/Parcel;)V
 
     return-void
 
@@ -573,35 +580,6 @@
     move-exception v0
 
     .local v0, ex:Landroid/content/pm/PackageManager$NameNotFoundException;
-    goto :goto_0
-.end method
-
-.method public static isPlutoNamespace(Ljava/lang/String;)Z
-    .locals 1
-    .parameter "namespace"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    if-eqz p0, :cond_0
-
-    const-string v0, "http://www.w3.org/2001/pluto.html"
-
-    invoke-virtual {p0, v0}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
-
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    const/4 v0, 0x1
-
-    :goto_0
-    return v0
-
-    :cond_0
-    const/4 v0, 0x0
-
     goto :goto_0
 .end method
 
@@ -889,7 +867,7 @@
 
     iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
 
-    if-nez v0, :cond_8
+    if-nez v0, :cond_9
 
     iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->publicSourceDir:Ljava/lang/String;
 
@@ -954,6 +932,37 @@
     invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
 
     :cond_3
+    iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->seinfo:Ljava/lang/String;
+
+    if-eqz v0, :cond_4
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v0, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    const-string v1, "seinfo="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    iget-object v1, p0, Landroid/content/pm/ApplicationInfo;->seinfo:Ljava/lang/String;
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
+
+    :cond_4
     new-instance v0, Ljava/lang/StringBuilder;
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
@@ -982,7 +991,7 @@
 
     iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->sharedLibraryFiles:[Ljava/lang/String;
 
-    if-eqz v0, :cond_4
+    if-eqz v0, :cond_5
 
     new-instance v0, Ljava/lang/StringBuilder;
 
@@ -1010,7 +1019,7 @@
 
     invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
 
-    :cond_4
+    :cond_5
     new-instance v0, Ljava/lang/StringBuilder;
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
@@ -1051,7 +1060,7 @@
 
     iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->manageSpaceActivityName:Ljava/lang/String;
 
-    if-eqz v0, :cond_5
+    if-eqz v0, :cond_6
 
     new-instance v0, Ljava/lang/StringBuilder;
 
@@ -1079,10 +1088,10 @@
 
     invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
 
-    :cond_5
+    :cond_6
     iget v0, p0, Landroid/content/pm/ApplicationInfo;->descriptionRes:I
 
-    if-eqz v0, :cond_6
+    if-eqz v0, :cond_7
 
     new-instance v0, Ljava/lang/StringBuilder;
 
@@ -1114,10 +1123,10 @@
 
     invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
 
-    :cond_6
+    :cond_7
     iget v0, p0, Landroid/content/pm/ApplicationInfo;->uiOptions:I
 
-    if-eqz v0, :cond_7
+    if-eqz v0, :cond_8
 
     new-instance v0, Ljava/lang/StringBuilder;
 
@@ -1149,7 +1158,7 @@
 
     invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
 
-    :cond_7
+    :cond_8
     new-instance v0, Ljava/lang/StringBuilder;
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
@@ -1168,7 +1177,7 @@
 
     move-result v0
 
-    if-eqz v0, :cond_9
+    if-eqz v0, :cond_a
 
     const-string v0, "true"
 
@@ -1187,7 +1196,7 @@
 
     return-void
 
-    :cond_8
+    :cond_9
     iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
 
     iget-object v1, p0, Landroid/content/pm/ApplicationInfo;->publicSourceDir:Ljava/lang/String;
@@ -1226,7 +1235,7 @@
 
     goto/16 :goto_0
 
-    :cond_9
+    :cond_a
     const-string v0, "false"
 
     goto :goto_1
@@ -1237,18 +1246,6 @@
 
     .prologue
     return-object p0
-.end method
-
-.method public getPackageName()Ljava/lang/String;
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
-
-    return-object v0
 .end method
 
 .method public hasRtlSupport()Z
@@ -1297,7 +1294,7 @@
 
     move-result-object v0
 
-    const v1, 0x1080573
+    const v1, 0x10805f4
 
     invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getDrawable(I)Landroid/graphics/drawable/Drawable;
 
@@ -1337,33 +1334,6 @@
     .end local v0           #label:Ljava/lang/CharSequence;
     :goto_0
     return-object v0
-
-    :cond_0
-    const/4 v0, 0x0
-
-    goto :goto_0
-.end method
-
-.method setThemeable(Landroid/os/Parcel;)V
-    .locals 1
-    .parameter "source"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    const/4 v0, 0x1
-
-    :goto_0
-    iput-boolean v0, p0, Landroid/content/pm/ApplicationInfo;->isThemeable:Z
-
-    return-void
 
     :cond_0
     const/4 v0, 0x0
@@ -1423,7 +1393,7 @@
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V
-    .locals 3
+    .locals 1
     .parameter "dest"
     .parameter "parcelableFlags"
     .annotation build Landroid/annotation/LewaHook;
@@ -1431,10 +1401,6 @@
     .end annotation
 
     .prologue
-    const/4 v1, 0x1
-
-    const/4 v2, 0x0
-
     invoke-super {p0, p1, p2}, Landroid/content/pm/PackageItemInfo;->writeToParcel(Landroid/os/Parcel;I)V
 
     iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->taskAffinity:Ljava/lang/String;
@@ -1489,6 +1455,10 @@
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
 
+    iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->seinfo:Ljava/lang/String;
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
     iget-object v0, p0, Landroid/content/pm/ApplicationInfo;->sharedLibraryFiles:[Ljava/lang/String;
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
@@ -1509,7 +1479,7 @@
 
     if-eqz v0, :cond_0
 
-    move v0, v1
+    const/4 v0, 0x1
 
     :goto_0
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
@@ -1538,22 +1508,12 @@
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
-    iget-boolean v0, p0, Landroid/content/pm/ApplicationInfo;->isThemeable:Z
-
-    if-eqz v0, :cond_1
-
-    :goto_1
-    invoke-virtual {p1, v1}, Landroid/os/Parcel;->writeInt(I)V
+    invoke-static {p0, p1, p2}, Landroid/content/pm/ApplicationInfo$Injector;->writeToParcel(Landroid/content/pm/ApplicationInfo;Landroid/os/Parcel;I)V
 
     return-void
 
     :cond_0
-    move v0, v2
+    const/4 v0, 0x0
 
     goto :goto_0
-
-    :cond_1
-    move v1, v2
-
-    goto :goto_1
 .end method

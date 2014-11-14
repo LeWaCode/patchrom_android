@@ -27,8 +27,6 @@
 
 .field final synthetic this$0:Landroid/widget/RemoteViews;
 
-.field viewId:I
-
 
 # direct methods
 .method constructor <init>(Landroid/widget/RemoteViews;ILjava/lang/String;Landroid/graphics/Bitmap;)V
@@ -52,7 +50,7 @@
     iput-object p3, p0, Landroid/widget/RemoteViews$BitmapReflectionAction;->methodName:Ljava/lang/String;
 
     #getter for: Landroid/widget/RemoteViews;->mBitmapCache:Landroid/widget/RemoteViews$BitmapCache;
-    invoke-static {p1}, Landroid/widget/RemoteViews;->access$200(Landroid/widget/RemoteViews;)Landroid/widget/RemoteViews$BitmapCache;
+    invoke-static {p1}, Landroid/widget/RemoteViews;->access$400(Landroid/widget/RemoteViews;)Landroid/widget/RemoteViews$BitmapCache;
 
     move-result-object v0
 
@@ -96,7 +94,7 @@
     iput v0, p0, Landroid/widget/RemoteViews$BitmapReflectionAction;->bitmapId:I
 
     #getter for: Landroid/widget/RemoteViews;->mBitmapCache:Landroid/widget/RemoteViews$BitmapCache;
-    invoke-static {p1}, Landroid/widget/RemoteViews;->access$200(Landroid/widget/RemoteViews;)Landroid/widget/RemoteViews$BitmapCache;
+    invoke-static {p1}, Landroid/widget/RemoteViews;->access$400(Landroid/widget/RemoteViews;)Landroid/widget/RemoteViews$BitmapCache;
 
     move-result-object v0
 
@@ -143,6 +141,15 @@
     invoke-virtual {v0, p1, p2, p3}, Landroid/widget/RemoteViews$ReflectionAction;->apply(Landroid/view/View;Landroid/view/ViewGroup;Landroid/widget/RemoteViews$OnClickHandler;)V
 
     return-void
+.end method
+
+.method public getActionName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    const-string v0, "BitmapReflectionAction"
+
+    return-object v0
 .end method
 
 .method public setBitmapCache(Landroid/widget/RemoteViews$BitmapCache;)V

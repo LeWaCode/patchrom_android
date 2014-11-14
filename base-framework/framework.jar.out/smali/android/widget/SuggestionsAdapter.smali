@@ -99,7 +99,7 @@
 
     const/4 v3, -0x1
 
-    const v1, 0x10900a1
+    const v1, 0x1090096
 
     const/4 v2, 0x0
 

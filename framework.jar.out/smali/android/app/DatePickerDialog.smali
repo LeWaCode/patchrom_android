@@ -68,7 +68,7 @@
     .local v1, themeContext:Landroid/content/Context;
     const/4 v3, -0x1
 
-    const v4, 0x1040423
+    const v4, 0x104045b
 
     invoke-virtual {v1, v4}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
 
@@ -91,7 +91,7 @@
     check-cast v0, Landroid/view/LayoutInflater;
 
     .local v0, inflater:Landroid/view/LayoutInflater;
-    const v3, 0x1090036
+    const v3, 0x1090039
 
     const/4 v4, 0x0
 
@@ -102,7 +102,7 @@
     .local v2, view:Landroid/view/View;
     invoke-virtual {p0, v2}, Landroid/app/DatePickerDialog;->setView(Landroid/view/View;)V
 
-    const v3, 0x1020273
+    const v3, 0x1020296
 
     invoke-virtual {v2, v3}, Landroid/view/View;->findViewById(I)Landroid/view/View;
 
@@ -145,28 +145,6 @@
     move v6, p5
 
     invoke-direct/range {v0 .. v6}, Landroid/app/DatePickerDialog;-><init>(Landroid/content/Context;ILandroid/app/DatePickerDialog$OnDateSetListener;III)V
-
-    return-void
-.end method
-
-.method private setButton(Landroid/content/Context;Landroid/app/DatePickerDialog;)V
-    .locals 2
-    .parameter "context"
-    .parameter "dialog"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    const/4 v0, -0x2
-
-    const/high16 v1, 0x104
-
-    invoke-virtual {p1, v1}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
-
-    move-result-object v1
-
-    invoke-virtual {p0, v0, v1, p2}, Landroid/app/DatePickerDialog;->setButton(ILjava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)V
 
     return-void
 .end method
@@ -277,7 +255,7 @@
 
     iput-boolean v1, p0, Landroid/app/DatePickerDialog;->mTitleNeedsUpdate:Z
 
-    const v1, 0x1040421
+    const v1, 0x1040459
 
     invoke-virtual {p0, v1}, Landroid/app/DatePickerDialog;->setTitle(I)V
 
@@ -296,7 +274,7 @@
 .end method
 
 .method public onClick(Landroid/content/DialogInterface;I)V
-    .locals 1
+    .locals 0
     .parameter "dialog"
     .parameter "which"
     .annotation build Landroid/annotation/LewaHook;
@@ -304,13 +282,8 @@
     .end annotation
 
     .prologue
-    const/4 v0, -0x1
+    invoke-direct {p0, p2}, Landroid/app/DatePickerDialog;->tryNotifyDateSetExt(I)V
 
-    if-ne v0, p2, :cond_lewa_0
-
-    invoke-direct {p0}, Landroid/app/DatePickerDialog;->tryNotifyDateSet()V
-
-    :cond_lewa_0
     return-void
 .end method
 
@@ -430,5 +403,45 @@
 
     invoke-virtual {v0, p1, p2, p3}, Landroid/widget/DatePicker;->updateDate(III)V
 
+    return-void
+.end method
+
+.method private setButton(Landroid/content/Context;Landroid/app/DatePickerDialog;)V
+    .locals 2
+    .parameter "context"
+    .parameter "dialog"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v0, -0x2
+
+    const/high16 v1, 0x104
+
+    invoke-virtual {p1, v1}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
+
+    move-result-object v1
+
+    invoke-virtual {p0, v0, v1, p2}, Landroid/app/DatePickerDialog;->setButton(ILjava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)V
+
+    return-void
+.end method
+
+.method private tryNotifyDateSetExt(I)V
+    .locals 1
+    .parameter "which"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v0, -0x1
+
+    if-ne v0, p1, :cond_0
+
+    invoke-direct {p0}, Landroid/app/DatePickerDialog;->tryNotifyDateSet()V
+
+    :cond_0
     return-void
 .end method

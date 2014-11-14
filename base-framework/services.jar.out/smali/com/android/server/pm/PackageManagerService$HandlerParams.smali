@@ -21,13 +21,16 @@
 # instance fields
 .field private mRetries:I
 
+.field private final mUser:Landroid/os/UserHandle;
+
 .field final synthetic this$0:Lcom/android/server/pm/PackageManagerService;
 
 
 # direct methods
-.method private constructor <init>(Lcom/android/server/pm/PackageManagerService;)V
+.method constructor <init>(Lcom/android/server/pm/PackageManagerService;Landroid/os/UserHandle;)V
     .locals 1
     .parameter
+    .parameter "user"
 
     .prologue
     iput-object p1, p0, Lcom/android/server/pm/PackageManagerService$HandlerParams;->this$0:Lcom/android/server/pm/PackageManagerService;
@@ -38,22 +41,22 @@
 
     iput v0, p0, Lcom/android/server/pm/PackageManagerService$HandlerParams;->mRetries:I
 
-    return-void
-.end method
-
-.method synthetic constructor <init>(Lcom/android/server/pm/PackageManagerService;Lcom/android/server/pm/PackageManagerService$1;)V
-    .locals 0
-    .parameter "x0"
-    .parameter "x1"
-
-    .prologue
-    invoke-direct {p0, p1}, Lcom/android/server/pm/PackageManagerService$HandlerParams;-><init>(Lcom/android/server/pm/PackageManagerService;)V
+    iput-object p2, p0, Lcom/android/server/pm/PackageManagerService$HandlerParams;->mUser:Landroid/os/UserHandle;
 
     return-void
 .end method
 
 
 # virtual methods
+.method getUser()Landroid/os/UserHandle;
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Lcom/android/server/pm/PackageManagerService$HandlerParams;->mUser:Landroid/os/UserHandle;
+
+    return-object v0
+.end method
+
 .method abstract handleReturnCode()V
 .end method
 

@@ -28,6 +28,8 @@
 
 .field static final TRANSACTION_attach:I = 0x1
 
+.field static final TRANSACTION_detach:I = 0x2
+
 
 # direct methods
 .method public constructor <init>()V
@@ -136,9 +138,22 @@
 
     goto :goto_0
 
+    .end local v0           #_arg0:Landroid/os/IBinder;
+    :sswitch_2
+    const-string v2, "android.service.dreams.IDreamService"
+
+    invoke-virtual {p2, v2}, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+
+    invoke-virtual {p0}, Landroid/service/dreams/IDreamService$Stub;->detach()V
+
+    goto :goto_0
+
+    nop
+
     :sswitch_data_0
     .sparse-switch
         0x1 -> :sswitch_1
+        0x2 -> :sswitch_2
         0x5f4e5446 -> :sswitch_0
     .end sparse-switch
 .end method

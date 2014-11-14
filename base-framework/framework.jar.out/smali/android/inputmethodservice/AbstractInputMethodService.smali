@@ -89,6 +89,16 @@
 .method public abstract onCreateInputMethodSessionInterface()Landroid/inputmethodservice/AbstractInputMethodService$AbstractInputMethodSessionImpl;
 .end method
 
+.method public onGenericMotionEvent(Landroid/view/MotionEvent;)Z
+    .locals 1
+    .parameter "event"
+
+    .prologue
+    const/4 v0, 0x0
+
+    return v0
+.end method
+
 .method public onTrackballEvent(Landroid/view/MotionEvent;)Z
     .locals 1
     .parameter "event"

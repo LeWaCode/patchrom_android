@@ -25,7 +25,7 @@
     .prologue
     new-instance v0, Landroid/content/ReceiverCallNotAllowedException;
 
-    const-string v1, "IntentReceiver components are not allowed to bind to services"
+    const-string v1, "BroadcastReceiver components are not allowed to bind to services"
 
     invoke-direct {v0, v1}, Landroid/content/ReceiverCallNotAllowedException;-><init>(Ljava/lang/String;)V
 
@@ -55,9 +55,59 @@
     .parameter "scheduler"
 
     .prologue
+    if-nez p1, :cond_0
+
+    const/4 v0, 0x0
+
+    invoke-super {p0, v0, p2, p3, p4}, Landroid/content/ContextWrapper;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+
+    move-result-object v0
+
+    return-object v0
+
+    :cond_0
     new-instance v0, Landroid/content/ReceiverCallNotAllowedException;
 
-    const-string v1, "IntentReceiver components are not allowed to register to receive intents"
+    const-string v1, "BroadcastReceiver components are not allowed to register to receive intents"
+
+    invoke-direct {v0, v1}, Landroid/content/ReceiverCallNotAllowedException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+.end method
+
+.method public registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+    .locals 6
+    .parameter "receiver"
+    .parameter "user"
+    .parameter "filter"
+    .parameter "broadcastPermission"
+    .parameter "scheduler"
+
+    .prologue
+    if-nez p1, :cond_0
+
+    const/4 v1, 0x0
+
+    move-object v0, p0
+
+    move-object v2, p2
+
+    move-object v3, p3
+
+    move-object v4, p4
+
+    move-object v5, p5
+
+    invoke-super/range {v0 .. v5}, Landroid/content/ContextWrapper;->registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+
+    move-result-object v0
+
+    return-object v0
+
+    :cond_0
+    new-instance v0, Landroid/content/ReceiverCallNotAllowedException;
+
+    const-string v1, "BroadcastReceiver components are not allowed to register to receive intents"
 
     invoke-direct {v0, v1}, Landroid/content/ReceiverCallNotAllowedException;-><init>(Ljava/lang/String;)V
 

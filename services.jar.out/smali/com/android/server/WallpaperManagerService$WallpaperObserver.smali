@@ -75,12 +75,12 @@
 
 # virtual methods
 .method public onEvent(ILjava/lang/String;)V
-    .locals 10
+    .locals 11
     .parameter "event"
     .parameter "path"
 
     .prologue
-    const/16 v7, 0x8
+    const/16 v2, 0x8
 
     if-nez p2, :cond_0
 
@@ -88,112 +88,112 @@
     return-void
 
     :cond_0
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
 
-    iget-object v5, v4, Lcom/android/server/WallpaperManagerService;->mLock:Ljava/lang/Object;
+    iget-object v10, v0, Lcom/android/server/WallpaperManagerService;->mLock:Ljava/lang/Object;
 
-    monitor-enter v5
+    monitor-enter v10
 
     :try_start_0
     invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
 
-    move-result-wide v2
+    move-result-wide v8
 
-    .local v2, origId:J
-    new-instance v0, Landroid/app/backup/BackupManager;
+    .local v8, origId:J
+    new-instance v6, Landroid/app/backup/BackupManager;
 
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
 
-    iget-object v4, v4, Lcom/android/server/WallpaperManagerService;->mContext:Landroid/content/Context;
+    iget-object v0, v0, Lcom/android/server/WallpaperManagerService;->mContext:Landroid/content/Context;
 
-    invoke-direct {v0, v4}, Landroid/app/backup/BackupManager;-><init>(Landroid/content/Context;)V
+    invoke-direct {v6, v0}, Landroid/app/backup/BackupManager;-><init>(Landroid/content/Context;)V
 
-    .local v0, bm:Landroid/app/backup/BackupManager;
-    invoke-virtual {v0}, Landroid/app/backup/BackupManager;->dataChanged()V
+    .local v6, bm:Landroid/app/backup/BackupManager;
+    invoke-virtual {v6}, Landroid/app/backup/BackupManager;->dataChanged()V
 
-    invoke-static {v2, v3}, Landroid/os/Binder;->restoreCallingIdentity(J)V
+    invoke-static {v8, v9}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 
-    new-instance v1, Ljava/io/File;
+    new-instance v7, Ljava/io/File;
 
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaperDir:Ljava/io/File;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaperDir:Ljava/io/File;
 
-    invoke-direct {v1, v4, p2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+    invoke-direct {v7, v0, p2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    .local v1, changedFile:Ljava/io/File;
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaperFile:Ljava/io/File;
+    .local v7, changedFile:Ljava/io/File;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaperFile:Ljava/io/File;
 
-    invoke-virtual {v4, v1}, Ljava/io/File;->equals(Ljava/lang/Object;)Z
+    invoke-virtual {v0, v7}, Ljava/io/File;->equals(Ljava/lang/Object;)Z
 
-    move-result v4
+    move-result v0
 
-    if-eqz v4, :cond_3
+    if-eqz v0, :cond_3
 
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
 
-    iget-object v6, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
+    iget-object v1, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
 
     #calls: Lcom/android/server/WallpaperManagerService;->notifyCallbacksLocked(Lcom/android/server/WallpaperManagerService$WallpaperData;)V
-    invoke-static {v4, v6}, Lcom/android/server/WallpaperManagerService;->access$100(Lcom/android/server/WallpaperManagerService;Lcom/android/server/WallpaperManagerService$WallpaperData;)V
+    invoke-static {v0, v1}, Lcom/android/server/WallpaperManagerService;->access$100(Lcom/android/server/WallpaperManagerService;Lcom/android/server/WallpaperManagerService$WallpaperData;)V
 
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
 
-    iget-object v4, v4, Lcom/android/server/WallpaperManagerService$WallpaperData;->wallpaperComponent:Landroid/content/ComponentName;
+    iget-object v0, v0, Lcom/android/server/WallpaperManagerService$WallpaperData;->wallpaperComponent:Landroid/content/ComponentName;
 
-    if-eqz v4, :cond_1
+    if-eqz v0, :cond_1
 
-    if-ne p1, v7, :cond_1
+    if-ne p1, v2, :cond_1
 
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
 
-    iget-boolean v4, v4, Lcom/android/server/WallpaperManagerService$WallpaperData;->imageWallpaperPending:Z
+    iget-boolean v0, v0, Lcom/android/server/WallpaperManagerService$WallpaperData;->imageWallpaperPending:Z
 
-    if-eqz v4, :cond_3
+    if-eqz v0, :cond_3
 
     :cond_1
-    if-ne p1, v7, :cond_2
+    if-ne p1, v2, :cond_2
+
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
+
+    const/4 v1, 0x0
+
+    iput-boolean v1, v0, Lcom/android/server/WallpaperManagerService$WallpaperData;->imageWallpaperPending:Z
+
+    :cond_2
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
+
+    sget-object v1, Lcom/android/server/WallpaperManagerService;->IMAGE_WALLPAPER:Landroid/content/ComponentName;
+
+    const/4 v2, 0x1
+
+    const/4 v3, 0x0
 
     iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
 
-    const/4 v6, 0x0
+    const/4 v5, 0x0
 
-    iput-boolean v6, v4, Lcom/android/server/WallpaperManagerService$WallpaperData;->imageWallpaperPending:Z
+    invoke-virtual/range {v0 .. v5}, Lcom/android/server/WallpaperManagerService;->bindWallpaperComponentLocked(Landroid/content/ComponentName;ZZLcom/android/server/WallpaperManagerService$WallpaperData;Landroid/os/IRemoteCallback;)Z
 
-    :cond_2
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
+    iget-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
 
-    iget-object v6, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
-
-    iget-object v6, v6, Lcom/android/server/WallpaperManagerService$WallpaperData;->imageWallpaperComponent:Landroid/content/ComponentName;
-
-    const/4 v7, 0x1
-
-    const/4 v8, 0x0
-
-    iget-object v9, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
-
-    invoke-virtual {v4, v6, v7, v8, v9}, Lcom/android/server/WallpaperManagerService;->bindWallpaperComponentLocked(Landroid/content/ComponentName;ZZLcom/android/server/WallpaperManagerService$WallpaperData;)Z
-
-    iget-object v4, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->this$0:Lcom/android/server/WallpaperManagerService;
-
-    iget-object v6, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
+    iget-object v1, p0, Lcom/android/server/WallpaperManagerService$WallpaperObserver;->mWallpaper:Lcom/android/server/WallpaperManagerService$WallpaperData;
 
     #calls: Lcom/android/server/WallpaperManagerService;->saveSettingsLocked(Lcom/android/server/WallpaperManagerService$WallpaperData;)V
-    invoke-static {v4, v6}, Lcom/android/server/WallpaperManagerService;->access$200(Lcom/android/server/WallpaperManagerService;Lcom/android/server/WallpaperManagerService$WallpaperData;)V
+    invoke-static {v0, v1}, Lcom/android/server/WallpaperManagerService;->access$200(Lcom/android/server/WallpaperManagerService;Lcom/android/server/WallpaperManagerService$WallpaperData;)V
 
     :cond_3
-    monitor-exit v5
+    monitor-exit v10
 
     goto :goto_0
 
-    .end local v0           #bm:Landroid/app/backup/BackupManager;
-    .end local v1           #changedFile:Ljava/io/File;
-    .end local v2           #origId:J
+    .end local v6           #bm:Landroid/app/backup/BackupManager;
+    .end local v7           #changedFile:Ljava/io/File;
+    .end local v8           #origId:J
     :catchall_0
-    move-exception v4
+    move-exception v0
 
-    monitor-exit v5
+    monitor-exit v10
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    throw v4
+    throw v0
 .end method

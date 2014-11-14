@@ -11,51 +11,62 @@
 
 # direct methods
 .method public constructor <init>(Landroid/content/Context;)V
-    .locals 3
+    .locals 4
     .parameter "context"
 
     .prologue
-    const/high16 v2, 0x2
+    const/high16 v3, 0x2
 
-    const v0, 0x10302f2
+    const v1, 0x1030307
 
-    invoke-direct {p0, p1, v0}, Landroid/app/AlertDialog;-><init>(Landroid/content/Context;I)V
+    invoke-direct {p0, p1, v1}, Landroid/app/AlertDialog;-><init>(Landroid/content/Context;I)V
 
-    new-instance v0, Lcom/android/server/am/BaseErrorDialog$1;
+    new-instance v1, Lcom/android/server/am/BaseErrorDialog$1;
 
-    invoke-direct {v0, p0}, Lcom/android/server/am/BaseErrorDialog$1;-><init>(Lcom/android/server/am/BaseErrorDialog;)V
+    invoke-direct {v1, p0}, Lcom/android/server/am/BaseErrorDialog$1;-><init>(Lcom/android/server/am/BaseErrorDialog;)V
 
-    iput-object v0, p0, Lcom/android/server/am/BaseErrorDialog;->mHandler:Landroid/os/Handler;
+    iput-object v1, p0, Lcom/android/server/am/BaseErrorDialog;->mHandler:Landroid/os/Handler;
 
-    const/4 v0, 0x1
+    const/4 v1, 0x1
 
-    iput-boolean v0, p0, Lcom/android/server/am/BaseErrorDialog;->mConsuming:Z
-
-    invoke-virtual {p0}, Lcom/android/server/am/BaseErrorDialog;->getWindow()Landroid/view/Window;
-
-    move-result-object v0
-
-    const/16 v1, 0x7d3
-
-    invoke-virtual {v0, v1}, Landroid/view/Window;->setType(I)V
+    iput-boolean v1, p0, Lcom/android/server/am/BaseErrorDialog;->mConsuming:Z
 
     invoke-virtual {p0}, Lcom/android/server/am/BaseErrorDialog;->getWindow()Landroid/view/Window;
 
-    move-result-object v0
+    move-result-object v1
 
-    invoke-virtual {v0, v2, v2}, Landroid/view/Window;->setFlags(II)V
+    const/16 v2, 0x7d3
+
+    invoke-virtual {v1, v2}, Landroid/view/Window;->setType(I)V
 
     invoke-virtual {p0}, Lcom/android/server/am/BaseErrorDialog;->getWindow()Landroid/view/Window;
 
+    move-result-object v1
+
+    invoke-virtual {v1, v3, v3}, Landroid/view/Window;->setFlags(II)V
+
+    invoke-virtual {p0}, Lcom/android/server/am/BaseErrorDialog;->getWindow()Landroid/view/Window;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Landroid/view/Window;->getAttributes()Landroid/view/WindowManager$LayoutParams;
+
     move-result-object v0
 
+    .local v0, attrs:Landroid/view/WindowManager$LayoutParams;
     const-string v1, "Error Dialog"
 
-    invoke-virtual {v0, v1}, Landroid/view/Window;->setTitle(Ljava/lang/CharSequence;)V
+    invoke-virtual {v0, v1}, Landroid/view/WindowManager$LayoutParams;->setTitle(Ljava/lang/CharSequence;)V
 
-    const v0, 0x1010355
+    invoke-virtual {p0}, Lcom/android/server/am/BaseErrorDialog;->getWindow()Landroid/view/Window;
 
-    invoke-virtual {p0, v0}, Lcom/android/server/am/BaseErrorDialog;->setIconAttribute(I)V
+    move-result-object v1
+
+    invoke-virtual {v1, v0}, Landroid/view/Window;->setAttributes(Landroid/view/WindowManager$LayoutParams;)V
+
+    const v1, 0x1010355
+
+    invoke-virtual {p0, v1}, Lcom/android/server/am/BaseErrorDialog;->setIconAttribute(I)V
 
     return-void
 .end method

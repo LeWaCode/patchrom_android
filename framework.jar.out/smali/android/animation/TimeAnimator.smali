@@ -105,3 +105,16 @@
 
     return-void
 .end method
+
+.method public start()V
+    .locals 2
+
+    .prologue
+    const-wide/16 v0, -0x1
+
+    iput-wide v0, p0, Landroid/animation/TimeAnimator;->mPreviousTime:J
+
+    invoke-super {p0}, Landroid/animation/ValueAnimator;->start()V
+
+    return-void
+.end method

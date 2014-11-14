@@ -178,9 +178,9 @@
 
     iget-object v0, p1, Landroid/os/Message;->obj:Ljava/lang/Object;
 
-    check-cast v0, Landroid/telephony/CellInfo;
+    check-cast v0, Ljava/util/List;
 
-    invoke-virtual {v1, v0}, Landroid/telephony/PhoneStateListener;->onCellInfoChanged(Landroid/telephony/CellInfo;)V
+    invoke-virtual {v1, v0}, Landroid/telephony/PhoneStateListener;->onCellInfoChanged(Ljava/util/List;)V
 
     goto :goto_0
 

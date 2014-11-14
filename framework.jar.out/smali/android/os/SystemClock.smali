@@ -25,6 +25,9 @@
 .method public static native elapsedRealtime()J
 .end method
 
+.method public static native elapsedRealtimeNanos()J
+.end method
+
 .method public static native setCurrentTimeMillis(J)Z
 .end method
 

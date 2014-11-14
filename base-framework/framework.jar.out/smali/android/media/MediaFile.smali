@@ -242,6 +242,16 @@
 
     invoke-static {v0, v1, v2, v3}, Landroid/media/MediaFile;->addFileType(Ljava/lang/String;ILjava/lang/String;I)V
 
+    const-string v0, "MPGA"
+
+    const/4 v1, 0x1
+
+    const-string v2, "audio/mpeg"
+
+    const/16 v3, 0x3009
+
+    invoke-static {v0, v1, v2, v3}, Landroid/media/MediaFile;->addFileType(Ljava/lang/String;ILjava/lang/String;I)V
+
     const-string v0, "M4A"
 
     const/4 v1, 0x2
@@ -880,13 +890,13 @@
 .end method
 
 .method public static getFileType(Ljava/lang/String;)Landroid/media/MediaFile$MediaFileType;
-    .locals 3
+    .locals 4
     .parameter "path"
 
     .prologue
-    const-string v1, "."
+    const/16 v1, 0x2e
 
-    invoke-virtual {p0, v1}, Ljava/lang/String;->lastIndexOf(Ljava/lang/String;)I
+    invoke-virtual {p0, v1}, Ljava/lang/String;->lastIndexOf(I)I
 
     move-result v0
 
@@ -907,7 +917,9 @@
 
     move-result-object v2
 
-    invoke-virtual {v2}, Ljava/lang/String;->toUpperCase()Ljava/lang/String;
+    sget-object v3, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
+
+    invoke-virtual {v2, v3}, Ljava/lang/String;->toUpperCase(Ljava/util/Locale;)Ljava/lang/String;
 
     move-result-object v2
 
@@ -950,7 +962,7 @@
 .end method
 
 .method public static getFormatCode(Ljava/lang/String;Ljava/lang/String;)I
-    .locals 4
+    .locals 5
     .parameter "fileName"
     .parameter "mimeType"
 
@@ -989,6 +1001,12 @@
     add-int/lit8 v3, v1, 0x1
 
     invoke-virtual {p0, v3}, Ljava/lang/String;->substring(I)Ljava/lang/String;
+
+    move-result-object v3
+
+    sget-object v4, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
+
+    invoke-virtual {v3, v4}, Ljava/lang/String;->toUpperCase(Ljava/util/Locale;)Ljava/lang/String;
 
     move-result-object v0
 

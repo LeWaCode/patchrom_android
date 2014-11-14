@@ -26,6 +26,10 @@
 
 .field public static final RESIZE_VERTICAL:I = 0x2
 
+.field public static final WIDGET_CATEGORY_HOME_SCREEN:I = 0x1
+
+.field public static final WIDGET_CATEGORY_KEYGUARD:I = 0x2
+
 
 # instance fields
 .field public autoAdvanceViewId:I
@@ -33,6 +37,8 @@
 .field public configure:Landroid/content/ComponentName;
 
 .field public icon:I
+
+.field public initialKeyguardLayout:I
 
 .field public initialLayout:I
 
@@ -53,6 +59,8 @@
 .field public resizeMode:I
 
 .field public updatePeriodMillis:I
+
+.field public widgetCategory:I
 
 
 # direct methods
@@ -138,6 +146,12 @@
 
     move-result v0
 
+    iput v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->initialKeyguardLayout:I
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v0
+
     if-eqz v0, :cond_1
 
     new-instance v0, Landroid/content/ComponentName;
@@ -177,11 +191,149 @@
 
     iput v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->resizeMode:I
 
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v0
+
+    iput v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->widgetCategory:I
+
     return-void
 .end method
 
 
 # virtual methods
+.method public clone()Landroid/appwidget/AppWidgetProviderInfo;
+    .locals 3
+
+    .prologue
+    const/4 v2, 0x0
+
+    new-instance v0, Landroid/appwidget/AppWidgetProviderInfo;
+
+    invoke-direct {v0}, Landroid/appwidget/AppWidgetProviderInfo;-><init>()V
+
+    .local v0, that:Landroid/appwidget/AppWidgetProviderInfo;
+    iget-object v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    if-nez v1, :cond_0
+
+    move-object v1, v2
+
+    :goto_0
+    iput-object v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->minWidth:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->minWidth:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->minHeight:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeHeight:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeWidth:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeHeight:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->minResizeHeight:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->updatePeriodMillis:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->updatePeriodMillis:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->initialLayout:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->initialLayout:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->initialKeyguardLayout:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->initialKeyguardLayout:I
+
+    iget-object v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->configure:Landroid/content/ComponentName;
+
+    if-nez v1, :cond_1
+
+    move-object v1, v2
+
+    :goto_1
+    iput-object v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->configure:Landroid/content/ComponentName;
+
+    iget-object v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->label:Ljava/lang/String;
+
+    if-nez v1, :cond_2
+
+    :goto_2
+    iput-object v2, v0, Landroid/appwidget/AppWidgetProviderInfo;->label:Ljava/lang/String;
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->icon:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->icon:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->previewImage:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->previewImage:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->autoAdvanceViewId:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->autoAdvanceViewId:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->resizeMode:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->resizeMode:I
+
+    iget v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->widgetCategory:I
+
+    iput v1, v0, Landroid/appwidget/AppWidgetProviderInfo;->widgetCategory:I
+
+    return-object v0
+
+    :cond_0
+    iget-object v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->provider:Landroid/content/ComponentName;
+
+    invoke-virtual {v1}, Landroid/content/ComponentName;->clone()Landroid/content/ComponentName;
+
+    move-result-object v1
+
+    goto :goto_0
+
+    :cond_1
+    iget-object v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->configure:Landroid/content/ComponentName;
+
+    invoke-virtual {v1}, Landroid/content/ComponentName;->clone()Landroid/content/ComponentName;
+
+    move-result-object v1
+
+    goto :goto_1
+
+    :cond_2
+    iget-object v1, p0, Landroid/appwidget/AppWidgetProviderInfo;->label:Ljava/lang/String;
+
+    const/4 v2, 0x0
+
+    invoke-virtual {v1, v2}, Ljava/lang/String;->substring(I)Ljava/lang/String;
+
+    move-result-object v2
+
+    goto :goto_2
+.end method
+
+.method public bridge synthetic clone()Ljava/lang/Object;
+    .locals 1
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Ljava/lang/CloneNotSupportedException;
+        }
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Landroid/appwidget/AppWidgetProviderInfo;->clone()Landroid/appwidget/AppWidgetProviderInfo;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method public describeContents()I
     .locals 1
 
@@ -269,6 +421,10 @@
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
+    iget v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->initialKeyguardLayout:I
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+
     iget-object v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->configure:Landroid/content/ComponentName;
 
     if-eqz v0, :cond_1
@@ -297,6 +453,10 @@
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
     iget v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->resizeMode:I
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+
+    iget v0, p0, Landroid/appwidget/AppWidgetProviderInfo;->widgetCategory:I
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 

@@ -1067,7 +1067,7 @@
     :goto_2
     move/from16 v0, p2
 
-    if-ge v9, v0, :cond_15
+    if-ge v9, v0, :cond_12
 
     move-object/from16 v0, p0
 
@@ -1257,7 +1257,6 @@
     .end local v25           #j:I
     .restart local v12       #j:I
     :cond_a
-    :goto_6
     move/from16 v9, v24
 
     goto/16 :goto_2
@@ -1270,69 +1269,11 @@
     goto :goto_5
 
     :cond_c
-    if-nez p5, :cond_f
-
-    if-nez p11, :cond_d
-
-    move/from16 v0, p2
-
-    if-ge v5, v0, :cond_e
-
-    :cond_d
-    const/16 v23, 0x1
-
-    :goto_7
-    move-object/from16 v10, p0
-
-    move-object v11, v3
-
-    move v12, v9
-
-    move v13, v5
-
-    move v14, v9
-
-    move/from16 v15, v24
-
-    move/from16 v16, p4
-
-    move-object/from16 v17, p5
-
-    move/from16 v18, p6
-
-    move/from16 v19, p7
-
-    move/from16 v20, p8
-
-    move/from16 v21, p9
-
-    move-object/from16 v22, p10
-
-    invoke-direct/range {v10 .. v23}, Landroid/text/TextLine;->handleText(Landroid/text/TextPaint;IIIIZLandroid/graphics/Canvas;FIIILandroid/graphics/Paint$FontMetricsInt;Z)F
-
-    move-result v2
-
-    add-float p6, p6, v2
-
-    move/from16 v12, v25
-
-    .end local v25           #j:I
-    .restart local v12       #j:I
-    goto :goto_6
-
-    .end local v12           #j:I
-    .restart local v25       #j:I
-    :cond_e
-    const/16 v23, 0x0
-
-    goto :goto_7
-
-    :cond_f
     move v12, v9
 
     .end local v25           #j:I
     .restart local v12       #j:I
-    :goto_8
+    :goto_6
     if-ge v12, v5, :cond_a
 
     move-object/from16 v0, p0
@@ -1371,7 +1312,7 @@
     const/16 v26, 0x0
 
     .local v26, k:I
-    :goto_9
+    :goto_7
     move-object/from16 v0, p0
 
     iget-object v2, v0, Landroid/text/TextLine;->mCharacterStyleSpanSet:Landroid/text/SpanSet;
@@ -1380,7 +1321,7 @@
 
     move/from16 v0, v26
 
-    if-ge v0, v2, :cond_12
+    if-ge v0, v2, :cond_f
 
     move-object/from16 v0, p0
 
@@ -1396,7 +1337,7 @@
 
     add-int/2addr v4, v13
 
-    if-ge v2, v4, :cond_10
+    if-ge v2, v4, :cond_d
 
     move-object/from16 v0, p0
 
@@ -1412,15 +1353,15 @@
 
     add-int/2addr v4, v12
 
-    if-gt v2, v4, :cond_11
+    if-gt v2, v4, :cond_e
 
-    :cond_10
-    :goto_a
+    :cond_d
+    :goto_8
     add-int/lit8 v26, v26, 0x1
 
-    goto :goto_9
+    goto :goto_7
 
-    :cond_11
+    :cond_e
     move-object/from16 v0, p0
 
     iget-object v2, v0, Landroid/text/TextLine;->mCharacterStyleSpanSet:Landroid/text/SpanSet;
@@ -1436,20 +1377,20 @@
 
     invoke-virtual {v0, v3}, Landroid/text/style/CharacterStyle;->updateDrawState(Landroid/text/TextPaint;)V
 
-    goto :goto_a
+    goto :goto_8
 
     .end local v28           #span:Landroid/text/style/CharacterStyle;
-    :cond_12
-    if-nez p11, :cond_13
+    :cond_f
+    if-nez p11, :cond_10
 
     move/from16 v0, p2
 
-    if-ge v13, v0, :cond_14
+    if-ge v13, v0, :cond_11
 
-    :cond_13
+    :cond_10
     const/16 v23, 0x1
 
-    :goto_b
+    :goto_9
     move-object/from16 v10, p0
 
     move-object v11, v3
@@ -1480,12 +1421,12 @@
 
     move v12, v13
 
-    goto/16 :goto_8
+    goto/16 :goto_6
 
-    :cond_14
+    :cond_11
     const/16 v23, 0x0
 
-    goto :goto_b
+    goto :goto_9
 
     .end local v3           #wp:Landroid/text/TextPaint;
     .end local v5           #mlimit:I
@@ -1494,7 +1435,7 @@
     .end local v13           #jnext:I
     .end local v24           #inext:I
     .end local v26           #k:I
-    :cond_15
+    :cond_12
     sub-float v2, p6, v27
 
     goto/16 :goto_0

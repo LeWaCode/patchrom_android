@@ -1,11 +1,11 @@
 .class Lcom/android/server/LocationManagerService$2;
-.super Lcom/android/internal/content/PackageMonitor;
+.super Landroid/database/ContentObserver;
 .source "LocationManagerService.java"
 
 
 # annotations
-.annotation system Ldalvik/annotation/EnclosingClass;
-    value = Lcom/android/server/LocationManagerService;
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Lcom/android/server/LocationManagerService;->systemRunning()V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -19,64 +19,51 @@
 
 
 # direct methods
-.method constructor <init>(Lcom/android/server/LocationManagerService;)V
+.method constructor <init>(Lcom/android/server/LocationManagerService;Landroid/os/Handler;)V
     .locals 0
     .parameter
+    .parameter "x0"
 
     .prologue
     iput-object p1, p0, Lcom/android/server/LocationManagerService$2;->this$0:Lcom/android/server/LocationManagerService;
 
-    invoke-direct {p0}, Lcom/android/internal/content/PackageMonitor;-><init>()V
+    invoke-direct {p0, p2}, Landroid/database/ContentObserver;-><init>(Landroid/os/Handler;)V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public onPackageAdded(Ljava/lang/String;I)V
+.method public onChange(Z)V
     .locals 2
-    .parameter "packageName"
-    .parameter "uid"
+    .parameter "selfChange"
 
     .prologue
     iget-object v0, p0, Lcom/android/server/LocationManagerService$2;->this$0:Lcom/android/server/LocationManagerService;
 
-    #getter for: Lcom/android/server/LocationManagerService;->mLocationHandler:Lcom/android/server/LocationManagerService$LocationWorkerHandler;
-    invoke-static {v0}, Lcom/android/server/LocationManagerService;->access$200(Lcom/android/server/LocationManagerService;)Lcom/android/server/LocationManagerService$LocationWorkerHandler;
+    #getter for: Lcom/android/server/LocationManagerService;->mLock:Ljava/lang/Object;
+    invoke-static {v0}, Lcom/android/server/LocationManagerService;->access$000(Lcom/android/server/LocationManagerService;)Ljava/lang/Object;
 
-    move-result-object v0
+    move-result-object v1
 
-    const/4 v1, 0x2
+    monitor-enter v1
 
-    invoke-static {v0, v1, p1}, Landroid/os/Message;->obtain(Landroid/os/Handler;ILjava/lang/Object;)Landroid/os/Message;
-
-    move-result-object v0
-
-    invoke-virtual {v0}, Landroid/os/Message;->sendToTarget()V
-
-    return-void
-.end method
-
-.method public onPackageUpdateFinished(Ljava/lang/String;I)V
-    .locals 2
-    .parameter "packageName"
-    .parameter "uid"
-
-    .prologue
+    :try_start_0
     iget-object v0, p0, Lcom/android/server/LocationManagerService$2;->this$0:Lcom/android/server/LocationManagerService;
 
-    #getter for: Lcom/android/server/LocationManagerService;->mLocationHandler:Lcom/android/server/LocationManagerService$LocationWorkerHandler;
-    invoke-static {v0}, Lcom/android/server/LocationManagerService;->access$200(Lcom/android/server/LocationManagerService;)Lcom/android/server/LocationManagerService$LocationWorkerHandler;
+    #calls: Lcom/android/server/LocationManagerService;->updateProvidersLocked()V
+    invoke-static {v0}, Lcom/android/server/LocationManagerService;->access$300(Lcom/android/server/LocationManagerService;)V
 
-    move-result-object v0
-
-    const/4 v1, 0x2
-
-    invoke-static {v0, v1, p1}, Landroid/os/Message;->obtain(Landroid/os/Handler;ILjava/lang/Object;)Landroid/os/Message;
-
-    move-result-object v0
-
-    invoke-virtual {v0}, Landroid/os/Message;->sendToTarget()V
+    monitor-exit v1
 
     return-void
+
+    :catchall_0
+    move-exception v0
+
+    monitor-exit v1
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
 .end method

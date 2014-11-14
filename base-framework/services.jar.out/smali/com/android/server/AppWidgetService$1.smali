@@ -5,7 +5,7 @@
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/AppWidgetService;->systemReady(Z)V
+    value = Lcom/android/server/AppWidgetService;->systemRunning(Z)V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -39,11 +39,23 @@
     .parameter "intent"
 
     .prologue
+    const/16 v2, -0x2710
+
+    const-string v0, "android.intent.action.USER_REMOVED"
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_1
+
     iget-object v0, p0, Lcom/android/server/AppWidgetService$1;->this$0:Lcom/android/server/AppWidgetService;
 
-    const-string v1, "android.intent.extra.user_id"
-
-    const/4 v2, -0x1
+    const-string v1, "android.intent.extra.user_handle"
 
     invoke-virtual {p2, v1, v2}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
 
@@ -51,5 +63,32 @@
 
     invoke-virtual {v0, v1}, Lcom/android/server/AppWidgetService;->onUserRemoved(I)V
 
+    :cond_0
+    :goto_0
     return-void
+
+    :cond_1
+    const-string v0, "android.intent.action.USER_STOPPING"
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, p0, Lcom/android/server/AppWidgetService$1;->this$0:Lcom/android/server/AppWidgetService;
+
+    const-string v1, "android.intent.extra.user_handle"
+
+    invoke-virtual {p2, v1, v2}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Lcom/android/server/AppWidgetService;->onUserStopping(I)V
+
+    goto :goto_0
 .end method

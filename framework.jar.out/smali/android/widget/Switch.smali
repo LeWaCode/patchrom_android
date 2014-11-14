@@ -131,7 +131,7 @@
     .parameter "attrs"
 
     .prologue
-    const v0, 0x10103da
+    const v0, 0x101041f
 
     invoke-direct {p0, p1, p2, v0}, Landroid/widget/Switch;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V
 
@@ -336,30 +336,58 @@
 .end method
 
 .method private getTargetCheckedState()Z
-    .locals 2
+    .locals 4
 
     .prologue
-    iget v0, p0, Landroid/widget/Switch;->mThumbPosition:F
+    const/4 v0, 0x1
+
+    const/4 v1, 0x0
+
+    invoke-virtual {p0}, Landroid/widget/Switch;->isLayoutRtl()Z
+
+    move-result v2
+
+    if-eqz v2, :cond_2
+
+    iget v2, p0, Landroid/widget/Switch;->mThumbPosition:F
 
     invoke-direct {p0}, Landroid/widget/Switch;->getThumbScrollRange()I
 
-    move-result v1
+    move-result v3
 
-    div-int/lit8 v1, v1, 0x2
+    div-int/lit8 v3, v3, 0x2
 
-    int-to-float v1, v1
+    int-to-float v3, v3
 
-    cmpl-float v0, v0, v1
+    cmpg-float v2, v2, v3
 
-    if-ltz v0, :cond_0
+    if-gtz v2, :cond_1
 
-    const/4 v0, 0x1
-
+    :cond_0
     :goto_0
     return v0
 
-    :cond_0
-    const/4 v0, 0x0
+    :cond_1
+    move v0, v1
+
+    goto :goto_0
+
+    :cond_2
+    iget v2, p0, Landroid/widget/Switch;->mThumbPosition:F
+
+    invoke-direct {p0}, Landroid/widget/Switch;->getThumbScrollRange()I
+
+    move-result v3
+
+    div-int/lit8 v3, v3, 0x2
+
+    int-to-float v3, v3
+
+    cmpl-float v2, v2, v3
+
+    if-gez v2, :cond_0
+
+    move v0, v1
 
     goto :goto_0
 .end method
@@ -599,11 +627,58 @@
     .end packed-switch
 .end method
 
+.method private setThumbPosition(Z)V
+    .locals 2
+    .parameter "checked"
+
+    .prologue
+    const/4 v0, 0x0
+
+    invoke-virtual {p0}, Landroid/widget/Switch;->isLayoutRtl()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    if-eqz p1, :cond_0
+
+    :goto_0
+    iput v0, p0, Landroid/widget/Switch;->mThumbPosition:F
+
+    :goto_1
+    return-void
+
+    :cond_0
+    invoke-direct {p0}, Landroid/widget/Switch;->getThumbScrollRange()I
+
+    move-result v0
+
+    int-to-float v0, v0
+
+    goto :goto_0
+
+    :cond_1
+    if-eqz p1, :cond_2
+
+    invoke-direct {p0}, Landroid/widget/Switch;->getThumbScrollRange()I
+
+    move-result v0
+
+    int-to-float v0, v0
+
+    :cond_2
+    iput v0, p0, Landroid/widget/Switch;->mThumbPosition:F
+
+    goto :goto_1
+.end method
+
 .method private stopDrag(Landroid/view/MotionEvent;)V
-    .locals 7
+    .locals 8
     .parameter "ev"
 
     .prologue
+    const/4 v7, 0x0
+
     const/4 v3, 0x1
 
     const/4 v4, 0x0
@@ -628,7 +703,7 @@
     :goto_0
     invoke-direct {p0, p1}, Landroid/widget/Switch;->cancelSuperTouch(Landroid/view/MotionEvent;)V
 
-    if-eqz v0, :cond_3
+    if-eqz v0, :cond_5
 
     iget-object v5, p0, Landroid/widget/Switch;->mVelocityTracker:Landroid/view/VelocityTracker;
 
@@ -653,13 +728,17 @@
 
     cmpl-float v5, v5, v6
 
-    if-lez v5, :cond_2
+    if-lez v5, :cond_4
 
-    const/4 v5, 0x0
+    invoke-virtual {p0}, Landroid/widget/Switch;->isLayoutRtl()Z
 
-    cmpl-float v5, v2, v5
+    move-result v5
 
-    if-lez v5, :cond_1
+    if-eqz v5, :cond_2
+
+    cmpg-float v5, v2, v7
+
+    if-gez v5, :cond_1
 
     move v1, v3
 
@@ -686,6 +765,20 @@
     goto :goto_1
 
     :cond_2
+    cmpl-float v5, v2, v7
+
+    if-lez v5, :cond_3
+
+    move v1, v3
+
+    goto :goto_1
+
+    :cond_3
+    move v1, v4
+
+    goto :goto_1
+
+    :cond_4
     invoke-direct {p0}, Landroid/widget/Switch;->getTargetCheckedState()Z
 
     move-result v1
@@ -695,7 +788,7 @@
 
     .end local v1           #newState:Z
     .end local v2           #xvel:F
-    :cond_3
+    :cond_5
     invoke-virtual {p0}, Landroid/widget/Switch;->isChecked()Z
 
     move-result v3
@@ -741,10 +834,70 @@
     return-void
 .end method
 
+.method public getCompoundPaddingLeft()I
+    .locals 3
+
+    .prologue
+    invoke-virtual {p0}, Landroid/widget/Switch;->isLayoutRtl()Z
+
+    move-result v1
+
+    if-nez v1, :cond_1
+
+    invoke-super {p0}, Landroid/widget/CompoundButton;->getCompoundPaddingLeft()I
+
+    move-result v0
+
+    :cond_0
+    :goto_0
+    return v0
+
+    :cond_1
+    invoke-super {p0}, Landroid/widget/CompoundButton;->getCompoundPaddingLeft()I
+
+    move-result v1
+
+    iget v2, p0, Landroid/widget/Switch;->mSwitchWidth:I
+
+    add-int v0, v1, v2
+
+    .local v0, padding:I
+    invoke-virtual {p0}, Landroid/widget/Switch;->getText()Ljava/lang/CharSequence;
+
+    move-result-object v1
+
+    invoke-static {v1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    iget v1, p0, Landroid/widget/Switch;->mSwitchPadding:I
+
+    add-int/2addr v0, v1
+
+    goto :goto_0
+.end method
+
 .method public getCompoundPaddingRight()I
     .locals 3
 
     .prologue
+    invoke-virtual {p0}, Landroid/widget/Switch;->isLayoutRtl()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    invoke-super {p0}, Landroid/widget/CompoundButton;->getCompoundPaddingRight()I
+
+    move-result v0
+
+    :cond_0
+    :goto_0
+    return v0
+
+    :cond_1
     invoke-super {p0}, Landroid/widget/CompoundButton;->getCompoundPaddingRight()I
 
     move-result v1
@@ -768,8 +921,7 @@
 
     add-int/2addr v0, v1
 
-    :cond_0
-    return v0
+    goto :goto_0
 .end method
 
 .method public getSwitchMinWidth()I
@@ -1257,33 +1409,25 @@
 
     move-result v4
 
+    invoke-direct {p0, v4}, Landroid/widget/Switch;->setThumbPosition(Z)V
+
+    invoke-virtual {p0}, Landroid/widget/Switch;->isLayoutRtl()Z
+
+    move-result v4
+
     if-eqz v4, :cond_0
 
-    invoke-direct {p0}, Landroid/widget/Switch;->getThumbScrollRange()I
+    invoke-virtual {p0}, Landroid/widget/Switch;->getPaddingLeft()I
 
-    move-result v4
-
-    int-to-float v4, v4
-
-    :goto_0
-    iput v4, p0, Landroid/widget/Switch;->mThumbPosition:F
-
-    invoke-virtual {p0}, Landroid/widget/Switch;->getWidth()I
-
-    move-result v4
-
-    invoke-virtual {p0}, Landroid/widget/Switch;->getPaddingRight()I
-
-    move-result v5
-
-    sub-int v2, v4, v5
-
-    .local v2, switchRight:I
-    iget v4, p0, Landroid/widget/Switch;->mSwitchWidth:I
-
-    sub-int v1, v2, v4
+    move-result v1
 
     .local v1, switchLeft:I
+    iget v4, p0, Landroid/widget/Switch;->mSwitchWidth:I
+
+    add-int v2, v1, v4
+
+    .local v2, switchRight:I
+    :goto_0
     const/4 v3, 0x0
 
     .local v3, switchTop:I
@@ -1322,13 +1466,25 @@
     .end local v2           #switchRight:I
     .end local v3           #switchTop:I
     :cond_0
-    const/4 v4, 0x0
+    invoke-virtual {p0}, Landroid/widget/Switch;->getWidth()I
 
+    move-result v4
+
+    invoke-virtual {p0}, Landroid/widget/Switch;->getPaddingRight()I
+
+    move-result v5
+
+    sub-int v2, v4, v5
+
+    .restart local v2       #switchRight:I
+    iget v4, p0, Landroid/widget/Switch;->mSwitchWidth:I
+
+    sub-int v1, v2, v4
+
+    .restart local v1       #switchLeft:I
     goto :goto_0
 
     .restart local v0       #switchBottom:I
-    .restart local v1       #switchLeft:I
-    .restart local v2       #switchRight:I
     .restart local v3       #switchTop:I
     :sswitch_0
     invoke-virtual {p0}, Landroid/widget/Switch;->getPaddingTop()I
@@ -1378,6 +1534,8 @@
 
     goto :goto_1
 
+    nop
+
     :sswitch_data_0
     .sparse-switch
         0x10 -> :sswitch_0
@@ -1386,194 +1544,128 @@
 .end method
 
 .method public onMeasure(II)V
-    .locals 11
+    .locals 7
     .parameter "widthMeasureSpec"
     .parameter "heightMeasureSpec"
 
     .prologue
-    invoke-static {p1}, Landroid/view/View$MeasureSpec;->getMode(I)I
+    iget-object v4, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
 
-    move-result v6
+    if-nez v4, :cond_0
 
-    .local v6, widthMode:I
-    invoke-static {p2}, Landroid/view/View$MeasureSpec;->getMode(I)I
+    iget-object v4, p0, Landroid/widget/Switch;->mTextOn:Ljava/lang/CharSequence;
 
-    move-result v0
+    invoke-direct {p0, v4}, Landroid/widget/Switch;->makeLayout(Ljava/lang/CharSequence;)Landroid/text/Layout;
 
-    .local v0, heightMode:I
-    invoke-static {p1}, Landroid/view/View$MeasureSpec;->getSize(I)I
+    move-result-object v4
 
-    move-result v7
-
-    .local v7, widthSize:I
-    invoke-static {p2}, Landroid/view/View$MeasureSpec;->getSize(I)I
-
-    move-result v1
-
-    .local v1, heightSize:I
-    iget-object v8, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
-
-    if-nez v8, :cond_0
-
-    iget-object v8, p0, Landroid/widget/Switch;->mTextOn:Ljava/lang/CharSequence;
-
-    invoke-direct {p0, v8}, Landroid/widget/Switch;->makeLayout(Ljava/lang/CharSequence;)Landroid/text/Layout;
-
-    move-result-object v8
-
-    iput-object v8, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
+    iput-object v4, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
 
     :cond_0
-    iget-object v8, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
+    iget-object v4, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
 
-    if-nez v8, :cond_1
+    if-nez v4, :cond_1
 
-    iget-object v8, p0, Landroid/widget/Switch;->mTextOff:Ljava/lang/CharSequence;
+    iget-object v4, p0, Landroid/widget/Switch;->mTextOff:Ljava/lang/CharSequence;
 
-    invoke-direct {p0, v8}, Landroid/widget/Switch;->makeLayout(Ljava/lang/CharSequence;)Landroid/text/Layout;
+    invoke-direct {p0, v4}, Landroid/widget/Switch;->makeLayout(Ljava/lang/CharSequence;)Landroid/text/Layout;
 
-    move-result-object v8
+    move-result-object v4
 
-    iput-object v8, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
+    iput-object v4, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
 
     :cond_1
-    iget-object v8, p0, Landroid/widget/Switch;->mTrackDrawable:Landroid/graphics/drawable/Drawable;
+    iget-object v4, p0, Landroid/widget/Switch;->mTrackDrawable:Landroid/graphics/drawable/Drawable;
 
-    iget-object v9, p0, Landroid/widget/Switch;->mTempRect:Landroid/graphics/Rect;
+    iget-object v5, p0, Landroid/widget/Switch;->mTempRect:Landroid/graphics/Rect;
 
-    invoke-virtual {v8, v9}, Landroid/graphics/drawable/Drawable;->getPadding(Landroid/graphics/Rect;)Z
+    invoke-virtual {v4, v5}, Landroid/graphics/drawable/Drawable;->getPadding(Landroid/graphics/Rect;)Z
 
-    iget-object v8, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
+    iget-object v4, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
 
-    invoke-virtual {v8}, Landroid/text/Layout;->getWidth()I
-
-    move-result v8
-
-    iget-object v9, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
-
-    invoke-virtual {v9}, Landroid/text/Layout;->getWidth()I
-
-    move-result v9
-
-    invoke-static {v8, v9}, Ljava/lang/Math;->max(II)I
-
-    move-result v2
-
-    .local v2, maxTextWidth:I
-    iget v8, p0, Landroid/widget/Switch;->mSwitchMinWidth:I
-
-    mul-int/lit8 v9, v2, 0x2
-
-    iget v10, p0, Landroid/widget/Switch;->mThumbTextPadding:I
-
-    mul-int/lit8 v10, v10, 0x4
-
-    add-int/2addr v9, v10
-
-    iget-object v10, p0, Landroid/widget/Switch;->mTempRect:Landroid/graphics/Rect;
-
-    iget v10, v10, Landroid/graphics/Rect;->left:I
-
-    add-int/2addr v9, v10
-
-    iget-object v10, p0, Landroid/widget/Switch;->mTempRect:Landroid/graphics/Rect;
-
-    iget v10, v10, Landroid/graphics/Rect;->right:I
-
-    add-int/2addr v9, v10
-
-    invoke-static {v8, v9}, Ljava/lang/Math;->max(II)I
-
-    move-result v5
-
-    .local v5, switchWidth:I
-    iget-object v8, p0, Landroid/widget/Switch;->mTrackDrawable:Landroid/graphics/drawable/Drawable;
-
-    invoke-virtual {v8}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+    invoke-virtual {v4}, Landroid/text/Layout;->getWidth()I
 
     move-result v4
 
-    .local v4, switchHeight:I
-    iget v8, p0, Landroid/widget/Switch;->mThumbTextPadding:I
+    iget-object v5, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
 
-    mul-int/lit8 v8, v8, 0x2
+    invoke-virtual {v5}, Landroid/text/Layout;->getWidth()I
 
-    add-int/2addr v8, v2
+    move-result v5
 
-    iput v8, p0, Landroid/widget/Switch;->mThumbWidth:I
+    invoke-static {v4, v5}, Ljava/lang/Math;->max(II)I
 
-    sparse-switch v6, :sswitch_data_0
+    move-result v0
 
-    :goto_0
-    sparse-switch v0, :sswitch_data_1
+    .local v0, maxTextWidth:I
+    iget v4, p0, Landroid/widget/Switch;->mSwitchMinWidth:I
 
-    :goto_1
-    iput v5, p0, Landroid/widget/Switch;->mSwitchWidth:I
+    mul-int/lit8 v5, v0, 0x2
 
-    iput v4, p0, Landroid/widget/Switch;->mSwitchHeight:I
+    iget v6, p0, Landroid/widget/Switch;->mThumbTextPadding:I
+
+    mul-int/lit8 v6, v6, 0x4
+
+    add-int/2addr v5, v6
+
+    iget-object v6, p0, Landroid/widget/Switch;->mTempRect:Landroid/graphics/Rect;
+
+    iget v6, v6, Landroid/graphics/Rect;->left:I
+
+    add-int/2addr v5, v6
+
+    iget-object v6, p0, Landroid/widget/Switch;->mTempRect:Landroid/graphics/Rect;
+
+    iget v6, v6, Landroid/graphics/Rect;->right:I
+
+    add-int/2addr v5, v6
+
+    invoke-static {v4, v5}, Ljava/lang/Math;->max(II)I
+
+    move-result v3
+
+    .local v3, switchWidth:I
+    iget-object v4, p0, Landroid/widget/Switch;->mTrackDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v4}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+
+    move-result v2
+
+    .local v2, switchHeight:I
+    iget v4, p0, Landroid/widget/Switch;->mThumbTextPadding:I
+
+    mul-int/lit8 v4, v4, 0x2
+
+    add-int/2addr v4, v0
+
+    iput v4, p0, Landroid/widget/Switch;->mThumbWidth:I
+
+    iput v3, p0, Landroid/widget/Switch;->mSwitchWidth:I
+
+    iput v2, p0, Landroid/widget/Switch;->mSwitchHeight:I
 
     invoke-super {p0, p1, p2}, Landroid/widget/CompoundButton;->onMeasure(II)V
 
     invoke-virtual {p0}, Landroid/widget/Switch;->getMeasuredHeight()I
 
-    move-result v3
+    move-result v1
 
-    .local v3, measuredHeight:I
-    if-ge v3, v4, :cond_2
+    .local v1, measuredHeight:I
+    if-ge v1, v2, :cond_2
 
     invoke-virtual {p0}, Landroid/widget/Switch;->getMeasuredWidthAndState()I
 
-    move-result v8
+    move-result v4
 
-    invoke-virtual {p0, v8, v4}, Landroid/widget/Switch;->setMeasuredDimension(II)V
+    invoke-virtual {p0, v4, v2}, Landroid/widget/Switch;->setMeasuredDimension(II)V
 
     :cond_2
     return-void
-
-    .end local v3           #measuredHeight:I
-    :sswitch_0
-    invoke-static {v7, v5}, Ljava/lang/Math;->min(II)I
-
-    move-result v7
-
-    goto :goto_0
-
-    :sswitch_1
-    move v7, v5
-
-    goto :goto_0
-
-    :sswitch_2
-    invoke-static {v1, v4}, Ljava/lang/Math;->min(II)I
-
-    move-result v1
-
-    goto :goto_1
-
-    :sswitch_3
-    move v1, v4
-
-    goto :goto_1
-
-    :sswitch_data_0
-    .sparse-switch
-        -0x80000000 -> :sswitch_0
-        0x0 -> :sswitch_1
-    .end sparse-switch
-
-    :sswitch_data_1
-    .sparse-switch
-        -0x80000000 -> :sswitch_2
-        0x0 -> :sswitch_3
-    .end sparse-switch
 .end method
 
 .method public onPopulateAccessibilityEvent(Landroid/view/accessibility/AccessibilityEvent;)V
-    .locals 2
+    .locals 3
     .parameter "event"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     invoke-super {p0, p1}, Landroid/widget/CompoundButton;->onPopulateAccessibilityEvent(Landroid/view/accessibility/AccessibilityEvent;)V
@@ -1582,21 +1674,19 @@
 
     move-result v1
 
-    if-eqz v1, :cond_2
-
-    iget-object v1, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
-
     if-eqz v1, :cond_1
 
-    iget-object v1, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
+    iget-object v0, p0, Landroid/widget/Switch;->mOnLayout:Landroid/text/Layout;
 
-    invoke-virtual {v1}, Landroid/text/Layout;->getText()Ljava/lang/CharSequence;
-
-    move-result-object v0
-
-    .local v0, text:Ljava/lang/CharSequence;
+    .local v0, layout:Landroid/text/Layout;
     :goto_0
-    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0}, Landroid/text/Layout;->getText()Ljava/lang/CharSequence;
+
+    move-result-object v1
+
+    invoke-static {v1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 
     move-result v1
 
@@ -1606,32 +1696,18 @@
 
     move-result-object v1
 
-    invoke-interface {v1, v0}, Ljava/util/List;->add(Ljava/lang/Object;)Z
+    invoke-virtual {v0}, Landroid/text/Layout;->getText()Ljava/lang/CharSequence;
+
+    move-result-object v2
+
+    invoke-interface {v1, v2}, Ljava/util/List;->add(Ljava/lang/Object;)Z
 
     :cond_0
     return-void
 
-    .end local v0           #text:Ljava/lang/CharSequence;
+    .end local v0           #layout:Landroid/text/Layout;
     :cond_1
-    const-string v0, ""
-
-    goto :goto_0
-
-    :cond_2
-    iget-object v1, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
-
-    if-eqz v1, :cond_3
-
-    iget-object v1, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
-
-    invoke-virtual {v1}, Landroid/text/Layout;->getText()Ljava/lang/CharSequence;
-
-    move-result-object v0
-
-    goto :goto_0
-
-    :cond_3
-    const-string v0, ""
+    iget-object v0, p0, Landroid/widget/Switch;->mOffLayout:Landroid/text/Layout;
 
     goto :goto_0
 .end method
@@ -1859,25 +1935,15 @@
     .prologue
     invoke-super {p0, p1}, Landroid/widget/CompoundButton;->setChecked(Z)V
 
-    if-eqz p1, :cond_0
-
-    invoke-direct {p0}, Landroid/widget/Switch;->getThumbScrollRange()I
+    invoke-virtual {p0}, Landroid/widget/Switch;->isChecked()Z
 
     move-result v0
 
-    int-to-float v0, v0
-
-    :goto_0
-    iput v0, p0, Landroid/widget/Switch;->mThumbPosition:F
+    invoke-direct {p0, v0}, Landroid/widget/Switch;->setThumbPosition(Z)V
 
     invoke-virtual {p0}, Landroid/widget/Switch;->invalidate()V
 
     return-void
-
-    :cond_0
-    const/4 v0, 0x0
-
-    goto :goto_0
 .end method
 
 .method public setSwitchMinWidth(I)V
@@ -1977,7 +2043,7 @@
     .local v3, styleIndex:I
     invoke-direct {p0, v5, v3}, Landroid/widget/Switch;->setSwitchTypefaceByIndex(II)V
 
-    const/4 v6, 0x7
+    const/16 v6, 0xb
 
     invoke-virtual {v1, v6, v8}, Landroid/content/res/TypedArray;->getBoolean(IZ)Z
 

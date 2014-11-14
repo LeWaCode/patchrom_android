@@ -65,19 +65,26 @@
     #setter for: Landroid/location/Location;->mTime:J
     invoke-static {v0, v5, v6}, Landroid/location/Location;->access$002(Landroid/location/Location;J)J
 
+    invoke-virtual {p1}, Landroid/os/Parcel;->readLong()J
+
+    move-result-wide v5
+
+    #setter for: Landroid/location/Location;->mElapsedRealtimeNanos:J
+    invoke-static {v0, v5, v6}, Landroid/location/Location;->access$102(Landroid/location/Location;J)J
+
     invoke-virtual {p1}, Landroid/os/Parcel;->readDouble()D
 
     move-result-wide v5
 
     #setter for: Landroid/location/Location;->mLatitude:D
-    invoke-static {v0, v5, v6}, Landroid/location/Location;->access$102(Landroid/location/Location;D)D
+    invoke-static {v0, v5, v6}, Landroid/location/Location;->access$202(Landroid/location/Location;D)D
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readDouble()D
 
     move-result-wide v5
 
     #setter for: Landroid/location/Location;->mLongitude:D
-    invoke-static {v0, v5, v6}, Landroid/location/Location;->access$202(Landroid/location/Location;D)D
+    invoke-static {v0, v5, v6}, Landroid/location/Location;->access$302(Landroid/location/Location;D)D
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
@@ -89,14 +96,14 @@
 
     :goto_0
     #setter for: Landroid/location/Location;->mHasAltitude:Z
-    invoke-static {v0, v2}, Landroid/location/Location;->access$302(Landroid/location/Location;Z)Z
+    invoke-static {v0, v2}, Landroid/location/Location;->access$402(Landroid/location/Location;Z)Z
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readDouble()D
 
     move-result-wide v5
 
     #setter for: Landroid/location/Location;->mAltitude:D
-    invoke-static {v0, v5, v6}, Landroid/location/Location;->access$402(Landroid/location/Location;D)D
+    invoke-static {v0, v5, v6}, Landroid/location/Location;->access$502(Landroid/location/Location;D)D
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
@@ -108,14 +115,14 @@
 
     :goto_1
     #setter for: Landroid/location/Location;->mHasSpeed:Z
-    invoke-static {v0, v2}, Landroid/location/Location;->access$502(Landroid/location/Location;Z)Z
+    invoke-static {v0, v2}, Landroid/location/Location;->access$602(Landroid/location/Location;Z)Z
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readFloat()F
 
     move-result v2
 
     #setter for: Landroid/location/Location;->mSpeed:F
-    invoke-static {v0, v2}, Landroid/location/Location;->access$602(Landroid/location/Location;F)F
+    invoke-static {v0, v2}, Landroid/location/Location;->access$702(Landroid/location/Location;F)F
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
@@ -127,14 +134,14 @@
 
     :goto_2
     #setter for: Landroid/location/Location;->mHasBearing:Z
-    invoke-static {v0, v2}, Landroid/location/Location;->access$702(Landroid/location/Location;Z)Z
+    invoke-static {v0, v2}, Landroid/location/Location;->access$802(Landroid/location/Location;Z)Z
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readFloat()F
 
     move-result v2
 
     #setter for: Landroid/location/Location;->mBearing:F
-    invoke-static {v0, v2}, Landroid/location/Location;->access$802(Landroid/location/Location;F)F
+    invoke-static {v0, v2}, Landroid/location/Location;->access$902(Landroid/location/Location;F)F
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
@@ -142,23 +149,35 @@
 
     if-eqz v2, :cond_3
 
+    move v2, v3
+
     :goto_3
     #setter for: Landroid/location/Location;->mHasAccuracy:Z
-    invoke-static {v0, v3}, Landroid/location/Location;->access$902(Landroid/location/Location;Z)Z
+    invoke-static {v0, v2}, Landroid/location/Location;->access$1002(Landroid/location/Location;Z)Z
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readFloat()F
 
     move-result v2
 
     #setter for: Landroid/location/Location;->mAccuracy:F
-    invoke-static {v0, v2}, Landroid/location/Location;->access$1002(Landroid/location/Location;F)F
+    invoke-static {v0, v2}, Landroid/location/Location;->access$1102(Landroid/location/Location;F)F
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readBundle()Landroid/os/Bundle;
 
     move-result-object v2
 
     #setter for: Landroid/location/Location;->mExtras:Landroid/os/Bundle;
-    invoke-static {v0, v2}, Landroid/location/Location;->access$1102(Landroid/location/Location;Landroid/os/Bundle;)Landroid/os/Bundle;
+    invoke-static {v0, v2}, Landroid/location/Location;->access$1202(Landroid/location/Location;Landroid/os/Bundle;)Landroid/os/Bundle;
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v2
+
+    if-eqz v2, :cond_4
+
+    :goto_4
+    #setter for: Landroid/location/Location;->mIsFromMockProvider:Z
+    invoke-static {v0, v3}, Landroid/location/Location;->access$1302(Landroid/location/Location;Z)Z
 
     return-object v0
 
@@ -178,9 +197,14 @@
     goto :goto_2
 
     :cond_3
-    move v3, v4
+    move v2, v4
 
     goto :goto_3
+
+    :cond_4
+    move v3, v4
+
+    goto :goto_4
 .end method
 
 .method public bridge synthetic createFromParcel(Landroid/os/Parcel;)Ljava/lang/Object;

@@ -62,9 +62,10 @@
     return-void
 .end method
 
-.method private static sendAPNM(Ljava/lang/String;)V
+.method private static sendAPNM(Ljava/lang/String;I)V
     .locals 3
     .parameter "appName"
+    .parameter "userId"
 
     .prologue
     invoke-virtual {p0}, Ljava/lang/String;->length()I
@@ -72,6 +73,8 @@
     move-result v2
 
     mul-int/lit8 v2, v2, 0x2
+
+    add-int/lit8 v2, v2, 0x4
 
     add-int/lit8 v2, v2, 0x4
 
@@ -92,6 +95,8 @@
 
     invoke-static {v1, p0}, Landroid/ddm/DdmHandleAppName;->putString(Ljava/nio/ByteBuffer;Ljava/lang/String;)V
 
+    invoke-virtual {v1, p1}, Ljava/nio/ByteBuffer;->putInt(I)Ljava/nio/ByteBuffer;
+
     new-instance v0, Lorg/apache/harmony/dalvik/ddmc/Chunk;
 
     sget v2, Landroid/ddm/DdmHandleAppName;->CHUNK_APNM:I
@@ -104,9 +109,10 @@
     return-void
 .end method
 
-.method public static setAppName(Ljava/lang/String;)V
+.method public static setAppName(Ljava/lang/String;I)V
     .locals 1
     .parameter "name"
+    .parameter "userId"
 
     .prologue
     if-eqz p0, :cond_0
@@ -124,7 +130,7 @@
     :cond_1
     sput-object p0, Landroid/ddm/DdmHandleAppName;->mAppName:Ljava/lang/String;
 
-    invoke-static {p0}, Landroid/ddm/DdmHandleAppName;->sendAPNM(Ljava/lang/String;)V
+    invoke-static {p0, p1}, Landroid/ddm/DdmHandleAppName;->sendAPNM(Ljava/lang/String;I)V
 
     goto :goto_0
 .end method

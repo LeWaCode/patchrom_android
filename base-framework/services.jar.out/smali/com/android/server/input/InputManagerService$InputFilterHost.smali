@@ -1,9 +1,6 @@
 .class final Lcom/android/server/input/InputManagerService$InputFilterHost;
-.super Ljava/lang/Object;
+.super Landroid/view/IInputFilterHost$Stub;
 .source "InputManagerService.java"
-
-# interfaces
-.implements Lcom/android/server/input/InputFilter$Host;
 
 
 # annotations
@@ -31,7 +28,7 @@
     .prologue
     iput-object p1, p0, Lcom/android/server/input/InputManagerService$InputFilterHost;->this$0:Lcom/android/server/input/InputManagerService;
 
-    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+    invoke-direct {p0}, Landroid/view/IInputFilterHost$Stub;-><init>()V
 
     return-void
 .end method
@@ -91,7 +88,7 @@
     iget-object v0, p0, Lcom/android/server/input/InputManagerService$InputFilterHost;->this$0:Lcom/android/server/input/InputManagerService;
 
     #getter for: Lcom/android/server/input/InputManagerService;->mPtr:I
-    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$700(Lcom/android/server/input/InputManagerService;)I
+    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$600(Lcom/android/server/input/InputManagerService;)I
 
     move-result v0
 
@@ -110,7 +107,7 @@
     move-object v1, p1
 
     #calls: Lcom/android/server/input/InputManagerService;->nativeInjectInputEvent(ILandroid/view/InputEvent;IIIII)I
-    invoke-static/range {v0 .. v6}, Lcom/android/server/input/InputManagerService;->access$800(ILandroid/view/InputEvent;IIIII)I
+    invoke-static/range {v0 .. v6}, Lcom/android/server/input/InputManagerService;->access$700(ILandroid/view/InputEvent;IIIII)I
 
     :cond_1
     monitor-exit v7

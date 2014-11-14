@@ -15,6 +15,8 @@
 
 
 # static fields
+.field static final DEF_KEYGUARD_FEATURES_DISABLED:I = 0x0
+
 .field static final DEF_MAXIMUM_FAILED_PASSWORDS_FOR_WIPE:I = 0x0
 
 .field static final DEF_MAXIMUM_TIME_TO_UNLOCK:J = 0x0L
@@ -42,6 +44,8 @@
 
 # instance fields
 .field disableCamera:Z
+
+.field disabledKeyguardFeatures:I
 
 .field encryptionRequested:Z
 
@@ -121,6 +125,8 @@
     iput-wide v2, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->passwordExpirationTimeout:J
 
     iput-wide v2, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->passwordExpirationDate:J
+
+    iput v0, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->disabledKeyguardFeatures:I
 
     iput-boolean v0, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->encryptionRequested:Z
 
@@ -398,6 +404,16 @@
 
     invoke-virtual {p2, v2}, Ljava/io/PrintWriter;->println(Z)V
 
+    invoke-virtual {p2, p1}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    const-string v2, "disabledKeyguardFeatures="
+
+    invoke-virtual {p2, v2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    iget v2, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->disabledKeyguardFeatures:I
+
+    invoke-virtual {p2, v2}, Ljava/io/PrintWriter;->println(I)V
+
     return-void
 .end method
 
@@ -416,6 +432,31 @@
     iget v0, v0, Landroid/content/pm/ApplicationInfo;->uid:I
 
     return v0
+.end method
+
+.method public getUserHandle()Landroid/os/UserHandle;
+    .locals 2
+
+    .prologue
+    new-instance v0, Landroid/os/UserHandle;
+
+    iget-object v1, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->info:Landroid/app/admin/DeviceAdminInfo;
+
+    invoke-virtual {v1}, Landroid/app/admin/DeviceAdminInfo;->getActivityInfo()Landroid/content/pm/ActivityInfo;
+
+    move-result-object v1
+
+    iget-object v1, v1, Landroid/content/pm/ActivityInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+
+    iget v1, v1, Landroid/content/pm/ApplicationInfo;->uid:I
+
+    invoke-static {v1}, Landroid/os/UserHandle;->getUserId(I)I
+
+    move-result v1
+
+    invoke-direct {v0, v1}, Landroid/os/UserHandle;-><init>(I)V
+
+    return-object v0
 .end method
 
 .method readFromXml(Lorg/xmlpull/v1/XmlPullParser;)V
@@ -447,7 +488,7 @@
     .local v2, type:I
     const/4 v3, 0x1
 
-    if-eq v2, v3, :cond_15
+    if-eq v2, v3, :cond_16
 
     if-ne v2, v7, :cond_1
 
@@ -455,7 +496,7 @@
 
     move-result v3
 
-    if-le v3, v0, :cond_15
+    if-le v3, v0, :cond_16
 
     :cond_1
     if-eq v2, v7, :cond_0
@@ -893,6 +934,29 @@
     goto/16 :goto_1
 
     :cond_14
+    const-string v3, "disable-keyguard-features"
+
+    invoke-virtual {v3, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_15
+
+    const-string v3, "value"
+
+    invoke-interface {p1, v6, v3}, Lorg/xmlpull/v1/XmlPullParser;->getAttributeValue(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-static {v3}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+
+    move-result v3
+
+    iput v3, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->disabledKeyguardFeatures:I
+
+    goto/16 :goto_1
+
+    :cond_15
     const-string v3, "DevicePolicyManagerService"
 
     new-instance v4, Ljava/lang/StringBuilder;
@@ -918,7 +982,7 @@
     goto/16 :goto_1
 
     .end local v1           #tag:Ljava/lang/String;
-    :cond_15
+    :cond_16
     return-void
 .end method
 
@@ -1362,5 +1426,28 @@
     invoke-interface {p1, v3, v0}, Lorg/xmlpull/v1/XmlSerializer;->endTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
 
     :cond_f
+    iget v0, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->disabledKeyguardFeatures:I
+
+    if-eqz v0, :cond_10
+
+    const-string v0, "disable-keyguard-features"
+
+    invoke-interface {p1, v3, v0}, Lorg/xmlpull/v1/XmlSerializer;->startTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+
+    const-string v0, "value"
+
+    iget v1, p0, Lcom/android/server/DevicePolicyManagerService$ActiveAdmin;->disabledKeyguardFeatures:I
+
+    invoke-static {v1}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-interface {p1, v3, v0, v1}, Lorg/xmlpull/v1/XmlSerializer;->attribute(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+
+    const-string v0, "disable-keyguard-features"
+
+    invoke-interface {p1, v3, v0}, Lorg/xmlpull/v1/XmlSerializer;->endTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+
+    :cond_10
     return-void
 .end method

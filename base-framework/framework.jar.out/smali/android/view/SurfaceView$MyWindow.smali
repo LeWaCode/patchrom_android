@@ -107,10 +107,10 @@
     return-void
 .end method
 
-.method public resized(IILandroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
+.method public resized(Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
     .locals 3
-    .parameter "w"
-    .parameter "h"
+    .parameter "frame"
+    .parameter "overscanInsets"
     .parameter "contentInsets"
     .parameter "visibleInsets"
     .parameter "reportDraw"
@@ -168,7 +168,11 @@
 
     move-result v1
 
-    if-ne v1, p1, :cond_3
+    invoke-virtual {p1}, Landroid/graphics/Rect;->width()I
+
+    move-result v2
+
+    if-ne v1, v2, :cond_3
 
     iget-object v1, v0, Landroid/view/SurfaceView;->mWinFrame:Landroid/graphics/Rect;
 
@@ -176,7 +180,11 @@
 
     move-result v1
 
-    if-eq v1, p2, :cond_0
+    invoke-virtual {p1}, Landroid/graphics/Rect;->height()I
+
+    move-result v2
+
+    if-eq v1, v2, :cond_0
 
     :cond_3
     const/4 v1, 0x1

@@ -23,6 +23,8 @@
 
 .field public static final accessibilityFlags:I = 0x1010384
 
+.field public static final accessibilityLiveRegion:I = 0x10103ee
+
 .field public static final accountPreferences:I = 0x101029f
 
 .field public static final accountType:I = 0x101028f
@@ -91,9 +93,13 @@
 
 .field public static final activityOpenExitAnimation:I = 0x10100b9
 
+.field public static final addPrintersActivity:I = 0x10103e6
+
 .field public static final addStatesFromChildren:I = 0x10100f0
 
 .field public static final adjustViewBounds:I = 0x101011e
+
+.field public static final advancedPrintOptionsActivity:I = 0x10103f1
 
 .field public static final alertDialogIcon:I = 0x1010355
 
@@ -148,6 +154,8 @@
 
 .field public static final anyDensity:I = 0x101026c
 
+.field public static final apduServiceBanner:I = 0x10103ed
+
 .field public static final apiKey:I = 0x1010211
 
 .field public static final author:I = 0x10102b4
@@ -159,6 +167,8 @@
 .field public static final autoCompleteTextViewStyle:I = 0x101006b
 
 .field public static final autoLink:I = 0x10100b0
+
+.field public static final autoMirrored:I = 0x10103ea
 
 .field public static final autoStart:I = 0x10102b5
 
@@ -231,6 +241,12 @@
 
 .field public static final calendarViewStyle:I = 0x101035d
 
+.field public static final canRequestEnhancedWebAccessibility:I = 0x10103d8
+
+.field public static final canRequestFilterKeyEvents:I = 0x10103d9
+
+.field public static final canRequestTouchExplorationMode:I = 0x10103d7
+
 .field public static final canRetrieveWindowContent:I = 0x1010385
 
 .field public static final candidatesTextStyleSpans:I = 0x1010230
@@ -239,6 +255,8 @@
     .annotation runtime Ljava/lang/Deprecated;
     .end annotation
 .end field
+
+.field public static final category:I = 0x10103e8
 
 .field public static final centerBright:I = 0x10100cc
 
@@ -266,13 +284,19 @@
 
 .field public static final checkedButton:I = 0x1010148
 
+.field public static final checkedTextViewStyle:I = 0x10103c8
+
 .field public static final childDivider:I = 0x1010111
 
 .field public static final childIndicator:I = 0x101010c
 
+.field public static final childIndicatorEnd:I = 0x10103d4
+
 .field public static final childIndicatorLeft:I = 0x101010f
 
 .field public static final childIndicatorRight:I = 0x1010110
+
+.field public static final childIndicatorStart:I = 0x10103d3
 
 .field public static final choiceMode:I = 0x101012b
 
@@ -536,6 +560,8 @@
 
 .field public static final fadingEdgeLength:I = 0x10100e0
 
+.field public static final fadingMode:I = 0x10103e1
+
 .field public static final fastScrollAlwaysVisible:I = 0x1010335
 
 .field public static final fastScrollEnabled:I = 0x1010226
@@ -590,6 +616,10 @@
 
 .field public static final format:I = 0x1010105
 
+.field public static final format12Hour:I = 0x10103ca
+
+.field public static final format24Hour:I = 0x10103cb
+
 .field public static final fragment:I = 0x10102e3
 
 .field public static final fragmentCloseEnterAnimation:I = 0x10102e7
@@ -609,6 +639,8 @@
 .field public static final fromAlpha:I = 0x10101ca
 
 .field public static final fromDegrees:I = 0x10101b3
+
+.field public static final fromScene:I = 0x10103dd
 
 .field public static final fromXDelta:I = 0x10101c6
 
@@ -742,13 +774,19 @@
 
 .field public static final indeterminateProgressStyle:I = 0x1010318
 
+.field public static final indicatorEnd:I = 0x10103d2
+
 .field public static final indicatorLeft:I = 0x101010d
 
 .field public static final indicatorRight:I = 0x101010e
 
+.field public static final indicatorStart:I = 0x10103d1
+
 .field public static final inflatedId:I = 0x10100f3
 
 .field public static final initOrder:I = 0x101001a
+
+.field public static final initialKeyguardLayout:I = 0x10103c2
 
 .field public static final initialLayout:I = 0x1010251
 
@@ -776,6 +814,8 @@
 .field public static final interpolator:I = 0x1010141
 
 .field public static final isAlwaysSyncable:I = 0x1010333
+
+.field public static final isAsciiCapable:I = 0x10103e9
 
 .field public static final isAuxiliary:I = 0x101037f
 
@@ -823,6 +863,8 @@
 
 .field public static final keyPreviewOffset:I = 0x1010238
 
+.field public static final keySet:I = 0x10103db
+
 .field public static final keyTextColor:I = 0x1010236
 
 .field public static final keyTextSize:I = 0x1010234
@@ -838,6 +880,8 @@
 .field public static final killAfterRestore:I = 0x101029c
 
 .field public static final label:I = 0x1010001
+
+.field public static final labelFor:I = 0x10103c6
 
 .field public static final labelTextSize:I = 0x1010235
 
@@ -855,23 +899,35 @@
 
 .field public static final layoutAnimation:I = 0x10100ec
 
+.field public static final layoutDirection:I = 0x10103b2
+
+.field public static final layoutMode:I = 0x10103da
+
 .field public static final layout_above:I = 0x1010184
 
 .field public static final layout_alignBaseline:I = 0x1010186
 
 .field public static final layout_alignBottom:I = 0x101018a
 
+.field public static final layout_alignEnd:I = 0x10103ba
+
 .field public static final layout_alignLeft:I = 0x1010187
 
 .field public static final layout_alignParentBottom:I = 0x101018e
+
+.field public static final layout_alignParentEnd:I = 0x10103bc
 
 .field public static final layout_alignParentLeft:I = 0x101018b
 
 .field public static final layout_alignParentRight:I = 0x101018d
 
+.field public static final layout_alignParentStart:I = 0x10103bb
+
 .field public static final layout_alignParentTop:I = 0x101018c
 
 .field public static final layout_alignRight:I = 0x1010189
+
+.field public static final layout_alignStart:I = 0x10103b9
 
 .field public static final layout_alignTop:I = 0x1010188
 
@@ -897,9 +953,13 @@
 
 .field public static final layout_marginBottom:I = 0x10100fa
 
+.field public static final layout_marginEnd:I = 0x10103b6
+
 .field public static final layout_marginLeft:I = 0x10100f7
 
 .field public static final layout_marginRight:I = 0x10100f9
+
+.field public static final layout_marginStart:I = 0x10103b5
 
 .field public static final layout_marginTop:I = 0x10100f8
 
@@ -911,9 +971,13 @@
 
 .field public static final layout_span:I = 0x101014d
 
+.field public static final layout_toEndOf:I = 0x10103b8
+
 .field public static final layout_toLeftOf:I = 0x1010182
 
 .field public static final layout_toRightOf:I = 0x1010183
+
+.field public static final layout_toStartOf:I = 0x10103b7
 
 .field public static final layout_weight:I = 0x1010181
 
@@ -951,9 +1015,13 @@
 
 .field public static final listPreferredItemHeightSmall:I = 0x1010387
 
+.field public static final listPreferredItemPaddingEnd:I = 0x10103be
+
 .field public static final listPreferredItemPaddingLeft:I = 0x10103a3
 
 .field public static final listPreferredItemPaddingRight:I = 0x10103a4
+
+.field public static final listPreferredItemPaddingStart:I = 0x10103bd
 
 .field public static final listSelector:I = 0x10100fb
 
@@ -1027,6 +1095,10 @@
 
 .field public static final minWidth:I = 0x101013f
 
+.field public static final mipMap:I = 0x10103cd
+
+.field public static final mirrorForRtl:I = 0x10103ce
+
 .field public static final mode:I = 0x101017e
 
 .field public static final moreIcon:I = 0x1010135
@@ -1098,9 +1170,13 @@
 
 .field public static final paddingBottom:I = 0x10100d9
 
+.field public static final paddingEnd:I = 0x10103b4
+
 .field public static final paddingLeft:I = 0x10100d6
 
 .field public static final paddingRight:I = 0x10100d8
+
+.field public static final paddingStart:I = 0x10103b3
 
 .field public static final paddingTop:I = 0x10100d7
 
@@ -1129,9 +1205,11 @@
 
 .field public static final permission:I = 0x1010006
 
+.field public static final permissionFlags:I = 0x10103c7
+
 .field public static final permissionGroup:I = 0x101000a
 
-.field public static final permissionGroupFlags:I = 0x10103a8
+.field public static final permissionGroupFlags:I = 0x10103c5
 
 .field public static final persistent:I = 0x101000d
 
@@ -1173,6 +1251,8 @@
 .field public static final preferenceScreenStyle:I = 0x101008b
 
 .field public static final preferenceStyle:I = 0x101008e
+
+.field public static final presentationTheme:I = 0x10103c0
 
 .field public static final previewImage:I = 0x10102da
 
@@ -1258,7 +1338,13 @@
 
 .field public static final reqTouchScreen:I = 0x1010227
 
+.field public static final requireDeviceUnlock:I = 0x10103ec
+
 .field public static final required:I = 0x101028e
+
+.field public static final requiredAccountType:I = 0x10103d6
+
+.field public static final requiredForAllUsers:I = 0x10103d0
 
 .field public static final requiresFadingEdge:I = 0x10103a5
 
@@ -1276,6 +1362,8 @@
     .annotation runtime Ljava/lang/Deprecated;
     .end annotation
 .end field
+
+.field public static final restrictedAccountType:I = 0x10103d5
 
 .field public static final right:I = 0x10101af
 
@@ -1416,6 +1504,8 @@
 
 .field public static final showDividers:I = 0x1010329
 
+.field public static final showOnLockScreen:I = 0x10103c9
+
 .field public static final showSilent:I = 0x10101fb
 
 .field public static final showWeekNumber:I = 0x101033e
@@ -1428,6 +1518,8 @@
     .annotation runtime Ljava/lang/Deprecated;
     .end annotation
 .end field
+
+.field public static final singleUser:I = 0x10103bf
 
 .field public static final smallIcon:I = 0x101029e
 
@@ -1455,11 +1547,19 @@
 
 .field public static final src:I = 0x1010119
 
+.field public static final ssp:I = 0x10103e3
+
+.field public static final sspPattern:I = 0x10103e5
+
+.field public static final sspPrefix:I = 0x10103e4
+
 .field public static final stackFromBottom:I = 0x10100fd
 
 .field public static final starStyle:I = 0x1010082
 
 .field public static final startColor:I = 0x101019d
+
+.field public static final startDelay:I = 0x10103e2
 
 .field public static final startOffset:I = 0x10101be
 
@@ -1532,6 +1632,8 @@
 
 .field public static final subtypeExtraValue:I = 0x101039a
 
+.field public static final subtypeId:I = 0x10103c1
+
 .field public static final subtypeLocale:I = 0x1010399
 
 .field public static final suggestActionMsg:I = 0x10101dc
@@ -1545,6 +1647,10 @@
 .field public static final summaryOff:I = 0x10101f0
 
 .field public static final summaryOn:I = 0x10101ef
+
+.field public static final supportsRtl:I = 0x10103af
+
+.field public static final supportsSwitchingToNextInputMethod:I = 0x10103eb
 
 .field public static final supportsUploading:I = 0x101029b
 
@@ -1578,6 +1684,8 @@
 
 .field public static final targetDescriptions:I = 0x10103a0
 
+.field public static final targetId:I = 0x10103dc
+
 .field public static final targetPackage:I = 0x1010021
 
 .field public static final targetSdkVersion:I = 0x1010270
@@ -1605,6 +1713,8 @@
 .field public static final testOnly:I = 0x1010272
 
 .field public static final text:I = 0x101014f
+
+.field public static final textAlignment:I = 0x10103b1
 
 .field public static final textAllCaps:I = 0x101038c
 
@@ -1684,6 +1794,8 @@
 
 .field public static final textCursorDrawable:I = 0x1010362
 
+.field public static final textDirection:I = 0x10103b0
+
 .field public static final textEditNoPasteWindowLayout:I = 0x1010315
 
 .field public static final textEditPasteWindowLayout:I = 0x1010314
@@ -1736,6 +1848,8 @@
 
 .field public static final tileMode:I = 0x1010201
 
+.field public static final timeZone:I = 0x10103cc
+
 .field public static final tint:I = 0x1010121
 
 .field public static final title:I = 0x10101e1
@@ -1747,6 +1861,8 @@
 .field public static final toAlpha:I = 0x10101cb
 
 .field public static final toDegrees:I = 0x10101b4
+
+.field public static final toScene:I = 0x10103de
 
 .field public static final toXDelta:I = 0x10101c7
 
@@ -1775,6 +1891,10 @@
 .field public static final transformPivotX:I = 0x1010320
 
 .field public static final transformPivotY:I = 0x1010321
+
+.field public static final transition:I = 0x10103df
+
+.field public static final transitionOrdering:I = 0x10103e0
 
 .field public static final translationX:I = 0x1010322
 
@@ -1811,6 +1931,8 @@
 .field public static final valueType:I = 0x10102e0
 
 .field public static final variablePadding:I = 0x1010195
+
+.field public static final vendor:I = 0x10103e7
 
 .field public static final versionCode:I = 0x101021b
 
@@ -1870,6 +1992,8 @@
 
 .field public static final weightSum:I = 0x1010128
 
+.field public static final widgetCategory:I = 0x10103c4
+
 .field public static final widgetLayout:I = 0x10101eb
 
 .field public static final width:I = 0x1010159
@@ -1914,6 +2038,8 @@
 
 .field public static final windowNoTitle:I = 0x1010056
 
+.field public static final windowOverscan:I = 0x10103cf
+
 .field public static final windowShowAnimation:I = 0x10100b6
 
 .field public static final windowShowWallpaper:I = 0x1010292
@@ -1925,6 +2051,10 @@
 .field public static final windowTitleSize:I = 0x101005a
 
 .field public static final windowTitleStyle:I = 0x101005b
+
+.field public static final windowTranslucentNavigation:I = 0x10103f0
+
+.field public static final windowTranslucentStatus:I = 0x10103ef
 
 .field public static final writePermission:I = 0x1010008
 

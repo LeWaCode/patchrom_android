@@ -325,7 +325,17 @@
     :pswitch_15
     new-instance v3, Landroid/text/style/EasyEditSpan;
 
-    invoke-direct {v3}, Landroid/text/style/EasyEditSpan;-><init>()V
+    invoke-direct {v3, p1}, Landroid/text/style/EasyEditSpan;-><init>(Landroid/os/Parcel;)V
+
+    #calls: Landroid/text/TextUtils;->readSpan(Landroid/os/Parcel;Landroid/text/Spannable;Ljava/lang/Object;)V
+    invoke-static {p1, v1, v3}, Landroid/text/TextUtils;->access$000(Landroid/os/Parcel;Landroid/text/Spannable;Ljava/lang/Object;)V
+
+    goto/16 :goto_1
+
+    :pswitch_16
+    new-instance v3, Landroid/text/style/LocaleSpan;
+
+    invoke-direct {v3, p1}, Landroid/text/style/LocaleSpan;-><init>(Landroid/os/Parcel;)V
 
     #calls: Landroid/text/TextUtils;->readSpan(Landroid/os/Parcel;Landroid/text/Spannable;Ljava/lang/Object;)V
     invoke-static {p1, v1, v3}, Landroid/text/TextUtils;->access$000(Landroid/os/Parcel;Landroid/text/Spannable;Ljava/lang/Object;)V
@@ -356,6 +366,7 @@
         :pswitch_13
         :pswitch_14
         :pswitch_15
+        :pswitch_16
     .end packed-switch
 .end method
 

@@ -34,108 +34,184 @@
 
 # virtual methods
 .method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
-    .locals 7
+    .locals 8
     .parameter "context"
     .parameter "intent"
 
     .prologue
-    const/4 v1, 0x1
+    const/4 v7, -0x1
 
-    const/4 v2, 0x0
+    const-string v6, "android.intent.extra.user_handle"
 
-    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+    invoke-virtual {p2, v6, v7}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
 
-    move-result-object v0
+    move-result v4
 
-    .local v0, action:Ljava/lang/String;
-    const-string v3, "android.intent.action.BOOT_COMPLETED"
-
-    invoke-virtual {v0, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v3
-
-    if-eqz v3, :cond_2
-
-    iget-object v3, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
-
-    #setter for: Lcom/android/server/MountService;->mBooted:Z
-    invoke-static {v3, v1}, Lcom/android/server/MountService;->access$502(Lcom/android/server/MountService;Z)Z
-
-    const-string v3, "simulator"
-
-    const-string v4, "ro.product.device"
-
-    invoke-static {v4}, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-virtual {v3, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v3
-
-    if-eqz v3, :cond_1
-
-    iget-object v3, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
-
-    const/4 v4, 0x0
-
-    const-string v5, "/sdcard"
-
-    const/4 v6, 0x4
-
-    #calls: Lcom/android/server/MountService;->notifyVolumeStateChange(Ljava/lang/String;Ljava/lang/String;II)V
-    invoke-static {v3, v4, v5, v2, v6}, Lcom/android/server/MountService;->access$600(Lcom/android/server/MountService;Ljava/lang/String;Ljava/lang/String;II)V
+    .local v4, userId:I
+    if-ne v4, v7, :cond_1
 
     :cond_0
     :goto_0
     return-void
 
     :cond_1
-    new-instance v2, Lcom/android/server/MountService$1$1;
+    new-instance v3, Landroid/os/UserHandle;
 
-    invoke-direct {v2, p0}, Lcom/android/server/MountService$1$1;-><init>(Lcom/android/server/MountService$1;)V
+    invoke-direct {v3, v4}, Landroid/os/UserHandle;-><init>(I)V
 
-    invoke-virtual {v2}, Lcom/android/server/MountService$1$1;->start()V
+    .local v3, user:Landroid/os/UserHandle;
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v0
+
+    .local v0, action:Ljava/lang/String;
+    const-string v6, "android.intent.action.USER_ADDED"
+
+    invoke-virtual {v6, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_2
+
+    iget-object v6, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
+
+    #getter for: Lcom/android/server/MountService;->mVolumesLock:Ljava/lang/Object;
+    invoke-static {v6}, Lcom/android/server/MountService;->access$600(Lcom/android/server/MountService;)Ljava/lang/Object;
+
+    move-result-object v7
+
+    monitor-enter v7
+
+    :try_start_0
+    iget-object v6, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
+
+    #calls: Lcom/android/server/MountService;->createEmulatedVolumeForUserLocked(Landroid/os/UserHandle;)V
+    invoke-static {v6, v3}, Lcom/android/server/MountService;->access$700(Lcom/android/server/MountService;Landroid/os/UserHandle;)V
+
+    monitor-exit v7
 
     goto :goto_0
+
+    :catchall_0
+    move-exception v6
+
+    monitor-exit v7
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v6
 
     :cond_2
-    const-string v3, "android.hardware.usb.action.USB_STATE"
+    const-string v6, "android.intent.action.USER_REMOVED"
 
-    invoke-virtual {v0, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    invoke-virtual {v6, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 
-    move-result v3
+    move-result v6
 
-    if-eqz v3, :cond_0
+    if-eqz v6, :cond_0
 
-    const-string v3, "connected"
+    iget-object v6, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
 
-    invoke-virtual {p2, v3, v2}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
+    #getter for: Lcom/android/server/MountService;->mVolumesLock:Ljava/lang/Object;
+    invoke-static {v6}, Lcom/android/server/MountService;->access$600(Lcom/android/server/MountService;)Ljava/lang/Object;
 
-    move-result v3
+    move-result-object v7
 
-    if-eqz v3, :cond_3
+    monitor-enter v7
 
-    const-string v3, "mass_storage"
+    :try_start_1
+    invoke-static {}, Lcom/google/android/collect/Lists;->newArrayList()Ljava/util/ArrayList;
 
-    invoke-virtual {p2, v3, v2}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
+    move-result-object v2
 
-    move-result v3
+    .local v2, toRemove:Ljava/util/List;,"Ljava/util/List<Landroid/os/storage/StorageVolume;>;"
+    iget-object v6, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
 
-    if-eqz v3, :cond_3
+    #getter for: Lcom/android/server/MountService;->mVolumes:Ljava/util/ArrayList;
+    invoke-static {v6}, Lcom/android/server/MountService;->access$800(Lcom/android/server/MountService;)Ljava/util/ArrayList;
 
-    .local v1, available:Z
-    :goto_1
-    iget-object v2, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
+    move-result-object v6
 
-    #calls: Lcom/android/server/MountService;->notifyShareAvailabilityChange(Z)V
-    invoke-static {v2, v1}, Lcom/android/server/MountService;->access$1200(Lcom/android/server/MountService;Z)V
+    invoke-virtual {v6}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
 
-    goto :goto_0
+    move-result-object v1
 
-    .end local v1           #available:Z
+    .local v1, i$:Ljava/util/Iterator;
     :cond_3
-    move v1, v2
+    :goto_1
+    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v6
+
+    if-eqz v6, :cond_4
+
+    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v5
+
+    check-cast v5, Landroid/os/storage/StorageVolume;
+
+    .local v5, volume:Landroid/os/storage/StorageVolume;
+    invoke-virtual {v5}, Landroid/os/storage/StorageVolume;->getOwner()Landroid/os/UserHandle;
+
+    move-result-object v6
+
+    invoke-virtual {v3, v6}, Landroid/os/UserHandle;->equals(Ljava/lang/Object;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_3
+
+    invoke-interface {v2, v5}, Ljava/util/List;->add(Ljava/lang/Object;)Z
 
     goto :goto_1
+
+    .end local v1           #i$:Ljava/util/Iterator;
+    .end local v2           #toRemove:Ljava/util/List;,"Ljava/util/List<Landroid/os/storage/StorageVolume;>;"
+    .end local v5           #volume:Landroid/os/storage/StorageVolume;
+    :catchall_1
+    move-exception v6
+
+    monitor-exit v7
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+
+    throw v6
+
+    .restart local v1       #i$:Ljava/util/Iterator;
+    .restart local v2       #toRemove:Ljava/util/List;,"Ljava/util/List<Landroid/os/storage/StorageVolume;>;"
+    :cond_4
+    :try_start_2
+    invoke-interface {v2}, Ljava/util/List;->iterator()Ljava/util/Iterator;
+
+    move-result-object v1
+
+    :goto_2
+    invoke-interface {v1}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v6
+
+    if-eqz v6, :cond_5
+
+    invoke-interface {v1}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v5
+
+    check-cast v5, Landroid/os/storage/StorageVolume;
+
+    .restart local v5       #volume:Landroid/os/storage/StorageVolume;
+    iget-object v6, p0, Lcom/android/server/MountService$1;->this$0:Lcom/android/server/MountService;
+
+    #calls: Lcom/android/server/MountService;->removeVolumeLocked(Landroid/os/storage/StorageVolume;)V
+    invoke-static {v6, v5}, Lcom/android/server/MountService;->access$900(Lcom/android/server/MountService;Landroid/os/storage/StorageVolume;)V
+
+    goto :goto_2
+
+    .end local v5           #volume:Landroid/os/storage/StorageVolume;
+    :cond_5
+    monitor-exit v7
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_1
+
+    goto :goto_0
 .end method

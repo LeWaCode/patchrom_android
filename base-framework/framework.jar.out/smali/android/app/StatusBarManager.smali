@@ -12,7 +12,7 @@
 
 .field public static final DISABLE_HOME:I = 0x200000
 
-.field public static final DISABLE_MASK:I = 0x1ff0000
+.field public static final DISABLE_MASK:I = 0x3ff0000
 
 .field public static final DISABLE_NAVIGATION:I = 0x1200000
     .annotation runtime Ljava/lang/Deprecated;
@@ -29,15 +29,21 @@
 
 .field public static final DISABLE_RECENT:I = 0x1000000
 
+.field public static final DISABLE_SEARCH:I = 0x2000000
+
 .field public static final DISABLE_SYSTEM_INFO:I = 0x100000
 
-.field public static final NAVIGATION_HINT_BACK_ALT:I = 0x8
+.field public static final NAVIGATION_HINT_BACK_ALT:I = 0x1
 
-.field public static final NAVIGATION_HINT_BACK_NOP:I = 0x1
+.field public static final WINDOW_NAVIGATION_BAR:I = 0x2
 
-.field public static final NAVIGATION_HINT_HOME_NOP:I = 0x2
+.field public static final WINDOW_STATE_HIDDEN:I = 0x2
 
-.field public static final NAVIGATION_HINT_RECENT_NOP:I = 0x4
+.field public static final WINDOW_STATE_HIDING:I = 0x1
+
+.field public static final WINDOW_STATE_SHOWING:I = 0x0
+
+.field public static final WINDOW_STATUS_BAR:I = 0x1
 
 
 # instance fields
@@ -117,9 +123,45 @@
     throw v0
 .end method
 
+.method public static windowStateToString(I)Ljava/lang/String;
+    .locals 1
+    .parameter "state"
+
+    .prologue
+    const/4 v0, 0x1
+
+    if-ne p0, v0, :cond_0
+
+    const-string v0, "WINDOW_STATE_HIDING"
+
+    :goto_0
+    return-object v0
+
+    :cond_0
+    const/4 v0, 0x2
+
+    if-ne p0, v0, :cond_1
+
+    const-string v0, "WINDOW_STATE_HIDDEN"
+
+    goto :goto_0
+
+    :cond_1
+    if-nez p0, :cond_2
+
+    const-string v0, "WINDOW_STATE_SHOWING"
+
+    goto :goto_0
+
+    :cond_2
+    const-string v0, "WINDOW_STATE_UNKNOWN"
+
+    goto :goto_0
+.end method
+
 
 # virtual methods
-.method public collapse()V
+.method public collapsePanels()V
     .locals 3
 
     .prologue
@@ -131,7 +173,7 @@
     .local v1, svc:Lcom/android/internal/statusbar/IStatusBarService;
     if-eqz v1, :cond_0
 
-    invoke-interface {v1}, Lcom/android/internal/statusbar/IStatusBarService;->collapse()V
+    invoke-interface {v1}, Lcom/android/internal/statusbar/IStatusBarService;->collapsePanels()V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -190,7 +232,7 @@
     throw v2
 .end method
 
-.method public expand()V
+.method public expandNotificationsPanel()V
     .locals 3
 
     .prologue
@@ -202,7 +244,38 @@
     .local v1, svc:Lcom/android/internal/statusbar/IStatusBarService;
     if-eqz v1, :cond_0
 
-    invoke-interface {v1}, Lcom/android/internal/statusbar/IStatusBarService;->expand()V
+    invoke-interface {v1}, Lcom/android/internal/statusbar/IStatusBarService;->expandNotificationsPanel()V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    :cond_0
+    return-void
+
+    .end local v1           #svc:Lcom/android/internal/statusbar/IStatusBarService;
+    :catch_0
+    move-exception v0
+
+    .local v0, ex:Landroid/os/RemoteException;
+    new-instance v2, Ljava/lang/RuntimeException;
+
+    invoke-direct {v2, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/Throwable;)V
+
+    throw v2
+.end method
+
+.method public expandSettingsPanel()V
+    .locals 3
+
+    .prologue
+    :try_start_0
+    invoke-direct {p0}, Landroid/app/StatusBarManager;->getService()Lcom/android/internal/statusbar/IStatusBarService;
+
+    move-result-object v1
+
+    .local v1, svc:Lcom/android/internal/statusbar/IStatusBarService;
+    if-eqz v1, :cond_0
+
+    invoke-interface {v1}, Lcom/android/internal/statusbar/IStatusBarService;->expandSettingsPanel()V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 

@@ -91,7 +91,7 @@
     :goto_0
     const/16 v0, 0x19
 
-    invoke-virtual {p0, v0}, Lcom/android/server/NsdService$NsdStateMachine;->setProcessedMessagesSize(I)V
+    invoke-virtual {p0, v0}, Lcom/android/server/NsdService$NsdStateMachine;->setLogRecSize(I)V
 
     invoke-direct {p0}, Lcom/android/server/NsdService$NsdStateMachine;->registerForNsdSetting()V
 
@@ -173,7 +173,7 @@
 
     const-string v2, "nsd_on"
 
-    invoke-static {v2}, Landroid/provider/Settings$Secure;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
+    invoke-static {v2}, Landroid/provider/Settings$Global;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v2
 
@@ -186,15 +186,13 @@
 
 
 # virtual methods
-.method protected getMessageInfo(Landroid/os/Message;)Ljava/lang/String;
+.method protected getWhatToString(I)Ljava/lang/String;
     .locals 1
-    .parameter "msg"
+    .parameter "what"
 
     .prologue
-    iget v0, p1, Landroid/os/Message;->what:I
-
     #calls: Lcom/android/server/NsdService;->cmdToString(I)Ljava/lang/String;
-    invoke-static {v0}, Lcom/android/server/NsdService;->access$000(I)Ljava/lang/String;
+    invoke-static {p1}, Lcom/android/server/NsdService;->access$000(I)Ljava/lang/String;
 
     move-result-object v0
 

@@ -4,10 +4,16 @@
 
 
 # static fields
+.field public static final DENSITY_400:I = 0x190
+
 .field public static final DENSITY_DEFAULT:I = 0xa0
 
-#the value of this static final field might be set in the static constructor
-.field public static final DENSITY_DEVICE:I = 0x0
+.field public static final DENSITY_DEFAULT_SCALE:F = 0.00625f
+
+.field public static DENSITY_DEVICE:I = 0x0
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
+.end field
 
 .field public static final DENSITY_HIGH:I = 0xf0
 
@@ -21,6 +27,8 @@
 
 .field public static final DENSITY_XXHIGH:I = 0x1e0
 
+.field public static final DENSITY_XXXHIGH:I = 0x280
+
 
 # instance fields
 .field public density:F
@@ -30,6 +38,8 @@
 .field public heightPixels:I
 
 .field public noncompatDensity:F
+
+.field public noncompatDensityDpi:I
 
 .field public noncompatHeightPixels:I
 
@@ -96,6 +106,192 @@
 
 
 # virtual methods
+.method public equals(Landroid/util/DisplayMetrics;)Z
+    .locals 2
+    .parameter "other"
+
+    .prologue
+    invoke-virtual {p0, p1}, Landroid/util/DisplayMetrics;->equalsPhysical(Landroid/util/DisplayMetrics;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->scaledDensity:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->scaledDensity:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->noncompatScaledDensity:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatScaledDensity:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
+.method public equals(Ljava/lang/Object;)Z
+    .locals 1
+    .parameter "o"
+
+    .prologue
+    instance-of v0, p1, Landroid/util/DisplayMetrics;
+
+    if-eqz v0, :cond_0
+
+    check-cast p1, Landroid/util/DisplayMetrics;
+
+    .end local p1
+    invoke-virtual {p0, p1}, Landroid/util/DisplayMetrics;->equals(Landroid/util/DisplayMetrics;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
+.method public equalsPhysical(Landroid/util/DisplayMetrics;)Z
+    .locals 2
+    .parameter "other"
+
+    .prologue
+    if-eqz p1, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->widthPixels:I
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->widthPixels:I
+
+    if-ne v0, v1, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->heightPixels:I
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->heightPixels:I
+
+    if-ne v0, v1, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->density:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->density:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->densityDpi:I
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->densityDpi:I
+
+    if-ne v0, v1, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->xdpi:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->xdpi:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->ydpi:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->ydpi:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->noncompatWidthPixels:I
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatWidthPixels:I
+
+    if-ne v0, v1, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->noncompatHeightPixels:I
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatHeightPixels:I
+
+    if-ne v0, v1, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->noncompatDensity:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatDensity:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->noncompatDensityDpi:I
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatDensityDpi:I
+
+    if-ne v0, v1, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->noncompatXdpi:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatXdpi:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->noncompatYdpi:F
+
+    iget v1, p1, Landroid/util/DisplayMetrics;->noncompatYdpi:F
+
+    cmpl-float v0, v0, v1
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
+.method public hashCode()I
+    .locals 2
+
+    .prologue
+    iget v0, p0, Landroid/util/DisplayMetrics;->widthPixels:I
+
+    iget v1, p0, Landroid/util/DisplayMetrics;->heightPixels:I
+
+    mul-int/2addr v0, v1
+
+    iget v1, p0, Landroid/util/DisplayMetrics;->densityDpi:I
+
+    mul-int/2addr v0, v1
+
+    return v0
+.end method
+
 .method public setTo(Landroid/util/DisplayMetrics;)V
     .locals 1
     .parameter "o"
@@ -141,6 +337,10 @@
 
     iput v0, p0, Landroid/util/DisplayMetrics;->noncompatDensity:F
 
+    iget v0, p1, Landroid/util/DisplayMetrics;->noncompatDensityDpi:I
+
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatDensityDpi:I
+
     iget v0, p1, Landroid/util/DisplayMetrics;->noncompatScaledDensity:F
 
     iput v0, p0, Landroid/util/DisplayMetrics;->noncompatScaledDensity:F
@@ -157,14 +357,14 @@
 .end method
 
 .method public setToDefaults()V
-    .locals 3
+    .locals 2
 
     .prologue
-    const/4 v2, 0x0
+    const/4 v0, 0x0
 
-    iput v2, p0, Landroid/util/DisplayMetrics;->widthPixels:I
+    iput v0, p0, Landroid/util/DisplayMetrics;->widthPixels:I
 
-    iput v2, p0, Landroid/util/DisplayMetrics;->heightPixels:I
+    iput v0, p0, Landroid/util/DisplayMetrics;->heightPixels:I
 
     sget v0, Landroid/util/DisplayMetrics;->DENSITY_DEVICE:I
 
@@ -196,9 +396,33 @@
 
     iput v0, p0, Landroid/util/DisplayMetrics;->ydpi:F
 
-    iput v2, p0, Landroid/util/DisplayMetrics;->noncompatWidthPixels:I
+    iget v0, p0, Landroid/util/DisplayMetrics;->widthPixels:I
 
-    iput v2, p0, Landroid/util/DisplayMetrics;->noncompatHeightPixels:I
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatWidthPixels:I
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->heightPixels:I
+
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatHeightPixels:I
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->density:F
+
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatDensity:F
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->densityDpi:I
+
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatDensityDpi:I
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->scaledDensity:F
+
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatScaledDensity:F
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->xdpi:F
+
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatXdpi:F
+
+    iget v0, p0, Landroid/util/DisplayMetrics;->ydpi:F
+
+    iput v0, p0, Landroid/util/DisplayMetrics;->noncompatYdpi:F
 
     return-void
 .end method

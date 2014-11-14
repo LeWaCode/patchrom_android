@@ -20,6 +20,9 @@
 .field mChangingConfigurations:I
 
 .field mUseColor:I
+    .annotation runtime Landroid/view/ViewDebug$ExportedProperty;
+    .end annotation
+.end field
 
 
 # direct methods
@@ -39,6 +42,10 @@
     iget v0, p1, Landroid/graphics/drawable/ColorDrawable$ColorState;->mUseColor:I
 
     iput v0, p0, Landroid/graphics/drawable/ColorDrawable$ColorState;->mUseColor:I
+
+    iget v0, p1, Landroid/graphics/drawable/ColorDrawable$ColorState;->mChangingConfigurations:I
+
+    iput v0, p0, Landroid/graphics/drawable/ColorDrawable$ColorState;->mChangingConfigurations:I
 
     :cond_0
     return-void

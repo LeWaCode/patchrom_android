@@ -26,6 +26,25 @@
     .end annotation
 .end field
 
+.field public isThemeApk:Z
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field lockedZipFilePath:Ljava/lang/String;
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field mDrmProtectedThemeApk:Z
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+
 .field public static final INSTALL_LOCATION_AUTO:I = 0x0
 
 .field public static final INSTALL_LOCATION_INTERNAL_ONLY:I = 0x1
@@ -54,25 +73,7 @@
 
 .field public instrumentation:[Landroid/content/pm/InstrumentationInfo;
 
-.field public isThemeApk:Z
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field public lastUpdateTime:J
-
-.field lockedZipFilePath:Ljava/lang/String;
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field mDrmProtectedThemeApk:Z
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field public packageName:Ljava/lang/String;
 
@@ -87,6 +88,12 @@
 .field public requestedPermissions:[Ljava/lang/String;
 
 .field public requestedPermissionsFlags:[I
+
+.field public requiredAccountType:Ljava/lang/String;
+
+.field public requiredForAllUsers:Z
+
+.field public restrictedAccountType:Ljava/lang/String;
 
 .field public services:[Landroid/content/pm/ServiceInfo;
 
@@ -125,13 +132,7 @@
     .locals 1
 
     .prologue
-    const/4 v0, 0x0
-
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
-
-    iput-boolean v0, p0, Landroid/content/pm/PackageInfo;->isThemeApk:Z
-
-    iput-boolean v0, p0, Landroid/content/pm/PackageInfo;->mDrmProtectedThemeApk:Z
 
     const/4 v0, 0x1
 
@@ -141,24 +142,18 @@
 .end method
 
 .method private constructor <init>(Landroid/os/Parcel;)V
-    .locals 3
+    .locals 5
     .parameter "source"
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
 
     .prologue
-    const/4 v1, 0x0
+    const/4 v2, 0x1
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    iput-boolean v1, p0, Landroid/content/pm/PackageInfo;->isThemeApk:Z
-
-    iput-boolean v1, p0, Landroid/content/pm/PackageInfo;->mDrmProtectedThemeApk:Z
-
-    const/4 v1, 0x1
-
-    iput v1, p0, Landroid/content/pm/PackageInfo;->installLocation:I
+    iput v2, p0, Landroid/content/pm/PackageInfo;->installLocation:I
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
 
@@ -210,15 +205,15 @@
     :cond_0
     invoke-virtual {p1}, Landroid/os/Parcel;->readLong()J
 
-    move-result-wide v1
+    move-result-wide v3
 
-    iput-wide v1, p0, Landroid/content/pm/PackageInfo;->firstInstallTime:J
+    iput-wide v3, p0, Landroid/content/pm/PackageInfo;->firstInstallTime:J
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readLong()J
 
-    move-result-wide v1
+    move-result-wide v3
 
-    iput-wide v1, p0, Landroid/content/pm/PackageInfo;->lastUpdateTime:J
+    iput-wide v3, p0, Landroid/content/pm/PackageInfo;->lastUpdateTime:J
 
     invoke-virtual {p1}, Landroid/os/Parcel;->createIntArray()[I
 
@@ -334,9 +329,37 @@
 
     iput v1, p0, Landroid/content/pm/PackageInfo;->installLocation:I
 
-    invoke-static {p1, p0}, Landroid/content/pm/PackageInfo$Injector;->writePackageInfoToParcel(Landroid/os/Parcel;Landroid/content/pm/PackageInfo;)V
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    move v1, v2
+
+    :goto_0
+    iput-boolean v1, p0, Landroid/content/pm/PackageInfo;->requiredForAllUsers:Z
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
+
+    move-result-object v1
+
+    iput-object v1, p0, Landroid/content/pm/PackageInfo;->restrictedAccountType:Ljava/lang/String;
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
+
+    move-result-object v1
+
+    iput-object v1, p0, Landroid/content/pm/PackageInfo;->requiredAccountType:Ljava/lang/String;
+
+    invoke-static {p1, p0}, Landroid/content/pm/PackageInfo$Injector;->readFromParcel(Landroid/os/Parcel;Landroid/content/pm/PackageInfo;)V
 
     return-void
+
+    :cond_1
+    const/4 v1, 0x0
+
+    goto :goto_0
 .end method
 
 .method synthetic constructor <init>(Landroid/os/Parcel;Landroid/content/pm/PackageInfo$1;)V
@@ -359,56 +382,6 @@
     const/4 v0, 0x0
 
     return v0
-.end method
-
-.method public getLockedZipFilePath()Ljava/lang/String;
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->lockedZipFilePath:Ljava/lang/String;
-
-    return-object v0
-.end method
-
-.method public isDrmProtectedThemeApk()Z
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-boolean v0, p0, Landroid/content/pm/PackageInfo;->mDrmProtectedThemeApk:Z
-
-    return v0
-.end method
-
-.method public setDrmProtectedThemeApk(Z)V
-    .locals 0
-    .parameter "value"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iput-boolean p1, p0, Landroid/content/pm/PackageInfo;->mDrmProtectedThemeApk:Z
-
-    return-void
-.end method
-
-.method public setLockedZipFilePath(Ljava/lang/String;)V
-    .locals 0
-    .parameter "value"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iput-object p1, p0, Landroid/content/pm/PackageInfo;->lockedZipFilePath:Ljava/lang/String;
-
-    return-void
 .end method
 
 .method public toString()Ljava/lang/String;
@@ -463,7 +436,7 @@
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V
-    .locals 2
+    .locals 4
     .parameter "dest"
     .parameter "parcelableFlags"
     .annotation build Landroid/annotation/LewaHook;
@@ -471,107 +444,177 @@
     .end annotation
 
     .prologue
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->packageName:Ljava/lang/String;
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
-
-    iget v0, p0, Landroid/content/pm/PackageInfo;->versionCode:I
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
-
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->versionName:Ljava/lang/String;
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
-
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->sharedUserId:Ljava/lang/String;
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
-
-    iget v0, p0, Landroid/content/pm/PackageInfo;->sharedUserLabel:I
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
-
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
-
-    if-eqz v0, :cond_0
-
     const/4 v0, 0x1
 
+    const/4 v1, 0x0
+
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->packageName:Ljava/lang/String;
+
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
+    iget v2, p0, Landroid/content/pm/PackageInfo;->versionCode:I
+
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeInt(I)V
+
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->versionName:Ljava/lang/String;
+
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->sharedUserId:Ljava/lang/String;
+
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
+    iget v2, p0, Landroid/content/pm/PackageInfo;->sharedUserLabel:I
+
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeInt(I)V
+
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+
+    if-eqz v2, :cond_0
+
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
 
-    invoke-virtual {v0, p1, p2}, Landroid/content/pm/ApplicationInfo;->writeToParcel(Landroid/os/Parcel;I)V
+    invoke-virtual {v2, p1, p2}, Landroid/content/pm/ApplicationInfo;->writeToParcel(Landroid/os/Parcel;I)V
 
     :goto_0
-    iget-wide v0, p0, Landroid/content/pm/PackageInfo;->firstInstallTime:J
+    iget-wide v2, p0, Landroid/content/pm/PackageInfo;->firstInstallTime:J
 
-    invoke-virtual {p1, v0, v1}, Landroid/os/Parcel;->writeLong(J)V
+    invoke-virtual {p1, v2, v3}, Landroid/os/Parcel;->writeLong(J)V
 
-    iget-wide v0, p0, Landroid/content/pm/PackageInfo;->lastUpdateTime:J
+    iget-wide v2, p0, Landroid/content/pm/PackageInfo;->lastUpdateTime:J
 
-    invoke-virtual {p1, v0, v1}, Landroid/os/Parcel;->writeLong(J)V
+    invoke-virtual {p1, v2, v3}, Landroid/os/Parcel;->writeLong(J)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->gids:[I
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->gids:[I
 
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeIntArray([I)V
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeIntArray([I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->activities:[Landroid/content/pm/ActivityInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->activities:[Landroid/content/pm/ActivityInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->receivers:[Landroid/content/pm/ActivityInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->receivers:[Landroid/content/pm/ActivityInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->services:[Landroid/content/pm/ServiceInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->services:[Landroid/content/pm/ServiceInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->providers:[Landroid/content/pm/ProviderInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->providers:[Landroid/content/pm/ProviderInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->instrumentation:[Landroid/content/pm/InstrumentationInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->instrumentation:[Landroid/content/pm/InstrumentationInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->permissions:[Landroid/content/pm/PermissionInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->permissions:[Landroid/content/pm/PermissionInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->requestedPermissions:[Ljava/lang/String;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->requestedPermissions:[Ljava/lang/String;
 
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeStringArray([Ljava/lang/String;)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->requestedPermissionsFlags:[I
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->requestedPermissionsFlags:[I
 
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeIntArray([I)V
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeIntArray([I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->signatures:[Landroid/content/pm/Signature;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->signatures:[Landroid/content/pm/Signature;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->configPreferences:[Landroid/content/pm/ConfigurationInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->configPreferences:[Landroid/content/pm/ConfigurationInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget-object v0, p0, Landroid/content/pm/PackageInfo;->reqFeatures:[Landroid/content/pm/FeatureInfo;
+    iget-object v2, p0, Landroid/content/pm/PackageInfo;->reqFeatures:[Landroid/content/pm/FeatureInfo;
 
-    invoke-virtual {p1, v0, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
+    invoke-virtual {p1, v2, p2}, Landroid/os/Parcel;->writeTypedArray([Landroid/os/Parcelable;I)V
 
-    iget v0, p0, Landroid/content/pm/PackageInfo;->installLocation:I
+    iget v2, p0, Landroid/content/pm/PackageInfo;->installLocation:I
 
+    invoke-virtual {p1, v2}, Landroid/os/Parcel;->writeInt(I)V
+
+    iget-boolean v2, p0, Landroid/content/pm/PackageInfo;->requiredForAllUsers:Z
+
+    if-eqz v2, :cond_1
+
+    :goto_1
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
-    invoke-static {p1, p2, p0}, Landroid/content/pm/PackageInfo$Injector;->writeThemeToParcel(Landroid/os/Parcel;ILandroid/content/pm/PackageInfo;)V
+    iget-object v0, p0, Landroid/content/pm/PackageInfo;->restrictedAccountType:Ljava/lang/String;
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
+    iget-object v0, p0, Landroid/content/pm/PackageInfo;->requiredAccountType:Ljava/lang/String;
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
+    invoke-static {p1, p2, p0}, Landroid/content/pm/PackageInfo$Injector;->writeToParcel(Landroid/os/Parcel;ILandroid/content/pm/PackageInfo;)V
 
     return-void
 
     :cond_0
-    const/4 v0, 0x0
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual {p1, v1}, Landroid/os/Parcel;->writeInt(I)V
 
     goto :goto_0
+
+    :cond_1
+    move v0, v1
+
+    goto :goto_1
+.end method
+
+.method public getLockedZipFilePath()Ljava/lang/String;
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/content/pm/PackageInfo;->lockedZipFilePath:Ljava/lang/String;
+
+    return-object v0
+.end method
+
+.method public isDrmProtectedThemeApk()Z
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-boolean v0, p0, Landroid/content/pm/PackageInfo;->mDrmProtectedThemeApk:Z
+
+    return v0
+.end method
+
+.method public setDrmProtectedThemeApk(Z)V
+    .locals 0
+    .parameter "value"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iput-boolean p1, p0, Landroid/content/pm/PackageInfo;->mDrmProtectedThemeApk:Z
+
+    return-void
+.end method
+
+.method public setLockedZipFilePath(Ljava/lang/String;)V
+    .locals 0
+    .parameter "value"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iput-object p1, p0, Landroid/content/pm/PackageInfo;->lockedZipFilePath:Ljava/lang/String;
+
+    return-void
 .end method

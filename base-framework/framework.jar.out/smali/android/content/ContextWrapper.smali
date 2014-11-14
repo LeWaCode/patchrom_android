@@ -61,17 +61,17 @@
     return v0
 .end method
 
-.method public bindService(Landroid/content/Intent;Landroid/content/ServiceConnection;II)Z
+.method public bindServiceAsUser(Landroid/content/Intent;Landroid/content/ServiceConnection;ILandroid/os/UserHandle;)Z
     .locals 1
     .parameter "service"
     .parameter "conn"
     .parameter "flags"
-    .parameter "userId"
+    .parameter "user"
 
     .prologue
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
-    invoke-virtual {v0, p1, p2, p3, p4}, Landroid/content/Context;->bindService(Landroid/content/Intent;Landroid/content/ServiceConnection;II)Z
+    invoke-virtual {v0, p1, p2, p3, p4}, Landroid/content/Context;->bindServiceAsUser(Landroid/content/Intent;Landroid/content/ServiceConnection;ILandroid/os/UserHandle;)Z
 
     move-result v0
 
@@ -216,6 +216,34 @@
     return-void
 .end method
 
+.method public createConfigurationContext(Landroid/content/res/Configuration;)Landroid/content/Context;
+    .locals 1
+    .parameter "overrideConfiguration"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1}, Landroid/content/Context;->createConfigurationContext(Landroid/content/res/Configuration;)Landroid/content/Context;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public createDisplayContext(Landroid/view/Display;)Landroid/content/Context;
+    .locals 1
+    .parameter "display"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1}, Landroid/content/Context;->createDisplayContext(Landroid/view/Display;)Landroid/content/Context;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method public createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
     .locals 1
     .parameter "packageName"
@@ -230,6 +258,27 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0, p1, p2}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
+    .locals 1
+    .parameter "packageName"
+    .parameter "flags"
+    .parameter "user"
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2, p3}, Landroid/content/Context;->createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
 
     move-result-object v0
 
@@ -465,6 +514,19 @@
     return-object v0
 .end method
 
+.method public getBasePackageName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0}, Landroid/content/Context;->getBasePackageName()Ljava/lang/String;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method public getCacheDir()Ljava/io/File;
     .locals 1
 
@@ -533,6 +595,20 @@
     return-object v0
 .end method
 
+.method public getDisplayAdjustments(I)Landroid/view/DisplayAdjustments;
+    .locals 1
+    .parameter "displayId"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1}, Landroid/content/Context;->getDisplayAdjustments(I)Landroid/view/DisplayAdjustments;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method public getExternalCacheDir()Ljava/io/File;
     .locals 1
 
@@ -540,6 +616,19 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0}, Landroid/content/Context;->getExternalCacheDir()Ljava/io/File;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public getExternalCacheDirs()[Ljava/io/File;
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0}, Landroid/content/Context;->getExternalCacheDirs()[Ljava/io/File;
 
     move-result-object v0
 
@@ -554,6 +643,20 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0, p1}, Landroid/content/Context;->getExternalFilesDir(Ljava/lang/String;)Ljava/io/File;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public getExternalFilesDirs(Ljava/lang/String;)[Ljava/io/File;
+    .locals 1
+    .parameter "type"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1}, Landroid/content/Context;->getExternalFilesDirs(Ljava/lang/String;)[Ljava/io/File;
 
     move-result-object v0
 
@@ -607,6 +710,32 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0}, Landroid/content/Context;->getObbDir()Ljava/io/File;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public getObbDirs()[Ljava/io/File;
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0}, Landroid/content/Context;->getObbDirs()[Ljava/io/File;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public getOpPackageName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0}, Landroid/content/Context;->getOpPackageName()Ljava/lang/String;
 
     move-result-object v0
 
@@ -741,6 +870,19 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0}, Landroid/content/Context;->getThemeResId()I
+
+    move-result v0
+
+    return v0
+.end method
+
+.method public getUserId()I
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0}, Landroid/content/Context;->getUserId()I
 
     move-result v0
 
@@ -930,6 +1072,34 @@
     return-object v0
 .end method
 
+.method public registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+    .locals 6
+    .parameter "receiver"
+    .parameter "user"
+    .parameter "filter"
+    .parameter "broadcastPermission"
+    .parameter "scheduler"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    move-object v1, p1
+
+    move-object v2, p2
+
+    move-object v3, p3
+
+    move-object v4, p4
+
+    move-object v5, p5
+
+    invoke-virtual/range {v0 .. v5}, Landroid/content/Context;->registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method public removeStickyBroadcast(Landroid/content/Intent;)V
     .locals 1
     .parameter "intent"
@@ -938,6 +1108,19 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0, p1}, Landroid/content/Context;->removeStickyBroadcast(Landroid/content/Intent;)V
+
+    return-void
+.end method
+
+.method public removeStickyBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+    .locals 1
+    .parameter "intent"
+    .parameter "user"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2}, Landroid/content/Context;->removeStickyBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
 
     return-void
 .end method
@@ -967,19 +1150,6 @@
     return-void
 .end method
 
-.method public sendBroadcast(Landroid/content/Intent;I)V
-    .locals 1
-    .parameter "intent"
-    .parameter "userId"
-
-    .prologue
-    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
-
-    invoke-virtual {v0, p1, p2}, Landroid/content/Context;->sendBroadcast(Landroid/content/Intent;I)V
-
-    return-void
-.end method
-
 .method public sendBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
     .locals 1
     .parameter "intent"
@@ -993,6 +1163,47 @@
     return-void
 .end method
 
+.method public sendBroadcast(Landroid/content/Intent;Ljava/lang/String;I)V
+    .locals 1
+    .parameter "intent"
+    .parameter "receiverPermission"
+    .parameter "appOp"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2, p3}, Landroid/content/Context;->sendBroadcast(Landroid/content/Intent;Ljava/lang/String;I)V
+
+    return-void
+.end method
+
+.method public sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+    .locals 1
+    .parameter "intent"
+    .parameter "user"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2}, Landroid/content/Context;->sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+
+    return-void
+.end method
+
+.method public sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;)V
+    .locals 1
+    .parameter "intent"
+    .parameter "user"
+    .parameter "receiverPermission"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2, p3}, Landroid/content/Context;->sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;)V
+
+    return-void
+.end method
+
 .method public sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
     .locals 1
     .parameter "intent"
@@ -1002,6 +1213,41 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0, p1, p2}, Landroid/content/Context;->sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
+
+    return-void
+.end method
+
+.method public sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;ILandroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+    .locals 9
+    .parameter "intent"
+    .parameter "receiverPermission"
+    .parameter "appOp"
+    .parameter "resultReceiver"
+    .parameter "scheduler"
+    .parameter "initialCode"
+    .parameter "initialData"
+    .parameter "initialExtras"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    move-object v1, p1
+
+    move-object v2, p2
+
+    move v3, p3
+
+    move-object v4, p4
+
+    move-object v5, p5
+
+    move v6, p6
+
+    move-object/from16 v7, p7
+
+    move-object/from16 v8, p8
+
+    invoke-virtual/range {v0 .. v8}, Landroid/content/Context;->sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;ILandroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
 
     return-void
 .end method
@@ -1038,6 +1284,41 @@
     return-void
 .end method
 
+.method public sendOrderedBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+    .locals 9
+    .parameter "intent"
+    .parameter "user"
+    .parameter "receiverPermission"
+    .parameter "resultReceiver"
+    .parameter "scheduler"
+    .parameter "initialCode"
+    .parameter "initialData"
+    .parameter "initialExtras"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    move-object v1, p1
+
+    move-object v2, p2
+
+    move-object v3, p3
+
+    move-object v4, p4
+
+    move-object v5, p5
+
+    move v6, p6
+
+    move-object/from16 v7, p7
+
+    move-object/from16 v8, p8
+
+    invoke-virtual/range {v0 .. v8}, Landroid/content/Context;->sendOrderedBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+
+    return-void
+.end method
+
 .method public sendStickyBroadcast(Landroid/content/Intent;)V
     .locals 1
     .parameter "intent"
@@ -1046,6 +1327,19 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0, p1}, Landroid/content/Context;->sendStickyBroadcast(Landroid/content/Intent;)V
+
+    return-void
+.end method
+
+.method public sendStickyBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+    .locals 1
+    .parameter "intent"
+    .parameter "user"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2}, Landroid/content/Context;->sendStickyBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
 
     return-void
 .end method
@@ -1075,6 +1369,38 @@
     move-object v6, p6
 
     invoke-virtual/range {v0 .. v6}, Landroid/content/Context;->sendStickyOrderedBroadcast(Landroid/content/Intent;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+
+    return-void
+.end method
+
+.method public sendStickyOrderedBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+    .locals 8
+    .parameter "intent"
+    .parameter "user"
+    .parameter "resultReceiver"
+    .parameter "scheduler"
+    .parameter "initialCode"
+    .parameter "initialData"
+    .parameter "initialExtras"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    move-object v1, p1
+
+    move-object v2, p2
+
+    move-object v3, p3
+
+    move-object v4, p4
+
+    move v5, p5
+
+    move-object v6, p6
+
+    move-object v7, p7
+
+    invoke-virtual/range {v0 .. v7}, Landroid/content/Context;->sendStickyOrderedBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
 
     return-void
 .end method
@@ -1150,6 +1476,20 @@
     return-void
 .end method
 
+.method public startActivitiesAsUser([Landroid/content/Intent;Landroid/os/Bundle;Landroid/os/UserHandle;)V
+    .locals 1
+    .parameter "intents"
+    .parameter "options"
+    .parameter "userHandle"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2, p3}, Landroid/content/Context;->startActivitiesAsUser([Landroid/content/Intent;Landroid/os/Bundle;Landroid/os/UserHandle;)V
+
+    return-void
+.end method
+
 .method public startActivity(Landroid/content/Intent;)V
     .locals 1
     .parameter "intent"
@@ -1171,6 +1511,33 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0, p1, p2}, Landroid/content/Context;->startActivity(Landroid/content/Intent;Landroid/os/Bundle;)V
+
+    return-void
+.end method
+
+.method public startActivityAsUser(Landroid/content/Intent;Landroid/os/Bundle;Landroid/os/UserHandle;)V
+    .locals 1
+    .parameter "intent"
+    .parameter "options"
+    .parameter "user"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2, p3}, Landroid/content/Context;->startActivityAsUser(Landroid/content/Intent;Landroid/os/Bundle;Landroid/os/UserHandle;)V
+
+    return-void
+.end method
+
+.method public startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+    .locals 1
+    .parameter "intent"
+    .parameter "user"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2}, Landroid/content/Context;->startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
 
     return-void
 .end method
@@ -1270,6 +1637,21 @@
     return-object v0
 .end method
 
+.method public startServiceAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)Landroid/content/ComponentName;
+    .locals 1
+    .parameter "service"
+    .parameter "user"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2}, Landroid/content/Context;->startServiceAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)Landroid/content/ComponentName;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 .method public stopService(Landroid/content/Intent;)Z
     .locals 1
     .parameter "name"
@@ -1278,6 +1660,21 @@
     iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
 
     invoke-virtual {v0, p1}, Landroid/content/Context;->stopService(Landroid/content/Intent;)Z
+
+    move-result v0
+
+    return v0
+.end method
+
+.method public stopServiceAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)Z
+    .locals 1
+    .parameter "name"
+    .parameter "user"
+
+    .prologue
+    iget-object v0, p0, Landroid/content/ContextWrapper;->mBase:Landroid/content/Context;
+
+    invoke-virtual {v0, p1, p2}, Landroid/content/Context;->stopServiceAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)Z
 
     move-result v0
 

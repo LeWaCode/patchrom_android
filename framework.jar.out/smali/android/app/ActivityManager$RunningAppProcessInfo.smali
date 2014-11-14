@@ -31,6 +31,8 @@
 
 .field public static final FLAG_CANT_SAVE_STATE:I = 0x1
 
+.field public static final FLAG_HAS_ACTIVITIES:I = 0x4
+
 .field public static final FLAG_PERSISTENT:I = 0x2
 
 .field public static final IMPORTANCE_BACKGROUND:I = 0x190

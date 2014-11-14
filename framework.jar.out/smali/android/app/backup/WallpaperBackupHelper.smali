@@ -9,15 +9,15 @@
 # static fields
 .field private static final DEBUG:Z = false
 
-.field private static final STAGE_FILE:Ljava/lang/String; = "/data/system/users/0/wallpaper-tmp"
+.field private static final STAGE_FILE:Ljava/lang/String; = null
 
 .field private static final TAG:Ljava/lang/String; = "WallpaperBackupHelper"
 
-.field public static final WALLPAPER_IMAGE:Ljava/lang/String; = "/data/system/users/0/wallpaper"
+.field public static final WALLPAPER_IMAGE:Ljava/lang/String; = null
 
 .field public static final WALLPAPER_IMAGE_KEY:Ljava/lang/String; = "/data/data/com.android.settings/files/wallpaper"
 
-.field public static final WALLPAPER_INFO:Ljava/lang/String; = "/data/system/users/0/wallpaper_info.xml"
+.field public static final WALLPAPER_INFO:Ljava/lang/String; = null
 
 .field public static final WALLPAPER_INFO_KEY:Ljava/lang/String; = "/data/system/wallpaper_info.xml"
 
@@ -35,6 +35,63 @@
 
 
 # direct methods
+.method static constructor <clinit>()V
+    .locals 4
+
+    .prologue
+    const/4 v3, 0x0
+
+    new-instance v0, Ljava/io/File;
+
+    invoke-static {v3}, Landroid/os/Environment;->getUserSystemDirectory(I)Ljava/io/File;
+
+    move-result-object v1
+
+    const-string v2, "wallpaper"
+
+    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+
+    invoke-virtual {v0}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v0
+
+    sput-object v0, Landroid/app/backup/WallpaperBackupHelper;->WALLPAPER_IMAGE:Ljava/lang/String;
+
+    new-instance v0, Ljava/io/File;
+
+    invoke-static {v3}, Landroid/os/Environment;->getUserSystemDirectory(I)Ljava/io/File;
+
+    move-result-object v1
+
+    const-string v2, "wallpaper_info.xml"
+
+    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+
+    invoke-virtual {v0}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v0
+
+    sput-object v0, Landroid/app/backup/WallpaperBackupHelper;->WALLPAPER_INFO:Ljava/lang/String;
+
+    new-instance v0, Ljava/io/File;
+
+    invoke-static {v3}, Landroid/os/Environment;->getUserSystemDirectory(I)Ljava/io/File;
+
+    move-result-object v1
+
+    const-string v2, "wallpaper-tmp"
+
+    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+
+    invoke-virtual {v0}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v0
+
+    sput-object v0, Landroid/app/backup/WallpaperBackupHelper;->STAGE_FILE:Ljava/lang/String;
+
+    return-void
+.end method
+
 .method public constructor <init>(Landroid/content/Context;[Ljava/lang/String;[Ljava/lang/String;)V
     .locals 8
     .parameter "context"
@@ -176,7 +233,7 @@
 
     new-instance v0, Ljava/io/File;
 
-    const-string v7, "/data/system/users/0/wallpaper-tmp"
+    sget-object v7, Landroid/app/backup/WallpaperBackupHelper;->STAGE_FILE:Ljava/lang/String;
 
     invoke-direct {v0, v7}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
@@ -196,7 +253,7 @@
 
     iput-boolean v7, v4, Landroid/graphics/BitmapFactory$Options;->inJustDecodeBounds:Z
 
-    const-string v7, "/data/system/users/0/wallpaper-tmp"
+    sget-object v7, Landroid/app/backup/WallpaperBackupHelper;->STAGE_FILE:Ljava/lang/String;
 
     invoke-static {v7, v4}, Landroid/graphics/BitmapFactory;->decodeFile(Ljava/lang/String;Landroid/graphics/BitmapFactory$Options;)Landroid/graphics/Bitmap;
 
@@ -244,7 +301,7 @@
 
     new-instance v7, Ljava/io/File;
 
-    const-string v8, "/data/system/users/0/wallpaper"
+    sget-object v8, Landroid/app/backup/WallpaperBackupHelper;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     invoke-direct {v7, v8}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
@@ -282,7 +339,7 @@
 
     new-instance v0, Ljava/io/File;
 
-    const-string v7, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v7, Landroid/app/backup/WallpaperBackupHelper;->WALLPAPER_INFO:Ljava/lang/String;
 
     invoke-direct {v0, v7}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 

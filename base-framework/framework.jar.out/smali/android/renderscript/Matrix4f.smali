@@ -259,8 +259,8 @@
 # virtual methods
 .method public get(II)F
     .locals 2
-    .parameter "i"
-    .parameter "j"
+    .parameter "x"
+    .parameter "y"
 
     .prologue
     iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
@@ -579,6 +579,160 @@
     const/4 v4, 0x1
 
     goto :goto_2
+.end method
+
+.method public load(Landroid/renderscript/Matrix3f;)V
+    .locals 7
+    .parameter "src"
+
+    .prologue
+    const/4 v6, 0x3
+
+    const/4 v5, 0x2
+
+    const/4 v3, 0x1
+
+    const/4 v2, 0x0
+
+    const/4 v4, 0x0
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    iget-object v1, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    aget v1, v1, v2
+
+    aput v1, v0, v2
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    iget-object v1, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    aget v1, v1, v3
+
+    aput v1, v0, v3
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    iget-object v1, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    aget v1, v1, v5
+
+    aput v1, v0, v5
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    aput v4, v0, v6
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/4 v1, 0x4
+
+    iget-object v2, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    aget v2, v2, v6
+
+    aput v2, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/4 v1, 0x5
+
+    iget-object v2, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    const/4 v3, 0x4
+
+    aget v2, v2, v3
+
+    aput v2, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/4 v1, 0x6
+
+    iget-object v2, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    const/4 v3, 0x5
+
+    aget v2, v2, v3
+
+    aput v2, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/4 v1, 0x7
+
+    aput v4, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0x8
+
+    iget-object v2, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    const/4 v3, 0x6
+
+    aget v2, v2, v3
+
+    aput v2, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0x9
+
+    iget-object v2, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    const/4 v3, 0x7
+
+    aget v2, v2, v3
+
+    aput v2, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0xa
+
+    iget-object v2, p1, Landroid/renderscript/Matrix3f;->mMat:[F
+
+    const/16 v3, 0x8
+
+    aget v2, v2, v3
+
+    aput v2, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0xb
+
+    aput v4, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0xc
+
+    aput v4, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0xd
+
+    aput v4, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0xe
+
+    aput v4, v0, v1
+
+    iget-object v0, p0, Landroid/renderscript/Matrix4f;->mMat:[F
+
+    const/16 v1, 0xf
+
+    const/high16 v2, 0x3f80
+
+    aput v2, v0, v1
+
+    return-void
 .end method
 
 .method public load(Landroid/renderscript/Matrix4f;)V
@@ -1558,8 +1712,8 @@
 
 .method public set(IIF)V
     .locals 2
-    .parameter "i"
-    .parameter "j"
+    .parameter "x"
+    .parameter "y"
     .parameter "v"
 
     .prologue

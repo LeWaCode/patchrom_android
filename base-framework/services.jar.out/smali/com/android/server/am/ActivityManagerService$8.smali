@@ -1,11 +1,11 @@
 .class Lcom/android/server/am/ActivityManagerService$8;
-.super Lcom/android/server/am/ActivityManagerService$ForegroundToken;
+.super Landroid/content/IIntentReceiver$Stub;
 .source "ActivityManagerService.java"
 
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/am/ActivityManagerService;->setProcessForeground(Landroid/os/IBinder;IZ)V
+    value = Lcom/android/server/am/ActivityManagerService;->finishBooting()V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -26,20 +26,51 @@
     .prologue
     iput-object p1, p0, Lcom/android/server/am/ActivityManagerService$8;->this$0:Lcom/android/server/am/ActivityManagerService;
 
-    invoke-direct {p0, p1}, Lcom/android/server/am/ActivityManagerService$ForegroundToken;-><init>(Lcom/android/server/am/ActivityManagerService;)V
+    invoke-direct {p0}, Landroid/content/IIntentReceiver$Stub;-><init>()V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public binderDied()V
-    .locals 1
+.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
+    .locals 6
+    .parameter "intent"
+    .parameter "resultCode"
+    .parameter "data"
+    .parameter "extras"
+    .parameter "ordered"
+    .parameter "sticky"
+    .parameter "sendingUser"
 
     .prologue
+    iget-object v1, p0, Lcom/android/server/am/ActivityManagerService$8;->this$0:Lcom/android/server/am/ActivityManagerService;
+
+    monitor-enter v1
+
+    :try_start_0
     iget-object v0, p0, Lcom/android/server/am/ActivityManagerService$8;->this$0:Lcom/android/server/am/ActivityManagerService;
 
-    invoke-virtual {v0, p0}, Lcom/android/server/am/ActivityManagerService;->foregroundTokenDied(Lcom/android/server/am/ActivityManagerService$ForegroundToken;)V
+    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
+
+    move-result-wide v2
+
+    const/4 v4, 0x1
+
+    const/4 v5, 0x0
+
+    invoke-virtual {v0, v2, v3, v4, v5}, Lcom/android/server/am/ActivityManagerService;->requestPssAllProcsLocked(JZZ)V
+
+    monitor-exit v1
 
     return-void
+
+    :catchall_0
+    move-exception v0
+
+    monitor-exit v1
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
 .end method

@@ -8,6 +8,8 @@
 
 .field public static final HUNDRED_DAY_FIELD_LEN:I = 0x13
 
+.field private static final LARGEST_DURATION:J = 0x141dd75fffL
+
 .field private static final SECONDS_PER_DAY:I = 0x15180
 
 .field private static final SECONDS_PER_HOUR:I = 0xe10
@@ -358,12 +360,21 @@
 
     cmp-long v4, p0, v6
 
-    if-lez v4, :cond_6
+    if-lez v4, :cond_7
 
     const/16 v17, 0x2b
 
     .local v17, prefix:C
     :goto_2
+    const-wide v6, 0x141dd75fffL
+
+    cmp-long v4, p0, v6
+
+    if-lez v4, :cond_3
+
+    const-wide p0, 0x141dd75fffL
+
+    :cond_3
     const-wide/16 v6, 0x3e8
 
     rem-long v6, p0, v6
@@ -399,7 +410,7 @@
 
     move/from16 v0, v18
 
-    if-le v0, v4, :cond_3
+    if-le v0, v4, :cond_4
 
     const v4, 0x15180
 
@@ -411,12 +422,12 @@
 
     sub-int v18, v18, v4
 
-    :cond_3
+    :cond_4
     const/16 v4, 0xe10
 
     move/from16 v0, v18
 
-    if-le v0, v4, :cond_4
+    if-le v0, v4, :cond_5
 
     move/from16 v0, v18
 
@@ -426,12 +437,12 @@
 
     sub-int v18, v18, v4
 
-    :cond_4
+    :cond_5
     const/16 v4, 0x3c
 
     move/from16 v0, v18
 
-    if-le v0, v4, :cond_5
+    if-le v0, v4, :cond_6
 
     div-int/lit8 v14, v18, 0x3c
 
@@ -439,11 +450,11 @@
 
     sub-int v18, v18, v4
 
-    :cond_5
+    :cond_6
     const/4 v5, 0x0
 
     .restart local v5       #pos:I
-    if-eqz p2, :cond_b
+    if-eqz p2, :cond_c
 
     const/4 v4, 0x1
 
@@ -458,7 +469,7 @@
     .local v15, myLen:I
     const/4 v6, 0x1
 
-    if-lez v15, :cond_7
+    if-lez v15, :cond_8
 
     const/4 v4, 0x1
 
@@ -473,7 +484,7 @@
 
     const/4 v6, 0x1
 
-    if-lez v15, :cond_8
+    if-lez v15, :cond_9
 
     const/4 v4, 0x1
 
@@ -488,7 +499,7 @@
 
     const/4 v6, 0x1
 
-    if-lez v15, :cond_9
+    if-lez v15, :cond_a
 
     const/4 v4, 0x1
 
@@ -507,7 +518,7 @@
 
     const/4 v7, 0x1
 
-    if-lez v15, :cond_a
+    if-lez v15, :cond_b
 
     const/4 v4, 0x3
 
@@ -523,7 +534,7 @@
     :goto_7
     move/from16 v0, p2
 
-    if-ge v15, v0, :cond_b
+    if-ge v15, v0, :cond_c
 
     const/16 v4, 0x20
 
@@ -543,7 +554,7 @@
     .end local v15           #myLen:I
     .end local v17           #prefix:C
     .end local v18           #seconds:I
-    :cond_6
+    :cond_7
     const/16 v17, 0x2d
 
     .restart local v17       #prefix:C
@@ -562,28 +573,28 @@
     .restart local v14       #minutes:I
     .restart local v15       #myLen:I
     .restart local v18       #seconds:I
-    :cond_7
+    :cond_8
     const/4 v4, 0x0
 
     goto :goto_3
 
-    :cond_8
+    :cond_9
     const/4 v4, 0x0
 
     goto :goto_4
 
-    :cond_9
+    :cond_a
     const/4 v4, 0x0
 
     goto :goto_5
 
-    :cond_a
+    :cond_b
     const/4 v4, 0x0
 
     goto :goto_6
 
     .end local v15           #myLen:I
-    :cond_b
+    :cond_c
     aput-char v17, v2, v5
 
     add-int/lit8 v5, v5, 0x1
@@ -591,7 +602,7 @@
     move/from16 v19, v5
 
     .local v19, start:I
-    if-eqz p2, :cond_c
+    if-eqz p2, :cond_d
 
     const/16 v20, 0x1
 
@@ -611,12 +622,12 @@
 
     move/from16 v0, v19
 
-    if-eq v5, v0, :cond_d
+    if-eq v5, v0, :cond_e
 
     const/4 v10, 0x1
 
     :goto_9
-    if-eqz v20, :cond_e
+    if-eqz v20, :cond_f
 
     const/4 v11, 0x2
 
@@ -635,12 +646,12 @@
 
     move/from16 v0, v19
 
-    if-eq v5, v0, :cond_f
+    if-eq v5, v0, :cond_10
 
     const/4 v10, 0x1
 
     :goto_b
-    if-eqz v20, :cond_10
+    if-eqz v20, :cond_11
 
     const/4 v11, 0x2
 
@@ -659,12 +670,12 @@
 
     move/from16 v0, v19
 
-    if-eq v5, v0, :cond_11
+    if-eq v5, v0, :cond_12
 
     const/4 v10, 0x1
 
     :goto_d
-    if-eqz v20, :cond_12
+    if-eqz v20, :cond_13
 
     const/4 v11, 0x2
 
@@ -683,11 +694,11 @@
 
     const/4 v10, 0x1
 
-    if-eqz v20, :cond_13
+    if-eqz v20, :cond_14
 
     move/from16 v0, v19
 
-    if-eq v5, v0, :cond_13
+    if-eq v5, v0, :cond_14
 
     const/4 v11, 0x3
 
@@ -711,46 +722,154 @@
     goto/16 :goto_1
 
     .end local v20           #zeropad:Z
-    :cond_c
+    :cond_d
     const/16 v20, 0x0
 
     goto :goto_8
 
     .restart local v20       #zeropad:Z
-    :cond_d
+    :cond_e
     const/4 v10, 0x0
 
     goto :goto_9
 
-    :cond_e
+    :cond_f
     const/4 v11, 0x0
 
     goto :goto_a
 
-    :cond_f
+    :cond_10
     const/4 v10, 0x0
 
     goto :goto_b
 
-    :cond_10
+    :cond_11
     const/4 v11, 0x0
 
     goto :goto_c
 
-    :cond_11
+    :cond_12
     const/4 v10, 0x0
 
     goto :goto_d
 
-    :cond_12
+    :cond_13
     const/4 v11, 0x0
 
     goto :goto_e
 
-    :cond_13
+    :cond_14
     const/4 v11, 0x0
 
     goto :goto_f
+.end method
+
+.method public static formatUptime(J)Ljava/lang/String;
+    .locals 6
+    .parameter "time"
+
+    .prologue
+    const-wide/16 v4, 0x0
+
+    invoke-static {}, Landroid/os/SystemClock;->uptimeMillis()J
+
+    move-result-wide v2
+
+    sub-long v0, p0, v2
+
+    .local v0, diff:J
+    cmp-long v2, v0, v4
+
+    if-lez v2, :cond_0
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v2, p0, p1}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, " (in "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, v0, v1}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, " ms)"
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    :goto_0
+    return-object v2
+
+    :cond_0
+    cmp-long v2, v0, v4
+
+    if-gez v2, :cond_1
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v2, p0, p1}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, " ("
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    neg-long v3, v0
+
+    invoke-virtual {v2, v3, v4}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, " ms ago)"
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    goto :goto_0
+
+    :cond_1
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v2, p0, p1}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, " (now)"
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    goto :goto_0
 .end method
 
 .method public static getTimeZone(IZJLjava/lang/String;)Ljava/util/TimeZone;
@@ -769,7 +888,7 @@
     move-result-object v8
 
     .local v8, r:Landroid/content/res/Resources;
-    const v10, 0x10f000d
+    const v10, 0x10f0011
 
     invoke-virtual {v8, v10}, Landroid/content/res/Resources;->getXml(I)Landroid/content/res/XmlResourceParser;
 
@@ -876,7 +995,11 @@
     .locals 1
 
     .prologue
-    invoke-static {}, Llibcore/util/ZoneInfoDB;->getVersion()Ljava/lang/String;
+    invoke-static {}, Llibcore/util/ZoneInfoDB;->getInstance()Llibcore/util/ZoneInfoDB$TzData;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Llibcore/util/ZoneInfoDB$TzData;->getVersion()Ljava/lang/String;
 
     move-result-object v0
 
@@ -939,7 +1062,7 @@
     move-result-object v4
 
     .local v4, r:Landroid/content/res/Resources;
-    const v8, 0x10f000d
+    const v8, 0x10f0011
 
     invoke-virtual {v4, v8}, Landroid/content/res/Resources;->getXml(I)Landroid/content/res/XmlResourceParser;
 

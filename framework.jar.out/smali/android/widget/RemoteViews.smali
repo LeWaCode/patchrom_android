@@ -10,7 +10,7 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Landroid/widget/RemoteViews$2;,
+        Landroid/widget/RemoteViews$3;,
         Landroid/widget/RemoteViews$MemoryUsageCounter;,
         Landroid/widget/RemoteViews$ViewPaddingAction;,
         Landroid/widget/RemoteViews$TextViewSizeAction;,
@@ -23,13 +23,15 @@
         Landroid/widget/RemoteViews$SetDrawableParameters;,
         Landroid/widget/RemoteViews$SetOnClickPendingIntent;,
         Landroid/widget/RemoteViews$SetRemoteViewsAdapterIntent;,
+        Landroid/widget/RemoteViews$SetRemoteViewsAdapterList;,
         Landroid/widget/RemoteViews$SetPendingIntentTemplate;,
         Landroid/widget/RemoteViews$SetOnClickFillInIntent;,
         Landroid/widget/RemoteViews$SetEmptyView;,
         Landroid/widget/RemoteViews$Action;,
         Landroid/widget/RemoteViews$OnClickHandler;,
         Landroid/widget/RemoteViews$ActionException;,
-        Landroid/widget/RemoteViews$RemoteView;
+        Landroid/widget/RemoteViews$RemoteView;,
+        Landroid/widget/RemoteViews$MutablePair;
     }
 .end annotation
 
@@ -55,6 +57,41 @@
 .field private static final MODE_HAS_LANDSCAPE_AND_PORTRAIT:I = 0x1
 
 .field private static final MODE_NORMAL:I
+
+.field private static final sInvokeArgsTls:Ljava/lang/ThreadLocal;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/lang/ThreadLocal",
+            "<[",
+            "Ljava/lang/Object;",
+            ">;"
+        }
+    .end annotation
+.end field
+
+.field private static final sMethods:Landroid/util/ArrayMap;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Landroid/util/ArrayMap",
+            "<",
+            "Ljava/lang/Class",
+            "<+",
+            "Landroid/view/View;",
+            ">;",
+            "Landroid/util/ArrayMap",
+            "<",
+            "Landroid/widget/RemoteViews$MutablePair",
+            "<",
+            "Ljava/lang/String;",
+            "Ljava/lang/Class",
+            "<*>;>;",
+            "Ljava/lang/reflect/Method;",
+            ">;>;"
+        }
+    .end annotation
+.end field
+
+.field private static final sMethodsLock:[Ljava/lang/Object;
 
 
 # instance fields
@@ -89,7 +126,21 @@
 
 .field private final mPackage:Ljava/lang/String;
 
+.field private final mPair:Landroid/widget/RemoteViews$MutablePair;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Landroid/widget/RemoteViews$MutablePair",
+            "<",
+            "Ljava/lang/String;",
+            "Ljava/lang/Class",
+            "<*>;>;"
+        }
+    .end annotation
+.end field
+
 .field private mPortrait:Landroid/widget/RemoteViews;
+
+.field private mUser:Landroid/os/UserHandle;
 
 
 # direct methods
@@ -103,9 +154,27 @@
 
     sput-object v0, Landroid/widget/RemoteViews;->DEFAULT_ON_CLICK_HANDLER:Landroid/widget/RemoteViews$OnClickHandler;
 
+    const/4 v0, 0x0
+
+    new-array v0, v0, [Ljava/lang/Object;
+
+    sput-object v0, Landroid/widget/RemoteViews;->sMethodsLock:[Ljava/lang/Object;
+
+    new-instance v0, Landroid/util/ArrayMap;
+
+    invoke-direct {v0}, Landroid/util/ArrayMap;-><init>()V
+
+    sput-object v0, Landroid/widget/RemoteViews;->sMethods:Landroid/util/ArrayMap;
+
     new-instance v0, Landroid/widget/RemoteViews$1;
 
     invoke-direct {v0}, Landroid/widget/RemoteViews$1;-><init>()V
+
+    sput-object v0, Landroid/widget/RemoteViews;->sInvokeArgsTls:Ljava/lang/ThreadLocal;
+
+    new-instance v0, Landroid/widget/RemoteViews$2;
+
+    invoke-direct {v0}, Landroid/widget/RemoteViews$2;-><init>()V
 
     sput-object v0, Landroid/widget/RemoteViews;->CREATOR:Landroid/os/Parcelable$Creator;
 
@@ -132,15 +201,21 @@
     .prologue
     const/4 v5, 0x0
 
-    const/4 v7, 0x0
-
     const/4 v4, 0x1
+
+    const/4 v7, 0x0
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    const v6, 0x103006e
+    const v6, 0x903000d
 
     iput v6, p0, Landroid/widget/RemoteViews;->mDefaultTheme:I
+
+    invoke-static {}, Landroid/os/Process;->myUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v6
+
+    iput-object v6, p0, Landroid/widget/RemoteViews;->mUser:Landroid/os/UserHandle;
 
     iput-boolean v4, p0, Landroid/widget/RemoteViews;->mIsRoot:Z
 
@@ -149,6 +224,12 @@
     iput-object v7, p0, Landroid/widget/RemoteViews;->mPortrait:Landroid/widget/RemoteViews;
 
     iput-boolean v5, p0, Landroid/widget/RemoteViews;->mIsWidgetCollectionChild:Z
+
+    new-instance v6, Landroid/widget/RemoteViews$MutablePair;
+
+    invoke-direct {v6, v7, v7}, Landroid/widget/RemoteViews$MutablePair;-><init>(Ljava/lang/Object;Ljava/lang/Object;)V
+
+    iput-object v6, p0, Landroid/widget/RemoteViews;->mPair:Landroid/widget/RemoteViews$MutablePair;
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
@@ -410,6 +491,17 @@
 
     goto/16 :goto_3
 
+    :pswitch_e
+    iget-object v4, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    new-instance v5, Landroid/widget/RemoteViews$SetRemoteViewsAdapterList;
+
+    invoke-direct {v5, p0, p1}, Landroid/widget/RemoteViews$SetRemoteViewsAdapterList;-><init>(Landroid/widget/RemoteViews;Landroid/os/Parcel;)V
+
+    invoke-virtual {v4, v5}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    goto/16 :goto_3
+
     .end local v0           #count:I
     .end local v1           #i:I
     .end local v3           #tag:I
@@ -457,8 +549,6 @@
 
     return-void
 
-    nop
-
     :pswitch_data_0
     .packed-switch 0x1
         :pswitch_1
@@ -475,6 +565,7 @@
         :pswitch_d
         :pswitch_b
         :pswitch_c
+        :pswitch_e
     .end packed-switch
 .end method
 
@@ -500,9 +591,15 @@
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    const v0, 0x103006e
+    const v0, 0x903000d
 
     iput v0, p0, Landroid/widget/RemoteViews;->mDefaultTheme:I
+
+    invoke-static {}, Landroid/os/Process;->myUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v0
+
+    iput-object v0, p0, Landroid/widget/RemoteViews;->mUser:Landroid/os/UserHandle;
 
     const/4 v0, 0x1
 
@@ -515,6 +612,12 @@
     const/4 v0, 0x0
 
     iput-boolean v0, p0, Landroid/widget/RemoteViews;->mIsWidgetCollectionChild:Z
+
+    new-instance v0, Landroid/widget/RemoteViews$MutablePair;
+
+    invoke-direct {v0, v2, v2}, Landroid/widget/RemoteViews$MutablePair;-><init>(Ljava/lang/Object;Ljava/lang/Object;)V
+
+    iput-object v0, p0, Landroid/widget/RemoteViews;->mPair:Landroid/widget/RemoteViews$MutablePair;
 
     if-eqz p1, :cond_0
 
@@ -600,9 +703,15 @@
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    const v0, 0x103006e
+    const v0, 0x903000d
 
     iput v0, p0, Landroid/widget/RemoteViews;->mDefaultTheme:I
+
+    invoke-static {}, Landroid/os/Process;->myUserHandle()Landroid/os/UserHandle;
+
+    move-result-object v0
+
+    iput-object v0, p0, Landroid/widget/RemoteViews;->mUser:Landroid/os/UserHandle;
 
     const/4 v0, 0x1
 
@@ -615,6 +724,12 @@
     const/4 v0, 0x0
 
     iput-boolean v0, p0, Landroid/widget/RemoteViews;->mIsWidgetCollectionChild:Z
+
+    new-instance v0, Landroid/widget/RemoteViews$MutablePair;
+
+    invoke-direct {v0, v1, v1}, Landroid/widget/RemoteViews$MutablePair;-><init>(Ljava/lang/Object;Ljava/lang/Object;)V
+
+    iput-object v0, p0, Landroid/widget/RemoteViews;->mPair:Landroid/widget/RemoteViews$MutablePair;
 
     iput-object p1, p0, Landroid/widget/RemoteViews;->mPackage:Ljava/lang/String;
 
@@ -647,7 +762,34 @@
     return v0
 .end method
 
-.method static synthetic access$200(Landroid/widget/RemoteViews;)Landroid/widget/RemoteViews$BitmapCache;
+.method static synthetic access$200(Landroid/view/View;)Landroid/graphics/Rect;
+    .locals 1
+    .parameter "x0"
+
+    .prologue
+    invoke-static {p0}, Landroid/widget/RemoteViews;->getSourceBounds(Landroid/view/View;)Landroid/graphics/Rect;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method static synthetic access$300(Landroid/widget/RemoteViews;Landroid/view/View;Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    .locals 1
+    .parameter "x0"
+    .parameter "x1"
+    .parameter "x2"
+    .parameter "x3"
+
+    .prologue
+    invoke-direct {p0, p1, p2, p3}, Landroid/widget/RemoteViews;->getMethod(Landroid/view/View;Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/reflect/Method;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method static synthetic access$400(Landroid/widget/RemoteViews;)Landroid/widget/RemoteViews$BitmapCache;
     .locals 1
     .parameter "x0"
 
@@ -657,7 +799,19 @@
     return-object v0
 .end method
 
-.method static synthetic access$300(Landroid/widget/RemoteViews;Landroid/widget/RemoteViews;)V
+.method static synthetic access$500(Ljava/lang/Object;)[Ljava/lang/Object;
+    .locals 1
+    .parameter "x0"
+
+    .prologue
+    invoke-static {p0}, Landroid/widget/RemoteViews;->wrapArg(Ljava/lang/Object;)[Ljava/lang/Object;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method static synthetic access$600(Landroid/widget/RemoteViews;Landroid/widget/RemoteViews;)V
     .locals 0
     .parameter "x0"
     .parameter "x1"
@@ -668,7 +822,7 @@
     return-void
 .end method
 
-.method static synthetic access$500(Landroid/widget/RemoteViews;Landroid/widget/RemoteViews$BitmapCache;)V
+.method static synthetic access$800(Landroid/widget/RemoteViews;Landroid/widget/RemoteViews$BitmapCache;)V
     .locals 0
     .parameter "x0"
     .parameter "x1"
@@ -741,6 +895,295 @@
     return-void
 .end method
 
+.method private getMethod(Landroid/view/View;Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    .locals 8
+    .parameter "view"
+    .parameter "methodName"
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/view/View;",
+            "Ljava/lang/String;",
+            "Ljava/lang/Class",
+            "<*>;)",
+            "Ljava/lang/reflect/Method;"
+        }
+    .end annotation
+
+    .prologue
+    .local p3, paramType:Ljava/lang/Class;,"Ljava/lang/Class<*>;"
+    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v1
+
+    .local v1, klass:Ljava/lang/Class;,"Ljava/lang/Class<+Landroid/view/View;>;"
+    sget-object v5, Landroid/widget/RemoteViews;->sMethodsLock:[Ljava/lang/Object;
+
+    monitor-enter v5
+
+    :try_start_0
+    sget-object v4, Landroid/widget/RemoteViews;->sMethods:Landroid/util/ArrayMap;
+
+    invoke-virtual {v4, v1}, Landroid/util/ArrayMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v3
+
+    check-cast v3, Landroid/util/ArrayMap;
+
+    .local v3, methods:Landroid/util/ArrayMap;,"Landroid/util/ArrayMap<Landroid/widget/RemoteViews$MutablePair<Ljava/lang/String;Ljava/lang/Class<*>;>;Ljava/lang/reflect/Method;>;"
+    if-nez v3, :cond_0
+
+    new-instance v3, Landroid/util/ArrayMap;
+
+    .end local v3           #methods:Landroid/util/ArrayMap;,"Landroid/util/ArrayMap<Landroid/widget/RemoteViews$MutablePair<Ljava/lang/String;Ljava/lang/Class<*>;>;Ljava/lang/reflect/Method;>;"
+    invoke-direct {v3}, Landroid/util/ArrayMap;-><init>()V
+
+    .restart local v3       #methods:Landroid/util/ArrayMap;,"Landroid/util/ArrayMap<Landroid/widget/RemoteViews$MutablePair<Ljava/lang/String;Ljava/lang/Class<*>;>;Ljava/lang/reflect/Method;>;"
+    sget-object v4, Landroid/widget/RemoteViews;->sMethods:Landroid/util/ArrayMap;
+
+    invoke-virtual {v4, v1, v3}, Landroid/util/ArrayMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    :cond_0
+    iget-object v4, p0, Landroid/widget/RemoteViews;->mPair:Landroid/widget/RemoteViews$MutablePair;
+
+    iput-object p2, v4, Landroid/widget/RemoteViews$MutablePair;->first:Ljava/lang/Object;
+
+    iget-object v4, p0, Landroid/widget/RemoteViews;->mPair:Landroid/widget/RemoteViews$MutablePair;
+
+    iput-object p3, v4, Landroid/widget/RemoteViews$MutablePair;->second:Ljava/lang/Object;
+
+    iget-object v4, p0, Landroid/widget/RemoteViews;->mPair:Landroid/widget/RemoteViews$MutablePair;
+
+    invoke-virtual {v3, v4}, Landroid/util/ArrayMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Ljava/lang/reflect/Method;
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    .local v2, method:Ljava/lang/reflect/Method;
+    if-nez v2, :cond_3
+
+    if-nez p3, :cond_1
+
+    const/4 v4, 0x0
+
+    :try_start_1
+    new-array v4, v4, [Ljava/lang/Class;
+
+    invoke-virtual {v1, p2, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+    .catch Ljava/lang/NoSuchMethodException; {:try_start_1 .. :try_end_1} :catch_0
+
+    move-result-object v2
+
+    :goto_0
+    :try_start_2
+    const-class v4, Landroid/view/RemotableViewMethod;
+
+    invoke-virtual {v2, v4}, Ljava/lang/reflect/Method;->isAnnotationPresent(Ljava/lang/Class;)Z
+
+    move-result v4
+
+    if-nez v4, :cond_2
+
+    new-instance v4, Landroid/widget/RemoteViews$ActionException;
+
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "view: "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v1}, Ljava/lang/Class;->getName()Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    const-string v7, " can\'t use method with RemoteViews: "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-static {p3}, Landroid/widget/RemoteViews;->getParameters(Ljava/lang/Class;)Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-direct {v4, v6}, Landroid/widget/RemoteViews$ActionException;-><init>(Ljava/lang/String;)V
+
+    throw v4
+
+    .end local v2           #method:Ljava/lang/reflect/Method;
+    .end local v3           #methods:Landroid/util/ArrayMap;,"Landroid/util/ArrayMap<Landroid/widget/RemoteViews$MutablePair<Ljava/lang/String;Ljava/lang/Class<*>;>;Ljava/lang/reflect/Method;>;"
+    :catchall_0
+    move-exception v4
+
+    monitor-exit v5
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+    throw v4
+
+    .restart local v2       #method:Ljava/lang/reflect/Method;
+    .restart local v3       #methods:Landroid/util/ArrayMap;,"Landroid/util/ArrayMap<Landroid/widget/RemoteViews$MutablePair<Ljava/lang/String;Ljava/lang/Class<*>;>;Ljava/lang/reflect/Method;>;"
+    :cond_1
+    const/4 v4, 0x1
+
+    :try_start_3
+    new-array v4, v4, [Ljava/lang/Class;
+
+    const/4 v6, 0x0
+
+    aput-object p3, v4, v6
+
+    invoke-virtual {v1, p2, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_0
+    .catch Ljava/lang/NoSuchMethodException; {:try_start_3 .. :try_end_3} :catch_0
+
+    move-result-object v2
+
+    goto :goto_0
+
+    :catch_0
+    move-exception v0
+
+    .local v0, ex:Ljava/lang/NoSuchMethodException;
+    :try_start_4
+    new-instance v4, Landroid/widget/RemoteViews$ActionException;
+
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "view: "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v1}, Ljava/lang/Class;->getName()Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    const-string v7, " doesn\'t have method: "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-static {p3}, Landroid/widget/RemoteViews;->getParameters(Ljava/lang/Class;)Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-direct {v4, v6}, Landroid/widget/RemoteViews$ActionException;-><init>(Ljava/lang/String;)V
+
+    throw v4
+
+    .end local v0           #ex:Ljava/lang/NoSuchMethodException;
+    :cond_2
+    new-instance v4, Landroid/widget/RemoteViews$MutablePair;
+
+    invoke-direct {v4, p2, p3}, Landroid/widget/RemoteViews$MutablePair;-><init>(Ljava/lang/Object;Ljava/lang/Object;)V
+
+    invoke-virtual {v3, v4, v2}, Landroid/util/ArrayMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    :cond_3
+    monitor-exit v5
+    :try_end_4
+    .catchall {:try_start_4 .. :try_end_4} :catchall_0
+
+    return-object v2
+.end method
+
+.method private static getParameters(Ljava/lang/Class;)Ljava/lang/String;
+    .locals 2
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/lang/Class",
+            "<*>;)",
+            "Ljava/lang/String;"
+        }
+    .end annotation
+
+    .prologue
+    .local p0, paramType:Ljava/lang/Class;,"Ljava/lang/Class<*>;"
+    if-nez p0, :cond_0
+
+    const-string v0, "()"
+
+    :goto_0
+    return-object v0
+
+    :cond_0
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v1, "("
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    const-string v1, ")"
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    goto :goto_0
+.end method
+
 .method private getRemoteViewsToApply(Landroid/content/Context;)Landroid/widget/RemoteViews;
     .locals 2
     .parameter "context"
@@ -783,6 +1226,107 @@
     goto :goto_0
 .end method
 
+.method private static getSourceBounds(Landroid/view/View;)Landroid/graphics/Rect;
+    .locals 7
+    .parameter "v"
+
+    .prologue
+    const/4 v6, 0x1
+
+    const/4 v4, 0x0
+
+    const/high16 v5, 0x3f00
+
+    invoke-virtual {p0}, Landroid/view/View;->getContext()Landroid/content/Context;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Landroid/content/res/Resources;->getCompatibilityInfo()Landroid/content/res/CompatibilityInfo;
+
+    move-result-object v3
+
+    iget v0, v3, Landroid/content/res/CompatibilityInfo;->applicationScale:F
+
+    .local v0, appScale:F
+    const/4 v3, 0x2
+
+    new-array v1, v3, [I
+
+    .local v1, pos:[I
+    invoke-virtual {p0, v1}, Landroid/view/View;->getLocationOnScreen([I)V
+
+    new-instance v2, Landroid/graphics/Rect;
+
+    invoke-direct {v2}, Landroid/graphics/Rect;-><init>()V
+
+    .local v2, rect:Landroid/graphics/Rect;
+    aget v3, v1, v4
+
+    int-to-float v3, v3
+
+    mul-float/2addr v3, v0
+
+    add-float/2addr v3, v5
+
+    float-to-int v3, v3
+
+    iput v3, v2, Landroid/graphics/Rect;->left:I
+
+    aget v3, v1, v6
+
+    int-to-float v3, v3
+
+    mul-float/2addr v3, v0
+
+    add-float/2addr v3, v5
+
+    float-to-int v3, v3
+
+    iput v3, v2, Landroid/graphics/Rect;->top:I
+
+    aget v3, v1, v4
+
+    invoke-virtual {p0}, Landroid/view/View;->getWidth()I
+
+    move-result v4
+
+    add-int/2addr v3, v4
+
+    int-to-float v3, v3
+
+    mul-float/2addr v3, v0
+
+    add-float/2addr v3, v5
+
+    float-to-int v3, v3
+
+    iput v3, v2, Landroid/graphics/Rect;->right:I
+
+    aget v3, v1, v6
+
+    invoke-virtual {p0}, Landroid/view/View;->getHeight()I
+
+    move-result v4
+
+    add-int/2addr v3, v4
+
+    int-to-float v3, v3
+
+    mul-float/2addr v3, v0
+
+    add-float/2addr v3, v5
+
+    float-to-int v3, v3
+
+    iput v3, v2, Landroid/graphics/Rect;->bottom:I
+
+    return-object v2
+.end method
+
 .method private hasLandscapeAndPortraitLayouts()Z
     .locals 1
 
@@ -815,8 +1359,13 @@
     .prologue
     iget-object v3, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
 
-    if-eqz v3, :cond_0
+    if-eqz v3, :cond_1
 
+    if-nez p3, :cond_0
+
+    sget-object p3, Landroid/widget/RemoteViews;->DEFAULT_ON_CLICK_HANDLER:Landroid/widget/RemoteViews$OnClickHandler;
+
+    :cond_0
     iget-object v3, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
 
     invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
@@ -828,7 +1377,7 @@
 
     .local v2, i:I
     :goto_0
-    if-ge v2, v1, :cond_0
+    if-ge v2, v1, :cond_1
 
     iget-object v3, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
 
@@ -848,7 +1397,7 @@
     .end local v0           #a:Landroid/widget/RemoteViews$Action;
     .end local v1           #count:I
     .end local v2           #i:I
-    :cond_0
+    :cond_1
     return-void
 .end method
 
@@ -865,7 +1414,9 @@
     const/4 v3, 0x4
 
     :try_start_0
-    invoke-virtual {p1, v2, v3}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+    iget-object v4, p0, Landroid/widget/RemoteViews;->mUser:Landroid/os/UserHandle;
+
+    invoke-virtual {p1, v2, v3, v4}, Landroid/content/Context;->createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
     :try_end_0
     .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -1075,6 +1626,27 @@
     return-void
 .end method
 
+.method private static wrapArg(Ljava/lang/Object;)[Ljava/lang/Object;
+    .locals 2
+    .parameter "value"
+
+    .prologue
+    sget-object v1, Landroid/widget/RemoteViews;->sInvokeArgsTls:Ljava/lang/ThreadLocal;
+
+    invoke-virtual {v1}, Ljava/lang/ThreadLocal;->get()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, [Ljava/lang/Object;
+
+    .local v0, args:[Ljava/lang/Object;
+    const/4 v1, 0x0
+
+    aput-object p0, v0, v1
+
+    return-object v0
+.end method
+
 
 # virtual methods
 .method public addView(ILandroid/widget/RemoteViews;)V
@@ -1098,7 +1670,7 @@
     .parameter "parent"
 
     .prologue
-    sget-object v0, Landroid/widget/RemoteViews;->DEFAULT_ON_CLICK_HANDLER:Landroid/widget/RemoteViews$OnClickHandler;
+    const/4 v0, 0x0
 
     invoke-virtual {p0, p1, p2, v0}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/view/View;
 
@@ -1112,9 +1684,6 @@
     .parameter "context"
     .parameter "parent"
     .parameter "handler"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     invoke-direct {p0, p1}, Landroid/widget/RemoteViews;->getRemoteViewsToApply(Landroid/content/Context;)Landroid/widget/RemoteViews;
@@ -1127,10 +1696,6 @@
     move-result-object v0
 
     .local v0, c:Landroid/content/Context;
-    iget v4, p0, Landroid/widget/RemoteViews;->mDefaultTheme:I
-
-    invoke-virtual {v0, v4}, Landroid/content/Context;->setTheme(I)V
-
     const-string v4, "layout_inflater"
 
     invoke-virtual {v0, v4}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
@@ -1163,66 +1728,25 @@
 .end method
 
 .method public clone()Landroid/widget/RemoteViews;
-    .locals 5
+    .locals 2
 
     .prologue
-    invoke-direct {p0}, Landroid/widget/RemoteViews;->hasLandscapeAndPortraitLayouts()Z
+    const/4 v1, 0x0
 
-    move-result v3
-
-    if-nez v3, :cond_1
-
-    new-instance v2, Landroid/widget/RemoteViews;
-
-    iget-object v3, p0, Landroid/widget/RemoteViews;->mPackage:Ljava/lang/String;
-
-    iget v4, p0, Landroid/widget/RemoteViews;->mLayoutId:I
-
-    invoke-direct {v2, v3, v4}, Landroid/widget/RemoteViews;-><init>(Ljava/lang/String;I)V
-
-    .local v2, that:Landroid/widget/RemoteViews;
-    iget-object v3, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
-
-    if-eqz v3, :cond_0
-
-    iget-object v3, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
-
-    invoke-virtual {v3}, Ljava/util/ArrayList;->clone()Ljava/lang/Object;
-
-    move-result-object v3
-
-    check-cast v3, Ljava/util/ArrayList;
-
-    iput-object v3, v2, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
-
-    :cond_0
-    :goto_0
-    invoke-direct {v2}, Landroid/widget/RemoteViews;->recalculateMemoryUsage()V
-
-    return-object v2
-
-    .end local v2           #that:Landroid/widget/RemoteViews;
-    :cond_1
-    iget-object v3, p0, Landroid/widget/RemoteViews;->mLandscape:Landroid/widget/RemoteViews;
-
-    invoke-virtual {v3}, Landroid/widget/RemoteViews;->clone()Landroid/widget/RemoteViews;
+    invoke-static {}, Landroid/os/Parcel;->obtain()Landroid/os/Parcel;
 
     move-result-object v0
 
-    .local v0, land:Landroid/widget/RemoteViews;
-    iget-object v3, p0, Landroid/widget/RemoteViews;->mPortrait:Landroid/widget/RemoteViews;
+    .local v0, p:Landroid/os/Parcel;
+    invoke-virtual {p0, v0, v1}, Landroid/widget/RemoteViews;->writeToParcel(Landroid/os/Parcel;I)V
 
-    invoke-virtual {v3}, Landroid/widget/RemoteViews;->clone()Landroid/widget/RemoteViews;
+    invoke-virtual {v0, v1}, Landroid/os/Parcel;->setDataPosition(I)V
 
-    move-result-object v1
+    new-instance v1, Landroid/widget/RemoteViews;
 
-    .local v1, port:Landroid/widget/RemoteViews;
-    new-instance v2, Landroid/widget/RemoteViews;
+    invoke-direct {v1, v0}, Landroid/widget/RemoteViews;-><init>(Landroid/os/Parcel;)V
 
-    invoke-direct {v2, v0, v1}, Landroid/widget/RemoteViews;-><init>(Landroid/widget/RemoteViews;Landroid/widget/RemoteViews;)V
-
-    .restart local v2       #that:Landroid/widget/RemoteViews;
-    goto :goto_0
+    return-object v1
 .end method
 
 .method public bridge synthetic clone()Ljava/lang/Object;
@@ -1281,6 +1805,168 @@
     return-object v0
 .end method
 
+.method public mergeRemoteViews(Landroid/widget/RemoteViews;)V
+    .locals 10
+    .parameter "newRv"
+
+    .prologue
+    if-nez p1, :cond_1
+
+    :cond_0
+    :goto_0
+    return-void
+
+    :cond_1
+    invoke-virtual {p1}, Landroid/widget/RemoteViews;->clone()Landroid/widget/RemoteViews;
+
+    move-result-object v1
+
+    .local v1, copy:Landroid/widget/RemoteViews;
+    new-instance v5, Ljava/util/HashMap;
+
+    invoke-direct {v5}, Ljava/util/HashMap;-><init>()V
+
+    .local v5, map:Ljava/util/HashMap;,"Ljava/util/HashMap<Ljava/lang/String;Landroid/widget/RemoteViews$Action;>;"
+    iget-object v8, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    if-nez v8, :cond_2
+
+    new-instance v8, Ljava/util/ArrayList;
+
+    invoke-direct {v8}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v8, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    :cond_2
+    iget-object v8, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    invoke-virtual {v8}, Ljava/util/ArrayList;->size()I
+
+    move-result v2
+
+    .local v2, count:I
+    const/4 v3, 0x0
+
+    .local v3, i:I
+    :goto_1
+    if-ge v3, v2, :cond_3
+
+    iget-object v8, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    invoke-virtual {v8, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/RemoteViews$Action;
+
+    .local v0, a:Landroid/widget/RemoteViews$Action;
+    invoke-virtual {v0}, Landroid/widget/RemoteViews$Action;->getUniqueKey()Ljava/lang/String;
+
+    move-result-object v8
+
+    invoke-virtual {v5, v8, v0}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    add-int/lit8 v3, v3, 0x1
+
+    goto :goto_1
+
+    .end local v0           #a:Landroid/widget/RemoteViews$Action;
+    :cond_3
+    iget-object v7, v1, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    .local v7, newActions:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/widget/RemoteViews$Action;>;"
+    if-eqz v7, :cond_0
+
+    invoke-virtual {v7}, Ljava/util/ArrayList;->size()I
+
+    move-result v2
+
+    const/4 v3, 0x0
+
+    :goto_2
+    if-ge v3, v2, :cond_7
+
+    invoke-virtual {v7, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/RemoteViews$Action;
+
+    .restart local v0       #a:Landroid/widget/RemoteViews$Action;
+    invoke-virtual {v7, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v8
+
+    check-cast v8, Landroid/widget/RemoteViews$Action;
+
+    invoke-virtual {v8}, Landroid/widget/RemoteViews$Action;->getUniqueKey()Ljava/lang/String;
+
+    move-result-object v4
+
+    .local v4, key:Ljava/lang/String;
+    invoke-virtual {v7, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v8
+
+    check-cast v8, Landroid/widget/RemoteViews$Action;
+
+    invoke-virtual {v8}, Landroid/widget/RemoteViews$Action;->mergeBehavior()I
+
+    move-result v6
+
+    .local v6, mergeBehavior:I
+    invoke-virtual {v5, v4}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
+
+    move-result v8
+
+    if-eqz v8, :cond_4
+
+    if-nez v6, :cond_4
+
+    iget-object v8, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    invoke-virtual {v5, v4}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v9
+
+    invoke-virtual {v8, v9}, Ljava/util/ArrayList;->remove(Ljava/lang/Object;)Z
+
+    invoke-virtual {v5, v4}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
+
+    :cond_4
+    if-eqz v6, :cond_5
+
+    const/4 v8, 0x1
+
+    if-ne v6, v8, :cond_6
+
+    :cond_5
+    iget-object v8, p0, Landroid/widget/RemoteViews;->mActions:Ljava/util/ArrayList;
+
+    invoke-virtual {v8, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    :cond_6
+    add-int/lit8 v3, v3, 0x1
+
+    goto :goto_2
+
+    .end local v0           #a:Landroid/widget/RemoteViews$Action;
+    .end local v4           #key:Ljava/lang/String;
+    .end local v6           #mergeBehavior:I
+    :cond_7
+    new-instance v8, Landroid/widget/RemoteViews$BitmapCache;
+
+    invoke-direct {v8}, Landroid/widget/RemoteViews$BitmapCache;-><init>()V
+
+    iput-object v8, p0, Landroid/widget/RemoteViews;->mBitmapCache:Landroid/widget/RemoteViews$BitmapCache;
+
+    iget-object v8, p0, Landroid/widget/RemoteViews;->mBitmapCache:Landroid/widget/RemoteViews$BitmapCache;
+
+    invoke-direct {p0, v8}, Landroid/widget/RemoteViews;->setBitmapCache(Landroid/widget/RemoteViews$BitmapCache;)V
+
+    goto/16 :goto_0
+.end method
+
 .method public onLoadClass(Ljava/lang/Class;)Z
     .locals 1
     .parameter "clazz"
@@ -1301,7 +1987,7 @@
     .parameter "v"
 
     .prologue
-    sget-object v0, Landroid/widget/RemoteViews;->DEFAULT_ON_CLICK_HANDLER:Landroid/widget/RemoteViews$OnClickHandler;
+    const/4 v0, 0x0
 
     invoke-virtual {p0, p1, p2, v0}, Landroid/widget/RemoteViews;->reapply(Landroid/content/Context;Landroid/view/View;Landroid/widget/RemoteViews$OnClickHandler;)V
 
@@ -1795,6 +2481,19 @@
     return-void
 .end method
 
+.method public setLabelFor(II)V
+    .locals 1
+    .parameter "viewId"
+    .parameter "labeledId"
+
+    .prologue
+    const-string v0, "setLabelFor"
+
+    invoke-virtual {p0, p1, v0, p2}, Landroid/widget/RemoteViews;->setInt(ILjava/lang/String;I)V
+
+    return-void
+.end method
+
 .method public setLong(ILjava/lang/String;J)V
     .locals 6
     .parameter "viewId"
@@ -1941,6 +2640,32 @@
     new-instance v0, Landroid/widget/RemoteViews$SetRemoteViewsAdapterIntent;
 
     invoke-direct {v0, p0, p1, p2}, Landroid/widget/RemoteViews$SetRemoteViewsAdapterIntent;-><init>(Landroid/widget/RemoteViews;ILandroid/content/Intent;)V
+
+    invoke-direct {p0, v0}, Landroid/widget/RemoteViews;->addAction(Landroid/widget/RemoteViews$Action;)V
+
+    return-void
+.end method
+
+.method public setRemoteAdapter(ILjava/util/ArrayList;I)V
+    .locals 1
+    .parameter "viewId"
+    .parameter
+    .parameter "viewTypeCount"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(I",
+            "Ljava/util/ArrayList",
+            "<",
+            "Landroid/widget/RemoteViews;",
+            ">;I)V"
+        }
+    .end annotation
+
+    .prologue
+    .local p2, list:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/widget/RemoteViews;>;"
+    new-instance v0, Landroid/widget/RemoteViews$SetRemoteViewsAdapterList;
+
+    invoke-direct {v0, p0, p1, p2, p3}, Landroid/widget/RemoteViews$SetRemoteViewsAdapterList;-><init>(Landroid/widget/RemoteViews;ILjava/util/ArrayList;I)V
 
     invoke-direct {p0, v0}, Landroid/widget/RemoteViews;->addAction(Landroid/widget/RemoteViews$Action;)V
 
@@ -2127,6 +2852,23 @@
     .parameter "value"
 
     .prologue
+    if-eqz p3, :cond_0
+
+    invoke-virtual {p3}, Landroid/net/Uri;->getCanonicalUri()Landroid/net/Uri;
+
+    move-result-object p3
+
+    invoke-static {}, Landroid/os/StrictMode;->vmFileUriExposureEnabled()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    const-string v0, "RemoteViews.setUri()"
+
+    invoke-virtual {p3, v0}, Landroid/net/Uri;->checkFileUriExposed(Ljava/lang/String;)V
+
+    :cond_0
     new-instance v0, Landroid/widget/RemoteViews$ReflectionAction;
 
     const/16 v4, 0xb
@@ -2142,6 +2884,16 @@
     invoke-direct/range {v0 .. v5}, Landroid/widget/RemoteViews$ReflectionAction;-><init>(Landroid/widget/RemoteViews;ILjava/lang/String;ILjava/lang/Object;)V
 
     invoke-direct {p0, v0}, Landroid/widget/RemoteViews;->addAction(Landroid/widget/RemoteViews$Action;)V
+
+    return-void
+.end method
+
+.method public setUser(Landroid/os/UserHandle;)V
+    .locals 0
+    .parameter "user"
+
+    .prologue
+    iput-object p1, p0, Landroid/widget/RemoteViews;->mUser:Landroid/os/UserHandle;
 
     return-void
 .end method

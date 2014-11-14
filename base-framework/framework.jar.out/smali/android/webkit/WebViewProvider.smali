@@ -55,7 +55,7 @@
 .method public abstract copyBackForwardList()Landroid/webkit/WebBackForwardList;
 .end method
 
-.method public abstract debugDump()V
+.method public abstract createPrintDocumentAdapter()Landroid/print/PrintDocumentAdapter;
 .end method
 
 .method public abstract destroy()V
@@ -64,13 +64,29 @@
 .method public abstract documentHasImages(Landroid/os/Message;)V
 .end method
 
-.method public abstract emulateShiftHeld()V
+.method public abstract dumpViewHierarchyWithProperties(Ljava/io/BufferedWriter;I)V
+.end method
+
+.method public abstract evaluateJavaScript(Ljava/lang/String;Landroid/webkit/ValueCallback;)V
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/lang/String;",
+            "Landroid/webkit/ValueCallback",
+            "<",
+            "Ljava/lang/String;",
+            ">;)V"
+        }
+    .end annotation
 .end method
 
 .method public abstract findAll(Ljava/lang/String;)I
 .end method
 
 .method public abstract findAllAsync(Ljava/lang/String;)V
+.end method
+
+.method public abstract findHierarchyView(Ljava/lang/String;I)Landroid/view/View;
 .end method
 
 .method public abstract findNext(Z)V
@@ -185,6 +201,9 @@
             ">;)V"
         }
     .end annotation
+.end method
+
+.method public abstract notifyFindDialogDismissed()V
 .end method
 
 .method public abstract onPause()V

@@ -1,142 +1,49 @@
-.class synthetic Landroid/widget/TextView$3;
+.class Landroid/widget/TextView$3;
 .super Ljava/lang/Object;
 .source "TextView.java"
 
+# interfaces
+.implements Ljava/lang/Runnable;
+
 
 # annotations
-.annotation system Ldalvik/annotation/EnclosingClass;
-    value = Landroid/widget/TextView;
+.annotation system Ldalvik/annotation/EnclosingMethod;
+    value = Landroid/widget/TextView;->updateTextServicesLocaleAsync()V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
-    accessFlags = 0x1008
+    accessFlags = 0x0
     name = null
 .end annotation
 
 
-# static fields
-.field static final synthetic $SwitchMap$android$text$Layout$Alignment:[I
+# instance fields
+.field final synthetic this$0:Landroid/widget/TextView;
 
 
 # direct methods
-.method static constructor <clinit>()V
-    .locals 3
+.method constructor <init>(Landroid/widget/TextView;)V
+    .locals 0
+    .parameter
 
     .prologue
-    invoke-static {}, Landroid/text/Layout$Alignment;->values()[Landroid/text/Layout$Alignment;
+    iput-object p1, p0, Landroid/widget/TextView$3;->this$0:Landroid/widget/TextView;
 
-    move-result-object v0
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    array-length v0, v0
-
-    new-array v0, v0, [I
-
-    sput-object v0, Landroid/widget/TextView$3;->$SwitchMap$android$text$Layout$Alignment:[I
-
-    :try_start_0
-    sget-object v0, Landroid/widget/TextView$3;->$SwitchMap$android$text$Layout$Alignment:[I
-
-    sget-object v1, Landroid/text/Layout$Alignment;->ALIGN_LEFT:Landroid/text/Layout$Alignment;
-
-    invoke-virtual {v1}, Landroid/text/Layout$Alignment;->ordinal()I
-
-    move-result v1
-
-    const/4 v2, 0x1
-
-    aput v2, v0, v1
-    :try_end_0
-    .catch Ljava/lang/NoSuchFieldError; {:try_start_0 .. :try_end_0} :catch_4
-
-    :goto_0
-    :try_start_1
-    sget-object v0, Landroid/widget/TextView$3;->$SwitchMap$android$text$Layout$Alignment:[I
-
-    sget-object v1, Landroid/text/Layout$Alignment;->ALIGN_RIGHT:Landroid/text/Layout$Alignment;
-
-    invoke-virtual {v1}, Landroid/text/Layout$Alignment;->ordinal()I
-
-    move-result v1
-
-    const/4 v2, 0x2
-
-    aput v2, v0, v1
-    :try_end_1
-    .catch Ljava/lang/NoSuchFieldError; {:try_start_1 .. :try_end_1} :catch_3
-
-    :goto_1
-    :try_start_2
-    sget-object v0, Landroid/widget/TextView$3;->$SwitchMap$android$text$Layout$Alignment:[I
-
-    sget-object v1, Landroid/text/Layout$Alignment;->ALIGN_NORMAL:Landroid/text/Layout$Alignment;
-
-    invoke-virtual {v1}, Landroid/text/Layout$Alignment;->ordinal()I
-
-    move-result v1
-
-    const/4 v2, 0x3
-
-    aput v2, v0, v1
-    :try_end_2
-    .catch Ljava/lang/NoSuchFieldError; {:try_start_2 .. :try_end_2} :catch_2
-
-    :goto_2
-    :try_start_3
-    sget-object v0, Landroid/widget/TextView$3;->$SwitchMap$android$text$Layout$Alignment:[I
-
-    sget-object v1, Landroid/text/Layout$Alignment;->ALIGN_OPPOSITE:Landroid/text/Layout$Alignment;
-
-    invoke-virtual {v1}, Landroid/text/Layout$Alignment;->ordinal()I
-
-    move-result v1
-
-    const/4 v2, 0x4
-
-    aput v2, v0, v1
-    :try_end_3
-    .catch Ljava/lang/NoSuchFieldError; {:try_start_3 .. :try_end_3} :catch_1
-
-    :goto_3
-    :try_start_4
-    sget-object v0, Landroid/widget/TextView$3;->$SwitchMap$android$text$Layout$Alignment:[I
-
-    sget-object v1, Landroid/text/Layout$Alignment;->ALIGN_CENTER:Landroid/text/Layout$Alignment;
-
-    invoke-virtual {v1}, Landroid/text/Layout$Alignment;->ordinal()I
-
-    move-result v1
-
-    const/4 v2, 0x5
-
-    aput v2, v0, v1
-    :try_end_4
-    .catch Ljava/lang/NoSuchFieldError; {:try_start_4 .. :try_end_4} :catch_0
-
-    :goto_4
     return-void
+.end method
 
-    :catch_0
-    move-exception v0
 
-    goto :goto_4
+# virtual methods
+.method public run()V
+    .locals 1
 
-    :catch_1
-    move-exception v0
+    .prologue
+    iget-object v0, p0, Landroid/widget/TextView$3;->this$0:Landroid/widget/TextView;
 
-    goto :goto_3
+    #calls: Landroid/widget/TextView;->updateTextServicesLocaleLocked()V
+    invoke-static {v0}, Landroid/widget/TextView;->access$200(Landroid/widget/TextView;)V
 
-    :catch_2
-    move-exception v0
-
-    goto :goto_2
-
-    :catch_3
-    move-exception v0
-
-    goto :goto_1
-
-    :catch_4
-    move-exception v0
-
-    goto :goto_0
+    return-void
 .end method

@@ -43,7 +43,7 @@
     return-void
 .end method
 
-.method public static showQuickContact(Landroid/content/Context;Landroid/graphics/Rect;Landroid/net/Uri;I[Ljava/lang/String;)V
+.method public static composeQuickContactsIntent(Landroid/content/Context;Landroid/graphics/Rect;Landroid/net/Uri;I[Ljava/lang/String;)Landroid/content/Intent;
     .locals 5
     .parameter "context"
     .parameter "target"
@@ -106,13 +106,7 @@
 
     invoke-virtual {v1, v3, p4}, Landroid/content/Intent;->putExtra(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;
 
-    :try_start_0
-    invoke-virtual {p0, v1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
-    :try_end_0
-    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
-
-    :goto_2
-    return-void
+    return-object v1
 
     .end local v1           #intent:Landroid/content/Intent;
     .end local v2           #intentFlags:I
@@ -120,16 +114,9 @@
     const v2, 0x10008000
 
     goto :goto_1
-
-    .restart local v1       #intent:Landroid/content/Intent;
-    .restart local v2       #intentFlags:I
-    :catch_0
-    move-exception v3
-
-    goto :goto_2
 .end method
 
-.method public static showQuickContact(Landroid/content/Context;Landroid/view/View;Landroid/net/Uri;I[Ljava/lang/String;)V
+.method public static composeQuickContactsIntent(Landroid/content/Context;Landroid/view/View;Landroid/net/Uri;I[Ljava/lang/String;)Landroid/content/Intent;
     .locals 7
     .parameter "context"
     .parameter "target"
@@ -227,7 +214,56 @@
 
     iput v3, v2, Landroid/graphics/Rect;->bottom:I
 
-    invoke-static {p0, v2, p2, p3, p4}, Landroid/provider/ContactsContract$QuickContact;->showQuickContact(Landroid/content/Context;Landroid/graphics/Rect;Landroid/net/Uri;I[Ljava/lang/String;)V
+    invoke-static {p0, v2, p2, p3, p4}, Landroid/provider/ContactsContract$QuickContact;->composeQuickContactsIntent(Landroid/content/Context;Landroid/graphics/Rect;Landroid/net/Uri;I[Ljava/lang/String;)Landroid/content/Intent;
+
+    move-result-object v3
+
+    return-object v3
+.end method
+
+.method public static showQuickContact(Landroid/content/Context;Landroid/graphics/Rect;Landroid/net/Uri;I[Ljava/lang/String;)V
+    .locals 2
+    .parameter "context"
+    .parameter "target"
+    .parameter "lookupUri"
+    .parameter "mode"
+    .parameter "excludeMimes"
+
+    .prologue
+    invoke-static {p0, p1, p2, p3, p4}, Landroid/provider/ContactsContract$QuickContact;->composeQuickContactsIntent(Landroid/content/Context;Landroid/graphics/Rect;Landroid/net/Uri;I[Ljava/lang/String;)Landroid/content/Intent;
+
+    move-result-object v0
+
+    .local v0, intent:Landroid/content/Intent;
+    :try_start_0
+    invoke-virtual {p0, v0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+    :try_end_0
+    .catch Landroid/content/ActivityNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
+
+    :goto_0
+    return-void
+
+    :catch_0
+    move-exception v1
+
+    goto :goto_0
+.end method
+
+.method public static showQuickContact(Landroid/content/Context;Landroid/view/View;Landroid/net/Uri;I[Ljava/lang/String;)V
+    .locals 1
+    .parameter "context"
+    .parameter "target"
+    .parameter "lookupUri"
+    .parameter "mode"
+    .parameter "excludeMimes"
+
+    .prologue
+    invoke-static {p0, p1, p2, p3, p4}, Landroid/provider/ContactsContract$QuickContact;->composeQuickContactsIntent(Landroid/content/Context;Landroid/view/View;Landroid/net/Uri;I[Ljava/lang/String;)Landroid/content/Intent;
+
+    move-result-object v0
+
+    .local v0, intent:Landroid/content/Intent;
+    invoke-virtual {p0, v0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
 
     return-void
 .end method

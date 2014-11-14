@@ -48,6 +48,8 @@
 
 .field public static final METADATA_KEY_VIDEO_HEIGHT:I = 0x13
 
+.field public static final METADATA_KEY_VIDEO_ROTATION:I = 0x18
+
 .field public static final METADATA_KEY_VIDEO_WIDTH:I = 0x12
 
 .field public static final METADATA_KEY_WRITER:I = 0xb
@@ -495,6 +497,15 @@
     .end annotation
 
     .prologue
+    if-nez p1, :cond_0
+
+    new-instance v0, Ljava/lang/IllegalArgumentException;
+
+    invoke-direct {v0}, Ljava/lang/IllegalArgumentException;-><init>()V
+
+    throw v0
+
+    :cond_0
     const/4 v8, 0x0
 
     .local v8, is:Ljava/io/FileInputStream;
@@ -525,14 +536,14 @@
     .catch Ljava/io/FileNotFoundException; {:try_start_1 .. :try_end_1} :catch_4
     .catch Ljava/io/IOException; {:try_start_1 .. :try_end_1} :catch_3
 
-    if-eqz v9, :cond_0
+    if-eqz v9, :cond_1
 
     :try_start_2
     invoke-virtual {v9}, Ljava/io/FileInputStream;->close()V
     :try_end_2
     .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_2
 
-    :cond_0
+    :cond_1
     :goto_0
     return-void
 

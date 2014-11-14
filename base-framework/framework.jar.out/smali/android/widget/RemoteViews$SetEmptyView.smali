@@ -118,6 +118,15 @@
     goto :goto_0
 .end method
 
+.method public getActionName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    const-string v0, "SetEmptyView"
+
+    return-object v0
+.end method
+
 .method public writeToParcel(Landroid/os/Parcel;I)V
     .locals 1
     .parameter "out"

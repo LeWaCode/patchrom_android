@@ -14,6 +14,8 @@
 # instance fields
 .field mChecked:Z
 
+.field private mCheckedSet:Z
+
 .field private mDisableDependentsState:Z
 
 .field private mSendClickAccessibilityEvent:Z
@@ -326,28 +328,51 @@
 .end method
 
 .method public setChecked(Z)V
-    .locals 1
+    .locals 3
     .parameter "checked"
 
     .prologue
-    iget-boolean v0, p0, Landroid/preference/TwoStatePreference;->mChecked:Z
+    const/4 v1, 0x1
 
-    if-eq v0, p1, :cond_0
+    iget-boolean v2, p0, Landroid/preference/TwoStatePreference;->mChecked:Z
 
+    if-eq v2, p1, :cond_2
+
+    move v0, v1
+
+    .local v0, changed:Z
+    :goto_0
+    if-nez v0, :cond_0
+
+    iget-boolean v2, p0, Landroid/preference/TwoStatePreference;->mCheckedSet:Z
+
+    if-nez v2, :cond_1
+
+    :cond_0
     iput-boolean p1, p0, Landroid/preference/TwoStatePreference;->mChecked:Z
+
+    iput-boolean v1, p0, Landroid/preference/TwoStatePreference;->mCheckedSet:Z
 
     invoke-virtual {p0, p1}, Landroid/preference/TwoStatePreference;->persistBoolean(Z)Z
 
+    if-eqz v0, :cond_1
+
     invoke-virtual {p0}, Landroid/preference/TwoStatePreference;->shouldDisableDependents()Z
 
-    move-result v0
+    move-result v1
 
-    invoke-virtual {p0, v0}, Landroid/preference/TwoStatePreference;->notifyDependencyChange(Z)V
+    invoke-virtual {p0, v1}, Landroid/preference/TwoStatePreference;->notifyDependencyChange(Z)V
 
     invoke-virtual {p0}, Landroid/preference/TwoStatePreference;->notifyChanged()V
 
-    :cond_0
+    :cond_1
     return-void
+
+    .end local v0           #changed:Z
+    :cond_2
+    const/4 v0, 0x0
+
+    goto :goto_0
 .end method
 
 .method public setDisableDependentsState(Z)V
@@ -505,7 +530,11 @@
 
     iget-object v4, p0, Landroid/preference/TwoStatePreference;->mSummaryOn:Ljava/lang/CharSequence;
 
-    if-eqz v4, :cond_4
+    invoke-static {v4}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v4
+
+    if-nez v4, :cond_4
 
     iget-object v4, p0, Landroid/preference/TwoStatePreference;->mSummaryOn:Ljava/lang/CharSequence;
 
@@ -522,7 +551,11 @@
     move-result-object v1
 
     .local v1, summary:Ljava/lang/CharSequence;
-    if-eqz v1, :cond_1
+    invoke-static {v1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v4
+
+    if-nez v4, :cond_1
 
     invoke-virtual {v2, v1}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
 
@@ -559,7 +592,11 @@
 
     iget-object v4, p0, Landroid/preference/TwoStatePreference;->mSummaryOff:Ljava/lang/CharSequence;
 
-    if-eqz v4, :cond_0
+    invoke-static {v4}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v4
+
+    if-nez v4, :cond_0
 
     iget-object v4, p0, Landroid/preference/TwoStatePreference;->mSummaryOff:Ljava/lang/CharSequence;
 

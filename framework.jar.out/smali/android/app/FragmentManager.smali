@@ -72,6 +72,9 @@
     return-void
 .end method
 
+.method public abstract isDestroyed()Z
+.end method
+
 .method public openTransaction()Landroid/app/FragmentTransaction;
     .locals 1
     .annotation runtime Ljava/lang/Deprecated;

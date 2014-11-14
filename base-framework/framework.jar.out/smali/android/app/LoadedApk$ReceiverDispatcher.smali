@@ -143,14 +143,15 @@
     return-object v0
 .end method
 
-.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
-    .locals 9
+.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
+    .locals 10
     .parameter "intent"
     .parameter "resultCode"
     .parameter "data"
     .parameter "extras"
     .parameter "ordered"
     .parameter "sticky"
+    .parameter "sendingUser"
 
     .prologue
     new-instance v0, Landroid/app/LoadedApk$ReceiverDispatcher$Args;
@@ -167,9 +168,11 @@
 
     move v6, p5
 
-    move v7, p6
+    move/from16 v7, p6
 
-    invoke-direct/range {v0 .. v7}, Landroid/app/LoadedApk$ReceiverDispatcher$Args;-><init>(Landroid/app/LoadedApk$ReceiverDispatcher;Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
+    move/from16 v8, p7
+
+    invoke-direct/range {v0 .. v8}, Landroid/app/LoadedApk$ReceiverDispatcher$Args;-><init>(Landroid/app/LoadedApk$ReceiverDispatcher;Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
 
     .local v0, args:Landroid/app/LoadedApk$ReceiverDispatcher$Args;
     iget-object v1, p0, Landroid/app/LoadedApk$ReceiverDispatcher;->mActivityThread:Landroid/os/Handler;
@@ -188,12 +191,12 @@
 
     invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
 
-    move-result-object v8
+    move-result-object v9
 
-    .local v8, mgr:Landroid/app/IActivityManager;
-    invoke-virtual {v0, v8}, Landroid/app/LoadedApk$ReceiverDispatcher$Args;->sendFinished(Landroid/app/IActivityManager;)V
+    .local v9, mgr:Landroid/app/IActivityManager;
+    invoke-virtual {v0, v9}, Landroid/app/LoadedApk$ReceiverDispatcher$Args;->sendFinished(Landroid/app/IActivityManager;)V
 
-    .end local v8           #mgr:Landroid/app/IActivityManager;
+    .end local v9           #mgr:Landroid/app/IActivityManager;
     :cond_0
     return-void
 .end method

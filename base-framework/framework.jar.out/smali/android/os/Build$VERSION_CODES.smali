@@ -49,6 +49,12 @@
 
 .field public static final JELLY_BEAN:I = 0x10
 
+.field public static final JELLY_BEAN_MR1:I = 0x11
+
+.field public static final JELLY_BEAN_MR2:I = 0x12
+
+.field public static final KITKAT:I = 0x13
+
 
 # direct methods
 .method public constructor <init>()V

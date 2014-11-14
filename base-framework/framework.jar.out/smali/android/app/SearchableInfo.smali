@@ -705,46 +705,96 @@
     goto :goto_0
 .end method
 
-.method public static getActivityMetaData(Landroid/content/Context;Landroid/content/pm/ActivityInfo;)Landroid/app/SearchableInfo;
-    .locals 5
+.method public static getActivityMetaData(Landroid/content/Context;Landroid/content/pm/ActivityInfo;I)Landroid/app/SearchableInfo;
+    .locals 8
     .parameter "context"
     .parameter "activityInfo"
+    .parameter "userId"
 
     .prologue
-    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+    const/4 v2, 0x0
+
+    const/4 v3, 0x0
+
+    .local v3, userContext:Landroid/content/Context;
+    :try_start_0
+    const-string v5, "system"
+
+    const/4 v6, 0x0
+
+    new-instance v7, Landroid/os/UserHandle;
+
+    invoke-direct {v7, p2}, Landroid/os/UserHandle;-><init>(I)V
+
+    invoke-virtual {p0, v5, v6, v7}, Landroid/content/Context;->createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
+    :try_end_0
+    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
 
     move-result-object v3
 
-    const-string v4, "android.app.searchable"
+    invoke-virtual {v3}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
 
-    invoke-virtual {p1, v3, v4}, Landroid/content/pm/ActivityInfo;->loadXmlMetaData(Landroid/content/pm/PackageManager;Ljava/lang/String;)Landroid/content/res/XmlResourceParser;
+    move-result-object v5
 
-    move-result-object v2
+    const-string v6, "android.app.searchable"
 
-    .local v2, xml:Landroid/content/res/XmlResourceParser;
-    if-nez v2, :cond_0
+    invoke-virtual {p1, v5, v6}, Landroid/content/pm/ActivityInfo;->loadXmlMetaData(Landroid/content/pm/PackageManager;Ljava/lang/String;)Landroid/content/res/XmlResourceParser;
 
-    const/4 v1, 0x0
+    move-result-object v4
 
+    .local v4, xml:Landroid/content/res/XmlResourceParser;
+    if-nez v4, :cond_0
+
+    .end local v4           #xml:Landroid/content/res/XmlResourceParser;
     :goto_0
-    return-object v1
+    return-object v2
 
+    :catch_0
+    move-exception v1
+
+    .local v1, nnfe:Landroid/content/pm/PackageManager$NameNotFoundException;
+    const-string v5, "SearchableInfo"
+
+    new-instance v6, Ljava/lang/StringBuilder;
+
+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v7, "Couldn\'t create package context for user "
+
+    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-static {v5, v6}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    goto :goto_0
+
+    .end local v1           #nnfe:Landroid/content/pm/PackageManager$NameNotFoundException;
+    .restart local v4       #xml:Landroid/content/res/XmlResourceParser;
     :cond_0
     new-instance v0, Landroid/content/ComponentName;
 
-    iget-object v3, p1, Landroid/content/pm/ActivityInfo;->packageName:Ljava/lang/String;
+    iget-object v5, p1, Landroid/content/pm/ActivityInfo;->packageName:Ljava/lang/String;
 
-    iget-object v4, p1, Landroid/content/pm/ActivityInfo;->name:Ljava/lang/String;
+    iget-object v6, p1, Landroid/content/pm/ActivityInfo;->name:Ljava/lang/String;
 
-    invoke-direct {v0, v3, v4}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-direct {v0, v5, v6}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
 
     .local v0, cName:Landroid/content/ComponentName;
-    invoke-static {p0, v2, v0}, Landroid/app/SearchableInfo;->getActivityMetaData(Landroid/content/Context;Lorg/xmlpull/v1/XmlPullParser;Landroid/content/ComponentName;)Landroid/app/SearchableInfo;
+    invoke-static {v3, v4, v0}, Landroid/app/SearchableInfo;->getActivityMetaData(Landroid/content/Context;Lorg/xmlpull/v1/XmlPullParser;Landroid/content/ComponentName;)Landroid/app/SearchableInfo;
 
-    move-result-object v1
+    move-result-object v2
 
-    .local v1, searchable:Landroid/app/SearchableInfo;
-    invoke-interface {v2}, Landroid/content/res/XmlResourceParser;->close()V
+    .local v2, searchable:Landroid/app/SearchableInfo;
+    invoke-interface {v4}, Landroid/content/res/XmlResourceParser;->close()V
 
     goto :goto_0
 .end method

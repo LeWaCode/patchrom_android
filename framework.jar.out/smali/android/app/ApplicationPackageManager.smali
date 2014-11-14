@@ -19,10 +19,10 @@
 
 .field private static final TAG:Ljava/lang/String; = "ApplicationPackageManager"
 
-.field private static sIconCache:Ljava/util/HashMap;
+.field private static sIconCache:Landroid/util/ArrayMap;
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "Ljava/util/HashMap",
+            "Landroid/util/ArrayMap",
             "<",
             "Landroid/app/ApplicationPackageManager$ResourceName;",
             "Ljava/lang/ref/WeakReference",
@@ -33,10 +33,10 @@
     .end annotation
 .end field
 
-.field private static sStringCache:Ljava/util/HashMap;
+.field private static sStringCache:Landroid/util/ArrayMap;
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "Ljava/util/HashMap",
+            "Landroid/util/ArrayMap",
             "<",
             "Landroid/app/ApplicationPackageManager$ResourceName;",
             "Ljava/lang/ref/WeakReference",
@@ -69,17 +69,17 @@
 
     sput-object v0, Landroid/app/ApplicationPackageManager;->sSync:Ljava/lang/Object;
 
-    new-instance v0, Ljava/util/HashMap;
+    new-instance v0, Landroid/util/ArrayMap;
 
-    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
+    invoke-direct {v0}, Landroid/util/ArrayMap;-><init>()V
 
-    sput-object v0, Landroid/app/ApplicationPackageManager;->sIconCache:Ljava/util/HashMap;
+    sput-object v0, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
 
-    new-instance v0, Ljava/util/HashMap;
+    new-instance v0, Landroid/util/ArrayMap;
 
-    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
+    invoke-direct {v0}, Landroid/util/ArrayMap;-><init>()V
 
-    sput-object v0, Landroid/app/ApplicationPackageManager;->sStringCache:Ljava/util/HashMap;
+    sput-object v0, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
 
     return-void
 .end method
@@ -112,13 +112,13 @@
     monitor-enter v1
 
     :try_start_0
-    sget-object v0, Landroid/app/ApplicationPackageManager;->sIconCache:Ljava/util/HashMap;
+    sget-object v0, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v0}, Ljava/util/HashMap;->clear()V
+    invoke-virtual {v0}, Landroid/util/ArrayMap;->clear()V
 
-    sget-object v0, Landroid/app/ApplicationPackageManager;->sStringCache:Ljava/util/HashMap;
+    sget-object v0, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v0}, Ljava/util/HashMap;->clear()V
+    invoke-virtual {v0}, Landroid/util/ArrayMap;->clear()V
 
     monitor-exit v1
 
@@ -144,9 +144,9 @@
     monitor-enter v3
 
     :try_start_0
-    sget-object v2, Landroid/app/ApplicationPackageManager;->sIconCache:Ljava/util/HashMap;
+    sget-object v2, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v2, p1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v2, p1}, Landroid/util/ArrayMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
 
     move-result-object v1
 
@@ -176,9 +176,9 @@
 
     .restart local v0       #state:Landroid/graphics/drawable/Drawable$ConstantState;
     :cond_0
-    sget-object v2, Landroid/app/ApplicationPackageManager;->sIconCache:Ljava/util/HashMap;
+    sget-object v2, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v2, p1}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v2, p1}, Landroid/util/ArrayMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
 
     .end local v0           #state:Landroid/graphics/drawable/Drawable$ConstantState;
     :cond_1
@@ -209,9 +209,9 @@
     monitor-enter v3
 
     :try_start_0
-    sget-object v2, Landroid/app/ApplicationPackageManager;->sStringCache:Ljava/util/HashMap;
+    sget-object v2, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v2, p1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v2, p1}, Landroid/util/ArrayMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
 
     move-result-object v1
 
@@ -237,9 +237,9 @@
 
     .restart local v0       #cs:Ljava/lang/CharSequence;
     :cond_0
-    sget-object v2, Landroid/app/ApplicationPackageManager;->sStringCache:Ljava/util/HashMap;
+    sget-object v2, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v2, p1}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v2, p1}, Landroid/util/ArrayMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
 
     .end local v0           #cs:Ljava/lang/CharSequence;
     :cond_1
@@ -267,14 +267,14 @@
     .parameter "hasPkgInfo"
 
     .prologue
-    const/4 v2, 0x0
+    const/4 v3, 0x0
 
-    .local v2, immediateGc:Z
+    .local v3, immediateGc:Z
     const/4 v8, 0x1
 
     if-ne p0, v8, :cond_0
 
-    const/4 v2, 0x1
+    const/4 v3, 0x1
 
     :cond_0
     if-eqz p1, :cond_7
@@ -292,13 +292,13 @@
     array-length v4, v0
 
     .local v4, len$:I
-    const/4 v1, 0x0
+    const/4 v2, 0x0
 
-    .local v1, i$:I
+    .local v2, i$:I
     :goto_0
-    if-ge v1, v4, :cond_5
+    if-ge v2, v4, :cond_5
 
-    aget-object v7, v0, v1
+    aget-object v7, v0, v2
 
     .local v7, ssp:Ljava/lang/String;
     sget-object v9, Landroid/app/ApplicationPackageManager;->sSync:Ljava/lang/Object;
@@ -306,34 +306,21 @@
     monitor-enter v9
 
     :try_start_0
-    sget-object v8, Landroid/app/ApplicationPackageManager;->sIconCache:Ljava/util/HashMap;
+    sget-object v8, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v8}, Ljava/util/HashMap;->size()I
+    invoke-virtual {v8}, Landroid/util/ArrayMap;->size()I
 
     move-result v8
 
-    if-lez v8, :cond_2
+    add-int/lit8 v1, v8, -0x1
 
-    sget-object v8, Landroid/app/ApplicationPackageManager;->sIconCache:Ljava/util/HashMap;
-
-    invoke-virtual {v8}, Ljava/util/HashMap;->keySet()Ljava/util/Set;
-
-    move-result-object v8
-
-    invoke-interface {v8}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
-
-    move-result-object v3
-
-    .local v3, it:Ljava/util/Iterator;,"Ljava/util/Iterator<Landroid/app/ApplicationPackageManager$ResourceName;>;"
-    :cond_1
+    .local v1, i:I
     :goto_1
-    invoke-interface {v3}, Ljava/util/Iterator;->hasNext()Z
+    if-ltz v1, :cond_2
 
-    move-result v8
+    sget-object v8, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
 
-    if-eqz v8, :cond_2
-
-    invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-virtual {v8, v1}, Landroid/util/ArrayMap;->keyAt(I)Ljava/lang/Object;
 
     move-result-object v6
 
@@ -348,43 +335,33 @@
 
     if-eqz v8, :cond_1
 
-    invoke-interface {v3}, Ljava/util/Iterator;->remove()V
+    sget-object v8, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
+
+    invoke-virtual {v8, v1}, Landroid/util/ArrayMap;->removeAt(I)Ljava/lang/Object;
 
     const/4 v5, 0x1
 
+    :cond_1
+    add-int/lit8 v1, v1, -0x1
+
     goto :goto_1
 
-    .end local v3           #it:Ljava/util/Iterator;,"Ljava/util/Iterator<Landroid/app/ApplicationPackageManager$ResourceName;>;"
     .end local v6           #nm:Landroid/app/ApplicationPackageManager$ResourceName;
     :cond_2
-    sget-object v8, Landroid/app/ApplicationPackageManager;->sStringCache:Ljava/util/HashMap;
+    sget-object v8, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
 
-    invoke-virtual {v8}, Ljava/util/HashMap;->size()I
+    invoke-virtual {v8}, Landroid/util/ArrayMap;->size()I
 
     move-result v8
 
-    if-lez v8, :cond_4
+    add-int/lit8 v1, v8, -0x1
 
-    sget-object v8, Landroid/app/ApplicationPackageManager;->sStringCache:Ljava/util/HashMap;
-
-    invoke-virtual {v8}, Ljava/util/HashMap;->keySet()Ljava/util/Set;
-
-    move-result-object v8
-
-    invoke-interface {v8}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
-
-    move-result-object v3
-
-    .restart local v3       #it:Ljava/util/Iterator;,"Ljava/util/Iterator<Landroid/app/ApplicationPackageManager$ResourceName;>;"
-    :cond_3
     :goto_2
-    invoke-interface {v3}, Ljava/util/Iterator;->hasNext()Z
+    if-ltz v1, :cond_4
 
-    move-result v8
+    sget-object v8, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
 
-    if-eqz v8, :cond_4
-
-    invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-virtual {v8, v1}, Landroid/util/ArrayMap;->keyAt(I)Ljava/lang/Object;
 
     move-result-object v6
 
@@ -399,21 +376,26 @@
 
     if-eqz v8, :cond_3
 
-    invoke-interface {v3}, Ljava/util/Iterator;->remove()V
+    sget-object v8, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
+
+    invoke-virtual {v8, v1}, Landroid/util/ArrayMap;->removeAt(I)Ljava/lang/Object;
 
     const/4 v5, 0x1
 
+    :cond_3
+    add-int/lit8 v1, v1, -0x1
+
     goto :goto_2
 
-    .end local v3           #it:Ljava/util/Iterator;,"Ljava/util/Iterator<Landroid/app/ApplicationPackageManager$ResourceName;>;"
     .end local v6           #nm:Landroid/app/ApplicationPackageManager$ResourceName;
     :cond_4
     monitor-exit v9
 
-    add-int/lit8 v1, v1, 0x1
+    add-int/lit8 v2, v2, 0x1
 
     goto :goto_0
 
+    .end local v1           #i:I
     :catchall_0
     move-exception v8
 
@@ -430,7 +412,7 @@
     if-eqz p2, :cond_7
 
     :cond_6
-    if-eqz v2, :cond_8
+    if-eqz v3, :cond_8
 
     invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
 
@@ -439,7 +421,7 @@
     invoke-virtual {v8}, Ljava/lang/Runtime;->gc()V
 
     .end local v0           #arr$:[Ljava/lang/String;
-    .end local v1           #i$:I
+    .end local v2           #i$:I
     .end local v4           #len$:I
     .end local v5           #needCleanup:Z
     :cond_7
@@ -447,7 +429,7 @@
     return-void
 
     .restart local v0       #arr$:[Ljava/lang/String;
-    .restart local v1       #i$:I
+    .restart local v2       #i$:I
     .restart local v4       #len$:I
     .restart local v5       #needCleanup:Z
     :cond_8
@@ -471,7 +453,7 @@
     monitor-enter v1
 
     :try_start_0
-    sget-object v0, Landroid/app/ApplicationPackageManager;->sIconCache:Ljava/util/HashMap;
+    sget-object v0, Landroid/app/ApplicationPackageManager;->sIconCache:Landroid/util/ArrayMap;
 
     new-instance v2, Ljava/lang/ref/WeakReference;
 
@@ -481,7 +463,7 @@
 
     invoke-direct {v2, v3}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
 
-    invoke-virtual {v0, p1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v0, p1, v2}, Landroid/util/ArrayMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 
     monitor-exit v1
 
@@ -508,13 +490,13 @@
     monitor-enter v1
 
     :try_start_0
-    sget-object v0, Landroid/app/ApplicationPackageManager;->sStringCache:Ljava/util/HashMap;
+    sget-object v0, Landroid/app/ApplicationPackageManager;->sStringCache:Landroid/util/ArrayMap;
 
     new-instance v2, Ljava/lang/ref/WeakReference;
 
     invoke-direct {v2, p2}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
 
-    invoke-virtual {v0, p1, v2}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-virtual {v0, p1, v2}, Landroid/util/ArrayMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 
     monitor-exit v1
 
@@ -612,7 +594,7 @@
 .end method
 
 .method public addPreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;)V
-    .locals 1
+    .locals 6
     .parameter "filter"
     .parameter "match"
     .parameter "set"
@@ -622,7 +604,56 @@
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-interface {v0, p1, p2, p3, p4}, Landroid/content/pm/IPackageManager;->addPreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;)V
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v1}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v5
+
+    move-object v1, p1
+
+    move v2, p2
+
+    move-object v3, p3
+
+    move-object v4, p4
+
+    invoke-interface/range {v0 .. v5}, Landroid/content/pm/IPackageManager;->addPreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;I)V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    :goto_0
+    return-void
+
+    :catch_0
+    move-exception v0
+
+    goto :goto_0
+.end method
+
+.method public addPreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;I)V
+    .locals 6
+    .parameter "filter"
+    .parameter "match"
+    .parameter "set"
+    .parameter "activity"
+    .parameter "userId"
+
+    .prologue
+    :try_start_0
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    move-object v1, p1
+
+    move v2, p2
+
+    move-object v3, p3
+
+    move-object v4, p4
+
+    move v5, p5
+
+    invoke-interface/range {v0 .. v5}, Landroid/content/pm/IPackageManager;->addPreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;I)V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -763,7 +794,9 @@
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v1}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v1
 
@@ -797,32 +830,6 @@
 
     :catch_0
     move-exception v0
-
-    goto :goto_0
-.end method
-
-.method public createUser(Ljava/lang/String;I)Landroid/content/pm/UserInfo;
-    .locals 1
-    .parameter "name"
-    .parameter "flags"
-
-    .prologue
-    :try_start_0
-    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
-
-    invoke-interface {v0, p1, p2}, Landroid/content/pm/IPackageManager;->createUser(Ljava/lang/String;I)Landroid/content/pm/UserInfo;
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result-object v0
-
-    :goto_0
-    return-object v0
-
-    :catch_0
-    move-exception v0
-
-    const/4 v0, 0x0
 
     goto :goto_0
 .end method
@@ -879,7 +886,7 @@
 .end method
 
 .method public deletePackage(Ljava/lang/String;Landroid/content/pm/IPackageDeleteObserver;I)V
-    .locals 1
+    .locals 2
     .parameter "packageName"
     .parameter "observer"
     .parameter "flags"
@@ -888,7 +895,34 @@
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-interface {v0, p1, p2, p3}, Landroid/content/pm/IPackageManager;->deletePackage(Ljava/lang/String;Landroid/content/pm/IPackageDeleteObserver;I)V
+    invoke-static {}, Landroid/os/UserHandle;->myUserId()I
+
+    move-result v1
+
+    invoke-interface {v0, p1, p2, v1, p3}, Landroid/content/pm/IPackageManager;->deletePackageAsUser(Ljava/lang/String;Landroid/content/pm/IPackageDeleteObserver;II)V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    :goto_0
+    return-void
+
+    :catch_0
+    move-exception v0
+
+    goto :goto_0
+.end method
+
+.method public extendVerificationTimeout(IIJ)V
+    .locals 1
+    .parameter "id"
+    .parameter "verificationCodeAtTimeout"
+    .parameter "millisecondsToDelay"
+
+    .prologue
+    :try_start_0
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    invoke-interface {v0, p1, p2, p3, p4}, Landroid/content/pm/IPackageManager;->extendVerificationTimeout(IIJ)V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -1041,7 +1075,9 @@
     :try_start_0
     iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v3
 
@@ -1203,6 +1239,36 @@
     throw v1
 .end method
 
+.method public getApplicationBlockedSettingAsUser(Ljava/lang/String;Landroid/os/UserHandle;)Z
+    .locals 2
+    .parameter "packageName"
+    .parameter "user"
+
+    .prologue
+    :try_start_0
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    invoke-virtual {p2}, Landroid/os/UserHandle;->getIdentifier()I
+
+    move-result v1
+
+    invoke-interface {v0, p1, v1}, Landroid/content/pm/IPackageManager;->getApplicationBlockedSettingAsUser(Ljava/lang/String;I)Z
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v0
+
+    :goto_0
+    return v0
+
+    :catch_0
+    move-exception v0
+
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
 .method public getApplicationEnabledSetting(Ljava/lang/String;)I
     .locals 2
     .parameter "packageName"
@@ -1211,7 +1277,9 @@
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v1}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v1
 
@@ -1281,7 +1349,9 @@
     :try_start_0
     iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v3
 
@@ -1374,7 +1444,9 @@
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v1}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v1
 
@@ -1598,8 +1670,44 @@
     goto/16 :goto_0
 .end method
 
+.method public getHomeActivities(Ljava/util/List;)Landroid/content/ComponentName;
+    .locals 1
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;)",
+            "Landroid/content/ComponentName;"
+        }
+    .end annotation
+
+    .prologue
+    .local p1, outActivities:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/ResolveInfo;>;"
+    :try_start_0
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    invoke-interface {v0, p1}, Landroid/content/pm/IPackageManager;->getHomeActivities(Ljava/util/List;)Landroid/content/ComponentName;
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v0
+
+    :goto_0
+    return-object v0
+
+    :catch_0
+    move-exception v0
+
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
 .method public getInstalledApplications(I)Ljava/util/List;
-    .locals 8
+    .locals 5
     .parameter "flags"
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -1612,82 +1720,45 @@
     .end annotation
 
     .prologue
-    invoke-static {}, Landroid/os/Process;->myUid()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
 
-    move-result v6
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
-    invoke-static {v6}, Landroid/os/UserId;->getUserId(I)I
+    move-result v2
 
-    move-result v5
-
-    .local v5, userId:I
+    .local v2, userId:I
     :try_start_0
-    new-instance v0, Ljava/util/ArrayList;
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+    invoke-interface {v3, p1, v2}, Landroid/content/pm/IPackageManager;->getInstalledApplications(II)Landroid/content/pm/ParceledListSlice;
 
-    .local v0, applicationInfos:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/ApplicationInfo;>;"
-    const/4 v2, 0x0
+    move-result-object v1
 
-    .local v2, lastItem:Landroid/content/pm/ApplicationInfo;
-    :cond_0
-    if-eqz v2, :cond_1
-
-    iget-object v3, v2, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
-
-    .local v3, lastKey:Ljava/lang/String;
-    :goto_0
-    iget-object v6, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
-
-    invoke-interface {v6, p1, v3, v5}, Landroid/content/pm/IPackageManager;->getInstalledApplications(ILjava/lang/String;I)Landroid/content/pm/ParceledListSlice;
-
-    move-result-object v4
-
-    .local v4, slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/ApplicationInfo;>;"
-    sget-object v6, Landroid/content/pm/ApplicationInfo;->CREATOR:Landroid/os/Parcelable$Creator;
-
-    invoke-virtual {v4, v0, v6}, Landroid/content/pm/ParceledListSlice;->populateList(Ljava/util/List;Landroid/os/Parcelable$Creator;)Landroid/os/Parcelable;
-
-    move-result-object v2
-
-    .end local v2           #lastItem:Landroid/content/pm/ApplicationInfo;
-    check-cast v2, Landroid/content/pm/ApplicationInfo;
-
-    .restart local v2       #lastItem:Landroid/content/pm/ApplicationInfo;
-    invoke-virtual {v4}, Landroid/content/pm/ParceledListSlice;->isLastSlice()Z
+    .local v1, slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/ApplicationInfo;>;"
+    invoke-virtual {v1}, Landroid/content/pm/ParceledListSlice;->getList()Ljava/util/List;
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
-    move-result v6
+    move-result-object v3
 
-    if-eqz v6, :cond_0
+    return-object v3
 
-    return-object v0
-
-    .end local v3           #lastKey:Ljava/lang/String;
-    .end local v4           #slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/ApplicationInfo;>;"
-    :cond_1
-    const/4 v3, 0x0
-
-    goto :goto_0
-
-    .end local v0           #applicationInfos:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/ApplicationInfo;>;"
-    .end local v2           #lastItem:Landroid/content/pm/ApplicationInfo;
+    .end local v1           #slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/ApplicationInfo;>;"
     :catch_0
-    move-exception v1
+    move-exception v0
 
-    .local v1, e:Landroid/os/RemoteException;
-    new-instance v6, Ljava/lang/RuntimeException;
+    .local v0, e:Landroid/os/RemoteException;
+    new-instance v3, Ljava/lang/RuntimeException;
 
-    const-string v7, "Package manager has died"
+    const-string v4, "Package manager has died"
 
-    invoke-direct {v6, v7, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+    invoke-direct {v3, v4, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
 
-    throw v6
+    throw v3
 .end method
 
 .method public getInstalledPackages(I)Ljava/util/List;
-    .locals 7
+    .locals 1
     .parameter "flags"
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -1700,69 +1771,62 @@
     .end annotation
 
     .prologue
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v0}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, v0}, Landroid/app/ApplicationPackageManager;->getInstalledPackages(II)Ljava/util/List;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public getInstalledPackages(II)Ljava/util/List;
+    .locals 4
+    .parameter "flags"
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(II)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/PackageInfo;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
     :try_start_0
-    new-instance v3, Ljava/util/ArrayList;
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-direct {v3}, Ljava/util/ArrayList;-><init>()V
-
-    .local v3, packageInfos:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/PackageInfo;>;"
-    const/4 v1, 0x0
-
-    .local v1, lastItem:Landroid/content/pm/PackageInfo;
-    :cond_0
-    if-eqz v1, :cond_1
-
-    iget-object v2, v1, Landroid/content/pm/PackageInfo;->packageName:Ljava/lang/String;
-
-    .local v2, lastKey:Ljava/lang/String;
-    :goto_0
-    iget-object v5, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
-
-    invoke-interface {v5, p1, v2}, Landroid/content/pm/IPackageManager;->getInstalledPackages(ILjava/lang/String;)Landroid/content/pm/ParceledListSlice;
-
-    move-result-object v4
-
-    .local v4, slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/PackageInfo;>;"
-    sget-object v5, Landroid/content/pm/PackageInfo;->CREATOR:Landroid/os/Parcelable$Creator;
-
-    invoke-virtual {v4, v3, v5}, Landroid/content/pm/ParceledListSlice;->populateList(Ljava/util/List;Landroid/os/Parcelable$Creator;)Landroid/os/Parcelable;
+    invoke-interface {v2, p1, p2}, Landroid/content/pm/IPackageManager;->getInstalledPackages(II)Landroid/content/pm/ParceledListSlice;
 
     move-result-object v1
 
-    .end local v1           #lastItem:Landroid/content/pm/PackageInfo;
-    check-cast v1, Landroid/content/pm/PackageInfo;
-
-    .restart local v1       #lastItem:Landroid/content/pm/PackageInfo;
-    invoke-virtual {v4}, Landroid/content/pm/ParceledListSlice;->isLastSlice()Z
+    .local v1, slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/PackageInfo;>;"
+    invoke-virtual {v1}, Landroid/content/pm/ParceledListSlice;->getList()Ljava/util/List;
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
-    move-result v5
+    move-result-object v2
 
-    if-eqz v5, :cond_0
+    return-object v2
 
-    return-object v3
-
-    .end local v2           #lastKey:Ljava/lang/String;
-    .end local v4           #slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/PackageInfo;>;"
-    :cond_1
-    const/4 v2, 0x0
-
-    goto :goto_0
-
-    .end local v1           #lastItem:Landroid/content/pm/PackageInfo;
-    .end local v3           #packageInfos:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/PackageInfo;>;"
+    .end local v1           #slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/PackageInfo;>;"
     :catch_0
     move-exception v0
 
     .local v0, e:Landroid/os/RemoteException;
-    new-instance v5, Ljava/lang/RuntimeException;
+    new-instance v2, Ljava/lang/RuntimeException;
 
-    const-string v6, "Package manager has died"
+    const-string v3, "Package manager has died"
 
-    invoke-direct {v5, v6, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+    invoke-direct {v2, v3, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
 
-    throw v5
+    throw v2
 .end method
 
 .method public getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
@@ -2039,11 +2103,15 @@
     :try_start_0
     iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v3
 
     invoke-interface {v2, p1, p2, v3}, Landroid/content/pm/IPackageManager;->getPackageInfo(Ljava/lang/String;II)Landroid/content/pm/PackageInfo;
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
     move-result-object v1
 
@@ -2051,9 +2119,7 @@
     if-eqz v1, :cond_0
 
     invoke-static {p1, v1}, Landroid/app/ApplicationPackageManager$Injector;->registerUmengAnalytic(Ljava/lang/String;Landroid/content/pm/PackageInfo;)V
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
+  
     return-object v1
 
     .end local v1           #pi:Landroid/content/pm/PackageInfo;
@@ -2079,16 +2145,17 @@
     throw v2
 .end method
 
-.method public getPackageSizeInfo(Ljava/lang/String;Landroid/content/pm/IPackageStatsObserver;)V
+.method public getPackageSizeInfo(Ljava/lang/String;ILandroid/content/pm/IPackageStatsObserver;)V
     .locals 1
     .parameter "packageName"
+    .parameter "userHandle"
     .parameter "observer"
 
     .prologue
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-interface {v0, p1, p2}, Landroid/content/pm/IPackageManager;->getPackageSizeInfo(Ljava/lang/String;Landroid/content/pm/IPackageStatsObserver;)V
+    invoke-interface {v0, p1, p2, p3}, Landroid/content/pm/IPackageManager;->getPackageSizeInfo(Ljava/lang/String;ILandroid/content/pm/IPackageStatsObserver;)V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -2099,6 +2166,54 @@
     move-exception v0
 
     goto :goto_0
+.end method
+
+.method public getPackageUid(Ljava/lang/String;I)I
+    .locals 4
+    .parameter "packageName"
+    .parameter "userHandle"
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
+
+    .prologue
+    :try_start_0
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    invoke-interface {v2, p1, p2}, Landroid/content/pm/IPackageManager;->getPackageUid(Ljava/lang/String;I)I
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v1
+
+    .local v1, uid:I
+    if-ltz v1, :cond_0
+
+    return v1
+
+    .end local v1           #uid:I
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    new-instance v2, Ljava/lang/RuntimeException;
+
+    const-string v3, "Package manager has died"
+
+    invoke-direct {v2, v3, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+
+    throw v2
+
+    .end local v0           #e:Landroid/os/RemoteException;
+    .restart local v1       #uid:I
+    :cond_0
+    new-instance v2, Landroid/content/pm/PackageManager$NameNotFoundException;
+
+    invoke-direct {v2, p1}, Landroid/content/pm/PackageManager$NameNotFoundException;-><init>(Ljava/lang/String;)V
+
+    throw v2
 .end method
 
 .method public getPackagesForUid(I)[Ljava/lang/String;
@@ -2128,6 +2243,60 @@
     invoke-direct {v1, v2, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
 
     throw v1
+.end method
+
+.method public getPackagesHoldingPermissions([Ljava/lang/String;I)Ljava/util/List;
+    .locals 5
+    .parameter "permissions"
+    .parameter "flags"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "([",
+            "Ljava/lang/String;",
+            "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/PackageInfo;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v2
+
+    .local v2, userId:I
+    :try_start_0
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    invoke-interface {v3, p1, p2, v2}, Landroid/content/pm/IPackageManager;->getPackagesHoldingPermissions([Ljava/lang/String;II)Landroid/content/pm/ParceledListSlice;
+
+    move-result-object v1
+
+    .local v1, slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/PackageInfo;>;"
+    invoke-virtual {v1}, Landroid/content/pm/ParceledListSlice;->getList()Ljava/util/List;
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v3
+
+    return-object v3
+
+    .end local v1           #slice:Landroid/content/pm/ParceledListSlice;,"Landroid/content/pm/ParceledListSlice<Landroid/content/pm/PackageInfo;>;"
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    new-instance v3, Ljava/lang/RuntimeException;
+
+    const-string v4, "Package manager has died"
+
+    invoke-direct {v3, v4, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+
+    throw v3
 .end method
 
 .method public getPermissionGroupInfo(Ljava/lang/String;I)Landroid/content/pm/PermissionGroupInfo;
@@ -2320,7 +2489,9 @@
     :try_start_0
     iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v3
 
@@ -2376,7 +2547,9 @@
     :try_start_0
     iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v3
 
@@ -2444,7 +2617,7 @@
 .end method
 
 .method public getResourcesForApplication(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
-    .locals 5
+    .locals 6
     .parameter "app"
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
@@ -2483,12 +2656,6 @@
     return-object v0
 
     :cond_1
-    move-object v0, p1
-
-    iget-object v4, v0, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
-
-    .local v4, packageName:Ljava/lang/String;
-
     iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
 
     iget-object v2, v1, Landroid/app/ContextImpl;->mMainThread:Landroid/app/ActivityThread;
@@ -2504,15 +2671,23 @@
     iget-object v1, p1, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
 
     :goto_0
-    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+    const/4 v3, 0x0
 
-    iget-object v3, v3, Landroid/app/ContextImpl;->mPackageInfo:Landroid/app/LoadedApk;
+    const/4 v4, 0x0
 
-    invoke-virtual {v2, v4, v1, v3}, Landroid/app/ActivityThread;->getTopLevelResources(Ljava/lang/String;Ljava/lang/String;Landroid/app/LoadedApk;)Landroid/content/res/Resources;
+    iget-object v5, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    iget-object v5, v5, Landroid/app/ContextImpl;->mPackageInfo:Landroid/app/LoadedApk;
+
+    invoke-virtual {v2, v1, v3, v4, v5}, Landroid/app/ActivityThread;->getTopLevelResources(Ljava/lang/String;ILandroid/content/res/Configuration;Landroid/app/LoadedApk;)Landroid/content/res/Resources;
 
     move-result-object v0
 
     .local v0, r:Landroid/content/res/Resources;
+    invoke-direct {p0, p1}, Landroid/app/ApplicationPackageManager;->getLewaTopLevelResources(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
+
+    move-result-object v0
+
     if-nez v0, :cond_0
 
     new-instance v1, Landroid/content/pm/PackageManager$NameNotFoundException;
@@ -2571,6 +2746,135 @@
     return-object v0
 .end method
 
+.method public getResourcesForApplicationAsUser(Ljava/lang/String;I)Landroid/content/res/Resources;
+    .locals 5
+    .parameter "appPackageName"
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
+
+    .prologue
+    if-gez p2, :cond_0
+
+    new-instance v2, Ljava/lang/IllegalArgumentException;
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "Call does not support special user #"
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+
+    throw v2
+
+    :cond_0
+    const-string v2, "system"
+
+    invoke-virtual {v2, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_1
+
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    iget-object v2, v2, Landroid/app/ContextImpl;->mMainThread:Landroid/app/ActivityThread;
+
+    invoke-virtual {v2}, Landroid/app/ActivityThread;->getSystemContext()Landroid/app/ContextImpl;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Landroid/app/ContextImpl;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v2
+
+    :goto_0
+    return-object v2
+
+    :cond_1
+    :try_start_0
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    const/4 v3, 0x0
+
+    invoke-interface {v2, p1, v3, p2}, Landroid/content/pm/IPackageManager;->getApplicationInfo(Ljava/lang/String;II)Landroid/content/pm/ApplicationInfo;
+
+    move-result-object v0
+
+    .local v0, ai:Landroid/content/pm/ApplicationInfo;
+    if-eqz v0, :cond_2
+
+    invoke-virtual {p0, v0}, Landroid/app/ApplicationPackageManager;->getResourcesForApplication(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v2
+
+    goto :goto_0
+
+    .end local v0           #ai:Landroid/content/pm/ApplicationInfo;
+    :catch_0
+    move-exception v1
+
+    .local v1, e:Landroid/os/RemoteException;
+    new-instance v2, Ljava/lang/RuntimeException;
+
+    const-string v3, "Package manager has died"
+
+    invoke-direct {v2, v3, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+
+    throw v2
+
+    .end local v1           #e:Landroid/os/RemoteException;
+    .restart local v0       #ai:Landroid/content/pm/ApplicationInfo;
+    :cond_2
+    new-instance v2, Landroid/content/pm/PackageManager$NameNotFoundException;
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "Package "
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    const-string v4, " doesn\'t exist"
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Landroid/content/pm/PackageManager$NameNotFoundException;-><init>(Ljava/lang/String;)V
+
+    throw v2
+.end method
+
 .method public getServiceInfo(Landroid/content/ComponentName;I)Landroid/content/pm/ServiceInfo;
     .locals 4
     .parameter "className"
@@ -2585,7 +2889,9 @@
     :try_start_0
     iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v3
 
@@ -2890,82 +3196,6 @@
     throw v2
 .end method
 
-.method public getUser(I)Landroid/content/pm/UserInfo;
-    .locals 2
-    .parameter "userId"
-
-    .prologue
-    :try_start_0
-    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
-
-    invoke-interface {v1, p1}, Landroid/content/pm/IPackageManager;->getUser(I)Landroid/content/pm/UserInfo;
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result-object v1
-
-    :goto_0
-    return-object v1
-
-    :catch_0
-    move-exception v0
-
-    .local v0, re:Landroid/os/RemoteException;
-    const/4 v1, 0x0
-
-    goto :goto_0
-.end method
-
-.method public getUsers()Ljava/util/List;
-    .locals 6
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "()",
-            "Ljava/util/List",
-            "<",
-            "Landroid/content/pm/UserInfo;",
-            ">;"
-        }
-    .end annotation
-
-    .prologue
-    :try_start_0
-    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
-
-    invoke-interface {v3}, Landroid/content/pm/IPackageManager;->getUsers()Ljava/util/List;
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result-object v2
-
-    :goto_0
-    return-object v2
-
-    :catch_0
-    move-exception v1
-
-    .local v1, re:Landroid/os/RemoteException;
-    new-instance v2, Ljava/util/ArrayList;
-
-    invoke-direct {v2}, Ljava/util/ArrayList;-><init>()V
-
-    .local v2, users:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/content/pm/UserInfo;>;"
-    new-instance v0, Landroid/content/pm/UserInfo;
-
-    const/4 v3, 0x0
-
-    const-string v4, "Root!"
-
-    const/4 v5, 0x3
-
-    invoke-direct {v0, v3, v4, v5}, Landroid/content/pm/UserInfo;-><init>(ILjava/lang/String;I)V
-
-    .local v0, primary:Landroid/content/pm/UserInfo;
-    invoke-virtual {v2, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    goto :goto_0
-.end method
-
 .method public getVerifierDeviceIdentity()Landroid/content/pm/VerifierDeviceIdentity;
     .locals 1
 
@@ -3166,6 +3396,105 @@
     throw v1
 .end method
 
+.method public installExistingPackage(Ljava/lang/String;)I
+    .locals 5
+    .parameter "packageName"
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
+
+    .prologue
+    :try_start_0
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    invoke-static {}, Landroid/os/UserHandle;->myUserId()I
+
+    move-result v3
+
+    invoke-interface {v2, p1, v3}, Landroid/content/pm/IPackageManager;->installExistingPackageAsUser(Ljava/lang/String;I)I
+
+    move-result v1
+
+    .local v1, res:I
+    const/4 v2, -0x3
+
+    if-ne v1, v2, :cond_0
+
+    new-instance v2, Landroid/content/pm/PackageManager$NameNotFoundException;
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "Package "
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    const-string v4, " doesn\'t exist"
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Landroid/content/pm/PackageManager$NameNotFoundException;-><init>(Ljava/lang/String;)V
+
+    throw v2
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    .end local v1           #res:I
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    new-instance v2, Landroid/content/pm/PackageManager$NameNotFoundException;
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "Package "
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    const-string v4, " doesn\'t exist"
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Landroid/content/pm/PackageManager$NameNotFoundException;-><init>(Ljava/lang/String;)V
+
+    throw v2
+
+    .end local v0           #e:Landroid/os/RemoteException;
+    .restart local v1       #res:I
+    :cond_0
+    return v1
+.end method
+
 .method public installPackage(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;)V
     .locals 1
     .parameter "packageURI"
@@ -3219,6 +3548,44 @@
     move-object v7, p7
 
     invoke-interface/range {v0 .. v7}, Landroid/content/pm/IPackageManager;->installPackageWithVerification(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;Landroid/net/Uri;Landroid/content/pm/ManifestDigest;Landroid/content/pm/ContainerEncryptionParams;)V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    :goto_0
+    return-void
+
+    :catch_0
+    move-exception v0
+
+    goto :goto_0
+.end method
+
+.method public installPackageWithVerificationAndEncryption(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;Landroid/content/pm/VerificationParams;Landroid/content/pm/ContainerEncryptionParams;)V
+    .locals 7
+    .parameter "packageURI"
+    .parameter "observer"
+    .parameter "flags"
+    .parameter "installerPackageName"
+    .parameter "verificationParams"
+    .parameter "encryptionParams"
+
+    .prologue
+    :try_start_0
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    move-object v1, p1
+
+    move-object v2, p2
+
+    move v3, p3
+
+    move-object v4, p4
+
+    move-object v5, p5
+
+    move-object v6, p6
+
+    invoke-interface/range {v0 .. v6}, Landroid/content/pm/IPackageManager;->installPackageWithVerificationAndEncryption(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;Landroid/content/pm/VerificationParams;Landroid/content/pm/ContainerEncryptionParams;)V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -3314,7 +3681,7 @@
 .end method
 
 .method public queryBroadcastReceivers(Landroid/content/Intent;I)Ljava/util/List;
-    .locals 4
+    .locals 1
     .parameter "intent"
     .parameter "flags"
     .annotation system Ldalvik/annotation/Signature;
@@ -3322,6 +3689,37 @@
             "(",
             "Landroid/content/Intent;",
             "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v0}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, p2, v0}, Landroid/app/ApplicationPackageManager;->queryBroadcastReceivers(Landroid/content/Intent;II)Ljava/util/List;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public queryBroadcastReceivers(Landroid/content/Intent;II)Ljava/util/List;
+    .locals 3
+    .parameter "intent"
+    .parameter "flags"
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
             "Ljava/util/List",
             "<",
             "Landroid/content/pm/ResolveInfo;",
@@ -3343,11 +3741,7 @@
 
     move-result-object v2
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
-
-    move-result v3
-
-    invoke-interface {v1, p1, v2, p2, v3}, Landroid/content/pm/IPackageManager;->queryIntentReceivers(Landroid/content/Intent;Ljava/lang/String;II)Ljava/util/List;
+    invoke-interface {v1, p1, v2, p2, p3}, Landroid/content/pm/IPackageManager;->queryIntentReceivers(Landroid/content/Intent;Ljava/lang/String;II)Ljava/util/List;
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -3452,7 +3846,7 @@
 .end method
 
 .method public queryIntentActivities(Landroid/content/Intent;I)Ljava/util/List;
-    .locals 4
+    .locals 1
     .parameter "intent"
     .parameter "flags"
     .annotation system Ldalvik/annotation/Signature;
@@ -3460,6 +3854,37 @@
             "(",
             "Landroid/content/Intent;",
             "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v0}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, p2, v0}, Landroid/app/ApplicationPackageManager;->queryIntentActivitiesAsUser(Landroid/content/Intent;II)Ljava/util/List;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public queryIntentActivitiesAsUser(Landroid/content/Intent;II)Ljava/util/List;
+    .locals 3
+    .parameter "intent"
+    .parameter "flags"
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
             "Ljava/util/List",
             "<",
             "Landroid/content/pm/ResolveInfo;",
@@ -3481,11 +3906,7 @@
 
     move-result-object v2
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
-
-    move-result v3
-
-    invoke-interface {v1, p1, v2, p2, v3}, Landroid/content/pm/IPackageManager;->queryIntentActivities(Landroid/content/Intent;Ljava/lang/String;II)Ljava/util/List;
+    invoke-interface {v1, p1, v2, p2, p3}, Landroid/content/pm/IPackageManager;->queryIntentActivities(Landroid/content/Intent;Ljava/lang/String;II)Ljava/util/List;
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -3589,7 +4010,9 @@
 
     move-result-object v6
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v2}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v8
 
@@ -3622,8 +4045,8 @@
     throw v1
 .end method
 
-.method public queryIntentServices(Landroid/content/Intent;I)Ljava/util/List;
-    .locals 4
+.method public queryIntentContentProviders(Landroid/content/Intent;I)Ljava/util/List;
+    .locals 1
     .parameter "intent"
     .parameter "flags"
     .annotation system Ldalvik/annotation/Signature;
@@ -3631,6 +4054,37 @@
             "(",
             "Landroid/content/Intent;",
             "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v0}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, p2, v0}, Landroid/app/ApplicationPackageManager;->queryIntentContentProvidersAsUser(Landroid/content/Intent;II)Ljava/util/List;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public queryIntentContentProvidersAsUser(Landroid/content/Intent;II)Ljava/util/List;
+    .locals 3
+    .parameter "intent"
+    .parameter "flags"
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
             "Ljava/util/List",
             "<",
             "Landroid/content/pm/ResolveInfo;",
@@ -3652,11 +4106,89 @@
 
     move-result-object v2
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    invoke-interface {v1, p1, v2, p2, p3}, Landroid/content/pm/IPackageManager;->queryIntentContentProviders(Landroid/content/Intent;Ljava/lang/String;II)Ljava/util/List;
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
-    move-result v3
+    move-result-object v1
 
-    invoke-interface {v1, p1, v2, p2, v3}, Landroid/content/pm/IPackageManager;->queryIntentServices(Landroid/content/Intent;Ljava/lang/String;II)Ljava/util/List;
+    return-object v1
+
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    new-instance v1, Ljava/lang/RuntimeException;
+
+    const-string v2, "Package manager has died"
+
+    invoke-direct {v1, v2, v0}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+
+    throw v1
+.end method
+
+.method public queryIntentServices(Landroid/content/Intent;I)Ljava/util/List;
+    .locals 1
+    .parameter "intent"
+    .parameter "flags"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "I)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v0}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, p2, v0}, Landroid/app/ApplicationPackageManager;->queryIntentServicesAsUser(Landroid/content/Intent;II)Ljava/util/List;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public queryIntentServicesAsUser(Landroid/content/Intent;II)Ljava/util/List;
+    .locals 3
+    .parameter "intent"
+    .parameter "flags"
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            "II)",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    :try_start_0
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v2}, Landroid/app/ContextImpl;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v2
+
+    invoke-virtual {p1, v2}, Landroid/content/Intent;->resolveTypeIfNeeded(Landroid/content/ContentResolver;)Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-interface {v1, p1, v2, p2, p3}, Landroid/content/pm/IPackageManager;->queryIntentServices(Landroid/content/Intent;Ljava/lang/String;II)Ljava/util/List;
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -3785,32 +4317,6 @@
     throw v1
 .end method
 
-.method public removeUser(I)Z
-    .locals 2
-    .parameter "id"
-
-    .prologue
-    :try_start_0
-    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
-
-    invoke-interface {v1, p1}, Landroid/content/pm/IPackageManager;->removeUser(I)Z
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result v1
-
-    :goto_0
-    return v1
-
-    :catch_0
-    move-exception v0
-
-    .local v0, e:Landroid/os/RemoteException;
-    const/4 v1, 0x0
-
-    goto :goto_0
-.end method
-
 .method public replacePreferredActivity(Landroid/content/IntentFilter;I[Landroid/content/ComponentName;Landroid/content/ComponentName;)V
     .locals 1
     .parameter "filter"
@@ -3836,9 +4342,29 @@
 .end method
 
 .method public resolveActivity(Landroid/content/Intent;I)Landroid/content/pm/ResolveInfo;
-    .locals 4
+    .locals 1
     .parameter "intent"
     .parameter "flags"
+
+    .prologue
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v0}, Landroid/app/ContextImpl;->getUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, p2, v0}, Landroid/app/ApplicationPackageManager;->resolveActivityAsUser(Landroid/content/Intent;II)Landroid/content/pm/ResolveInfo;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public resolveActivityAsUser(Landroid/content/Intent;II)Landroid/content/pm/ResolveInfo;
+    .locals 3
+    .parameter "intent"
+    .parameter "flags"
+    .parameter "userId"
 
     .prologue
     :try_start_0
@@ -3854,11 +4380,7 @@
 
     move-result-object v2
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
-
-    move-result v3
-
-    invoke-interface {v1, p1, v2, p2, v3}, Landroid/content/pm/IPackageManager;->resolveIntent(Landroid/content/Intent;Ljava/lang/String;II)Landroid/content/pm/ResolveInfo;
+    invoke-interface {v1, p1, v2, p2, p3}, Landroid/content/pm/IPackageManager;->resolveIntent(Landroid/content/Intent;Ljava/lang/String;II)Landroid/content/pm/ResolveInfo;
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -3888,7 +4410,9 @@
     :try_start_0
     iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v2, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v2}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v2
 
@@ -3932,7 +4456,9 @@
 
     move-result-object v2
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v3, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v3}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v3
 
@@ -3985,8 +4511,39 @@
     throw v1
 .end method
 
-.method public setApplicationEnabledSetting(Ljava/lang/String;II)V
+.method public setApplicationBlockedSettingAsUser(Ljava/lang/String;ZLandroid/os/UserHandle;)Z
     .locals 2
+    .parameter "packageName"
+    .parameter "blocked"
+    .parameter "user"
+
+    .prologue
+    :try_start_0
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
+
+    invoke-virtual {p3}, Landroid/os/UserHandle;->getIdentifier()I
+
+    move-result v1
+
+    invoke-interface {v0, p1, p2, v1}, Landroid/content/pm/IPackageManager;->setApplicationBlockedSettingAsUser(Ljava/lang/String;ZI)Z
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v0
+
+    :goto_0
+    return v0
+
+    :catch_0
+    move-exception v0
+
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
+.method public setApplicationEnabledSetting(Ljava/lang/String;II)V
+    .locals 6
     .parameter "packageName"
     .parameter "newState"
     .parameter "flags"
@@ -3995,11 +4552,25 @@
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
 
-    move-result v1
+    invoke-virtual {v1}, Landroid/app/ContextImpl;->getUserId()I
 
-    invoke-interface {v0, p1, p2, p3, v1}, Landroid/content/pm/IPackageManager;->setApplicationEnabledSetting(Ljava/lang/String;III)V
+    move-result v4
+
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v1}, Landroid/app/ContextImpl;->getOpPackageName()Ljava/lang/String;
+
+    move-result-object v5
+
+    move-object v1, p1
+
+    move v2, p2
+
+    move v3, p3
+
+    invoke-interface/range {v0 .. v5}, Landroid/content/pm/IPackageManager;->setApplicationEnabledSetting(Ljava/lang/String;IIILjava/lang/String;)V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -4022,7 +4593,9 @@
     :try_start_0
     iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
 
-    invoke-static {}, Landroid/os/UserId;->myUserId()I
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    invoke-virtual {v1}, Landroid/app/ContextImpl;->getUserId()I
 
     move-result v1
 
@@ -4061,37 +4634,6 @@
     goto :goto_0
 .end method
 
-.method public updateUserFlags(II)V
-    .locals 0
-    .parameter "id"
-    .parameter "flags"
-
-    .prologue
-    return-void
-.end method
-
-.method public updateUserName(ILjava/lang/String;)V
-    .locals 1
-    .parameter "id"
-    .parameter "name"
-
-    .prologue
-    :try_start_0
-    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mPM:Landroid/content/pm/IPackageManager;
-
-    invoke-interface {v0, p1, p2}, Landroid/content/pm/IPackageManager;->updateUserName(ILjava/lang/String;)V
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    :goto_0
-    return-void
-
-    :catch_0
-    move-exception v0
-
-    goto :goto_0
-.end method
-
 .method public verifyPendingInstall(II)V
     .locals 1
     .parameter "id"
@@ -4110,6 +4652,99 @@
 
     :catch_0
     move-exception v0
+
+    goto :goto_0
+.end method
+
+.method private getLewaTopLevelResources(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
+    .locals 6
+    .parameter "app"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v0, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    iget-object v0, v0, Landroid/app/ContextImpl;->mMainThread:Landroid/app/ActivityThread;
+
+    invoke-static {p1}, Landroid/app/ApplicationPackageManager$Injector;->getPackageName(Landroid/content/pm/ApplicationInfo;)Ljava/lang/String;
+
+    move-result-object v1
+
+    iget v2, p1, Landroid/content/pm/ApplicationInfo;->uid:I
+
+    invoke-static {}, Landroid/os/Process;->myUid()I
+
+    move-result v3
+
+    if-ne v2, v3, :cond_0
+
+    iget-object v2, p1, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
+
+    :goto_0
+    const/4 v3, 0x0
+
+    const/4 v4, 0x0
+
+    iget-object v5, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    iget-object v5, v5, Landroid/app/ContextImpl;->mPackageInfo:Landroid/app/LoadedApk;
+
+    invoke-virtual/range {v0 .. v5}, Landroid/app/ActivityThread;->getTopLevelResources(Ljava/lang/String;Ljava/lang/String;ILandroid/content/res/Configuration;Landroid/app/LoadedApk;)Landroid/content/res/Resources;
+
+    move-result-object v0
+
+    return-object v0
+
+    :cond_0
+    iget-object v2, p1, Landroid/content/pm/ApplicationInfo;->publicSourceDir:Ljava/lang/String;
+
+    goto :goto_0
+.end method
+
+.method private getTopLevelResources(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;
+    .locals 6
+    .parameter "app"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-object v1, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    iget-object v0, v1, Landroid/app/ContextImpl;->mMainThread:Landroid/app/ActivityThread;
+
+    .local v0, activitythread:Landroid/app/ActivityThread;
+    iget-object v1, p1, Landroid/content/pm/ApplicationInfo;->packageName:Ljava/lang/String;
+
+    iget v2, p1, Landroid/content/pm/ApplicationInfo;->uid:I
+
+    invoke-static {}, Landroid/os/Process;->myUid()I
+
+    move-result v3
+
+    if-ne v2, v3, :cond_0
+
+    iget-object v2, p1, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
+
+    :goto_0
+    const/4 v3, 0x0
+
+    const/4 v4, 0x0
+
+    iget-object v5, p0, Landroid/app/ApplicationPackageManager;->mContext:Landroid/app/ContextImpl;
+
+    iget-object v5, v5, Landroid/app/ContextImpl;->mPackageInfo:Landroid/app/LoadedApk;
+
+    invoke-virtual/range {v0 .. v5}, Landroid/app/ActivityThread;->getTopLevelResources(Ljava/lang/String;Ljava/lang/String;ILandroid/content/res/Configuration;Landroid/app/LoadedApk;)Landroid/content/res/Resources;
+
+    move-result-object v1
+
+    return-object v1
+
+    :cond_0
+    iget-object v2, p1, Landroid/content/pm/ApplicationInfo;->publicSourceDir:Ljava/lang/String;
 
     goto :goto_0
 .end method

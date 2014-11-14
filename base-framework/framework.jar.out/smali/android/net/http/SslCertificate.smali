@@ -717,7 +717,7 @@
     move-result-object v2
 
     .local v2, factory:Landroid/view/LayoutInflater;
-    const v6, 0x10900ac
+    const v6, 0x10900a2
 
     const/4 v7, 0x0
 

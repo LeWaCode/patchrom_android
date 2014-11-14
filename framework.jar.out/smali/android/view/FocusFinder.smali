@@ -110,257 +110,7 @@
     return-void
 .end method
 
-.method private findNextAccessibilityFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
-    .locals 7
-    .parameter "root"
-    .parameter "focused"
-    .parameter "focusedRect"
-    .parameter "direction"
-
-    .prologue
-    iget-object v5, p0, Landroid/view/FocusFinder;->mTempList:Ljava/util/ArrayList;
-
-    .local v5, focusables:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/view/View;>;"
-    :try_start_0
-    invoke-virtual {v5}, Ljava/util/ArrayList;->clear()V
-
-    const/4 v0, 0x2
-
-    invoke-virtual {p1, v5, p4, v0}, Landroid/view/ViewGroup;->addFocusables(Ljava/util/ArrayList;II)V
-
-    move-object v0, p0
-
-    move-object v1, p1
-
-    move-object v2, p2
-
-    move-object v3, p3
-
-    move v4, p4
-
-    invoke-direct/range {v0 .. v5}, Landroid/view/FocusFinder;->findNextFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;ILjava/util/ArrayList;)Landroid/view/View;
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
-
-    move-result-object v6
-
-    .local v6, next:Landroid/view/View;
-    invoke-virtual {v5}, Ljava/util/ArrayList;->clear()V
-
-    return-object v6
-
-    .end local v6           #next:Landroid/view/View;
-    :catchall_0
-    move-exception v0
-
-    invoke-virtual {v5}, Ljava/util/ArrayList;->clear()V
-
-    throw v0
-.end method
-
 .method private findNextFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
-    .locals 2
-    .parameter "root"
-    .parameter "focused"
-    .parameter "focusedRect"
-    .parameter "direction"
-
-    .prologue
-    and-int/lit16 v0, p4, 0x1000
-
-    const/16 v1, 0x1000
-
-    if-eq v0, v1, :cond_0
-
-    invoke-direct {p0, p1, p2, p3, p4}, Landroid/view/FocusFinder;->findNextInputFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
-
-    move-result-object v0
-
-    :goto_0
-    return-object v0
-
-    :cond_0
-    invoke-direct {p0, p1, p2, p3, p4}, Landroid/view/FocusFinder;->findNextAccessibilityFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
-
-    move-result-object v0
-
-    goto :goto_0
-.end method
-
-.method private findNextFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;ILjava/util/ArrayList;)Landroid/view/View;
-    .locals 6
-    .parameter "root"
-    .parameter "focused"
-    .parameter "focusedRect"
-    .parameter "direction"
-    .parameter
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "(",
-            "Landroid/view/ViewGroup;",
-            "Landroid/view/View;",
-            "Landroid/graphics/Rect;",
-            "I",
-            "Ljava/util/ArrayList",
-            "<",
-            "Landroid/view/View;",
-            ">;)",
-            "Landroid/view/View;"
-        }
-    .end annotation
-
-    .prologue
-    .local p5, focusables:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/view/View;>;"
-    and-int/lit16 v5, p4, -0x1001
-
-    .local v5, directionMasked:I
-    if-eqz p2, :cond_2
-
-    if-nez p3, :cond_0
-
-    iget-object p3, p0, Landroid/view/FocusFinder;->mFocusedRect:Landroid/graphics/Rect;
-
-    :cond_0
-    invoke-virtual {p2, p3}, Landroid/view/View;->getFocusedRect(Landroid/graphics/Rect;)V
-
-    invoke-virtual {p1, p2, p3}, Landroid/view/ViewGroup;->offsetDescendantRectToMyCoords(Landroid/view/View;Landroid/graphics/Rect;)V
-
-    :cond_1
-    :goto_0
-    sparse-switch v5, :sswitch_data_0
-
-    new-instance v0, Ljava/lang/IllegalArgumentException;
-
-    new-instance v1, Ljava/lang/StringBuilder;
-
-    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v2, "Unknown direction: "
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v1
-
-    invoke-direct {v0, v1}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
-
-    throw v0
-
-    :cond_2
-    if-nez p3, :cond_1
-
-    iget-object p3, p0, Landroid/view/FocusFinder;->mFocusedRect:Landroid/graphics/Rect;
-
-    sparse-switch v5, :sswitch_data_1
-
-    goto :goto_0
-
-    :sswitch_0
-    invoke-virtual {p1}, Landroid/view/ViewGroup;->isLayoutRtl()Z
-
-    move-result v0
-
-    if-eqz v0, :cond_4
-
-    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusTopLeft(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
-
-    goto :goto_0
-
-    :sswitch_1
-    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusTopLeft(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
-
-    goto :goto_0
-
-    :sswitch_2
-    invoke-virtual {p1}, Landroid/view/ViewGroup;->isLayoutRtl()Z
-
-    move-result v0
-
-    if-eqz v0, :cond_3
-
-    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusBottomRight(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
-
-    goto :goto_0
-
-    :cond_3
-    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusTopLeft(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
-
-    goto :goto_0
-
-    :sswitch_3
-    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusBottomRight(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
-
-    goto :goto_0
-
-    :cond_4
-    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusBottomRight(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
-
-    goto :goto_0
-
-    :sswitch_4
-    move-object v0, p0
-
-    move-object v1, p5
-
-    move-object v2, p1
-
-    move-object v3, p2
-
-    move-object v4, p3
-
-    invoke-direct/range {v0 .. v5}, Landroid/view/FocusFinder;->findNextInputFocusInRelativeDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
-
-    move-result-object v0
-
-    :goto_1
-    return-object v0
-
-    :sswitch_5
-    move-object v0, p0
-
-    move-object v1, p5
-
-    move-object v2, p1
-
-    move-object v3, p2
-
-    move-object v4, p3
-
-    invoke-virtual/range {v0 .. v5}, Landroid/view/FocusFinder;->findNextInputFocusInAbsoluteDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
-
-    move-result-object v0
-
-    goto :goto_1
-
-    :sswitch_data_0
-    .sparse-switch
-        0x1 -> :sswitch_4
-        0x2 -> :sswitch_4
-        0x11 -> :sswitch_5
-        0x21 -> :sswitch_5
-        0x42 -> :sswitch_5
-        0x82 -> :sswitch_5
-    .end sparse-switch
-
-    :sswitch_data_1
-    .sparse-switch
-        0x1 -> :sswitch_0
-        0x2 -> :sswitch_2
-        0x11 -> :sswitch_3
-        0x21 -> :sswitch_3
-        0x42 -> :sswitch_1
-        0x82 -> :sswitch_1
-    .end sparse-switch
-.end method
-
-.method private findNextInputFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
     .locals 8
     .parameter "root"
     .parameter "focused"
@@ -373,7 +123,7 @@
     .local v6, next:Landroid/view/View;
     if-eqz p2, :cond_0
 
-    invoke-direct {p0, p1, p2, p4}, Landroid/view/FocusFinder;->findNextUserSpecifiedInputFocus(Landroid/view/ViewGroup;Landroid/view/View;I)Landroid/view/View;
+    invoke-direct {p0, p1, p2, p4}, Landroid/view/FocusFinder;->findNextUserSpecifiedFocus(Landroid/view/ViewGroup;Landroid/view/View;I)Landroid/view/View;
 
     move-result-object v6
 
@@ -439,7 +189,181 @@
     throw v0
 .end method
 
-.method private findNextInputFocusInRelativeDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
+.method private findNextFocus(Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;ILjava/util/ArrayList;)Landroid/view/View;
+    .locals 6
+    .parameter "root"
+    .parameter "focused"
+    .parameter "focusedRect"
+    .parameter "direction"
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/view/ViewGroup;",
+            "Landroid/view/View;",
+            "Landroid/graphics/Rect;",
+            "I",
+            "Ljava/util/ArrayList",
+            "<",
+            "Landroid/view/View;",
+            ">;)",
+            "Landroid/view/View;"
+        }
+    .end annotation
+
+    .prologue
+    .local p5, focusables:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/view/View;>;"
+    if-eqz p2, :cond_2
+
+    if-nez p3, :cond_0
+
+    iget-object p3, p0, Landroid/view/FocusFinder;->mFocusedRect:Landroid/graphics/Rect;
+
+    :cond_0
+    invoke-virtual {p2, p3}, Landroid/view/View;->getFocusedRect(Landroid/graphics/Rect;)V
+
+    invoke-virtual {p1, p2, p3}, Landroid/view/ViewGroup;->offsetDescendantRectToMyCoords(Landroid/view/View;Landroid/graphics/Rect;)V
+
+    :cond_1
+    :goto_0
+    sparse-switch p4, :sswitch_data_0
+
+    new-instance v0, Ljava/lang/IllegalArgumentException;
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "Unknown direction: "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, p4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-direct {v0, v1}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+
+    :cond_2
+    if-nez p3, :cond_1
+
+    iget-object p3, p0, Landroid/view/FocusFinder;->mFocusedRect:Landroid/graphics/Rect;
+
+    sparse-switch p4, :sswitch_data_1
+
+    goto :goto_0
+
+    :sswitch_0
+    invoke-virtual {p1}, Landroid/view/ViewGroup;->isLayoutRtl()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_4
+
+    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusTopLeft(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
+
+    goto :goto_0
+
+    :sswitch_1
+    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusTopLeft(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
+
+    goto :goto_0
+
+    :sswitch_2
+    invoke-virtual {p1}, Landroid/view/ViewGroup;->isLayoutRtl()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_3
+
+    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusBottomRight(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
+
+    goto :goto_0
+
+    :cond_3
+    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusTopLeft(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
+
+    goto :goto_0
+
+    :sswitch_3
+    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusBottomRight(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
+
+    goto :goto_0
+
+    :cond_4
+    invoke-direct {p0, p1, p3}, Landroid/view/FocusFinder;->setFocusBottomRight(Landroid/view/ViewGroup;Landroid/graphics/Rect;)V
+
+    goto :goto_0
+
+    :sswitch_4
+    move-object v0, p0
+
+    move-object v1, p5
+
+    move-object v2, p1
+
+    move-object v3, p2
+
+    move-object v4, p3
+
+    move v5, p4
+
+    invoke-direct/range {v0 .. v5}, Landroid/view/FocusFinder;->findNextFocusInRelativeDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
+
+    move-result-object v0
+
+    :goto_1
+    return-object v0
+
+    :sswitch_5
+    move-object v0, p0
+
+    move-object v1, p5
+
+    move-object v2, p1
+
+    move-object v3, p2
+
+    move-object v4, p3
+
+    move v5, p4
+
+    invoke-virtual/range {v0 .. v5}, Landroid/view/FocusFinder;->findNextFocusInAbsoluteDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
+
+    move-result-object v0
+
+    goto :goto_1
+
+    :sswitch_data_0
+    .sparse-switch
+        0x1 -> :sswitch_4
+        0x2 -> :sswitch_4
+        0x11 -> :sswitch_5
+        0x21 -> :sswitch_5
+        0x42 -> :sswitch_5
+        0x82 -> :sswitch_5
+    .end sparse-switch
+
+    :sswitch_data_1
+    .sparse-switch
+        0x1 -> :sswitch_0
+        0x2 -> :sswitch_2
+        0x11 -> :sswitch_3
+        0x21 -> :sswitch_3
+        0x42 -> :sswitch_1
+        0x82 -> :sswitch_1
+    .end sparse-switch
+.end method
+
+.method private findNextFocusInRelativeDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
     .locals 3
     .parameter
     .parameter "root"
@@ -467,6 +391,14 @@
     iget-object v1, p0, Landroid/view/FocusFinder;->mSequentialFocusComparator:Landroid/view/FocusFinder$SequentialFocusComparator;
 
     invoke-virtual {v1, p2}, Landroid/view/FocusFinder$SequentialFocusComparator;->setRoot(Landroid/view/ViewGroup;)V
+
+    iget-object v1, p0, Landroid/view/FocusFinder;->mSequentialFocusComparator:Landroid/view/FocusFinder$SequentialFocusComparator;
+
+    invoke-virtual {p2}, Landroid/view/ViewGroup;->isLayoutRtl()Z
+
+    move-result v2
+
+    invoke-virtual {v1, v2}, Landroid/view/FocusFinder$SequentialFocusComparator;->setIsLayoutRtl(Z)V
 
     iget-object v1, p0, Landroid/view/FocusFinder;->mSequentialFocusComparator:Landroid/view/FocusFinder$SequentialFocusComparator;
 
@@ -508,18 +440,20 @@
 
     .restart local v0       #count:I
     :pswitch_0
-    invoke-static {p2, p3, p1, v0}, Landroid/view/FocusFinder;->getForwardFocusable(Landroid/view/ViewGroup;Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
+    invoke-static {p3, p1, v0}, Landroid/view/FocusFinder;->getNextFocusable(Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
 
     move-result-object v1
 
     goto :goto_0
 
     :pswitch_1
-    invoke-static {p2, p3, p1, v0}, Landroid/view/FocusFinder;->getBackwardFocusable(Landroid/view/ViewGroup;Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
+    invoke-static {p3, p1, v0}, Landroid/view/FocusFinder;->getPreviousFocusable(Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
 
     move-result-object v1
 
     goto :goto_0
+
+    nop
 
     :pswitch_data_0
     .packed-switch 0x1
@@ -528,7 +462,7 @@
     .end packed-switch
 .end method
 
-.method private findNextUserSpecifiedInputFocus(Landroid/view/ViewGroup;Landroid/view/View;I)Landroid/view/View;
+.method private findNextUserSpecifiedFocus(Landroid/view/ViewGroup;Landroid/view/View;I)Landroid/view/View;
     .locals 2
     .parameter "root"
     .parameter "focused"
@@ -568,90 +502,6 @@
     .restart local v0       #userSetNextFocus:Landroid/view/View;
     :cond_1
     const/4 v0, 0x0
-
-    goto :goto_0
-.end method
-
-.method private static getBackwardFocusable(Landroid/view/ViewGroup;Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
-    .locals 1
-    .parameter "root"
-    .parameter "focused"
-    .parameter
-    .parameter "count"
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "(",
-            "Landroid/view/ViewGroup;",
-            "Landroid/view/View;",
-            "Ljava/util/ArrayList",
-            "<",
-            "Landroid/view/View;",
-            ">;I)",
-            "Landroid/view/View;"
-        }
-    .end annotation
-
-    .prologue
-    .local p2, focusables:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/view/View;>;"
-    invoke-virtual {p0}, Landroid/view/ViewGroup;->isLayoutRtl()Z
-
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    invoke-static {p1, p2, p3}, Landroid/view/FocusFinder;->getNextFocusable(Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
-
-    move-result-object v0
-
-    :goto_0
-    return-object v0
-
-    :cond_0
-    invoke-static {p1, p2, p3}, Landroid/view/FocusFinder;->getPreviousFocusable(Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
-
-    move-result-object v0
-
-    goto :goto_0
-.end method
-
-.method private static getForwardFocusable(Landroid/view/ViewGroup;Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
-    .locals 1
-    .parameter "root"
-    .parameter "focused"
-    .parameter
-    .parameter "count"
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "(",
-            "Landroid/view/ViewGroup;",
-            "Landroid/view/View;",
-            "Ljava/util/ArrayList",
-            "<",
-            "Landroid/view/View;",
-            ">;I)",
-            "Landroid/view/View;"
-        }
-    .end annotation
-
-    .prologue
-    .local p2, focusables:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/view/View;>;"
-    invoke-virtual {p0}, Landroid/view/ViewGroup;->isLayoutRtl()Z
-
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    invoke-static {p1, p2, p3}, Landroid/view/FocusFinder;->getPreviousFocusable(Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
-
-    move-result-object v0
-
-    :goto_0
-    return-object v0
-
-    :cond_0
-    invoke-static {p1, p2, p3}, Landroid/view/FocusFinder;->getNextFocusable(Landroid/view/View;Ljava/util/ArrayList;I)Landroid/view/View;
-
-    move-result-object v0
 
     goto :goto_0
 .end method
@@ -1599,7 +1449,7 @@
     return-object v0
 .end method
 
-.method findNextInputFocusInAbsoluteDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
+.method findNextFocusInAbsoluteDirection(Ljava/util/ArrayList;Landroid/view/ViewGroup;Landroid/view/View;Landroid/graphics/Rect;I)Landroid/view/View;
     .locals 7
     .parameter
     .parameter "root"
@@ -1730,7 +1580,7 @@
     :cond_1
     iget-object v4, p0, Landroid/view/FocusFinder;->mOtherRect:Landroid/graphics/Rect;
 
-    invoke-virtual {v1, v4}, Landroid/view/View;->getDrawingRect(Landroid/graphics/Rect;)V
+    invoke-virtual {v1, v4}, Landroid/view/View;->getFocusedRect(Landroid/graphics/Rect;)V
 
     iget-object v4, p0, Landroid/view/FocusFinder;->mOtherRect:Landroid/graphics/Rect;
 

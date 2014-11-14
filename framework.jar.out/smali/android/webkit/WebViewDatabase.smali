@@ -17,36 +17,20 @@
     return-void
 .end method
 
-.method public static declared-synchronized getInstance(Landroid/content/Context;)Landroid/webkit/WebViewDatabase;
-    .locals 2
+.method public static getInstance(Landroid/content/Context;)Landroid/webkit/WebViewDatabase;
+    .locals 1
     .parameter "context"
 
     .prologue
-    const-class v1, Landroid/webkit/WebViewDatabase;
-
-    monitor-enter v1
-
-    :try_start_0
     invoke-static {}, Landroid/webkit/WebViewFactory;->getProvider()Landroid/webkit/WebViewFactoryProvider;
 
     move-result-object v0
 
     invoke-interface {v0, p0}, Landroid/webkit/WebViewFactoryProvider;->getWebViewDatabase(Landroid/content/Context;)Landroid/webkit/WebViewDatabase;
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     move-result-object v0
 
-    monitor-exit v1
-
     return-object v0
-
-    :catchall_0
-    move-exception v0
-
-    monitor-exit v1
-
-    throw v0
 .end method
 
 
@@ -75,6 +59,8 @@
 
 .method public clearUsernamePassword()V
     .locals 1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -108,6 +94,8 @@
 
 .method public hasUsernamePassword()Z
     .locals 1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;

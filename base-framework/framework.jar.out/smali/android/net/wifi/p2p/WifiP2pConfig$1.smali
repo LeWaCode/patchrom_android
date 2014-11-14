@@ -71,15 +71,11 @@
 
     iput v1, v0, Landroid/net/wifi/p2p/WifiP2pConfig;->groupOwnerIntent:I
 
-    invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
-    move-result-object v1
+    move-result v1
 
-    invoke-static {v1}, Landroid/net/wifi/p2p/WifiP2pConfig$Persist;->valueOf(Ljava/lang/String;)Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
-
-    move-result-object v1
-
-    iput-object v1, v0, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iput v1, v0, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
     return-object v0
 .end method

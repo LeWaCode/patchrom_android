@@ -24,6 +24,8 @@
 
 .field public static final DISPLAY_SHOW_TITLE:I = 0x8
 
+.field public static final DISPLAY_TITLE_MULTIPLE_LINES:I = 0x20
+
 .field public static final DISPLAY_USE_LOGO:I = 0x1
 
 .field public static final NAVIGATION_MODE_LIST:I = 0x1
@@ -108,6 +110,15 @@
 .method public abstract isShowing()Z
 .end method
 
+.method public isTitleTruncated()Z
+    .locals 1
+
+    .prologue
+    const/4 v0, 0x0
+
+    return v0
+.end method
+
 .method public abstract newTab()Landroid/app/ActionBar$Tab;
 .end method
 
@@ -157,6 +168,38 @@
 .end method
 
 .method public abstract setDisplayUseLogoEnabled(Z)V
+.end method
+
+.method public setHomeActionContentDescription(I)V
+    .locals 0
+    .parameter "resId"
+
+    .prologue
+    return-void
+.end method
+
+.method public setHomeActionContentDescription(Ljava/lang/CharSequence;)V
+    .locals 0
+    .parameter "description"
+
+    .prologue
+    return-void
+.end method
+
+.method public setHomeAsUpIndicator(I)V
+    .locals 0
+    .parameter "resId"
+
+    .prologue
+    return-void
+.end method
+
+.method public setHomeAsUpIndicator(Landroid/graphics/drawable/Drawable;)V
+    .locals 0
+    .parameter "indicator"
+
+    .prologue
+    return-void
 .end method
 
 .method public setHomeButtonEnabled(Z)V

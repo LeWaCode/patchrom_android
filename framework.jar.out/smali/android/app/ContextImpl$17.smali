@@ -1,5 +1,5 @@
 .class final Landroid/app/ContextImpl$17;
-.super Landroid/app/ContextImpl$ServiceFetcher;
+.super Landroid/app/ContextImpl$StaticServiceFetcher;
 .source "ContextImpl.java"
 
 
@@ -19,19 +19,18 @@
     .locals 0
 
     .prologue
-    invoke-direct {p0}, Landroid/app/ContextImpl$ServiceFetcher;-><init>()V
+    invoke-direct {p0}, Landroid/app/ContextImpl$StaticServiceFetcher;-><init>()V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public createService(Landroid/app/ContextImpl;)Ljava/lang/Object;
+.method public createStaticService()Ljava/lang/Object;
     .locals 1
-    .parameter "ctx"
 
     .prologue
-    invoke-static {}, Landroid/view/textservice/TextServicesManager;->getInstance()Landroid/view/textservice/TextServicesManager;
+    invoke-static {}, Landroid/hardware/input/InputManager;->getInstance()Landroid/hardware/input/InputManager;
 
     move-result-object v0
 

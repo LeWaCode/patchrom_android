@@ -250,11 +250,11 @@
     .parameter "color"
 
     .prologue
-    const/high16 v2, -0x100
+    const/high16 v5, -0x100
+
+    const/high16 v4, 0x3f80
 
     const/4 v1, 0x0
-
-    if-eqz p1, :cond_0
 
     iget v0, p0, Landroid/view/View$ScrollabilityCache;->mLastColor:I
 
@@ -262,13 +262,11 @@
 
     iput p1, p0, Landroid/view/View$ScrollabilityCache;->mLastColor:I
 
-    or-int/2addr p1, v2
+    if-eqz p1, :cond_1
 
     new-instance v0, Landroid/graphics/LinearGradient;
 
-    const/high16 v4, 0x3f80
-
-    or-int v5, p1, v2
+    or-int/2addr v5, p1
 
     const v2, 0xffffff
 
@@ -297,5 +295,39 @@
     invoke-virtual {v0, v1}, Landroid/graphics/Paint;->setXfermode(Landroid/graphics/Xfermode;)Landroid/graphics/Xfermode;
 
     :cond_0
+    :goto_0
     return-void
+
+    :cond_1
+    new-instance v0, Landroid/graphics/LinearGradient;
+
+    const/4 v6, 0x0
+
+    sget-object v7, Landroid/graphics/Shader$TileMode;->CLAMP:Landroid/graphics/Shader$TileMode;
+
+    move v2, v1
+
+    move v3, v1
+
+    invoke-direct/range {v0 .. v7}, Landroid/graphics/LinearGradient;-><init>(FFFFIILandroid/graphics/Shader$TileMode;)V
+
+    iput-object v0, p0, Landroid/view/View$ScrollabilityCache;->shader:Landroid/graphics/Shader;
+
+    iget-object v0, p0, Landroid/view/View$ScrollabilityCache;->paint:Landroid/graphics/Paint;
+
+    iget-object v1, p0, Landroid/view/View$ScrollabilityCache;->shader:Landroid/graphics/Shader;
+
+    invoke-virtual {v0, v1}, Landroid/graphics/Paint;->setShader(Landroid/graphics/Shader;)Landroid/graphics/Shader;
+
+    iget-object v0, p0, Landroid/view/View$ScrollabilityCache;->paint:Landroid/graphics/Paint;
+
+    new-instance v1, Landroid/graphics/PorterDuffXfermode;
+
+    sget-object v2, Landroid/graphics/PorterDuff$Mode;->DST_OUT:Landroid/graphics/PorterDuff$Mode;
+
+    invoke-direct {v1, v2}, Landroid/graphics/PorterDuffXfermode;-><init>(Landroid/graphics/PorterDuff$Mode;)V
+
+    invoke-virtual {v0, v1}, Landroid/graphics/Paint;->setXfermode(Landroid/graphics/Xfermode;)Landroid/graphics/Xfermode;
+
+    goto :goto_0
 .end method

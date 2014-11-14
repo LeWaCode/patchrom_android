@@ -19,25 +19,19 @@
 
 
 # direct methods
-.method private constructor <init>(Lcom/android/server/input/InputManagerService;)V
-    .locals 0
+.method public constructor <init>(Lcom/android/server/input/InputManagerService;Landroid/os/Looper;)V
+    .locals 2
     .parameter
+    .parameter "looper"
 
     .prologue
     iput-object p1, p0, Lcom/android/server/input/InputManagerService$InputManagerHandler;->this$0:Lcom/android/server/input/InputManagerService;
 
-    invoke-direct {p0}, Landroid/os/Handler;-><init>()V
+    const/4 v0, 0x0
 
-    return-void
-.end method
+    const/4 v1, 0x1
 
-.method synthetic constructor <init>(Lcom/android/server/input/InputManagerService;Lcom/android/server/input/InputManagerService$1;)V
-    .locals 0
-    .parameter "x0"
-    .parameter "x1"
-
-    .prologue
-    invoke-direct {p0, p1}, Lcom/android/server/input/InputManagerService$InputManagerHandler;-><init>(Lcom/android/server/input/InputManagerService;)V
+    invoke-direct {p0, p2, v0, v1}, Landroid/os/Handler;-><init>(Landroid/os/Looper;Landroid/os/Handler$Callback;Z)V
 
     return-void
 .end method
@@ -66,7 +60,7 @@
     check-cast v0, [Landroid/view/InputDevice;
 
     #calls: Lcom/android/server/input/InputManagerService;->deliverInputDevicesChanged([Landroid/view/InputDevice;)V
-    invoke-static {v1, v0}, Lcom/android/server/input/InputManagerService;->access$400(Lcom/android/server/input/InputManagerService;[Landroid/view/InputDevice;)V
+    invoke-static {v1, v0}, Lcom/android/server/input/InputManagerService;->access$300(Lcom/android/server/input/InputManagerService;[Landroid/view/InputDevice;)V
 
     goto :goto_0
 
@@ -78,7 +72,7 @@
     iget v2, p1, Landroid/os/Message;->arg2:I
 
     #calls: Lcom/android/server/input/InputManagerService;->handleSwitchKeyboardLayout(II)V
-    invoke-static {v0, v1, v2}, Lcom/android/server/input/InputManagerService;->access$500(Lcom/android/server/input/InputManagerService;II)V
+    invoke-static {v0, v1, v2}, Lcom/android/server/input/InputManagerService;->access$400(Lcom/android/server/input/InputManagerService;II)V
 
     goto :goto_0
 
@@ -86,7 +80,7 @@
     iget-object v0, p0, Lcom/android/server/input/InputManagerService$InputManagerHandler;->this$0:Lcom/android/server/input/InputManagerService;
 
     #calls: Lcom/android/server/input/InputManagerService;->reloadKeyboardLayouts()V
-    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$600(Lcom/android/server/input/InputManagerService;)V
+    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$500(Lcom/android/server/input/InputManagerService;)V
 
     goto :goto_0
 
@@ -94,7 +88,7 @@
     iget-object v0, p0, Lcom/android/server/input/InputManagerService$InputManagerHandler;->this$0:Lcom/android/server/input/InputManagerService;
 
     #calls: Lcom/android/server/input/InputManagerService;->updateKeyboardLayouts()V
-    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$100(Lcom/android/server/input/InputManagerService;)V
+    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$000(Lcom/android/server/input/InputManagerService;)V
 
     goto :goto_0
 
@@ -102,7 +96,7 @@
     iget-object v0, p0, Lcom/android/server/input/InputManagerService$InputManagerHandler;->this$0:Lcom/android/server/input/InputManagerService;
 
     #calls: Lcom/android/server/input/InputManagerService;->reloadDeviceAliases()V
-    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$200(Lcom/android/server/input/InputManagerService;)V
+    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$100(Lcom/android/server/input/InputManagerService;)V
 
     goto :goto_0
 

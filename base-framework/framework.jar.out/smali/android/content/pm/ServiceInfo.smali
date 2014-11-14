@@ -20,6 +20,8 @@
 
 .field public static final FLAG_ISOLATED_PROCESS:I = 0x2
 
+.field public static final FLAG_SINGLE_USER:I = 0x40000000
+
 .field public static final FLAG_STOP_WITH_TASK:I = 0x1
 
 

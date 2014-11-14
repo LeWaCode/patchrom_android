@@ -7,17 +7,17 @@
 
 
 # static fields
+.field public static final CONFIG_DENSITY:I = 0x1000
+
 .field public static final CONFIG_FONT:I = 0x80000
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field public static final CONFIG_FONT_SCALE:I = 0x40000000
 
 .field public static final CONFIG_KEYBOARD:I = 0x10
 
 .field public static final CONFIG_KEYBOARD_HIDDEN:I = 0x20
+
+.field public static final CONFIG_LAYOUT_DIRECTION:I = 0x2000
 
 .field public static final CONFIG_LOCALE:I = 0x4
 
@@ -38,10 +38,6 @@
 .field public static final CONFIG_SMALLEST_SCREEN_SIZE:I = 0x800
 
 .field public static final CONFIG_THEME_RESOURCE:I = 0x8000
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
 
 .field public static final CONFIG_TOUCHSCREEN:I = 0x8
 
@@ -72,11 +68,17 @@
 
 .field public static final FLAG_HARDWARE_ACCELERATED:I = 0x200
 
-.field public static final FLAG_IMMERSIVE:I = 0x400
+.field public static final FLAG_IMMERSIVE:I = 0x800
 
 .field public static final FLAG_MULTIPROCESS:I = 0x1
 
 .field public static final FLAG_NO_HISTORY:I = 0x80
+
+.field public static final FLAG_PRIMARY_USER_ONLY:I = 0x20000000
+
+.field public static final FLAG_SHOW_ON_LOCK_SCREEN:I = 0x400
+
+.field public static final FLAG_SINGLE_USER:I = 0x40000000
 
 .field public static final FLAG_STATE_NOT_NEEDED:I = 0x10
 
@@ -92,7 +94,11 @@
 
 .field public static final SCREEN_ORIENTATION_FULL_SENSOR:I = 0xa
 
+.field public static final SCREEN_ORIENTATION_FULL_USER:I = 0xd
+
 .field public static final SCREEN_ORIENTATION_LANDSCAPE:I = 0x0
+
+.field public static final SCREEN_ORIENTATION_LOCKED:I = 0xe
 
 .field public static final SCREEN_ORIENTATION_NOSENSOR:I = 0x5
 
@@ -111,6 +117,10 @@
 .field public static final SCREEN_ORIENTATION_UNSPECIFIED:I = -0x1
 
 .field public static final SCREEN_ORIENTATION_USER:I = 0x2
+
+.field public static final SCREEN_ORIENTATION_USER_LANDSCAPE:I = 0xb
+
+.field public static final SCREEN_ORIENTATION_USER_PORTRAIT:I = 0xc
 
 .field public static final UIOPTION_SPLIT_ACTION_BAR_WHEN_NARROW:I = 0x1
 
@@ -144,7 +154,7 @@
     .locals 1
 
     .prologue
-    const/16 v0, 0xc
+    const/16 v0, 0xe
 
     new-array v0, v0, [I
 
@@ -164,8 +174,8 @@
 
     :array_0
     .array-data 0x4
-        0x1t 0x0t 0x0t 0x0t
         0x2t 0x0t 0x0t 0x0t
+        0x1t 0x0t 0x0t 0x0t
         0x4t 0x0t 0x0t 0x0t
         0x8t 0x0t 0x0t 0x0t
         0x10t 0x0t 0x0t 0x0t
@@ -176,6 +186,8 @@
         0x0t 0x10t 0x0t 0x0t
         0x0t 0x2t 0x0t 0x0t
         0x0t 0x20t 0x0t 0x0t
+        0x0t 0x1t 0x0t 0x0t
+        0x0t 0x40t 0x0t 0x0t
     .end array-data
 .end method
 

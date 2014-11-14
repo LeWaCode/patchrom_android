@@ -27,9 +27,10 @@
 
 
 # virtual methods
-.method public onRemoteViewsLoaded(Landroid/widget/RemoteViews;)V
+.method public onRemoteViewsLoaded(Landroid/widget/RemoteViews;Landroid/widget/RemoteViews$OnClickHandler;)V
     .locals 3
     .parameter "view"
+    .parameter "handler"
 
     .prologue
     :try_start_0
@@ -39,7 +40,7 @@
 
     move-result-object v1
 
-    invoke-virtual {p1, v1, p0}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;)Landroid/view/View;
+    invoke-virtual {p1, v1, p0, p2}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/view/View;
 
     move-result-object v1
 

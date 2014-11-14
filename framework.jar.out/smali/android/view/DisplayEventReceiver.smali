@@ -63,13 +63,67 @@
     return-void
 .end method
 
-.method private dispatchVsync(JI)V
+.method private dispatchHotplug(JIZ)V
     .locals 0
     .parameter "timestampNanos"
+    .parameter "builtInDisplayId"
+    .parameter "connected"
+
+    .prologue
+    invoke-virtual {p0, p1, p2, p3, p4}, Landroid/view/DisplayEventReceiver;->onHotplug(JIZ)V
+
+    return-void
+.end method
+
+.method private dispatchVsync(JII)V
+    .locals 0
+    .parameter "timestampNanos"
+    .parameter "builtInDisplayId"
     .parameter "frame"
 
     .prologue
-    invoke-virtual {p0, p1, p2, p3}, Landroid/view/DisplayEventReceiver;->onVsync(JI)V
+    invoke-virtual {p0, p1, p2, p3, p4}, Landroid/view/DisplayEventReceiver;->onVsync(JII)V
+
+    return-void
+.end method
+
+.method private dispose(Z)V
+    .locals 1
+    .parameter "finalized"
+
+    .prologue
+    iget-object v0, p0, Landroid/view/DisplayEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
+
+    if-eqz v0, :cond_1
+
+    if-eqz p1, :cond_0
+
+    iget-object v0, p0, Landroid/view/DisplayEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
+
+    invoke-virtual {v0}, Ldalvik/system/CloseGuard;->warnIfOpen()V
+
+    :cond_0
+    iget-object v0, p0, Landroid/view/DisplayEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
+
+    invoke-virtual {v0}, Ldalvik/system/CloseGuard;->close()V
+
+    :cond_1
+    iget v0, p0, Landroid/view/DisplayEventReceiver;->mReceiverPtr:I
+
+    if-eqz v0, :cond_2
+
+    iget v0, p0, Landroid/view/DisplayEventReceiver;->mReceiverPtr:I
+
+    invoke-static {v0}, Landroid/view/DisplayEventReceiver;->nativeDispose(I)V
+
+    const/4 v0, 0x0
+
+    iput v0, p0, Landroid/view/DisplayEventReceiver;->mReceiverPtr:I
+
+    :cond_2
+    const/4 v0, 0x0
+
+    iput-object v0, p0, Landroid/view/DisplayEventReceiver;->mMessageQueue:Landroid/os/MessageQueue;
 
     return-void
 .end method
@@ -89,31 +143,9 @@
     .locals 1
 
     .prologue
-    iget-object v0, p0, Landroid/view/DisplayEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
-
-    if-eqz v0, :cond_0
-
-    iget-object v0, p0, Landroid/view/DisplayEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
-
-    invoke-virtual {v0}, Ldalvik/system/CloseGuard;->close()V
-
-    :cond_0
-    iget v0, p0, Landroid/view/DisplayEventReceiver;->mReceiverPtr:I
-
-    if-eqz v0, :cond_1
-
-    iget v0, p0, Landroid/view/DisplayEventReceiver;->mReceiverPtr:I
-
-    invoke-static {v0}, Landroid/view/DisplayEventReceiver;->nativeDispose(I)V
-
     const/4 v0, 0x0
 
-    iput v0, p0, Landroid/view/DisplayEventReceiver;->mReceiverPtr:I
-
-    :cond_1
-    const/4 v0, 0x0
-
-    iput-object v0, p0, Landroid/view/DisplayEventReceiver;->mMessageQueue:Landroid/os/MessageQueue;
+    invoke-direct {p0, v0}, Landroid/view/DisplayEventReceiver;->dispose(Z)V
 
     return-void
 .end method
@@ -127,8 +159,10 @@
     .end annotation
 
     .prologue
+    const/4 v0, 0x1
+
     :try_start_0
-    invoke-virtual {p0}, Landroid/view/DisplayEventReceiver;->dispose()V
+    invoke-direct {p0, v0}, Landroid/view/DisplayEventReceiver;->dispose(Z)V
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
@@ -144,9 +178,20 @@
     throw v0
 .end method
 
-.method public onVsync(JI)V
+.method public onHotplug(JIZ)V
     .locals 0
     .parameter "timestampNanos"
+    .parameter "builtInDisplayId"
+    .parameter "connected"
+
+    .prologue
+    return-void
+.end method
+
+.method public onVsync(JII)V
+    .locals 0
+    .parameter "timestampNanos"
+    .parameter "builtInDisplayId"
     .parameter "frame"
 
     .prologue

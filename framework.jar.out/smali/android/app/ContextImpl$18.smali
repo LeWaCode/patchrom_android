@@ -26,14 +26,18 @@
 
 
 # virtual methods
-.method public getService(Landroid/app/ContextImpl;)Ljava/lang/Object;
-    .locals 1
+.method public createService(Landroid/app/ContextImpl;)Ljava/lang/Object;
+    .locals 2
     .parameter "ctx"
 
     .prologue
-    new-instance v0, Landroid/app/KeyguardManager;
+    new-instance v0, Landroid/hardware/display/DisplayManager;
 
-    invoke-direct {v0}, Landroid/app/KeyguardManager;-><init>()V
+    invoke-virtual {p1}, Landroid/app/ContextImpl;->getOuterContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    invoke-direct {v0, v1}, Landroid/hardware/display/DisplayManager;-><init>(Landroid/content/Context;)V
 
     return-object v0
 .end method

@@ -748,7 +748,7 @@
 .end method
 
 .method public putStringSet(Ljava/lang/String;Ljava/util/Set;)Landroid/content/SharedPreferences$Editor;
-    .locals 1
+    .locals 2
     .parameter "key"
     .parameter
     .annotation system Ldalvik/annotation/Signature;
@@ -768,13 +768,25 @@
     monitor-enter p0
 
     :try_start_0
-    iget-object v0, p0, Landroid/app/SharedPreferencesImpl$EditorImpl;->mModified:Ljava/util/Map;
+    iget-object v1, p0, Landroid/app/SharedPreferencesImpl$EditorImpl;->mModified:Ljava/util/Map;
 
-    invoke-interface {v0, p1, p2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    if-nez p2, :cond_0
+
+    const/4 v0, 0x0
+
+    :goto_0
+    invoke-interface {v1, p1, v0}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 
     monitor-exit p0
 
     return-object p0
+
+    :cond_0
+    new-instance v0, Ljava/util/HashSet;
+
+    invoke-direct {v0, p2}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
+
+    goto :goto_0
 
     :catchall_0
     move-exception v0

@@ -44,7 +44,7 @@
     .parameter "context"
 
     .prologue
-    const v0, 0x10302f3
+    const v0, 0x1030308
 
     invoke-direct {p0, p1, v0}, Landroid/app/Dialog;-><init>(Landroid/content/Context;I)V
 
@@ -686,7 +686,7 @@
     .local v6, window:Landroid/view/Window;
     invoke-virtual {v6, v10}, Landroid/view/Window;->requestFeature(I)Z
 
-    const/16 v7, 0x7d8
+    const/16 v7, 0x7ec
 
     invoke-virtual {v6, v7}, Landroid/view/Window;->setType(I)V
 
@@ -696,7 +696,7 @@
 
     invoke-virtual {v6, v7}, Landroid/view/Window;->setTitle(Ljava/lang/CharSequence;)V
 
-    const v7, 0x1090090
+    const v7, 0x1090084
 
     invoke-virtual {p0, v7}, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->setContentView(I)V
 
@@ -715,7 +715,7 @@
 
     iget-object v8, p0, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->mIcons:[Landroid/widget/TextView;
 
-    const v7, 0x102030b
+    const v7, 0x10202fe
 
     invoke-virtual {p0, v7}, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->findViewById(I)Landroid/view/View;
 
@@ -767,7 +767,7 @@
 
     const/4 v9, 0x4
 
-    const v7, 0x102030c
+    const v7, 0x10202ff
 
     invoke-virtual {p0, v7}, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->findViewById(I)Landroid/view/View;
 
@@ -781,7 +781,7 @@
 
     const/4 v9, 0x5
 
-    const v7, 0x102030d
+    const v7, 0x1020300
 
     invoke-virtual {p0, v7}, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->findViewById(I)Landroid/view/View;
 
@@ -795,7 +795,7 @@
 
     const/4 v9, 0x6
 
-    const v7, 0x102030e
+    const v7, 0x1020301
 
     invoke-virtual {p0, v7}, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->findViewById(I)Landroid/view/View;
 
@@ -809,7 +809,7 @@
 
     const/4 v9, 0x7
 
-    const v7, 0x102030f
+    const v7, 0x1020302
 
     invoke-virtual {p0, v7}, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->findViewById(I)Landroid/view/View;
 
@@ -819,7 +819,7 @@
 
     aput-object v7, v8, v9
 
-    const v7, 0x102030a
+    const v7, 0x10202fd
 
     invoke-virtual {p0, v7}, Lcom/android/internal/policy/impl/RecentApplicationsDialog;->findViewById(I)Landroid/view/View;
 

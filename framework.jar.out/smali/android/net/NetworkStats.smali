@@ -2243,9 +2243,9 @@
     return-object v1
 .end method
 
-.method public withoutUid(I)Landroid/net/NetworkStats;
+.method public withoutUids([I)Landroid/net/NetworkStats;
     .locals 6
-    .parameter "uid"
+    .parameter "uids"
 
     .prologue
     new-instance v2, Landroid/net/NetworkStats;
@@ -2276,7 +2276,11 @@
 
     iget v3, v0, Landroid/net/NetworkStats$Entry;->uid:I
 
-    if-eq v3, p1, :cond_0
+    invoke-static {p1, v3}, Lcom/android/internal/util/ArrayUtils;->contains([II)Z
+
+    move-result v3
+
+    if-nez v3, :cond_0
 
     invoke-virtual {v2, v0}, Landroid/net/NetworkStats;->addValues(Landroid/net/NetworkStats$Entry;)Landroid/net/NetworkStats;
 

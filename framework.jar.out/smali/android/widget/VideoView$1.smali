@@ -101,6 +101,10 @@
 
     invoke-interface {v0, v1, v2}, Landroid/view/SurfaceHolder;->setFixedSize(II)V
 
+    iget-object v0, p0, Landroid/widget/VideoView$1;->this$0:Landroid/widget/VideoView;
+
+    invoke-virtual {v0}, Landroid/widget/VideoView;->requestLayout()V
+
     :cond_0
     return-void
 .end method

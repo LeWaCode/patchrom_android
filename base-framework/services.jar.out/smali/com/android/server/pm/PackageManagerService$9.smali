@@ -75,7 +75,7 @@
     iget v5, p0, Lcom/android/server/pm/PackageManagerService$9;->val$userId:I
 
     #calls: Lcom/android/server/pm/PackageManagerService;->deleteApplicationCacheFilesLI(Ljava/lang/String;I)Z
-    invoke-static {v2, v4, v5}, Lcom/android/server/pm/PackageManagerService;->access$3700(Lcom/android/server/pm/PackageManagerService;Ljava/lang/String;I)Z
+    invoke-static {v2, v4, v5}, Lcom/android/server/pm/PackageManagerService;->access$4500(Lcom/android/server/pm/PackageManagerService;Ljava/lang/String;I)Z
 
     move-result v1
 
@@ -88,10 +88,12 @@
 
     iget-object v3, p0, Lcom/android/server/pm/PackageManagerService$9;->val$packageName:Ljava/lang/String;
 
-    const/4 v4, 0x0
+    iget v4, p0, Lcom/android/server/pm/PackageManagerService$9;->val$userId:I
 
-    #calls: Lcom/android/server/pm/PackageManagerService;->clearExternalStorageDataSync(Ljava/lang/String;Z)V
-    invoke-static {v2, v3, v4}, Lcom/android/server/pm/PackageManagerService;->access$3600(Lcom/android/server/pm/PackageManagerService;Ljava/lang/String;Z)V
+    const/4 v5, 0x0
+
+    #calls: Lcom/android/server/pm/PackageManagerService;->clearExternalStorageDataSync(Ljava/lang/String;IZ)V
+    invoke-static {v2, v3, v4, v5}, Lcom/android/server/pm/PackageManagerService;->access$4400(Lcom/android/server/pm/PackageManagerService;Ljava/lang/String;IZ)V
 
     iget-object v2, p0, Lcom/android/server/pm/PackageManagerService$9;->val$observer:Landroid/content/pm/IPackageDataObserver;
 

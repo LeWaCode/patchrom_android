@@ -34,20 +34,26 @@
 
 # virtual methods
 .method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
-    .locals 4
+    .locals 5
     .parameter "context"
     .parameter "intent"
 
     .prologue
-    const-string v1, "android.intent.extra.UID"
+    const/4 v2, -0x1
 
-    const/4 v2, 0x0
+    const-string v1, "android.intent.extra.UID"
 
     invoke-virtual {p2, v1, v2}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
 
     move-result v0
 
     .local v0, uid:I
+    if-ne v0, v2, :cond_0
+
+    :goto_0
+    return-void
+
+    :cond_0
     iget-object v1, p0, Lcom/android/server/net/NetworkStatsService$5;->this$0:Lcom/android/server/net/NetworkStatsService;
 
     #getter for: Lcom/android/server/net/NetworkStatsService;->mStatsLock:Ljava/lang/Object;
@@ -67,15 +73,23 @@
 
     invoke-virtual {v1}, Landroid/os/PowerManager$WakeLock;->acquire()V
     :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_1
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     :try_start_1
     iget-object v1, p0, Lcom/android/server/net/NetworkStatsService$5;->this$0:Lcom/android/server/net/NetworkStatsService;
 
-    #calls: Lcom/android/server/net/NetworkStatsService;->removeUidLocked(I)V
-    invoke-static {v1, v0}, Lcom/android/server/net/NetworkStatsService;->access$1000(Lcom/android/server/net/NetworkStatsService;I)V
+    const/4 v3, 0x1
+
+    new-array v3, v3, [I
+
+    const/4 v4, 0x0
+
+    aput v0, v3, v4
+
+    #calls: Lcom/android/server/net/NetworkStatsService;->removeUidsLocked([I)V
+    invoke-static {v1, v3}, Lcom/android/server/net/NetworkStatsService;->access$1000(Lcom/android/server/net/NetworkStatsService;[I)V
     :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
 
     :try_start_2
     iget-object v1, p0, Lcom/android/server/net/NetworkStatsService$5;->this$0:Lcom/android/server/net/NetworkStatsService;
@@ -89,11 +103,21 @@
 
     monitor-exit v2
 
-    return-void
+    goto :goto_0
 
     :catchall_0
     move-exception v1
 
+    monitor-exit v2
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+    throw v1
+
+    :catchall_1
+    move-exception v1
+
+    :try_start_3
     iget-object v3, p0, Lcom/android/server/net/NetworkStatsService$5;->this$0:Lcom/android/server/net/NetworkStatsService;
 
     #getter for: Lcom/android/server/net/NetworkStatsService;->mWakeLock:Landroid/os/PowerManager$WakeLock;
@@ -104,13 +128,6 @@
     invoke-virtual {v3}, Landroid/os/PowerManager$WakeLock;->release()V
 
     throw v1
-
-    :catchall_1
-    move-exception v1
-
-    monitor-exit v2
-    :try_end_2
-    .catchall {:try_start_2 .. :try_end_2} :catchall_1
-
-    throw v1
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_0
 .end method

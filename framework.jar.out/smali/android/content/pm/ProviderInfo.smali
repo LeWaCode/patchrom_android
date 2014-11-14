@@ -7,7 +7,7 @@
 
 
 # static fields
-.field public static final CREATOR:Landroid/os/Parcelable$Creator;
+.field public static final CREATOR:Landroid/os/Parcelable$Creator; = null
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Landroid/os/Parcelable$Creator",
@@ -18,9 +18,13 @@
     .end annotation
 .end field
 
+.field public static final FLAG_SINGLE_USER:I = 0x40000000
+
 
 # instance fields
 .field public authority:Ljava/lang/String;
+
+.field public flags:I
 
 .field public grantUriPermissions:Z
 
@@ -66,23 +70,25 @@
 
     invoke-direct {p0}, Landroid/content/pm/ComponentInfo;-><init>()V
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->authority:Ljava/lang/String;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->authority:Ljava/lang/String;
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->readPermission:Ljava/lang/String;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->readPermission:Ljava/lang/String;
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->writePermission:Ljava/lang/String;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->writePermission:Ljava/lang/String;
 
-    iput-boolean v1, p0, Landroid/content/pm/ProviderInfo;->grantUriPermissions:Z
+    iput-boolean v0, p0, Landroid/content/pm/ProviderInfo;->grantUriPermissions:Z
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->uriPermissionPatterns:[Landroid/os/PatternMatcher;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->uriPermissionPatterns:[Landroid/os/PatternMatcher;
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->pathPermissions:[Landroid/content/pm/PathPermission;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->pathPermissions:[Landroid/content/pm/PathPermission;
 
-    iput-boolean v1, p0, Landroid/content/pm/ProviderInfo;->multiprocess:Z
+    iput-boolean v0, p0, Landroid/content/pm/ProviderInfo;->multiprocess:Z
 
-    iput v1, p0, Landroid/content/pm/ProviderInfo;->initOrder:I
+    iput v0, p0, Landroid/content/pm/ProviderInfo;->initOrder:I
 
-    iput-boolean v1, p0, Landroid/content/pm/ProviderInfo;->isSyncable:Z
+    iput v0, p0, Landroid/content/pm/ProviderInfo;->flags:I
+
+    iput-boolean v0, p0, Landroid/content/pm/ProviderInfo;->isSyncable:Z
 
     return-void
 .end method
@@ -98,23 +104,25 @@
 
     invoke-direct {p0, p1}, Landroid/content/pm/ComponentInfo;-><init>(Landroid/content/pm/ComponentInfo;)V
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->authority:Ljava/lang/String;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->authority:Ljava/lang/String;
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->readPermission:Ljava/lang/String;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->readPermission:Ljava/lang/String;
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->writePermission:Ljava/lang/String;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->writePermission:Ljava/lang/String;
 
-    iput-boolean v1, p0, Landroid/content/pm/ProviderInfo;->grantUriPermissions:Z
+    iput-boolean v0, p0, Landroid/content/pm/ProviderInfo;->grantUriPermissions:Z
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->uriPermissionPatterns:[Landroid/os/PatternMatcher;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->uriPermissionPatterns:[Landroid/os/PatternMatcher;
 
-    iput-object v0, p0, Landroid/content/pm/ProviderInfo;->pathPermissions:[Landroid/content/pm/PathPermission;
+    iput-object v1, p0, Landroid/content/pm/ProviderInfo;->pathPermissions:[Landroid/content/pm/PathPermission;
 
-    iput-boolean v1, p0, Landroid/content/pm/ProviderInfo;->multiprocess:Z
+    iput-boolean v0, p0, Landroid/content/pm/ProviderInfo;->multiprocess:Z
 
-    iput v1, p0, Landroid/content/pm/ProviderInfo;->initOrder:I
+    iput v0, p0, Landroid/content/pm/ProviderInfo;->initOrder:I
 
-    iput-boolean v1, p0, Landroid/content/pm/ProviderInfo;->isSyncable:Z
+    iput v0, p0, Landroid/content/pm/ProviderInfo;->flags:I
+
+    iput-boolean v0, p0, Landroid/content/pm/ProviderInfo;->isSyncable:Z
 
     iget-object v0, p1, Landroid/content/pm/ProviderInfo;->authority:Ljava/lang/String;
 
@@ -147,6 +155,10 @@
     iget v0, p1, Landroid/content/pm/ProviderInfo;->initOrder:I
 
     iput v0, p0, Landroid/content/pm/ProviderInfo;->initOrder:I
+
+    iget v0, p1, Landroid/content/pm/ProviderInfo;->flags:I
+
+    iput v0, p0, Landroid/content/pm/ProviderInfo;->flags:I
 
     iget-boolean v0, p1, Landroid/content/pm/ProviderInfo;->isSyncable:Z
 
@@ -183,6 +195,8 @@
     iput-boolean v2, p0, Landroid/content/pm/ProviderInfo;->multiprocess:Z
 
     iput v2, p0, Landroid/content/pm/ProviderInfo;->initOrder:I
+
+    iput v2, p0, Landroid/content/pm/ProviderInfo;->flags:I
 
     iput-boolean v2, p0, Landroid/content/pm/ProviderInfo;->isSyncable:Z
 
@@ -256,6 +270,12 @@
 
     move-result v0
 
+    iput v0, p0, Landroid/content/pm/ProviderInfo;->flags:I
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v0
+
     if-eqz v0, :cond_2
 
     :goto_2
@@ -301,6 +321,73 @@
     return v0
 .end method
 
+.method public dump(Landroid/util/Printer;Ljava/lang/String;)V
+    .locals 2
+    .parameter "pw"
+    .parameter "prefix"
+
+    .prologue
+    invoke-super {p0, p1, p2}, Landroid/content/pm/ComponentInfo;->dumpFront(Landroid/util/Printer;Ljava/lang/String;)V
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v0, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    const-string v1, "authority="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    iget-object v1, p0, Landroid/content/pm/ProviderInfo;->authority:Ljava/lang/String;
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
+
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v0, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    const-string v1, "flags=0x"
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    iget v1, p0, Landroid/content/pm/ProviderInfo;->flags:I
+
+    invoke-static {v1}, Ljava/lang/Integer;->toHexString(I)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-interface {p1, v0}, Landroid/util/Printer;->println(Ljava/lang/String;)V
+
+    return-void
+.end method
+
 .method public toString()Ljava/lang/String;
     .locals 2
 
@@ -333,23 +420,6 @@
 
     move-result-object v0
 
-    const-string v1, " isSyncable="
-
-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v1
-
-    iget-boolean v0, p0, Landroid/content/pm/ProviderInfo;->isSyncable:Z
-
-    if-eqz v0, :cond_0
-
-    const-string v0, "true"
-
-    :goto_0
-    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v0
-
     const-string v1, "}"
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
@@ -361,11 +431,6 @@
     move-result-object v0
 
     return-object v0
-
-    :cond_0
-    const-string v0, "false"
-
-    goto :goto_0
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V
@@ -419,6 +484,10 @@
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
     iget v0, p0, Landroid/content/pm/ProviderInfo;->initOrder:I
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+
+    iget v0, p0, Landroid/content/pm/ProviderInfo;->flags:I
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 

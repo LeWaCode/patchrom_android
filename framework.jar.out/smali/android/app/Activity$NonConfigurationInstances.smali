@@ -40,11 +40,12 @@
     .end annotation
 .end field
 
-.field loaders:Landroid/util/SparseArray;
+.field loaders:Landroid/util/ArrayMap;
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "Landroid/util/SparseArray",
+            "Landroid/util/ArrayMap",
             "<",
+            "Ljava/lang/String;",
             "Landroid/app/LoaderManagerImpl;",
             ">;"
         }

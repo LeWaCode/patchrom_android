@@ -202,9 +202,10 @@
     throw v2
 .end method
 
-.method public playAsync(Landroid/net/Uri;ZI)V
+.method public playAsync(Landroid/net/Uri;Landroid/os/UserHandle;ZI)V
     .locals 5
     .parameter "uri"
+    .parameter "user"
     .parameter "looping"
     .parameter "streamType"
     .annotation system Ldalvik/annotation/Throws;
@@ -246,10 +247,21 @@
     :goto_0
     if-eqz p2, :cond_1
 
+    const/4 v4, 0x1
+
+    invoke-virtual {v0, v4}, Landroid/os/Parcel;->writeInt(I)V
+
+    const/4 v4, 0x0
+
+    invoke-virtual {p2, v0, v4}, Landroid/os/UserHandle;->writeToParcel(Landroid/os/Parcel;I)V
+
     :goto_1
+    if-eqz p3, :cond_2
+
+    :goto_2
     invoke-virtual {v0, v2}, Landroid/os/Parcel;->writeInt(I)V
 
-    invoke-virtual {v0, p3}, Landroid/os/Parcel;->writeInt(I)V
+    invoke-virtual {v0, p4}, Landroid/os/Parcel;->writeInt(I)V
 
     iget-object v2, p0, Landroid/media/IRingtonePlayer$Stub$Proxy;->mRemote:Landroid/os/IBinder;
 
@@ -289,9 +301,19 @@
     throw v2
 
     :cond_1
-    move v2, v3
+    const/4 v4, 0x0
+
+    :try_start_2
+    invoke-virtual {v0, v4}, Landroid/os/Parcel;->writeInt(I)V
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
 
     goto :goto_1
+
+    :cond_2
+    move v2, v3
+
+    goto :goto_2
 .end method
 
 .method public stop(Landroid/os/IBinder;)V

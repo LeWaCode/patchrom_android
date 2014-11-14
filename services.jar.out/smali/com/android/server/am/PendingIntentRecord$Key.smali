@@ -41,11 +41,13 @@
 
 .field final type:I
 
+.field final userId:I
+
 .field final who:Ljava/lang/String;
 
 
 # direct methods
-.method constructor <init>(ILjava/lang/String;Lcom/android/server/am/ActivityRecord;Ljava/lang/String;I[Landroid/content/Intent;[Ljava/lang/String;ILandroid/os/Bundle;)V
+.method constructor <init>(ILjava/lang/String;Lcom/android/server/am/ActivityRecord;Ljava/lang/String;I[Landroid/content/Intent;[Ljava/lang/String;ILandroid/os/Bundle;I)V
     .locals 3
     .parameter "_t"
     .parameter "_p"
@@ -56,6 +58,7 @@
     .parameter "_it"
     .parameter "_f"
     .parameter "_o"
+    .parameter "_userId"
 
     .prologue
     const/4 v2, 0x0
@@ -102,6 +105,8 @@
 
     iput-object p9, p0, Lcom/android/server/am/PendingIntentRecord$Key;->options:Landroid/os/Bundle;
 
+    iput p10, p0, Lcom/android/server/am/PendingIntentRecord$Key;->userId:I
+
     const/16 v0, 0x17
 
     .local v0, hash:I
@@ -110,6 +115,10 @@
     mul-int/lit8 v1, v0, 0x25
 
     add-int v0, v1, p5
+
+    mul-int/lit8 v1, v0, 0x25
+
+    add-int v0, v1, p10
 
     if-eqz p4, :cond_1
 
@@ -213,6 +222,12 @@
     iget v3, p0, Lcom/android/server/am/PendingIntentRecord$Key;->type:I
 
     iget v4, v1, Lcom/android/server/am/PendingIntentRecord$Key;->type:I
+
+    if-ne v3, v4, :cond_0
+
+    iget v3, p0, Lcom/android/server/am/PendingIntentRecord$Key;->userId:I
+
+    iget v4, v1, Lcom/android/server/am/PendingIntentRecord$Key;->userId:I
 
     if-ne v3, v4, :cond_0
 
@@ -422,6 +437,18 @@
     move-result-object v1
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    const-string v1, " u="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    iget v1, p0, Lcom/android/server/am/PendingIntentRecord$Key;->userId:I
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 
     move-result-object v0
 

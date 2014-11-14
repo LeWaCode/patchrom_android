@@ -45,13 +45,13 @@
 
 .field private mGhostStart:F
 
-.field mMaxFadeScroll:F
+.field private mMaxFadeScroll:F
 
 .field private mMaxScroll:F
 
 .field private mRepeatLimit:I
 
-.field mScroll:F
+.field private mScroll:F
 
 .field private final mScrollUnit:F
 
@@ -147,6 +147,24 @@
 
     .prologue
     iget v0, p0, Landroid/widget/TextView$Marquee;->mGhostOffset:F
+
+    return v0
+.end method
+
+.method getMaxFadeScroll()F
+    .locals 1
+
+    .prologue
+    iget v0, p0, Landroid/widget/TextView$Marquee;->mMaxFadeScroll:F
+
+    return v0
+.end method
+
+.method getScroll()F
+    .locals 1
+
+    .prologue
+    iget v0, p0, Landroid/widget/TextView$Marquee;->mScroll:F
 
     return v0
 .end method
@@ -332,7 +350,7 @@
     if-eqz v2, :cond_0
 
     #getter for: Landroid/widget/TextView;->mLayout:Landroid/text/Layout;
-    invoke-static {v2}, Landroid/widget/TextView;->access$300(Landroid/widget/TextView;)Landroid/text/Layout;
+    invoke-static {v2}, Landroid/widget/TextView;->access$400(Landroid/widget/TextView;)Landroid/text/Layout;
 
     move-result-object v4
 
@@ -362,7 +380,7 @@
 
     .local v3, textWidth:I
     #getter for: Landroid/widget/TextView;->mLayout:Landroid/text/Layout;
-    invoke-static {v2}, Landroid/widget/TextView;->access$300(Landroid/widget/TextView;)Landroid/text/Layout;
+    invoke-static {v2}, Landroid/widget/TextView;->access$400(Landroid/widget/TextView;)Landroid/text/Layout;
 
     move-result-object v4
 

@@ -17,7 +17,7 @@
 
 
 # instance fields
-.field private final mAtomicFile:Lcom/android/internal/os/AtomicFile;
+.field private final mAtomicFile:Landroid/util/AtomicFile;
 
 .field private mDirty:Z
 
@@ -49,7 +49,7 @@
 
     iput-object v0, p0, Lcom/android/server/input/PersistentDataStore;->mInputDevices:Ljava/util/HashMap;
 
-    new-instance v0, Lcom/android/internal/os/AtomicFile;
+    new-instance v0, Landroid/util/AtomicFile;
 
     new-instance v1, Ljava/io/File;
 
@@ -57,9 +57,9 @@
 
     invoke-direct {v1, v2}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
-    invoke-direct {v0, v1}, Lcom/android/internal/os/AtomicFile;-><init>(Ljava/io/File;)V
+    invoke-direct {v0, v1}, Landroid/util/AtomicFile;-><init>(Ljava/io/File;)V
 
-    iput-object v0, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Lcom/android/internal/os/AtomicFile;
+    iput-object v0, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Landroid/util/AtomicFile;
 
     return-void
 .end method
@@ -121,9 +121,9 @@
     invoke-direct {p0}, Lcom/android/server/input/PersistentDataStore;->clearState()V
 
     :try_start_0
-    iget-object v3, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v3, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v3}, Lcom/android/internal/os/AtomicFile;->openRead()Ljava/io/FileInputStream;
+    invoke-virtual {v3}, Landroid/util/AtomicFile;->openRead()Ljava/io/FileInputStream;
     :try_end_0
     .catch Ljava/io/FileNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -376,9 +376,9 @@
 
     .prologue
     :try_start_0
-    iget-object v4, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v4, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v4}, Lcom/android/internal/os/AtomicFile;->startWrite()Ljava/io/FileOutputStream;
+    invoke-virtual {v4}, Landroid/util/AtomicFile;->startWrite()Ljava/io/FileOutputStream;
     :try_end_0
     .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -413,9 +413,9 @@
     if-eqz v3, :cond_0
 
     :try_start_2
-    iget-object v4, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v4, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v4, v1}, Lcom/android/internal/os/AtomicFile;->finishWrite(Ljava/io/FileOutputStream;)V
+    invoke-virtual {v4, v1}, Landroid/util/AtomicFile;->finishWrite(Ljava/io/FileOutputStream;)V
 
     .end local v1           #os:Ljava/io/FileOutputStream;
     .end local v2           #serializer:Lorg/xmlpull/v1/XmlSerializer;
@@ -427,9 +427,9 @@
     .restart local v2       #serializer:Lorg/xmlpull/v1/XmlSerializer;
     .restart local v3       #success:Z
     :cond_0
-    iget-object v4, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v4, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v4, v1}, Lcom/android/internal/os/AtomicFile;->failWrite(Ljava/io/FileOutputStream;)V
+    invoke-virtual {v4, v1}, Landroid/util/AtomicFile;->failWrite(Ljava/io/FileOutputStream;)V
     :try_end_2
     .catch Ljava/io/IOException; {:try_start_2 .. :try_end_2} :catch_0
 
@@ -459,17 +459,17 @@
     if-eqz v3, :cond_1
 
     :try_start_3
-    iget-object v5, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v5, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v5, v1}, Lcom/android/internal/os/AtomicFile;->finishWrite(Ljava/io/FileOutputStream;)V
+    invoke-virtual {v5, v1}, Landroid/util/AtomicFile;->finishWrite(Ljava/io/FileOutputStream;)V
 
     :goto_1
     throw v4
 
     :cond_1
-    iget-object v5, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v5, p0, Lcom/android/server/input/PersistentDataStore;->mAtomicFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v5, v1}, Lcom/android/internal/os/AtomicFile;->failWrite(Ljava/io/FileOutputStream;)V
+    invoke-virtual {v5, v1}, Landroid/util/AtomicFile;->failWrite(Ljava/io/FileOutputStream;)V
     :try_end_3
     .catch Ljava/io/IOException; {:try_start_3 .. :try_end_3} :catch_0
 

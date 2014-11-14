@@ -50,16 +50,15 @@
     .local v0, retValue:Z
     iget v1, p1, Landroid/os/Message;->what:I
 
-    packed-switch v1, :pswitch_data_0
+    sparse-switch v1, :sswitch_data_0
 
-    :pswitch_0
     const/4 v0, 0x0
 
     :goto_0
-    :pswitch_1
+    :sswitch_0
     return v0
 
-    :pswitch_2
+    :sswitch_1
     iget-object v1, p0, Landroid/net/DhcpStateMachine$WaitBeforeStartState;->this$0:Landroid/net/DhcpStateMachine;
 
     sget-object v2, Landroid/net/DhcpStateMachine$DhcpAction;->START:Landroid/net/DhcpStateMachine$DhcpAction;
@@ -100,7 +99,7 @@
 
     goto :goto_0
 
-    :pswitch_3
+    :sswitch_2
     iget-object v1, p0, Landroid/net/DhcpStateMachine$WaitBeforeStartState;->this$0:Landroid/net/DhcpStateMachine;
 
     iget-object v2, p0, Landroid/net/DhcpStateMachine$WaitBeforeStartState;->this$0:Landroid/net/DhcpStateMachine;
@@ -115,13 +114,10 @@
 
     goto :goto_0
 
-    :pswitch_data_0
-    .packed-switch 0x30001
-        :pswitch_1
-        :pswitch_3
-        :pswitch_0
-        :pswitch_0
-        :pswitch_0
-        :pswitch_2
-    .end packed-switch
+    :sswitch_data_0
+    .sparse-switch
+        0x30001 -> :sswitch_0
+        0x30002 -> :sswitch_2
+        0x30007 -> :sswitch_1
+    .end sparse-switch
 .end method

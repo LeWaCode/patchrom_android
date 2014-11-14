@@ -113,27 +113,27 @@
 
     .prologue
     :try_start_0
-    invoke-static {}, Lorg/apache/harmony/xnet/provider/jsse/SSLParametersImpl;->getDefaultTrustManager()Ljavax/net/ssl/X509TrustManager;
+    invoke-static {}, Lcom/android/org/conscrypt/SSLParametersImpl;->getDefaultTrustManager()Ljavax/net/ssl/X509TrustManager;
 
     move-result-object v2
 
     .local v2, x509TrustManager:Ljavax/net/ssl/X509TrustManager;
-    instance-of v3, v2, Lorg/apache/harmony/xnet/provider/jsse/TrustManagerImpl;
+    instance-of v3, v2, Lcom/android/org/conscrypt/TrustManagerImpl;
 
     if-eqz v3, :cond_0
 
     move-object v0, v2
 
-    check-cast v0, Lorg/apache/harmony/xnet/provider/jsse/TrustManagerImpl;
+    check-cast v0, Lcom/android/org/conscrypt/TrustManagerImpl;
 
     move-object v1, v0
 
-    .local v1, trustManager:Lorg/apache/harmony/xnet/provider/jsse/TrustManagerImpl;
-    invoke-virtual {v1}, Lorg/apache/harmony/xnet/provider/jsse/TrustManagerImpl;->handleTrustStorageUpdate()V
+    .local v1, trustManager:Lcom/android/org/conscrypt/TrustManagerImpl;
+    invoke-virtual {v1}, Lcom/android/org/conscrypt/TrustManagerImpl;->handleTrustStorageUpdate()V
     :try_end_0
     .catch Ljava/security/KeyManagementException; {:try_start_0 .. :try_end_0} :catch_0
 
-    .end local v1           #trustManager:Lorg/apache/harmony/xnet/provider/jsse/TrustManagerImpl;
+    .end local v1           #trustManager:Lcom/android/org/conscrypt/TrustManagerImpl;
     :cond_0
     :goto_0
     return-void
@@ -145,7 +145,7 @@
 .end method
 
 .method public static verifyServerCertificates([[BLjava/lang/String;Ljava/lang/String;)Landroid/net/http/SslError;
-    .locals 4
+    .locals 6
     .parameter "certChain"
     .parameter "domain"
     .parameter "authType"
@@ -158,55 +158,88 @@
     .prologue
     if-eqz p0, :cond_0
 
-    array-length v2, p0
+    array-length v4, p0
 
-    if-nez v2, :cond_1
+    if-nez v4, :cond_1
 
     :cond_0
-    new-instance v2, Ljava/lang/IllegalArgumentException;
+    new-instance v4, Ljava/lang/IllegalArgumentException;
 
-    const-string v3, "bad certificate chain"
+    const-string v5, "bad certificate chain"
 
-    invoke-direct {v2, v3}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+    invoke-direct {v4, v5}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
 
-    throw v2
+    throw v4
 
     :cond_1
-    array-length v2, p0
+    array-length v4, p0
 
-    new-array v1, v2, [Ljava/security/cert/X509Certificate;
+    new-array v3, v4, [Ljava/security/cert/X509Certificate;
 
-    .local v1, serverCertificates:[Ljava/security/cert/X509Certificate;
-    const/4 v0, 0x0
+    .local v3, serverCertificates:[Ljava/security/cert/X509Certificate;
+    :try_start_0
+    const-string v4, "X.509"
 
-    .local v0, i:I
+    invoke-static {v4}, Ljava/security/cert/CertificateFactory;->getInstance(Ljava/lang/String;)Ljava/security/cert/CertificateFactory;
+
+    move-result-object v0
+
+    .local v0, cf:Ljava/security/cert/CertificateFactory;
+    const/4 v2, 0x0
+
+    .local v2, i:I
     :goto_0
-    array-length v2, p0
+    array-length v4, p0
 
-    if-ge v0, v2, :cond_2
+    if-ge v2, v4, :cond_2
 
-    new-instance v2, Lorg/apache/harmony/security/provider/cert/X509CertImpl;
+    new-instance v4, Ljava/io/ByteArrayInputStream;
 
-    aget-object v3, p0, v0
+    aget-object v5, p0, v2
 
-    invoke-direct {v2, v3}, Lorg/apache/harmony/security/provider/cert/X509CertImpl;-><init>([B)V
+    invoke-direct {v4, v5}, Ljava/io/ByteArrayInputStream;-><init>([B)V
 
-    aput-object v2, v1, v0
+    invoke-virtual {v0, v4}, Ljava/security/cert/CertificateFactory;->generateCertificate(Ljava/io/InputStream;)Ljava/security/cert/Certificate;
 
-    add-int/lit8 v0, v0, 0x1
+    move-result-object v4
+
+    check-cast v4, Ljava/security/cert/X509Certificate;
+
+    aput-object v4, v3, v2
+    :try_end_0
+    .catch Ljava/security/cert/CertificateException; {:try_start_0 .. :try_end_0} :catch_0
+
+    add-int/lit8 v2, v2, 0x1
 
     goto :goto_0
 
+    .end local v0           #cf:Ljava/security/cert/CertificateFactory;
+    .end local v2           #i:I
+    :catch_0
+    move-exception v1
+
+    .local v1, e:Ljava/security/cert/CertificateException;
+    new-instance v4, Ljava/io/IOException;
+
+    const-string v5, "can\'t read certificate"
+
+    invoke-direct {v4, v5, v1}, Ljava/io/IOException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+
+    throw v4
+
+    .end local v1           #e:Ljava/security/cert/CertificateException;
+    .restart local v0       #cf:Ljava/security/cert/CertificateFactory;
+    .restart local v2       #i:I
     :cond_2
-    invoke-static {v1, p1, p2}, Landroid/net/http/CertificateChainValidator;->verifyServerDomainAndCertificates([Ljava/security/cert/X509Certificate;Ljava/lang/String;Ljava/lang/String;)Landroid/net/http/SslError;
+    invoke-static {v3, p1, p2}, Landroid/net/http/CertificateChainValidator;->verifyServerDomainAndCertificates([Ljava/security/cert/X509Certificate;Ljava/lang/String;Ljava/lang/String;)Landroid/net/http/SslError;
 
-    move-result-object v2
+    move-result-object v4
 
-    return-object v2
+    return-object v4
 .end method
 
 .method private static verifyServerDomainAndCertificates([Ljava/security/cert/X509Certificate;Ljava/lang/String;Ljava/lang/String;)Landroid/net/http/SslError;
-    .locals 5
+    .locals 8
     .parameter "chain"
     .parameter "domain"
     .parameter "authType"
@@ -217,76 +250,96 @@
     .end annotation
 
     .prologue
-    const/4 v2, 0x0
+    const/4 v4, 0x0
 
-    aget-object v0, p0, v2
+    aget-object v1, p0, v4
 
-    .local v0, currCertificate:Ljava/security/cert/X509Certificate;
-    if-nez v0, :cond_0
+    .local v1, currCertificate:Ljava/security/cert/X509Certificate;
+    if-nez v1, :cond_0
 
-    new-instance v3, Ljava/lang/IllegalArgumentException;
+    new-instance v6, Ljava/lang/IllegalArgumentException;
 
-    const-string v4, "certificate for this site is null"
+    const-string v7, "certificate for this site is null"
 
-    invoke-direct {v3, v4}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+    invoke-direct {v6, v7}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
 
-    throw v3
+    throw v6
 
     :cond_0
     if-eqz p1, :cond_1
 
     invoke-virtual {p1}, Ljava/lang/String;->isEmpty()Z
 
-    move-result v3
+    move-result v6
 
-    if-nez v3, :cond_1
+    if-nez v6, :cond_1
 
-    sget-object v3, Landroid/net/http/CertificateChainValidator;->sVerifier:Ljavax/net/ssl/DefaultHostnameVerifier;
+    sget-object v6, Landroid/net/http/CertificateChainValidator;->sVerifier:Ljavax/net/ssl/DefaultHostnameVerifier;
 
-    invoke-virtual {v3, p1, v0}, Ljavax/net/ssl/DefaultHostnameVerifier;->verify(Ljava/lang/String;Ljava/security/cert/X509Certificate;)Z
+    invoke-virtual {v6, p1, v1}, Ljavax/net/ssl/DefaultHostnameVerifier;->verify(Ljava/lang/String;Ljava/security/cert/X509Certificate;)Z
 
-    move-result v3
+    move-result v6
 
-    if-eqz v3, :cond_1
+    if-eqz v6, :cond_1
 
-    const/4 v2, 0x1
+    const/4 v4, 0x1
 
-    .local v2, valid:Z
+    .local v4, valid:Z
     :cond_1
-    if-nez v2, :cond_2
+    if-nez v4, :cond_2
 
-    new-instance v3, Landroid/net/http/SslError;
+    new-instance v6, Landroid/net/http/SslError;
 
-    const/4 v4, 0x2
+    const/4 v7, 0x2
 
-    invoke-direct {v3, v4, v0}, Landroid/net/http/SslError;-><init>(ILjava/security/cert/X509Certificate;)V
+    invoke-direct {v6, v7, v1}, Landroid/net/http/SslError;-><init>(ILjava/security/cert/X509Certificate;)V
 
     :goto_0
-    return-object v3
+    return-object v6
 
     :cond_2
     :try_start_0
-    invoke-static {}, Lorg/apache/harmony/xnet/provider/jsse/SSLParametersImpl;->getDefaultTrustManager()Ljavax/net/ssl/X509TrustManager;
+    invoke-static {}, Lcom/android/org/conscrypt/SSLParametersImpl;->getDefaultTrustManager()Ljavax/net/ssl/X509TrustManager;
 
-    move-result-object v3
+    move-result-object v5
 
-    invoke-interface {v3, p0, p2}, Ljavax/net/ssl/X509TrustManager;->checkServerTrusted([Ljava/security/cert/X509Certificate;Ljava/lang/String;)V
-    :try_end_0
-    .catch Ljava/security/GeneralSecurityException; {:try_start_0 .. :try_end_0} :catch_0
+    .local v5, x509TrustManager:Ljavax/net/ssl/X509TrustManager;
+    instance-of v6, v5, Lcom/android/org/conscrypt/TrustManagerImpl;
 
-    const/4 v3, 0x0
+    if-eqz v6, :cond_3
+
+    move-object v0, v5
+
+    check-cast v0, Lcom/android/org/conscrypt/TrustManagerImpl;
+
+    move-object v3, v0
+
+    .local v3, trustManager:Lcom/android/org/conscrypt/TrustManagerImpl;
+    invoke-virtual {v3, p0, p2, p1}, Lcom/android/org/conscrypt/TrustManagerImpl;->checkServerTrusted([Ljava/security/cert/X509Certificate;Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
+
+    .end local v3           #trustManager:Lcom/android/org/conscrypt/TrustManagerImpl;
+    :goto_1
+    const/4 v6, 0x0
 
     goto :goto_0
 
+    :cond_3
+    invoke-interface {v5, p0, p2}, Ljavax/net/ssl/X509TrustManager;->checkServerTrusted([Ljava/security/cert/X509Certificate;Ljava/lang/String;)V
+    :try_end_0
+    .catch Ljava/security/GeneralSecurityException; {:try_start_0 .. :try_end_0} :catch_0
+
+    goto :goto_1
+
+    .end local v5           #x509TrustManager:Ljavax/net/ssl/X509TrustManager;
     :catch_0
-    move-exception v1
+    move-exception v2
 
-    .local v1, e:Ljava/security/GeneralSecurityException;
-    new-instance v3, Landroid/net/http/SslError;
+    .local v2, e:Ljava/security/GeneralSecurityException;
+    new-instance v6, Landroid/net/http/SslError;
 
-    const/4 v4, 0x3
+    const/4 v7, 0x3
 
-    invoke-direct {v3, v4, v0}, Landroid/net/http/SslError;-><init>(ILjava/security/cert/X509Certificate;)V
+    invoke-direct {v6, v7, v1}, Landroid/net/http/SslError;-><init>(ILjava/security/cert/X509Certificate;)V
 
     goto :goto_0
 .end method

@@ -26,6 +26,8 @@
     .end annotation
 .end field
 
+.field private final mWindowSession:Landroid/view/IWindowSession;
+
 
 # direct methods
 .method constructor <init>(Landroid/view/ViewRootImpl;)V
@@ -40,6 +42,10 @@
     invoke-direct {v0, p1}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
 
     iput-object v0, p0, Landroid/view/ViewRootImpl$W;->mViewAncestor:Ljava/lang/ref/WeakReference;
+
+    iget-object v0, p1, Landroid/view/ViewRootImpl;->mWindowSession:Landroid/view/IWindowSession;
+
+    iput-object v0, p0, Landroid/view/ViewRootImpl$W;->mWindowSession:Landroid/view/IWindowSession;
 
     return-void
 .end method
@@ -229,7 +235,7 @@
     if-eqz p6, :cond_0
 
     :try_start_0
-    sget-object v0, Landroid/view/ViewRootImpl;->sWindowSession:Landroid/view/IWindowSession;
+    iget-object v0, p0, Landroid/view/ViewRootImpl$W;->mWindowSession:Landroid/view/IWindowSession;
 
     invoke-virtual {p0}, Landroid/view/ViewRootImpl$W;->asBinder()Landroid/os/IBinder;
 
@@ -263,7 +269,7 @@
     if-eqz p5, :cond_0
 
     :try_start_0
-    sget-object v0, Landroid/view/ViewRootImpl;->sWindowSession:Landroid/view/IWindowSession;
+    iget-object v0, p0, Landroid/view/ViewRootImpl$W;->mWindowSession:Landroid/view/IWindowSession;
 
     invoke-virtual {p0}, Landroid/view/ViewRootImpl$W;->asBinder()Landroid/os/IBinder;
 
@@ -497,10 +503,33 @@
     goto :goto_1
 .end method
 
-.method public resized(IILandroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
+.method public moved(II)V
+    .locals 2
+    .parameter "newX"
+    .parameter "newY"
+
+    .prologue
+    iget-object v1, p0, Landroid/view/ViewRootImpl$W;->mViewAncestor:Ljava/lang/ref/WeakReference;
+
+    invoke-virtual {v1}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/view/ViewRootImpl;
+
+    .local v0, viewAncestor:Landroid/view/ViewRootImpl;
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0, p1, p2}, Landroid/view/ViewRootImpl;->dispatchMoved(II)V
+
+    :cond_0
+    return-void
+.end method
+
+.method public resized(Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
     .locals 7
-    .parameter "w"
-    .parameter "h"
+    .parameter "frame"
+    .parameter "overscanInsets"
     .parameter "contentInsets"
     .parameter "visibleInsets"
     .parameter "reportDraw"
@@ -518,9 +547,9 @@
     .local v0, viewAncestor:Landroid/view/ViewRootImpl;
     if-eqz v0, :cond_0
 
-    move v1, p1
+    move-object v1, p1
 
-    move v2, p2
+    move-object v2, p2
 
     move-object v3, p3
 
@@ -530,7 +559,7 @@
 
     move-object v6, p6
 
-    invoke-virtual/range {v0 .. v6}, Landroid/view/ViewRootImpl;->dispatchResized(IILandroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
+    invoke-virtual/range {v0 .. v6}, Landroid/view/ViewRootImpl;->dispatchResized(Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
 
     :cond_0
     return-void

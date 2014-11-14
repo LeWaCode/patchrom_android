@@ -7,7 +7,8 @@
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
         Landroid/graphics/Path$Direction;,
-        Landroid/graphics/Path$FillType;
+        Landroid/graphics/Path$FillType;,
+        Landroid/graphics/Path$Op;
     }
 .end annotation
 
@@ -96,7 +97,7 @@
 .end method
 
 .method public constructor <init>(Landroid/graphics/Path;)V
-    .locals 2
+    .locals 3
     .parameter "src"
 
     .prologue
@@ -116,6 +117,22 @@
     if-eqz p1, :cond_0
 
     iget v0, p1, Landroid/graphics/Path;->mNativePath:I
+
+    iget-boolean v1, p1, Landroid/graphics/Path;->isSimplePath:Z
+
+    iput-boolean v1, p0, Landroid/graphics/Path;->isSimplePath:Z
+
+    iget-object v1, p1, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
+
+    if-eqz v1, :cond_0
+
+    new-instance v1, Landroid/graphics/Region;
+
+    iget-object v2, p1, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
+
+    invoke-direct {v1, v2}, Landroid/graphics/Region;-><init>(Landroid/graphics/Region;)V
+
+    iput-object v1, p0, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
 
     :cond_0
     invoke-static {v0}, Landroid/graphics/Path;->init2(I)I
@@ -267,6 +284,9 @@
 .end method
 
 .method private static native native_offset(IFFI)V
+.end method
+
+.method private static native native_op(IIII)Z
 .end method
 
 .method private static native native_quadTo(IFFFF)V
@@ -850,6 +870,10 @@
     .parameter "dy"
 
     .prologue
+    const/4 v0, 0x0
+
+    iput-boolean v0, p0, Landroid/graphics/Path;->isSimplePath:Z
+
     iget v0, p0, Landroid/graphics/Path;->mNativePath:I
 
     invoke-static {v0, p1, p2}, Landroid/graphics/Path;->native_offset(IFF)V
@@ -871,12 +895,66 @@
 
     iget v0, p3, Landroid/graphics/Path;->mNativePath:I
 
+    const/4 v1, 0x0
+
+    iput-boolean v1, p3, Landroid/graphics/Path;->isSimplePath:Z
+
     :cond_0
     iget v1, p0, Landroid/graphics/Path;->mNativePath:I
 
     invoke-static {v1, p1, p2, v0}, Landroid/graphics/Path;->native_offset(IFFI)V
 
     return-void
+.end method
+
+.method public op(Landroid/graphics/Path;Landroid/graphics/Path$Op;)Z
+    .locals 1
+    .parameter "path"
+    .parameter "op"
+
+    .prologue
+    invoke-virtual {p0, p0, p1, p2}, Landroid/graphics/Path;->op(Landroid/graphics/Path;Landroid/graphics/Path;Landroid/graphics/Path$Op;)Z
+
+    move-result v0
+
+    return v0
+.end method
+
+.method public op(Landroid/graphics/Path;Landroid/graphics/Path;Landroid/graphics/Path$Op;)Z
+    .locals 5
+    .parameter "path1"
+    .parameter "path2"
+    .parameter "op"
+
+    .prologue
+    const/4 v0, 0x0
+
+    iget v1, p1, Landroid/graphics/Path;->mNativePath:I
+
+    iget v2, p2, Landroid/graphics/Path;->mNativePath:I
+
+    invoke-virtual {p3}, Landroid/graphics/Path$Op;->ordinal()I
+
+    move-result v3
+
+    iget v4, p0, Landroid/graphics/Path;->mNativePath:I
+
+    invoke-static {v1, v2, v3, v4}, Landroid/graphics/Path;->native_op(IIII)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    iput-boolean v0, p0, Landroid/graphics/Path;->isSimplePath:Z
+
+    const/4 v0, 0x0
+
+    iput-object v0, p0, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
+
+    const/4 v0, 0x1
+
+    :cond_0
+    return v0
 .end method
 
 .method public quadTo(FFFF)V
@@ -981,33 +1059,40 @@
 .end method
 
 .method public reset()V
-    .locals 1
+    .locals 2
 
     .prologue
-    const/4 v0, 0x1
+    const/4 v1, 0x1
 
-    iput-boolean v0, p0, Landroid/graphics/Path;->isSimplePath:Z
+    iput-boolean v1, p0, Landroid/graphics/Path;->isSimplePath:Z
 
-    iget-boolean v0, p0, Landroid/graphics/Path;->mDetectSimplePaths:Z
+    iget-boolean v1, p0, Landroid/graphics/Path;->mDetectSimplePaths:Z
 
-    if-eqz v0, :cond_0
+    if-eqz v1, :cond_0
 
-    const/4 v0, 0x0
+    const/4 v1, 0x0
 
-    iput-object v0, p0, Landroid/graphics/Path;->mLastDirection:Landroid/graphics/Path$Direction;
+    iput-object v1, p0, Landroid/graphics/Path;->mLastDirection:Landroid/graphics/Path$Direction;
 
-    iget-object v0, p0, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
+    iget-object v1, p0, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
 
-    if-eqz v0, :cond_0
+    if-eqz v1, :cond_0
 
-    iget-object v0, p0, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
+    iget-object v1, p0, Landroid/graphics/Path;->rects:Landroid/graphics/Region;
 
-    invoke-virtual {v0}, Landroid/graphics/Region;->setEmpty()V
+    invoke-virtual {v1}, Landroid/graphics/Region;->setEmpty()V
 
     :cond_0
-    iget v0, p0, Landroid/graphics/Path;->mNativePath:I
+    invoke-virtual {p0}, Landroid/graphics/Path;->getFillType()Landroid/graphics/Path$FillType;
 
-    invoke-static {v0}, Landroid/graphics/Path;->native_reset(I)V
+    move-result-object v0
+
+    .local v0, fillType:Landroid/graphics/Path$FillType;
+    iget v1, p0, Landroid/graphics/Path;->mNativePath:I
+
+    invoke-static {v1}, Landroid/graphics/Path;->native_reset(I)V
+
+    invoke-virtual {p0, v0}, Landroid/graphics/Path;->setFillType(Landroid/graphics/Path$FillType;)V
 
     return-void
 .end method
@@ -1121,6 +1206,10 @@
     .parameter "matrix"
 
     .prologue
+    const/4 v0, 0x0
+
+    iput-boolean v0, p0, Landroid/graphics/Path;->isSimplePath:Z
+
     iget v0, p0, Landroid/graphics/Path;->mNativePath:I
 
     iget v1, p1, Landroid/graphics/Matrix;->native_instance:I
@@ -1140,6 +1229,10 @@
 
     .local v0, dstNative:I
     if-eqz p2, :cond_0
+
+    const/4 v1, 0x0
+
+    iput-boolean v1, p2, Landroid/graphics/Path;->isSimplePath:Z
 
     iget v0, p2, Landroid/graphics/Path;->mNativePath:I
 

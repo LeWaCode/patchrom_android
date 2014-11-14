@@ -35,6 +35,15 @@
 .method public abstract onRouteGrouped(Landroid/media/MediaRouter;Landroid/media/MediaRouter$RouteInfo;Landroid/media/MediaRouter$RouteGroup;I)V
 .end method
 
+.method public onRoutePresentationDisplayChanged(Landroid/media/MediaRouter;Landroid/media/MediaRouter$RouteInfo;)V
+    .locals 0
+    .parameter "router"
+    .parameter "info"
+
+    .prologue
+    return-void
+.end method
+
 .method public abstract onRouteRemoved(Landroid/media/MediaRouter;Landroid/media/MediaRouter$RouteInfo;)V
 .end method
 

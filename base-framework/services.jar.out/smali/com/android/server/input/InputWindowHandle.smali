@@ -8,6 +8,8 @@
 
 .field public dispatchingTimeoutNanos:J
 
+.field public final displayId:I
+
 .field public frameBottom:I
 
 .field public frameLeft:I
@@ -29,6 +31,8 @@
 .field public layer:I
 
 .field public layoutParamsFlags:I
+
+.field public layoutParamsPrivateFlags:I
 
 .field public layoutParamsType:I
 
@@ -52,10 +56,11 @@
 
 
 # direct methods
-.method public constructor <init>(Lcom/android/server/input/InputApplicationHandle;Ljava/lang/Object;)V
+.method public constructor <init>(Lcom/android/server/input/InputApplicationHandle;Ljava/lang/Object;I)V
     .locals 1
     .parameter "inputApplicationHandle"
     .parameter "windowState"
+    .parameter "displayId"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -69,6 +74,8 @@
     iput-object p1, p0, Lcom/android/server/input/InputWindowHandle;->inputApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
 
     iput-object p2, p0, Lcom/android/server/input/InputWindowHandle;->windowState:Ljava/lang/Object;
+
+    iput p3, p0, Lcom/android/server/input/InputWindowHandle;->displayId:I
 
     return-void
 .end method

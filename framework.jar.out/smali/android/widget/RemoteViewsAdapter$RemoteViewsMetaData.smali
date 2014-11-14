@@ -58,7 +58,7 @@
     return-void
 .end method
 
-.method static synthetic access$1800(Landroid/widget/RemoteViewsAdapter$RemoteViewsMetaData;ILandroid/view/View;Landroid/view/ViewGroup;Ljava/lang/Object;Landroid/view/LayoutInflater;)Landroid/widget/RemoteViewsAdapter$RemoteViewsFrameLayout;
+.method static synthetic access$2000(Landroid/widget/RemoteViewsAdapter$RemoteViewsMetaData;ILandroid/view/View;Landroid/view/ViewGroup;Ljava/lang/Object;Landroid/view/LayoutInflater;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/widget/RemoteViewsAdapter$RemoteViewsFrameLayout;
     .locals 1
     .parameter "x0"
     .parameter "x1"
@@ -66,22 +66,24 @@
     .parameter "x3"
     .parameter "x4"
     .parameter "x5"
+    .parameter "x6"
 
     .prologue
-    invoke-direct/range {p0 .. p5}, Landroid/widget/RemoteViewsAdapter$RemoteViewsMetaData;->createLoadingView(ILandroid/view/View;Landroid/view/ViewGroup;Ljava/lang/Object;Landroid/view/LayoutInflater;)Landroid/widget/RemoteViewsAdapter$RemoteViewsFrameLayout;
+    invoke-direct/range {p0 .. p6}, Landroid/widget/RemoteViewsAdapter$RemoteViewsMetaData;->createLoadingView(ILandroid/view/View;Landroid/view/ViewGroup;Ljava/lang/Object;Landroid/view/LayoutInflater;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/widget/RemoteViewsAdapter$RemoteViewsFrameLayout;
 
     move-result-object v0
 
     return-object v0
 .end method
 
-.method private createLoadingView(ILandroid/view/View;Landroid/view/ViewGroup;Ljava/lang/Object;Landroid/view/LayoutInflater;)Landroid/widget/RemoteViewsAdapter$RemoteViewsFrameLayout;
+.method private createLoadingView(ILandroid/view/View;Landroid/view/ViewGroup;Ljava/lang/Object;Landroid/view/LayoutInflater;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/widget/RemoteViewsAdapter$RemoteViewsFrameLayout;
     .locals 12
     .parameter "position"
     .parameter "convertView"
     .parameter "parent"
     .parameter "lock"
     .parameter "layoutInflater"
+    .parameter "handler"
 
     .prologue
     invoke-virtual {p3}, Landroid/view/ViewGroup;->getContext()Landroid/content/Context;
@@ -113,12 +115,14 @@
 
     move-result-object v10
 
-    invoke-virtual {v9, v10, p3}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;)Landroid/view/View;
+    move-object/from16 v0, p6
+
+    invoke-virtual {v9, v10, p3, v0}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/view/View;
 
     move-result-object v8
 
     .local v8, loadingView:Landroid/view/View;
-    const v9, 0x102023a
+    const v9, 0x1020259
 
     new-instance v10, Ljava/lang/Integer;
 
@@ -154,7 +158,9 @@
 
     move-result-object v10
 
-    invoke-virtual {v9, v10, p3}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;)Landroid/view/View;
+    move-object/from16 v0, p6
+
+    invoke-virtual {v9, v10, p3, v0}, Landroid/widget/RemoteViews;->apply(Landroid/content/Context;Landroid/view/ViewGroup;Landroid/widget/RemoteViews$OnClickHandler;)Landroid/view/View;
 
     move-result-object v5
 
@@ -193,7 +199,7 @@
     .end local v5           #firstView:Landroid/view/View;
     :cond_1
     :goto_1
-    const v9, 0x1090092
+    const v9, 0x1090086
 
     const/4 v10, 0x0
 

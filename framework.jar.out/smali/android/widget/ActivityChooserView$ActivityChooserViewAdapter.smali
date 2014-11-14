@@ -256,15 +256,6 @@
     goto :goto_0
 .end method
 
-.method public getMaxActivityCount()I
-    .locals 1
-
-    .prologue
-    iget v0, p0, Landroid/widget/ActivityChooserView$ActivityChooserViewAdapter;->mMaxActivityCount:I
-
-    return v0
-.end method
-
 .method public getShowDefaultActivity()Z
     .locals 1
 
@@ -281,7 +272,7 @@
     .parameter "parent"
 
     .prologue
-    const v11, 0x109001f
+    const v11, 0x1090020
 
     const v10, 0x1020016
 
@@ -338,11 +329,11 @@
     iget-object v6, p0, Landroid/widget/ActivityChooserView$ActivityChooserViewAdapter;->this$0:Landroid/widget/ActivityChooserView;
 
     #getter for: Landroid/widget/ActivityChooserView;->mContext:Landroid/content/Context;
-    invoke-static {v6}, Landroid/widget/ActivityChooserView;->access$1400(Landroid/widget/ActivityChooserView;)Landroid/content/Context;
+    invoke-static {v6}, Landroid/widget/ActivityChooserView;->access$1600(Landroid/widget/ActivityChooserView;)Landroid/content/Context;
 
     move-result-object v6
 
-    const v7, 0x10404f3
+    const v7, 0x1040536
 
     invoke-virtual {v6, v7}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 
@@ -368,7 +359,7 @@
 
     move-result v6
 
-    const v7, 0x1020249
+    const v7, 0x102026c
 
     if-eq v6, v7, :cond_3
 
@@ -391,7 +382,7 @@
     iget-object v6, p0, Landroid/widget/ActivityChooserView$ActivityChooserViewAdapter;->this$0:Landroid/widget/ActivityChooserView;
 
     #getter for: Landroid/widget/ActivityChooserView;->mContext:Landroid/content/Context;
-    invoke-static {v6}, Landroid/widget/ActivityChooserView;->access$1500(Landroid/widget/ActivityChooserView;)Landroid/content/Context;
+    invoke-static {v6}, Landroid/widget/ActivityChooserView;->access$1700(Landroid/widget/ActivityChooserView;)Landroid/content/Context;
 
     move-result-object v6
 
@@ -575,7 +566,7 @@
     iget-object v1, p0, Landroid/widget/ActivityChooserView$ActivityChooserViewAdapter;->this$0:Landroid/widget/ActivityChooserView;
 
     #getter for: Landroid/widget/ActivityChooserView;->mModelDataSetOberver:Landroid/database/DataSetObserver;
-    invoke-static {v1}, Landroid/widget/ActivityChooserView;->access$1300(Landroid/widget/ActivityChooserView;)Landroid/database/DataSetObserver;
+    invoke-static {v1}, Landroid/widget/ActivityChooserView;->access$1500(Landroid/widget/ActivityChooserView;)Landroid/database/DataSetObserver;
 
     move-result-object v1
 
@@ -597,7 +588,7 @@
     iget-object v1, p0, Landroid/widget/ActivityChooserView$ActivityChooserViewAdapter;->this$0:Landroid/widget/ActivityChooserView;
 
     #getter for: Landroid/widget/ActivityChooserView;->mModelDataSetOberver:Landroid/database/DataSetObserver;
-    invoke-static {v1}, Landroid/widget/ActivityChooserView;->access$1300(Landroid/widget/ActivityChooserView;)Landroid/database/DataSetObserver;
+    invoke-static {v1}, Landroid/widget/ActivityChooserView;->access$1500(Landroid/widget/ActivityChooserView;)Landroid/database/DataSetObserver;
 
     move-result-object v1
 

@@ -4,9 +4,19 @@
 
 
 # static fields
+#the value of this static final field might be set in the static constructor
+.field public static final OMAP_COMPAT:Z = false
+
+#the value of this static final field might be set in the static constructor
+.field public static final OMAP_ENHANCEMENT:Z = false
+
 .field public static final PROP_NAME_MAX:I = 0x1f
 
 .field public static final PROP_VALUE_MAX:I = 0x5b
+
+.field public static final QCOM_HARDWARE:Z
+
+.field public static final QCOM_HDMI_OUT:Z
 
 .field private static final sChangeCallbacks:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
@@ -22,9 +32,43 @@
 
 # direct methods
 .method static constructor <clinit>()V
-    .locals 1
+    .locals 2
 
     .prologue
+    const/4 v1, 0x0
+
+    const-string v0, "com.ti.omap_enhancement"
+
+    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
+
+    move-result v0
+
+    sput-boolean v0, Landroid/os/SystemProperties;->OMAP_ENHANCEMENT:Z
+
+    const-string v0, "com.ti.omap_compat"
+
+    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
+
+    move-result v0
+
+    sput-boolean v0, Landroid/os/SystemProperties;->OMAP_COMPAT:Z
+
+    const-string v0, "com.qc.hardware"
+
+    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
+
+    move-result v0
+
+    sput-boolean v0, Landroid/os/SystemProperties;->QCOM_HARDWARE:Z
+
+    const-string v0, "com.qc.hdmi_out"
+
+    invoke-static {v0, v1}, Landroid/os/SystemProperties;->native_get_boolean(Ljava/lang/String;Z)Z
+
+    move-result v0
+
+    sput-boolean v0, Landroid/os/SystemProperties;->QCOM_HDMI_OUT:Z
+
     new-instance v0, Ljava/util/ArrayList;
 
     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
@@ -302,116 +346,6 @@
     return-wide v0
 .end method
 
-.method public static getLongString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-    .locals 5
-    .parameter "key"
-    .parameter "def"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    invoke-virtual {p0}, Ljava/lang/String;->length()I
-
-    move-result v3
-
-    add-int/lit8 v3, v3, 0x1
-
-    const/16 v4, 0x1f
-
-    if-le v3, v4, :cond_0
-
-    new-instance v3, Ljava/lang/IllegalArgumentException;
-
-    const-string v4, "key.length > 31"
-
-    invoke-direct {v3, v4}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
-
-    throw v3
-
-    :cond_0
-    new-instance v3, Ljava/lang/StringBuilder;
-
-    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
-
-    invoke-virtual {v3, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    const/16 v4, 0x30
-
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v3
-
-    const/4 v4, 0x0
-
-    invoke-static {v3, v4}, Landroid/os/SystemProperties;->getInt(Ljava/lang/String;I)I
-
-    move-result v0
-
-    .local v0, chunks:I
-    if-nez v0, :cond_1
-
-    .end local p1
-    :goto_0
-    return-object p1
-
-    .restart local p1
-    :cond_1
-    new-instance v2, Ljava/lang/StringBuffer;
-
-    invoke-direct {v2}, Ljava/lang/StringBuffer;-><init>()V
-
-    .local v2, sb:Ljava/lang/StringBuffer;
-    const/4 v1, 0x1
-
-    .local v1, i:I
-    :goto_1
-    if-gt v1, v0, :cond_2
-
-    new-instance v3, Ljava/lang/StringBuilder;
-
-    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
-
-    invoke-virtual {v3, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-static {v1}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v3
-
-    invoke-static {v3}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v3
-
-    invoke-virtual {v2, v3}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
-
-    add-int/lit8 v1, v1, 0x1
-
-    goto :goto_1
-
-    :cond_2
-    invoke-virtual {v2}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
-
-    move-result-object p1
-
-    goto :goto_0
-.end method
-
 .method private static native native_add_change_callback()V
 .end method
 
@@ -614,4 +548,114 @@
     .end local v3           #start:I
     :cond_3
     return-void
+.end method
+
+.method public static getLongString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    .locals 5
+    .parameter "key"
+    .parameter "def"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    invoke-virtual {p0}, Ljava/lang/String;->length()I
+
+    move-result v3
+
+    add-int/lit8 v3, v3, 0x1
+
+    const/16 v4, 0x1f
+
+    if-le v3, v4, :cond_0
+
+    new-instance v3, Ljava/lang/IllegalArgumentException;
+
+    const-string v4, "key.length > 31"
+
+    invoke-direct {v3, v4}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+
+    throw v3
+
+    :cond_0
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v3, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    const/16 v4, 0x30
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    const/4 v4, 0x0
+
+    invoke-static {v3, v4}, Landroid/os/SystemProperties;->getInt(Ljava/lang/String;I)I
+
+    move-result v0
+
+    .local v0, chunks:I
+    if-nez v0, :cond_1
+
+    .end local p1
+    :goto_0
+    return-object p1
+
+    .restart local p1
+    :cond_1
+    new-instance v2, Ljava/lang/StringBuffer;
+
+    invoke-direct {v2}, Ljava/lang/StringBuffer;-><init>()V
+
+    .local v2, sb:Ljava/lang/StringBuffer;
+    const/4 v1, 0x1
+
+    .local v1, i:I
+    :goto_1
+    if-gt v1, v0, :cond_2
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v3, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-static {v1}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-static {v3}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
+
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_1
+
+    :cond_2
+    invoke-virtual {v2}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
+
+    move-result-object p1
+
+    goto :goto_0
 .end method

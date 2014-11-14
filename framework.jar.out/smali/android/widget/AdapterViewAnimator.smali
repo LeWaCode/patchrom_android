@@ -1894,6 +1894,23 @@
     goto :goto_0
 .end method
 
+.method public setRemoteViewsOnClickHandler(Landroid/widget/RemoteViews$OnClickHandler;)V
+    .locals 1
+    .parameter "handler"
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/AdapterViewAnimator;->mRemoteViewsAdapter:Landroid/widget/RemoteViewsAdapter;
+
+    if-eqz v0, :cond_0
+
+    iget-object v0, p0, Landroid/widget/AdapterViewAnimator;->mRemoteViewsAdapter:Landroid/widget/RemoteViewsAdapter;
+
+    invoke-virtual {v0, p1}, Landroid/widget/RemoteViewsAdapter;->setRemoteViewsOnClickHandler(Landroid/widget/RemoteViews$OnClickHandler;)V
+
+    :cond_0
+    return-void
+.end method
+
 .method public setSelection(I)V
     .locals 0
     .parameter "position"

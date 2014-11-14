@@ -22,13 +22,11 @@
 
 
 # instance fields
+.field mAccessibilityFetchFlags:I
+
 .field mAccessibilityFocusDrawable:Landroid/graphics/drawable/Drawable;
 
 .field mAccessibilityWindowId:I
-
-.field mActualWindowLeft:I
-
-.field mActualWindowTop:I
 
 .field mApplicationScale:F
 
@@ -39,6 +37,8 @@
 .field mDebugLayout:Z
 
 .field mDisabledSystemUiVisibility:I
+
+.field final mDisplay:Landroid/view/Display;
 
 .field mDrawingTime:J
 
@@ -58,21 +58,27 @@
 
 .field mHardwareRenderer:Landroid/view/HardwareRenderer;
 
+.field mHasNonEmptyGivenInternalInsets:Z
+
 .field mHasSystemUiListeners:Z
 
 .field mHasWindowFocus:Z
 
+.field mIWindowId:Landroid/view/IWindowId;
+
 .field mIgnoreDirtyState:Z
 
 .field mInTouchMode:Z
-
-.field mIncludeNotImportantViews:Z
 
 .field final mInvalidateChildLocation:[I
 
 .field mKeepScreenOn:Z
 
 .field final mKeyDispatchState:Landroid/view/KeyEvent$DispatcherState;
+
+.field final mOverscanInsets:Landroid/graphics/Rect;
+
+.field mOverscanRequested:Z
 
 .field mPanelParentWindowToken:Landroid/os/IBinder;
 
@@ -120,9 +126,13 @@
 
 .field final mTmpInvalRect:Landroid/graphics/Rect;
 
+.field final mTmpMatrix:Landroid/graphics/Matrix;
+
 .field final mTmpTransformLocation:[F
 
 .field final mTmpTransformRect:Landroid/graphics/RectF;
+
+.field final mTmpTransformation:Landroid/view/animation/Transformation;
 
 .field final mTransparentLocation:[I
 
@@ -131,6 +141,8 @@
 .field mTurnOffWindowResizeAnim:Z
 
 .field mUse32BitDrawingCache:Z
+
+.field mViewRequestingLayout:Landroid/view/View;
 
 .field final mViewRootImpl:Landroid/view/ViewRootImpl;
 
@@ -142,6 +154,8 @@
 
 .field final mWindow:Landroid/view/IWindow;
 
+.field mWindowId:Landroid/view/WindowId;
+
 .field mWindowLeft:I
 
 .field final mWindowToken:Landroid/os/IBinder;
@@ -152,10 +166,11 @@
 
 
 # direct methods
-.method constructor <init>(Landroid/view/IWindowSession;Landroid/view/IWindow;Landroid/view/ViewRootImpl;Landroid/os/Handler;Landroid/view/View$AttachInfo$Callbacks;)V
+.method constructor <init>(Landroid/view/IWindowSession;Landroid/view/IWindow;Landroid/view/Display;Landroid/view/ViewRootImpl;Landroid/os/Handler;Landroid/view/View$AttachInfo$Callbacks;)V
     .locals 3
     .parameter "session"
     .parameter "window"
+    .parameter "display"
     .parameter "viewRootImpl"
     .parameter "handler"
     .parameter "effectPlayer"
@@ -166,6 +181,12 @@
     const/4 v1, 0x2
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    new-instance v0, Landroid/graphics/Rect;
+
+    invoke-direct {v0}, Landroid/graphics/Rect;-><init>()V
+
+    iput-object v0, p0, Landroid/view/View$AttachInfo;->mOverscanInsets:Landroid/graphics/Rect;
 
     new-instance v0, Landroid/graphics/Rect;
 
@@ -229,6 +250,18 @@
 
     iput-object v0, p0, Landroid/view/View$AttachInfo;->mTmpTransformRect:Landroid/graphics/RectF;
 
+    new-instance v0, Landroid/graphics/Matrix;
+
+    invoke-direct {v0}, Landroid/graphics/Matrix;-><init>()V
+
+    iput-object v0, p0, Landroid/view/View$AttachInfo;->mTmpMatrix:Landroid/graphics/Matrix;
+
+    new-instance v0, Landroid/view/animation/Transformation;
+
+    invoke-direct {v0}, Landroid/view/animation/Transformation;-><init>()V
+
+    iput-object v0, p0, Landroid/view/View$AttachInfo;->mTmpTransformation:Landroid/view/animation/Transformation;
+
     new-instance v0, Ljava/util/ArrayList;
 
     const/16 v1, 0x18
@@ -265,11 +298,13 @@
 
     iput-object v0, p0, Landroid/view/View$AttachInfo;->mWindowToken:Landroid/os/IBinder;
 
-    iput-object p3, p0, Landroid/view/View$AttachInfo;->mViewRootImpl:Landroid/view/ViewRootImpl;
+    iput-object p3, p0, Landroid/view/View$AttachInfo;->mDisplay:Landroid/view/Display;
 
-    iput-object p4, p0, Landroid/view/View$AttachInfo;->mHandler:Landroid/os/Handler;
+    iput-object p4, p0, Landroid/view/View$AttachInfo;->mViewRootImpl:Landroid/view/ViewRootImpl;
 
-    iput-object p5, p0, Landroid/view/View$AttachInfo;->mRootCallbacks:Landroid/view/View$AttachInfo$Callbacks;
+    iput-object p5, p0, Landroid/view/View$AttachInfo;->mHandler:Landroid/os/Handler;
+
+    iput-object p6, p0, Landroid/view/View$AttachInfo;->mRootCallbacks:Landroid/view/View$AttachInfo$Callbacks;
 
     return-void
 .end method

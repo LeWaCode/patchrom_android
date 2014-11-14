@@ -12,7 +12,7 @@
     .locals 3
 
     .prologue
-    const/4 v0, 0x2
+    const/4 v0, 0x4
 
     new-array v0, v0, [Ljava/lang/String;
 
@@ -25,6 +25,18 @@
     const/4 v1, 0x1
 
     const-string v2, "android.webkit."
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x2
+
+    const-string v2, "lewa.widget."
+
+    aput-object v2, v0, v1
+
+    const/4 v1, 0x3
+
+    const-string v2, "lewa.view."
 
     aput-object v2, v0, v1
 

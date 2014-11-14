@@ -43,14 +43,29 @@
 
 
 # virtual methods
-.method public onVsync(JI)V
+.method public onVsync(JII)V
     .locals 8
     .parameter "timestampNanos"
+    .parameter "builtInDisplayId"
     .parameter "frame"
 
     .prologue
     const/4 v7, 0x1
 
+    if-eqz p3, :cond_0
+
+    const-string v3, "Choreographer"
+
+    const-string v4, "Received vsync from secondary display, but we don\'t support this case yet.  Choreographer needs a way to explicitly request vsync for a specific display to ensure it doesn\'t lose track of its scheduled vsync."
+
+    invoke-static {v3, v4}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    invoke-virtual {p0}, Landroid/view/Choreographer$FrameDisplayEventReceiver;->scheduleVsync()V
+
+    :goto_0
+    return-void
+
+    :cond_0
     invoke-static {}, Ljava/lang/System;->nanoTime()J
 
     move-result-wide v1
@@ -58,7 +73,7 @@
     .local v1, now:J
     cmp-long v3, p1, v1
 
-    if-lez v3, :cond_0
+    if-lez v3, :cond_1
 
     const-string v3, "Choreographer"
 
@@ -104,10 +119,10 @@
 
     move-wide p1, v1
 
-    :cond_0
+    :cond_1
     iget-boolean v3, p0, Landroid/view/Choreographer$FrameDisplayEventReceiver;->mHavePendingVsync:Z
 
-    if-eqz v3, :cond_1
+    if-eqz v3, :cond_2
 
     const-string v3, "Choreographer"
 
@@ -115,10 +130,10 @@
 
     invoke-static {v3, v4}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
 
-    :goto_0
+    :goto_1
     iput-wide p1, p0, Landroid/view/Choreographer$FrameDisplayEventReceiver;->mTimestampNanos:J
 
-    iput p3, p0, Landroid/view/Choreographer$FrameDisplayEventReceiver;->mFrame:I
+    iput p4, p0, Landroid/view/Choreographer$FrameDisplayEventReceiver;->mFrame:I
 
     iget-object v3, p0, Landroid/view/Choreographer$FrameDisplayEventReceiver;->this$0:Landroid/view/Choreographer;
 
@@ -147,13 +162,13 @@
 
     invoke-virtual {v3, v0, v4, v5}, Landroid/view/Choreographer$FrameHandler;->sendMessageAtTime(Landroid/os/Message;J)Z
 
-    return-void
+    goto :goto_0
 
     .end local v0           #msg:Landroid/os/Message;
-    :cond_1
+    :cond_2
     iput-boolean v7, p0, Landroid/view/Choreographer$FrameDisplayEventReceiver;->mHavePendingVsync:Z
 
-    goto :goto_0
+    goto :goto_1
 .end method
 
 .method public run()V

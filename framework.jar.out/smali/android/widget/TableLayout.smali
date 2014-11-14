@@ -420,9 +420,11 @@
 .end method
 
 .method private initTableLayout()V
-    .locals 2
+    .locals 3
 
     .prologue
+    const/4 v2, 0x1
+
     iget-object v0, p0, Landroid/widget/TableLayout;->mCollapsedColumns:Landroid/util/SparseBooleanArray;
 
     if-nez v0, :cond_0
@@ -456,6 +458,8 @@
     iput-object v0, p0, Landroid/widget/TableLayout;->mShrinkableColumns:Landroid/util/SparseBooleanArray;
 
     :cond_2
+    invoke-virtual {p0, v2}, Landroid/widget/TableLayout;->setOrientation(I)V
+
     new-instance v0, Landroid/widget/TableLayout$PassThroughHierarchyChangeListener;
 
     const/4 v1, 0x0
@@ -468,9 +472,7 @@
 
     invoke-super {p0, v0}, Landroid/widget/LinearLayout;->setOnHierarchyChangeListener(Landroid/view/ViewGroup$OnHierarchyChangeListener;)V
 
-    const/4 v0, 0x1
-
-    iput-boolean v0, p0, Landroid/widget/TableLayout;->mInitialized:Z
+    iput-boolean v2, p0, Landroid/widget/TableLayout;->mInitialized:Z
 
     return-void
 .end method
@@ -1251,7 +1253,7 @@
     .parameter "b"
 
     .prologue
-    invoke-virtual {p0}, Landroid/widget/TableLayout;->layoutVertical()V
+    invoke-virtual {p0, p2, p3, p4, p5}, Landroid/widget/TableLayout;->layoutVertical(IIII)V
 
     return-void
 .end method

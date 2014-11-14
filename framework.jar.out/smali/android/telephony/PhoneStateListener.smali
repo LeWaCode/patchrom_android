@@ -79,11 +79,21 @@
     return-void
 .end method
 
-.method public onCellInfoChanged(Landroid/telephony/CellInfo;)V
+.method public onCellInfoChanged(Ljava/util/List;)V
     .locals 0
-    .parameter "cellInfo"
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/List",
+            "<",
+            "Landroid/telephony/CellInfo;",
+            ">;)V"
+        }
+    .end annotation
 
     .prologue
+    .local p1, cellInfo:Ljava/util/List;,"Ljava/util/List<Landroid/telephony/CellInfo;>;"
     return-void
 .end method
 

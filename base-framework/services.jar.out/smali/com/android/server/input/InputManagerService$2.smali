@@ -5,7 +5,7 @@
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/input/InputManagerService;->systemReady(Landroid/server/BluetoothService;)V
+    value = Lcom/android/server/input/InputManagerService;->systemRunning()V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -41,8 +41,8 @@
     .prologue
     iget-object v0, p0, Lcom/android/server/input/InputManagerService$2;->this$0:Lcom/android/server/input/InputManagerService;
 
-    #calls: Lcom/android/server/input/InputManagerService;->reloadDeviceAliases()V
-    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$200(Lcom/android/server/input/InputManagerService;)V
+    #calls: Lcom/android/server/input/InputManagerService;->updateKeyboardLayouts()V
+    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$000(Lcom/android/server/input/InputManagerService;)V
 
     return-void
 .end method

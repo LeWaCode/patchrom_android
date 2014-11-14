@@ -71,13 +71,15 @@
     check-cast v3, Landroid/view/LayoutInflater;
 
     .local v3, inflater:Landroid/view/LayoutInflater;
-    const v5, 0x1090089
+    const v5, 0x109007d
 
     invoke-virtual {v3, v5, v6}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
 
     move-result-object v0
 
     .local v0, childPrefScreen:Landroid/view/View;
+    invoke-virtual {p0, v0, v1}, Landroid/preference/PreferenceScreen;->initChildPrefScreen(Landroid/view/View;Landroid/content/Context;)V
+
     const v5, 0x102000a
 
     invoke-virtual {v0, v5}, Landroid/view/View;->findViewById(I)Landroid/view/View;
@@ -142,7 +144,7 @@
 
     invoke-virtual {v2}, Landroid/app/Dialog;->show()V
 
-    invoke-static {v1, v2, v6}, Landroid/preference/PreferenceScreen$Injector;->setDisplayHomeAsUpEnabled(Landroid/content/Context;Landroid/app/Dialog;Z)V
+    invoke-static {v1, v2}, Landroid/preference/PreferenceScreen$Injector;->setDisplayHomeAsUpEnabled(Landroid/content/Context;Landroid/app/Dialog;)V
 
     return-void
 
@@ -199,6 +201,51 @@
     iget-object v0, p0, Landroid/preference/PreferenceScreen;->mRootAdapter:Landroid/widget/ListAdapter;
 
     return-object v0
+.end method
+
+.method public initChildPrefScreen(Landroid/view/View;Landroid/content/Context;)V
+    .locals 3
+    .parameter "view"
+    .parameter "context"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v2, 0x0
+
+    const-string v1, "layout_inflater"
+
+    invoke-virtual {p2, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/view/LayoutInflater;
+
+    .local v0, inflater:Landroid/view/LayoutInflater;
+    invoke-static {p2}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    const v1, 0x9090036
+
+    invoke-virtual {v0, v1, v2}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
+
+    move-result-object p1
+
+    :goto_0
+    return-void
+
+    :cond_0
+    const v1, 0x109007d
+
+    invoke-virtual {v0, v1, v2}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
+
+    move-result-object p1
+
+    goto :goto_0
 .end method
 
 .method protected isOnSameScreenAsChildren()Z

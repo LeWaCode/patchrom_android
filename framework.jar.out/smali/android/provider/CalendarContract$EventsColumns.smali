@@ -79,6 +79,8 @@
 
 .field public static final HAS_EXTENDED_PROPERTIES:Ljava/lang/String; = "hasExtendedProperties"
 
+.field public static final IS_ORGANIZER:Ljava/lang/String; = "isOrganizer"
+
 .field public static final LAST_DATE:Ljava/lang/String; = "lastDate"
 
 .field public static final LAST_SYNCED:Ljava/lang/String; = "lastSynced"
@@ -128,3 +130,5 @@
 .field public static final SYNC_DATA9:Ljava/lang/String; = "sync_data9"
 
 .field public static final TITLE:Ljava/lang/String; = "title"
+
+.field public static final UID_2445:Ljava/lang/String; = "uid2445"

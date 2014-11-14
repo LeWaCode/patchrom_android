@@ -43,7 +43,7 @@
 
 
 # virtual methods
-.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
+.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
     .locals 6
     .parameter "intent"
     .parameter "resultCode"
@@ -51,6 +51,7 @@
     .parameter "extras"
     .parameter "ordered"
     .parameter "sticky"
+    .parameter "sendingUser"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;

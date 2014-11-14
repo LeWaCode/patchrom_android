@@ -6,9 +6,9 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Landroid/widget/AbsSpinner$1;,
         Landroid/widget/AbsSpinner$RecycleBin;,
-        Landroid/widget/AbsSpinner$SavedState;
+        Landroid/widget/AbsSpinner$SavedState;,
+        Landroid/widget/AbsSpinner$Injector;
     }
 .end annotation
 
@@ -144,13 +144,15 @@
     .local v2, entries:[Ljava/lang/CharSequence;
     if-eqz v2, :cond_0
 
+    new-instance v1, Landroid/widget/ArrayAdapter;
+
     const v3, 0x1090008
 
-    invoke-direct {p0, p1, v3, v2, p2}, Landroid/widget/AbsSpinner;->absSpinnerExt(Landroid/content/Context;I[Ljava/lang/CharSequence;Landroid/util/AttributeSet;)Landroid/widget/ArrayAdapter;
-
-    move-result-object v1
+    invoke-direct {v1, p1, v3, v2}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;I[Ljava/lang/Object;)V
 
     .local v1, adapter:Landroid/widget/ArrayAdapter;,"Landroid/widget/ArrayAdapter<Ljava/lang/CharSequence;>;"
+    invoke-static {v1, p1, p2, v2}, Landroid/widget/AbsSpinner$Injector;->getLewaAbsAbsSpinner(Landroid/widget/ArrayAdapter;Landroid/content/Context;Landroid/util/AttributeSet;[Ljava/lang/CharSequence;)V
+
     const v3, 0x1090009
 
     invoke-virtual {v1, v3}, Landroid/widget/ArrayAdapter;->setDropDownViewResource(I)V
@@ -164,54 +166,7 @@
     return-void
 .end method
 
-.method private absSpinnerExt(Landroid/content/Context;I[Ljava/lang/CharSequence;Landroid/util/AttributeSet;)Landroid/widget/ArrayAdapter;
-    .locals 3
-    .parameter "context"
-    .parameter "defaultId"
-    .parameter "entries"
-    .parameter "attrs"
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "(",
-            "Landroid/content/Context;",
-            "I[",
-            "Ljava/lang/CharSequence;",
-            "Landroid/util/AttributeSet;",
-            ")",
-            "Landroid/widget/ArrayAdapter",
-            "<",
-            "Ljava/lang/CharSequence;",
-            ">;"
-        }
-    .end annotation
-
-    .prologue
-    invoke-static {p1, p4}, Llewa/util/LewaUiUtil;->isSpinnerV5Style(Landroid/content/Context;Landroid/util/AttributeSet;)Z
-
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    new-instance v0, Landroid/widget/ArrayAdapter;
-
-    const v1, 0x909001a
-
-    const v2, 0x1020014
-
-    invoke-direct {v0, p1, v1, v2, p3}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;II[Ljava/lang/Object;)V
-
-    :goto_0
-    return-object v0
-
-    :cond_0
-    new-instance v0, Landroid/widget/ArrayAdapter;
-
-    invoke-direct {v0, p1, p2, p3}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;I[Ljava/lang/Object;)V
-
-    goto :goto_0
-.end method
-
-.method static synthetic access$100(Landroid/widget/AbsSpinner;Landroid/view/View;Z)V
+.method static synthetic access$000(Landroid/widget/AbsSpinner;Landroid/view/View;Z)V
     .locals 0
     .parameter "x0"
     .parameter "x1"
@@ -399,7 +354,7 @@
 
     iget v10, p0, Landroid/widget/AbsSpinner;->mSelectionLeftPadding:I
 
-    if-le v8, v10, :cond_6
+    if-le v8, v10, :cond_5
 
     iget v8, p0, Landroid/widget/AbsSpinner;->mPaddingLeft:I
 
@@ -412,7 +367,7 @@
 
     iget v10, p0, Landroid/widget/AbsSpinner;->mSelectionTopPadding:I
 
-    if-le v8, v10, :cond_7
+    if-le v8, v10, :cond_6
 
     iget v8, p0, Landroid/widget/AbsSpinner;->mPaddingTop:I
 
@@ -425,7 +380,7 @@
 
     iget v10, p0, Landroid/widget/AbsSpinner;->mSelectionRightPadding:I
 
-    if-le v8, v10, :cond_8
+    if-le v8, v10, :cond_7
 
     iget v8, p0, Landroid/widget/AbsSpinner;->mPaddingRight:I
 
@@ -438,7 +393,7 @@
 
     iget v10, p0, Landroid/widget/AbsSpinner;->mSelectionBottomPadding:I
 
-    if-le v8, v10, :cond_9
+    if-le v8, v10, :cond_8
 
     iget v8, p0, Landroid/widget/AbsSpinner;->mPaddingBottom:I
 
@@ -466,11 +421,11 @@
     move-result v4
 
     .local v4, selectedPosition:I
-    if-ltz v4, :cond_4
+    if-ltz v4, :cond_3
 
     iget-object v8, p0, Landroid/widget/AbsSpinner;->mAdapter:Landroid/widget/SpinnerAdapter;
 
-    if-eqz v8, :cond_4
+    if-eqz v8, :cond_3
 
     iget-object v8, p0, Landroid/widget/AbsSpinner;->mAdapter:Landroid/widget/SpinnerAdapter;
 
@@ -478,7 +433,7 @@
 
     move-result v8
 
-    if-ge v4, v8, :cond_4
+    if-ge v4, v8, :cond_3
 
     iget-object v8, p0, Landroid/widget/AbsSpinner;->mRecycler:Landroid/widget/AbsSpinner$RecycleBin;
 
@@ -506,20 +461,17 @@
     invoke-virtual {v5, v12}, Landroid/view/View;->setImportantForAccessibility(I)V
 
     :cond_1
-    if-eqz v5, :cond_2
+    if-eqz v5, :cond_3
 
     iget-object v8, p0, Landroid/widget/AbsSpinner;->mRecycler:Landroid/widget/AbsSpinner$RecycleBin;
 
     invoke-virtual {v8, v4, v5}, Landroid/widget/AbsSpinner$RecycleBin;->put(ILandroid/view/View;)V
 
-    :cond_2
-    if-eqz v5, :cond_4
-
     invoke-virtual {v5}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
     move-result-object v8
 
-    if-nez v8, :cond_3
+    if-nez v8, :cond_2
 
     iput-boolean v12, p0, Landroid/widget/AbsSpinner;->mBlockLayoutRequests:Z
 
@@ -531,7 +483,7 @@
 
     iput-boolean v11, p0, Landroid/widget/AbsSpinner;->mBlockLayoutRequests:Z
 
-    :cond_3
+    :cond_2
     invoke-virtual {p0, v5, p1, p2}, Landroid/widget/AbsSpinner;->measureChild(Landroid/view/View;II)V
 
     invoke-virtual {p0, v5}, Landroid/widget/AbsSpinner;->getChildHeight(Landroid/view/View;)I
@@ -569,8 +521,8 @@
     const/4 v1, 0x0
 
     .end local v5           #view:Landroid/view/View;
-    :cond_4
-    if-eqz v1, :cond_5
+    :cond_3
+    if-eqz v1, :cond_4
 
     iget-object v8, p0, Landroid/widget/AbsSpinner;->mSpinnerPadding:Landroid/graphics/Rect;
 
@@ -582,7 +534,7 @@
 
     add-int v2, v8, v9
 
-    if-nez v6, :cond_5
+    if-nez v6, :cond_4
 
     iget-object v8, p0, Landroid/widget/AbsSpinner;->mSpinnerPadding:Landroid/graphics/Rect;
 
@@ -594,7 +546,7 @@
 
     add-int v3, v8, v9
 
-    :cond_5
+    :cond_4
     invoke-virtual {p0}, Landroid/widget/AbsSpinner;->getSuggestedMinimumHeight()I
 
     move-result v8
@@ -635,22 +587,22 @@
     .end local v3           #preferredWidth:I
     .end local v4           #selectedPosition:I
     .end local v7           #widthSize:I
-    :cond_6
+    :cond_5
     iget v8, p0, Landroid/widget/AbsSpinner;->mSelectionLeftPadding:I
 
     goto/16 :goto_0
 
-    :cond_7
+    :cond_6
     iget v8, p0, Landroid/widget/AbsSpinner;->mSelectionTopPadding:I
 
     goto/16 :goto_1
 
-    :cond_8
+    :cond_7
     iget v8, p0, Landroid/widget/AbsSpinner;->mSelectionRightPadding:I
 
     goto/16 :goto_2
 
-    :cond_9
+    :cond_8
     iget v8, p0, Landroid/widget/AbsSpinner;->mSelectionBottomPadding:I
 
     goto/16 :goto_3

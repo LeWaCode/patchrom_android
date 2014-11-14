@@ -23,6 +23,9 @@
 .field public static final LOAD_DEFAULT:I = -0x1
 
 .field public static final LOAD_NORMAL:I = 0x0
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
+.end field
 
 .field public static final LOAD_NO_CACHE:I = 0x2
 
@@ -37,10 +40,32 @@
     return-void
 .end method
 
+.method public static getDefaultUserAgent(Landroid/content/Context;)Ljava/lang/String;
+    .locals 1
+    .parameter "context"
+
+    .prologue
+    invoke-static {}, Landroid/webkit/WebViewFactory;->getProvider()Landroid/webkit/WebViewFactoryProvider;
+
+    move-result-object v0
+
+    invoke-interface {v0}, Landroid/webkit/WebViewFactoryProvider;->getStatics()Landroid/webkit/WebViewFactoryProvider$Statics;
+
+    move-result-object v0
+
+    invoke-interface {v0, p0}, Landroid/webkit/WebViewFactoryProvider$Statics;->getDefaultUserAgent(Landroid/content/Context;)Ljava/lang/String;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
 
 # virtual methods
 .method public enableSmoothTransition()Z
     .locals 1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -194,6 +219,8 @@
 
 .method public declared-synchronized getDatabasePath()Ljava/lang/String;
     .locals 1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     monitor-enter p0
@@ -446,6 +473,8 @@
 
 .method public getLightTouchEnabled()Z
     .locals 1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -485,6 +514,17 @@
     move-exception v0
 
     monitor-exit p0
+
+    throw v0
+.end method
+
+.method public getMediaPlaybackRequiresUserGesture()Z
+    .locals 1
+
+    .prologue
+    new-instance v0, Landroid/webkit/MustOverrideException;
+
+    invoke-direct {v0}, Landroid/webkit/MustOverrideException;-><init>()V
 
     throw v0
 .end method
@@ -550,6 +590,8 @@
 
 .method public declared-synchronized getPluginState()Landroid/webkit/WebSettings$PluginState;
     .locals 1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     monitor-enter p0
@@ -657,6 +699,8 @@
 
 .method public getSavePassword()Z
     .locals 1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -713,26 +757,106 @@
 .end method
 
 .method public declared-synchronized getTextSize()Landroid/webkit/WebSettings$TextSize;
-    .locals 1
+    .locals 9
 
     .prologue
     monitor-enter p0
 
+    const/4 v1, 0x0
+
+    .local v1, closestSize:Landroid/webkit/WebSettings$TextSize;
+    const v6, 0x7fffffff
+
+    .local v6, smallestDelta:I
     :try_start_0
-    new-instance v0, Landroid/webkit/MustOverrideException;
+    invoke-virtual {p0}, Landroid/webkit/WebSettings;->getTextZoom()I
 
-    invoke-direct {v0}, Landroid/webkit/MustOverrideException;-><init>()V
+    move-result v7
 
-    throw v0
+    .local v7, textSize:I
+    invoke-static {}, Landroid/webkit/WebSettings$TextSize;->values()[Landroid/webkit/WebSettings$TextSize;
+
+    move-result-object v0
+
+    .local v0, arr$:[Landroid/webkit/WebSettings$TextSize;
+    array-length v4, v0
+
+    .local v4, len$:I
+    const/4 v3, 0x0
+
+    .local v3, i$:I
+    :goto_0
+    if-ge v3, v4, :cond_2
+
+    aget-object v5, v0, v3
+
+    .local v5, size:Landroid/webkit/WebSettings$TextSize;
+    iget v8, v5, Landroid/webkit/WebSettings$TextSize;->value:I
+
+    sub-int v8, v7, v8
+
+    invoke-static {v8}, Ljava/lang/Math;->abs(I)I
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
+    move-result v2
+
+    .local v2, delta:I
+    if-nez v2, :cond_0
+
+    .end local v1           #closestSize:Landroid/webkit/WebSettings$TextSize;
+    .end local v2           #delta:I
+    .end local v5           #size:Landroid/webkit/WebSettings$TextSize;
+    :goto_1
+    monitor-exit p0
+
+    return-object v5
+
+    .restart local v1       #closestSize:Landroid/webkit/WebSettings$TextSize;
+    .restart local v2       #delta:I
+    .restart local v5       #size:Landroid/webkit/WebSettings$TextSize;
+    :cond_0
+    if-ge v2, v6, :cond_1
+
+    move v6, v2
+
+    move-object v1, v5
+
+    :cond_1
+    add-int/lit8 v3, v3, 0x1
+
+    goto :goto_0
+
+    .end local v2           #delta:I
+    .end local v5           #size:Landroid/webkit/WebSettings$TextSize;
+    :cond_2
+    if-eqz v1, :cond_3
+
+    .end local v1           #closestSize:Landroid/webkit/WebSettings$TextSize;
+    :goto_2
+    move-object v5, v1
+
+    goto :goto_1
+
+    .restart local v1       #closestSize:Landroid/webkit/WebSettings$TextSize;
+    :cond_3
+    :try_start_1
+    sget-object v1, Landroid/webkit/WebSettings$TextSize;->NORMAL:Landroid/webkit/WebSettings$TextSize;
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    goto :goto_2
+
+    .end local v0           #arr$:[Landroid/webkit/WebSettings$TextSize;
+    .end local v3           #i$:I
+    .end local v4           #len$:I
+    .end local v7           #textSize:I
     :catchall_0
-    move-exception v0
+    move-exception v8
 
     monitor-exit p0
 
-    throw v0
+    throw v8
 .end method
 
 .method public declared-synchronized getTextZoom()I
@@ -914,6 +1038,8 @@
 .method public declared-synchronized setAppCacheMaxSize(J)V
     .locals 1
     .parameter "appCacheMaxSize"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     monitor-enter p0
@@ -1082,6 +1208,8 @@
 .method public declared-synchronized setDatabasePath(Ljava/lang/String;)V
     .locals 1
     .parameter "databasePath"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     monitor-enter p0
@@ -1178,6 +1306,8 @@
 .method public setDefaultZoom(Landroid/webkit/WebSettings$ZoomDensity;)V
     .locals 1
     .parameter "zoom"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -1226,6 +1356,8 @@
 .method public setEnableSmoothTransition(Z)V
     .locals 1
     .parameter "enable"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -1406,6 +1538,8 @@
 .method public setLightTouchEnabled(Z)V
     .locals 1
     .parameter "enabled"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -1447,6 +1581,18 @@
     move-exception v0
 
     monitor-exit p0
+
+    throw v0
+.end method
+
+.method public setMediaPlaybackRequiresUserGesture(Z)V
+    .locals 1
+    .parameter "require"
+
+    .prologue
+    new-instance v0, Landroid/webkit/MustOverrideException;
+
+    invoke-direct {v0}, Landroid/webkit/MustOverrideException;-><init>()V
 
     throw v0
 .end method
@@ -1528,6 +1674,8 @@
 .method public declared-synchronized setPluginState(Landroid/webkit/WebSettings$PluginState;)V
     .locals 1
     .parameter "state"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     monitor-enter p0
@@ -1592,6 +1740,8 @@
 .method public declared-synchronized setRenderPriority(Landroid/webkit/WebSettings$RenderPriority;)V
     .locals 1
     .parameter "priority"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     monitor-enter p0
@@ -1652,6 +1802,8 @@
 .method public setSavePassword(Z)V
     .locals 1
     .parameter "save"
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     new-instance v0, Landroid/webkit/MustOverrideException;
@@ -1753,13 +1905,15 @@
     monitor-enter p0
 
     :try_start_0
-    new-instance v0, Landroid/webkit/MustOverrideException;
+    iget v0, p1, Landroid/webkit/WebSettings$TextSize;->value:I
 
-    invoke-direct {v0}, Landroid/webkit/MustOverrideException;-><init>()V
-
-    throw v0
+    invoke-virtual {p0, v0}, Landroid/webkit/WebSettings;->setTextZoom(I)V
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    monitor-exit p0
+
+    return-void
 
     :catchall_0
     move-exception v0

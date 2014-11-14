@@ -117,36 +117,6 @@
     return-void
 .end method
 
-.method private setOnBindeViewListener(Landroid/view/View;)V
-    .locals 3
-    .parameter "checkableView"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    instance-of v1, p1, Llewa/internal/v5/widget/SlidingButton;
-
-    if-eqz v1, :cond_0
-
-    move-object v0, p1
-
-    check-cast v0, Llewa/internal/v5/widget/SlidingButton;
-
-    .local v0, slidingButton:Llewa/internal/v5/widget/SlidingButton;
-    new-instance v1, Landroid/preference/SwitchPreference$SlidingButtonListener;
-
-    const/4 v2, 0x0
-
-    invoke-direct {v1, p0, v2}, Landroid/preference/SwitchPreference$SlidingButtonListener;-><init>(Landroid/preference/SwitchPreference;Landroid/preference/SwitchPreference$1;)V
-
-    invoke-virtual {v0, v1}, Llewa/internal/v5/widget/SlidingButton;->setOnCheckedChangedListener(Llewa/internal/v5/widget/SlidingButton$OnCheckedChangedListener;)V
-
-    .end local v0           #slidingButton:Llewa/internal/v5/widget/SlidingButton;
-    :cond_0
-    return-void
-.end method
-
 
 # virtual methods
 .method public getSwitchTextOff()Ljava/lang/CharSequence;
@@ -181,9 +151,7 @@
 
     move-result-object v2
 
-    const v3, 0x1020308
-
-    invoke-static {v2, v3}, Landroid/preference/SwitchPreference$Injector;->getCheckableResourceId(Landroid/content/Context;I)I
+    invoke-static {v2}, Landroid/preference/SwitchPreference$Injector;->getCheckableResourceId(Landroid/content/Context;)I
 
     move-result v2
 
@@ -241,6 +209,66 @@
 
     :cond_0
     invoke-virtual {p0, p1}, Landroid/preference/SwitchPreference;->syncSummaryView(Landroid/view/View;)V
+
+    return-void
+.end method
+
+.method public setSwitchTextOff(I)V
+    .locals 1
+    .parameter "resId"
+
+    .prologue
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-virtual {v0, p1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-virtual {p0, v0}, Landroid/preference/SwitchPreference;->setSwitchTextOff(Ljava/lang/CharSequence;)V
+
+    return-void
+.end method
+
+.method public setSwitchTextOff(Ljava/lang/CharSequence;)V
+    .locals 0
+    .parameter "offText"
+
+    .prologue
+    iput-object p1, p0, Landroid/preference/SwitchPreference;->mSwitchOff:Ljava/lang/CharSequence;
+
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->notifyChanged()V
+
+    return-void
+.end method
+
+.method public setSwitchTextOn(I)V
+    .locals 1
+    .parameter "resId"
+
+    .prologue
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getContext()Landroid/content/Context;
+
+    move-result-object v0
+
+    invoke-virtual {v0, p1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-virtual {p0, v0}, Landroid/preference/SwitchPreference;->setSwitchTextOn(Ljava/lang/CharSequence;)V
+
+    return-void
+.end method
+
+.method public setSwitchTextOn(Ljava/lang/CharSequence;)V
+    .locals 0
+    .parameter "onText"
+
+    .prologue
+    iput-object p1, p0, Landroid/preference/SwitchPreference;->mSwitchOn:Ljava/lang/CharSequence;
+
+    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->notifyChanged()V
 
     return-void
 .end method
@@ -390,62 +418,32 @@
     goto :goto_0
 .end method
 
-.method public setSwitchTextOff(I)V
-    .locals 1
-    .parameter "resId"
+.method private setOnBindeViewListener(Landroid/view/View;)V
+    .locals 3
+    .parameter "checkableView"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
-    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getContext()Landroid/content/Context;
+    instance-of v1, p1, Llewa/internal/v5/widget/SlidingButton;
 
-    move-result-object v0
+    if-eqz v1, :cond_0
 
-    invoke-virtual {v0, p1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
+    move-object v0, p1
 
-    move-result-object v0
+    check-cast v0, Llewa/internal/v5/widget/SlidingButton;
 
-    invoke-virtual {p0, v0}, Landroid/preference/SwitchPreference;->setSwitchTextOff(Ljava/lang/CharSequence;)V
+    .local v0, slidingButton:Llewa/internal/v5/widget/SlidingButton;
+    new-instance v1, Landroid/preference/SwitchPreference$SlidingButtonListener;
 
-    return-void
-.end method
+    const/4 v2, 0x0
 
-.method public setSwitchTextOff(Ljava/lang/CharSequence;)V
-    .locals 0
-    .parameter "offText"
+    invoke-direct {v1, p0, v2}, Landroid/preference/SwitchPreference$SlidingButtonListener;-><init>(Landroid/preference/SwitchPreference;Landroid/preference/SwitchPreference$1;)V
 
-    .prologue
-    iput-object p1, p0, Landroid/preference/SwitchPreference;->mSwitchOff:Ljava/lang/CharSequence;
+    invoke-virtual {v0, v1}, Llewa/internal/v5/widget/SlidingButton;->setOnCheckedChangedListener(Llewa/internal/v5/widget/SlidingButton$OnCheckedChangedListener;)V
 
-    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->notifyChanged()V
-
-    return-void
-.end method
-
-.method public setSwitchTextOn(I)V
-    .locals 1
-    .parameter "resId"
-
-    .prologue
-    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->getContext()Landroid/content/Context;
-
-    move-result-object v0
-
-    invoke-virtual {v0, p1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-virtual {p0, v0}, Landroid/preference/SwitchPreference;->setSwitchTextOn(Ljava/lang/CharSequence;)V
-
-    return-void
-.end method
-
-.method public setSwitchTextOn(Ljava/lang/CharSequence;)V
-    .locals 0
-    .parameter "onText"
-
-    .prologue
-    iput-object p1, p0, Landroid/preference/SwitchPreference;->mSwitchOn:Ljava/lang/CharSequence;
-
-    invoke-virtual {p0}, Landroid/preference/SwitchPreference;->notifyChanged()V
-
+    .end local v0           #slidingButton:Llewa/internal/v5/widget/SlidingButton;
+    :cond_0
     return-void
 .end method

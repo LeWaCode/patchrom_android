@@ -174,7 +174,7 @@
     return-object v0
 
     :cond_0
-    sget-object v0, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v0, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
     invoke-static {p0, v1, v0, v1}, Llibcore/net/UriCodec;->decode(Ljava/lang/String;ZLjava/nio/charset/Charset;Z)Ljava/lang/String;
 
@@ -604,6 +604,29 @@
 .method public abstract buildUpon()Landroid/net/Uri$Builder;
 .end method
 
+.method public checkFileUriExposed(Ljava/lang/String;)V
+    .locals 2
+    .parameter "location"
+
+    .prologue
+    const-string v0, "file"
+
+    invoke-virtual {p0}, Landroid/net/Uri;->getScheme()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    invoke-static {p1}, Landroid/os/StrictMode;->onFileUriExposed(Ljava/lang/String;)V
+
+    :cond_0
+    return-void
+.end method
+
 .method public compareTo(Landroid/net/Uri;)I
     .locals 2
     .parameter "other"
@@ -696,7 +719,9 @@
 
     .restart local p2
     :cond_0
-    invoke-virtual {v0}, Ljava/lang/String;->toLowerCase()Ljava/lang/String;
+    sget-object v1, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
+
+    invoke-virtual {v0, v1}, Ljava/lang/String;->toLowerCase(Ljava/util/Locale;)Ljava/lang/String;
 
     move-result-object v0
 
@@ -727,6 +752,113 @@
     const/4 v1, 0x0
 
     goto :goto_1
+.end method
+
+.method public getCanonicalUri()Landroid/net/Uri;
+    .locals 6
+
+    .prologue
+    const-string v3, "file"
+
+    invoke-virtual {p0}, Landroid/net/Uri;->getScheme()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-virtual {v3, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_0
+
+    :try_start_0
+    new-instance v3, Ljava/io/File;
+
+    invoke-virtual {p0}, Landroid/net/Uri;->getPath()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-direct {v3, v4}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+
+    invoke-virtual {v3}, Ljava/io/File;->getCanonicalPath()Ljava/lang/String;
+    :try_end_0
+    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v0
+
+    .local v0, canonicalPath:Ljava/lang/String;
+    invoke-static {}, Landroid/os/Environment;->isExternalStorageEmulated()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    invoke-static {}, Landroid/os/Environment;->getLegacyExternalStorageDirectory()Ljava/io/File;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/io/File;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    .local v2, legacyPath:Ljava/lang/String;
+    invoke-virtual {v0, v2}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    new-instance v3, Ljava/io/File;
+
+    invoke-static {}, Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ljava/io/File;->toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-virtual {v2}, Ljava/lang/String;->length()I
+
+    move-result v5
+
+    add-int/lit8 v5, v5, 0x1
+
+    invoke-virtual {v0, v5}, Ljava/lang/String;->substring(I)Ljava/lang/String;
+
+    move-result-object v5
+
+    invoke-direct {v3, v4, v5}, Ljava/io/File;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-static {v3}, Landroid/net/Uri;->fromFile(Ljava/io/File;)Landroid/net/Uri;
+
+    move-result-object p0
+
+    .end local v0           #canonicalPath:Ljava/lang/String;
+    .end local v2           #legacyPath:Ljava/lang/String;
+    .end local p0
+    :cond_0
+    :goto_0
+    return-object p0
+
+    .restart local p0
+    :catch_0
+    move-exception v1
+
+    .local v1, e:Ljava/io/IOException;
+    goto :goto_0
+
+    .end local v1           #e:Ljava/io/IOException;
+    .restart local v0       #canonicalPath:Ljava/lang/String;
+    :cond_1
+    new-instance v3, Ljava/io/File;
+
+    invoke-direct {v3, v0}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+
+    invoke-static {v3}, Landroid/net/Uri;->fromFile(Ljava/io/File;)Landroid/net/Uri;
+
+    move-result-object p0
+
+    goto :goto_0
 .end method
 
 .method public abstract getEncodedAuthority()Ljava/lang/String;
@@ -911,7 +1043,7 @@
     .local v1, encodedValue:Ljava/lang/String;
     const/4 v8, 0x1
 
-    sget-object v9, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v9, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
     invoke-static {v1, v8, v9, v12}, Llibcore/net/UriCodec;->decode(Ljava/lang/String;ZLjava/nio/charset/Charset;Z)Ljava/lang/String;
 
@@ -1329,7 +1461,7 @@
 
     .restart local p0
     :cond_1
-    sget-object v2, Ljava/util/Locale;->US:Ljava/util/Locale;
+    sget-object v2, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->toLowerCase(Ljava/util/Locale;)Ljava/lang/String;
 

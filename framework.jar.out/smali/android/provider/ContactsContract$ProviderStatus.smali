@@ -21,12 +21,6 @@
 
 .field public static final DATA1:Ljava/lang/String; = "data1"
 
-.field public static final SIM_CONTACT_CONTENT_URI:Landroid/net/Uri; = null
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field public static final STATUS:Ljava/lang/String; = "status"
 
 .field public static final STATUS_CHANGING_LOCALE:I = 0x3
@@ -76,3 +70,10 @@
 
     return-void
 .end method
+
+
+.field public static final SIM_CONTACT_CONTENT_URI:Landroid/net/Uri; = null
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field

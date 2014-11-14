@@ -15,25 +15,55 @@
 
 
 # instance fields
+.field aggregateTime:J
+
 .field count:I
+
+.field final mBroadcastStats:Lcom/android/server/AlarmManagerService$BroadcastStats;
+
+.field final mTarget:Landroid/util/Pair;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Landroid/util/Pair",
+            "<",
+            "Ljava/lang/String;",
+            "Landroid/content/ComponentName;",
+            ">;"
+        }
+    .end annotation
+.end field
+
+.field nesting:I
+
+.field numWakeup:I
+
+.field startTime:J
 
 
 # direct methods
-.method private constructor <init>()V
+.method constructor <init>(Lcom/android/server/AlarmManagerService$BroadcastStats;Landroid/util/Pair;)V
     .locals 0
+    .parameter "broadcastStats"
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Lcom/android/server/AlarmManagerService$BroadcastStats;",
+            "Landroid/util/Pair",
+            "<",
+            "Ljava/lang/String;",
+            "Landroid/content/ComponentName;",
+            ">;)V"
+        }
+    .end annotation
 
     .prologue
+    .local p2, target:Landroid/util/Pair;,"Landroid/util/Pair<Ljava/lang/String;Landroid/content/ComponentName;>;"
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    return-void
-.end method
+    iput-object p1, p0, Lcom/android/server/AlarmManagerService$FilterStats;->mBroadcastStats:Lcom/android/server/AlarmManagerService$BroadcastStats;
 
-.method synthetic constructor <init>(Lcom/android/server/AlarmManagerService$1;)V
-    .locals 0
-    .parameter "x0"
-
-    .prologue
-    invoke-direct {p0}, Lcom/android/server/AlarmManagerService$FilterStats;-><init>()V
+    iput-object p2, p0, Lcom/android/server/AlarmManagerService$FilterStats;->mTarget:Landroid/util/Pair;
 
     return-void
 .end method

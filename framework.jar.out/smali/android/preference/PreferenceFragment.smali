@@ -437,15 +437,35 @@
     .parameter "savedInstanceState"
 
     .prologue
-    const v0, 0x1090089
+    const v0, 0x109007d
 
     const/4 v1, 0x0
+
+    invoke-virtual {p0}, Landroid/preference/PreferenceFragment;->getActivity()Landroid/app/Activity;
+
+    move-result-object v0
+
+    invoke-static {v0}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_lewa_0
+
+    const v0, 0x9090036
 
     invoke-virtual {p1, v0, p2, v1}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;
 
     move-result-object v0
 
+    :goto_lewa_0
     return-object v0
+
+    :cond_lewa_0
+    invoke-virtual {p1, v0, p2, v1}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;
+
+    move-result-object v0
+
+    goto :goto_lewa_0
 .end method
 
 .method public onDestroy()V

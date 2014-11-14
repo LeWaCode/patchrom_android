@@ -5,7 +5,7 @@
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/internal/policy/impl/GlobalActions;->createDialog()Landroid/app/AlertDialog;
+    value = Lcom/android/internal/policy/impl/GlobalActions;->createDialog()Lcom/android/internal/policy/impl/GlobalActions$GlobalActionsDialog;
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -36,9 +36,11 @@
 
 # virtual methods
 .method public onLongPress()Z
-    .locals 1
+    .locals 2
 
     .prologue
+    const/4 v1, 0x1
+
     iget-object v0, p0, Lcom/android/internal/policy/impl/GlobalActions$2;->this$0:Lcom/android/internal/policy/impl/GlobalActions;
 
     #getter for: Lcom/android/internal/policy/impl/GlobalActions;->mWindowManagerFuncs:Landroid/view/WindowManagerPolicy$WindowManagerFuncs;
@@ -46,15 +48,13 @@
 
     move-result-object v0
 
-    invoke-interface {v0}, Landroid/view/WindowManagerPolicy$WindowManagerFuncs;->rebootSafeMode()V
+    invoke-interface {v0, v1}, Landroid/view/WindowManagerPolicy$WindowManagerFuncs;->rebootSafeMode(Z)V
 
-    const/4 v0, 0x1
-
-    return v0
+    return v1
 .end method
 
 .method public onPress()V
-    .locals 1
+    .locals 2
 
     .prologue
     iget-object v0, p0, Lcom/android/internal/policy/impl/GlobalActions$2;->this$0:Lcom/android/internal/policy/impl/GlobalActions;
@@ -64,7 +64,9 @@
 
     move-result-object v0
 
-    invoke-interface {v0}, Landroid/view/WindowManagerPolicy$WindowManagerFuncs;->shutdown()V
+    const/4 v1, 0x1
+
+    invoke-interface {v0, v1}, Landroid/view/WindowManagerPolicy$WindowManagerFuncs;->shutdown(Z)V
 
     return-void
 .end method

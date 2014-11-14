@@ -38,6 +38,8 @@
 
 .field public packageName:Ljava/lang/String;
 
+.field public userHandle:I
+
 
 # direct methods
 .method static constructor <clinit>()V
@@ -63,6 +65,10 @@
     iget-object v0, p1, Landroid/content/pm/PackageStats;->packageName:Ljava/lang/String;
 
     iput-object v0, p0, Landroid/content/pm/PackageStats;->packageName:Ljava/lang/String;
+
+    iget v0, p1, Landroid/content/pm/PackageStats;->userHandle:I
+
+    iput v0, p0, Landroid/content/pm/PackageStats;->userHandle:I
 
     iget-wide v0, p1, Landroid/content/pm/PackageStats;->codeSize:J
 
@@ -111,6 +117,12 @@
     move-result-object v0
 
     iput-object v0, p0, Landroid/content/pm/PackageStats;->packageName:Ljava/lang/String;
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v0
+
+    iput v0, p0, Landroid/content/pm/PackageStats;->userHandle:I
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readLong()J
 
@@ -164,13 +176,34 @@
 .end method
 
 .method public constructor <init>(Ljava/lang/String;)V
-    .locals 0
+    .locals 1
     .parameter "pkgName"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     iput-object p1, p0, Landroid/content/pm/PackageStats;->packageName:Ljava/lang/String;
+
+    invoke-static {}, Landroid/os/UserHandle;->myUserId()I
+
+    move-result v0
+
+    iput v0, p0, Landroid/content/pm/PackageStats;->userHandle:I
+
+    return-void
+.end method
+
+.method public constructor <init>(Ljava/lang/String;I)V
+    .locals 0
+    .parameter "pkgName"
+    .parameter "userHandle"
+
+    .prologue
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    iput-object p1, p0, Landroid/content/pm/PackageStats;->packageName:Ljava/lang/String;
+
+    iput p2, p0, Landroid/content/pm/PackageStats;->userHandle:I
 
     return-void
 .end method
@@ -187,9 +220,11 @@
 .end method
 
 .method public toString()Ljava/lang/String;
-    .locals 3
+    .locals 5
 
     .prologue
+    const-wide/16 v3, 0x0
+
     new-instance v0, Ljava/lang/StringBuilder;
 
     const-string v1, "PackageStats{"
@@ -207,7 +242,7 @@
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    const-string v1, " packageName="
+    const-string v1, " "
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -215,7 +250,13 @@
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    const-string v1, ",codeSize="
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->codeSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_0
+
+    const-string v1, " code="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -223,7 +264,14 @@
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
-    const-string v1, ",dataSize="
+    :cond_0
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->dataSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_1
+
+    const-string v1, " data="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -231,7 +279,14 @@
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
-    const-string v1, ",cacheSize="
+    :cond_1
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->cacheSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_2
+
+    const-string v1, " cache="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -239,7 +294,14 @@
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
-    const-string v1, ",externalCodeSize="
+    :cond_2
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->externalCodeSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_3
+
+    const-string v1, " extCode="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -247,7 +309,14 @@
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
-    const-string v1, ",externalDataSize="
+    :cond_3
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->externalDataSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_4
+
+    const-string v1, " extData="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -255,7 +324,14 @@
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
-    const-string v1, ",externalCacheSize="
+    :cond_4
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->externalCacheSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_5
+
+    const-string v1, " extCache="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -263,7 +339,14 @@
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
-    const-string v1, ",externalMediaSize="
+    :cond_5
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->externalMediaSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_6
+
+    const-string v1, " media="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -271,13 +354,25 @@
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
 
-    const-string v1, ",externalObbSize="
+    :cond_6
+    iget-wide v1, p0, Landroid/content/pm/PackageStats;->externalObbSize:J
+
+    cmp-long v1, v1, v3
+
+    if-eqz v1, :cond_7
+
+    const-string v1, " obb="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     iget-wide v1, p0, Landroid/content/pm/PackageStats;->externalObbSize:J
 
     invoke-virtual {v0, v1, v2}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
+
+    :cond_7
+    const-string v1, "}"
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
@@ -295,6 +390,10 @@
     iget-object v0, p0, Landroid/content/pm/PackageStats;->packageName:Ljava/lang/String;
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
+    iget v0, p0, Landroid/content/pm/PackageStats;->userHandle:I
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
     iget-wide v0, p0, Landroid/content/pm/PackageStats;->codeSize:J
 

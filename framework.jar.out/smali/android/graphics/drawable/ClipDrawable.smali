@@ -194,7 +194,7 @@
     sub-int/2addr v2, v0
 
     :cond_3
-    invoke-virtual {p0}, Landroid/graphics/drawable/ClipDrawable;->getResolvedLayoutDirectionSelf()I
+    invoke-virtual {p0}, Landroid/graphics/drawable/ClipDrawable;->getLayoutDirection()I
 
     move-result v5
 
@@ -222,6 +222,21 @@
     invoke-virtual {p1}, Landroid/graphics/Canvas;->restore()V
 
     goto :goto_0
+.end method
+
+.method public getAlpha()I
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/graphics/drawable/ClipDrawable;->mClipState:Landroid/graphics/drawable/ClipDrawable$ClipState;
+
+    iget-object v0, v0, Landroid/graphics/drawable/ClipDrawable$ClipState;->mDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v0}, Landroid/graphics/drawable/Drawable;->getAlpha()I
+
+    move-result v0
+
+    return v0
 .end method
 
 .method public getChangingConfigurations()I
@@ -575,6 +590,22 @@
     iget-object v0, v0, Landroid/graphics/drawable/ClipDrawable$ClipState;->mDrawable:Landroid/graphics/drawable/Drawable;
 
     invoke-virtual {v0, p1}, Landroid/graphics/drawable/Drawable;->setColorFilter(Landroid/graphics/ColorFilter;)V
+
+    return-void
+.end method
+
+.method public setLayoutDirection(I)V
+    .locals 1
+    .parameter "layoutDirection"
+
+    .prologue
+    iget-object v0, p0, Landroid/graphics/drawable/ClipDrawable;->mClipState:Landroid/graphics/drawable/ClipDrawable$ClipState;
+
+    iget-object v0, v0, Landroid/graphics/drawable/ClipDrawable$ClipState;->mDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v0, p1}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
+
+    invoke-super {p0, p1}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
 
     return-void
 .end method

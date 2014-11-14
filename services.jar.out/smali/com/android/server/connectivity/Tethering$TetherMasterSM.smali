@@ -52,6 +52,15 @@
 .field private mMobileApnReserved:I
 
 .field private mNotifyList:Ljava/util/ArrayList;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/util/ArrayList",
+            "<",
+            "Lcom/android/server/connectivity/Tethering$TetherInterfaceSM;",
+            ">;"
+        }
+    .end annotation
+.end field
 
 .field private mSequenceNumber:I
 

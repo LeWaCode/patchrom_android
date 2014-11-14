@@ -19,39 +19,39 @@
 
 # direct methods
 .method public constructor <init>(Landroid/content/Context;)V
-    .locals 12
+    .locals 14
     .parameter "context"
 
     .prologue
-    const/4 v11, 0x7
+    const/4 v13, 0x7
 
-    const/4 v7, 0x6
+    const/4 v9, 0x6
 
-    const/4 v10, 0x2
+    const/4 v12, 0x2
 
-    const/4 v9, 0x1
+    const/4 v11, 0x1
 
-    const/4 v8, 0x0
+    const/4 v10, 0x0
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    const/4 v4, 0x4
+    const/4 v6, 0x4
 
-    new-array v4, v4, [J
+    new-array v6, v6, [J
 
-    iput-object v4, p0, Landroid/webkit/DateSorter;->mBins:[J
+    iput-object v6, p0, Landroid/webkit/DateSorter;->mBins:[J
 
-    const/4 v4, 0x5
+    const/4 v6, 0x5
 
-    new-array v4, v4, [Ljava/lang/String;
+    new-array v6, v6, [Ljava/lang/String;
 
-    iput-object v4, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+    iput-object v6, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
 
     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
 
-    move-result-object v3
+    move-result-object v5
 
-    .local v3, resources:Landroid/content/res/Resources;
+    .local v5, resources:Landroid/content/res/Resources;
     invoke-static {}, Ljava/util/Calendar;->getInstance()Ljava/util/Calendar;
 
     move-result-object v0
@@ -59,129 +59,132 @@
     .local v0, c:Ljava/util/Calendar;
     invoke-direct {p0, v0}, Landroid/webkit/DateSorter;->beginningOfDay(Ljava/util/Calendar;)V
 
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mBins:[J
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mBins:[J
 
     invoke-virtual {v0}, Ljava/util/Calendar;->getTimeInMillis()J
 
-    move-result-wide v5
+    move-result-wide v7
 
-    aput-wide v5, v4, v8
+    aput-wide v7, v6, v10
 
-    const/4 v4, -0x1
+    const/4 v6, -0x1
 
-    invoke-virtual {v0, v7, v4}, Ljava/util/Calendar;->add(II)V
+    invoke-virtual {v0, v9, v6}, Ljava/util/Calendar;->add(II)V
 
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mBins:[J
-
-    invoke-virtual {v0}, Ljava/util/Calendar;->getTimeInMillis()J
-
-    move-result-wide v5
-
-    aput-wide v5, v4, v9
-
-    const/4 v4, -0x6
-
-    invoke-virtual {v0, v7, v4}, Ljava/util/Calendar;->add(II)V
-
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mBins:[J
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mBins:[J
 
     invoke-virtual {v0}, Ljava/util/Calendar;->getTimeInMillis()J
 
-    move-result-wide v5
+    move-result-wide v7
 
-    aput-wide v5, v4, v10
+    aput-wide v7, v6, v11
 
-    invoke-virtual {v0, v7, v11}, Ljava/util/Calendar;->add(II)V
+    const/4 v6, -0x6
 
-    const/4 v4, -0x1
+    invoke-virtual {v0, v9, v6}, Ljava/util/Calendar;->add(II)V
 
-    invoke-virtual {v0, v10, v4}, Ljava/util/Calendar;->add(II)V
-
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mBins:[J
-
-    const/4 v5, 0x3
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mBins:[J
 
     invoke-virtual {v0}, Ljava/util/Calendar;->getTimeInMillis()J
 
-    move-result-wide v6
+    move-result-wide v7
 
-    aput-wide v6, v4, v5
+    aput-wide v7, v6, v12
 
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+    invoke-virtual {v0, v9, v13}, Ljava/util/Calendar;->add(II)V
 
-    const v5, 0x104007c
+    const/4 v6, -0x1
 
-    invoke-virtual {p1, v5}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
+    invoke-virtual {v0, v12, v6}, Ljava/util/Calendar;->add(II)V
 
-    move-result-object v5
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mBins:[J
 
-    invoke-virtual {v5}, Ljava/lang/Object;->toString()Ljava/lang/String;
+    const/4 v7, 0x3
 
-    move-result-object v5
+    invoke-virtual {v0}, Ljava/util/Calendar;->getTimeInMillis()J
 
-    aput-object v5, v4, v8
+    move-result-wide v8
 
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+    aput-wide v8, v6, v7
 
-    const v5, 0x104007b
+    invoke-virtual {v5}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
 
-    invoke-virtual {p1, v5}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
+    move-result-object v6
 
-    move-result-object v5
+    iget-object v2, v6, Landroid/content/res/Configuration;->locale:Ljava/util/Locale;
 
-    invoke-virtual {v5}, Ljava/lang/Object;->toString()Ljava/lang/String;
+    .local v2, locale:Ljava/util/Locale;
+    if-nez v2, :cond_0
 
-    move-result-object v5
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
 
-    aput-object v5, v4, v9
+    move-result-object v2
 
-    const v2, 0x1130003
+    :cond_0
+    invoke-static {v2}, Llibcore/icu/LocaleData;->get(Ljava/util/Locale;)Llibcore/icu/LocaleData;
 
-    .local v2, resId:I
-    invoke-virtual {v3, v2, v11}, Landroid/content/res/Resources;->getQuantityString(II)Ljava/lang/String;
+    move-result-object v3
+
+    .local v3, localeData:Llibcore/icu/LocaleData;
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+
+    iget-object v7, v3, Llibcore/icu/LocaleData;->today:Ljava/lang/String;
+
+    aput-object v7, v6, v10
+
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+
+    iget-object v7, v3, Llibcore/icu/LocaleData;->yesterday:Ljava/lang/String;
+
+    aput-object v7, v6, v11
+
+    const v4, 0x1130004
+
+    .local v4, resId:I
+    invoke-virtual {v5, v4, v13}, Landroid/content/res/Resources;->getQuantityString(II)Ljava/lang/String;
 
     move-result-object v1
 
     .local v1, format:Ljava/lang/String;
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
 
-    new-array v5, v9, [Ljava/lang/Object;
+    new-array v7, v11, [Ljava/lang/Object;
 
-    invoke-static {v11}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+    invoke-static {v13}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
-    move-result-object v6
+    move-result-object v8
 
-    aput-object v6, v5, v8
+    aput-object v8, v7, v10
 
-    invoke-static {v1, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    invoke-static {v1, v7}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
-    move-result-object v5
+    move-result-object v7
 
-    aput-object v5, v4, v10
+    aput-object v7, v6, v12
 
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
 
-    const/4 v5, 0x3
+    const/4 v7, 0x3
 
-    const v6, 0x10403a5
+    const v8, 0x10403cf
 
-    invoke-virtual {p1, v6}, Landroid/content/Context;->getString(I)Ljava/lang/String;
+    invoke-virtual {p1, v8}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 
-    move-result-object v6
+    move-result-object v8
 
-    aput-object v6, v4, v5
+    aput-object v8, v6, v7
 
-    iget-object v4, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
+    iget-object v6, p0, Landroid/webkit/DateSorter;->mLabels:[Ljava/lang/String;
 
-    const/4 v5, 0x4
+    const/4 v7, 0x4
 
-    const v6, 0x10403a6
+    const v8, 0x10403d0
 
-    invoke-virtual {p1, v6}, Landroid/content/Context;->getString(I)Ljava/lang/String;
+    invoke-virtual {p1, v8}, Landroid/content/Context;->getString(I)Ljava/lang/String;
 
-    move-result-object v6
+    move-result-object v8
 
-    aput-object v6, v4, v5
+    aput-object v8, v6, v7
 
     return-void
 .end method

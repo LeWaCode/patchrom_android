@@ -693,7 +693,7 @@
 
     aput v16, v14, v15
 
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/TableRow;->getResolvedLayoutDirection()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/TableRow;->getLayoutDirection()I
 
     move-result v10
 
@@ -889,7 +889,7 @@
     .parameter "b"
 
     .prologue
-    invoke-virtual {p0}, Landroid/widget/TableRow;->layoutHorizontal()V
+    invoke-virtual {p0, p2, p3, p4, p5}, Landroid/widget/TableRow;->layoutHorizontal(IIII)V
 
     return-void
 .end method

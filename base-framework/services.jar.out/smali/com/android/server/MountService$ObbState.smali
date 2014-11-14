@@ -18,43 +18,76 @@
 
 
 # instance fields
-.field public final callerUid:I
-
-.field filename:Ljava/lang/String;
+.field final canonicalPath:Ljava/lang/String;
 
 .field final nonce:I
+
+.field final ownerGid:I
+
+.field final ownerPath:Ljava/lang/String;
+
+.field final rawPath:Ljava/lang/String;
 
 .field final synthetic this$0:Lcom/android/server/MountService;
 
 .field final token:Landroid/os/storage/IObbActionListener;
 
+.field final voldPath:Ljava/lang/String;
+
 
 # direct methods
-.method public constructor <init>(Lcom/android/server/MountService;Ljava/lang/String;ILandroid/os/storage/IObbActionListener;I)V
-    .locals 0
+.method public constructor <init>(Lcom/android/server/MountService;Ljava/lang/String;Ljava/lang/String;ILandroid/os/storage/IObbActionListener;I)V
+    .locals 2
     .parameter
-    .parameter "filename"
-    .parameter "callerUid"
+    .parameter "rawPath"
+    .parameter "canonicalPath"
+    .parameter "callingUid"
     .parameter "token"
     .parameter "nonce"
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
 
     .prologue
     iput-object p1, p0, Lcom/android/server/MountService$ObbState;->this$0:Lcom/android/server/MountService;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    iput-object p2, p0, Lcom/android/server/MountService$ObbState;->filename:Ljava/lang/String;
+    iput-object p2, p0, Lcom/android/server/MountService$ObbState;->rawPath:Ljava/lang/String;
 
-    iput p3, p0, Lcom/android/server/MountService$ObbState;->callerUid:I
+    invoke-virtual {p3}, Ljava/lang/String;->toString()Ljava/lang/String;
 
-    iput-object p4, p0, Lcom/android/server/MountService$ObbState;->token:Landroid/os/storage/IObbActionListener;
+    move-result-object v1
 
-    iput p5, p0, Lcom/android/server/MountService$ObbState;->nonce:I
+    iput-object v1, p0, Lcom/android/server/MountService$ObbState;->canonicalPath:Ljava/lang/String;
+
+    invoke-static {p4}, Landroid/os/UserHandle;->getUserId(I)I
+
+    move-result v0
+
+    .local v0, userId:I
+    const/4 v1, 0x0
+
+    invoke-static {p3, v0, v1}, Lcom/android/server/MountService;->buildObbPath(Ljava/lang/String;IZ)Ljava/lang/String;
+
+    move-result-object v1
+
+    iput-object v1, p0, Lcom/android/server/MountService$ObbState;->ownerPath:Ljava/lang/String;
+
+    const/4 v1, 0x1
+
+    invoke-static {p3, v0, v1}, Lcom/android/server/MountService;->buildObbPath(Ljava/lang/String;IZ)Ljava/lang/String;
+
+    move-result-object v1
+
+    iput-object v1, p0, Lcom/android/server/MountService$ObbState;->voldPath:Ljava/lang/String;
+
+    invoke-static {p4}, Landroid/os/UserHandle;->getSharedAppGid(I)I
+
+    move-result v1
+
+    iput v1, p0, Lcom/android/server/MountService$ObbState;->ownerGid:I
+
+    iput-object p5, p0, Lcom/android/server/MountService$ObbState;->token:Landroid/os/storage/IObbActionListener;
+
+    iput p6, p0, Lcom/android/server/MountService$ObbState;->nonce:I
 
     return-void
 .end method
@@ -131,7 +164,7 @@
 .end method
 
 .method public toString()Ljava/lang/String;
-    .locals 2
+    .locals 3
 
     .prologue
     new-instance v0, Ljava/lang/StringBuilder;
@@ -141,33 +174,77 @@
     invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
 
     .local v0, sb:Ljava/lang/StringBuilder;
-    const-string v1, "filename="
+    const-string v1, "rawPath="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    iget-object v1, p0, Lcom/android/server/MountService$ObbState;->filename:Ljava/lang/String;
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/android/server/MountService$ObbState;->rawPath:Ljava/lang/String;
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, ",canonicalPath="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/android/server/MountService$ObbState;->canonicalPath:Ljava/lang/String;
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, ",ownerPath="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/android/server/MountService$ObbState;->ownerPath:Ljava/lang/String;
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, ",voldPath="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget-object v2, p0, Lcom/android/server/MountService$ObbState;->voldPath:Ljava/lang/String;
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, ",ownerGid="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget v2, p0, Lcom/android/server/MountService$ObbState;->ownerGid:I
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 
     const-string v1, ",token="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    iget-object v1, p0, Lcom/android/server/MountService$ObbState;->token:Landroid/os/storage/IObbActionListener;
+    move-result-object v1
 
-    invoke-virtual {v1}, Ljava/lang/Object;->toString()Ljava/lang/String;
+    iget-object v2, p0, Lcom/android/server/MountService$ObbState;->token:Landroid/os/storage/IObbActionListener;
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+
+    const-string v1, ",binder="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v1
 
-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {p0}, Lcom/android/server/MountService$ObbState;->getBinder()Landroid/os/IBinder;
 
-    const-string v1, ",callerUid="
+    move-result-object v2
 
-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    iget v1, p0, Lcom/android/server/MountService$ObbState;->callerUid:I
-
-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 
     const/16 v1, 0x7d
 

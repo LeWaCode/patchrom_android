@@ -17,9 +17,9 @@
 # instance fields
 .field activity:Lcom/android/server/am/ActivityRecord;
 
-.field index:I
+.field holder:Lcom/android/server/am/ThumbnailHolder;
 
-.field thumbnail:Landroid/graphics/Bitmap;
+.field index:I
 
 
 # direct methods

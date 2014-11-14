@@ -18,6 +18,8 @@
     .end annotation
 .end field
 
+.field public static final FLAG_COSTS_MONEY:I = 0x1
+
 .field public static final PROTECTION_DANGEROUS:I = 0x1
 
 .field public static final PROTECTION_FLAG_DEVELOPMENT:I = 0x20
@@ -37,6 +39,8 @@
 
 # instance fields
 .field public descriptionRes:I
+
+.field public flags:I
 
 .field public group:Ljava/lang/String;
 
@@ -75,6 +79,14 @@
     .prologue
     invoke-direct {p0, p1}, Landroid/content/pm/PackageItemInfo;-><init>(Landroid/content/pm/PackageItemInfo;)V
 
+    iget v0, p1, Landroid/content/pm/PermissionInfo;->protectionLevel:I
+
+    iput v0, p0, Landroid/content/pm/PermissionInfo;->protectionLevel:I
+
+    iget v0, p1, Landroid/content/pm/PermissionInfo;->flags:I
+
+    iput v0, p0, Landroid/content/pm/PermissionInfo;->flags:I
+
     iget-object v0, p1, Landroid/content/pm/PermissionInfo;->group:Ljava/lang/String;
 
     iput-object v0, p0, Landroid/content/pm/PermissionInfo;->group:Ljava/lang/String;
@@ -82,10 +94,6 @@
     iget v0, p1, Landroid/content/pm/PermissionInfo;->descriptionRes:I
 
     iput v0, p0, Landroid/content/pm/PermissionInfo;->descriptionRes:I
-
-    iget v0, p1, Landroid/content/pm/PermissionInfo;->protectionLevel:I
-
-    iput v0, p0, Landroid/content/pm/PermissionInfo;->protectionLevel:I
 
     iget-object v0, p1, Landroid/content/pm/PermissionInfo;->nonLocalizedDescription:Ljava/lang/CharSequence;
 
@@ -101,6 +109,18 @@
     .prologue
     invoke-direct {p0, p1}, Landroid/content/pm/PackageItemInfo;-><init>(Landroid/os/Parcel;)V
 
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v0
+
+    iput v0, p0, Landroid/content/pm/PermissionInfo;->protectionLevel:I
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v0
+
+    iput v0, p0, Landroid/content/pm/PermissionInfo;->flags:I
+
     invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
 
     move-result-object v0
@@ -112,12 +132,6 @@
     move-result v0
 
     iput v0, p0, Landroid/content/pm/PermissionInfo;->descriptionRes:I
-
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v0
-
-    iput v0, p0, Landroid/content/pm/PermissionInfo;->protectionLevel:I
 
     sget-object v0, Landroid/text/TextUtils;->CHAR_SEQUENCE_CREATOR:Landroid/os/Parcelable$Creator;
 
@@ -360,15 +374,19 @@
     .prologue
     invoke-super {p0, p1, p2}, Landroid/content/pm/PackageItemInfo;->writeToParcel(Landroid/os/Parcel;I)V
 
+    iget v0, p0, Landroid/content/pm/PermissionInfo;->protectionLevel:I
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+
+    iget v0, p0, Landroid/content/pm/PermissionInfo;->flags:I
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
+
     iget-object v0, p0, Landroid/content/pm/PermissionInfo;->group:Ljava/lang/String;
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
 
     iget v0, p0, Landroid/content/pm/PermissionInfo;->descriptionRes:I
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
-
-    iget v0, p0, Landroid/content/pm/PermissionInfo;->protectionLevel:I
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 

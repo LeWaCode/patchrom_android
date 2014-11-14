@@ -233,10 +233,36 @@
     throw v1
 .end method
 
-.method public resized(IILandroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
+.method public moved(II)V
+    .locals 3
+    .parameter "newX"
+    .parameter "newY"
+
+    .prologue
+    iget-object v1, p0, Landroid/service/wallpaper/WallpaperService$Engine$3;->this$1:Landroid/service/wallpaper/WallpaperService$Engine;
+
+    iget-object v1, v1, Landroid/service/wallpaper/WallpaperService$Engine;->mCaller:Lcom/android/internal/os/HandlerCaller;
+
+    const/16 v2, 0x2733
+
+    invoke-virtual {v1, v2, p1, p2}, Lcom/android/internal/os/HandlerCaller;->obtainMessageII(III)Landroid/os/Message;
+
+    move-result-object v0
+
+    .local v0, msg:Landroid/os/Message;
+    iget-object v1, p0, Landroid/service/wallpaper/WallpaperService$Engine$3;->this$1:Landroid/service/wallpaper/WallpaperService$Engine;
+
+    iget-object v1, v1, Landroid/service/wallpaper/WallpaperService$Engine;->mCaller:Lcom/android/internal/os/HandlerCaller;
+
+    invoke-virtual {v1, v0}, Lcom/android/internal/os/HandlerCaller;->sendMessage(Landroid/os/Message;)V
+
+    return-void
+.end method
+
+.method public resized(Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;ZLandroid/content/res/Configuration;)V
     .locals 4
-    .parameter "w"
-    .parameter "h"
+    .parameter "frame"
+    .parameter "overscanInsets"
     .parameter "contentInsets"
     .parameter "visibleInsets"
     .parameter "reportDraw"

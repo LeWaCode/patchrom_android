@@ -5,7 +5,7 @@
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/WallpaperManagerService;->systemReady()V
+    value = Lcom/android/server/WallpaperManagerService;->systemRunning()V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -39,36 +39,11 @@
     .parameter "intent"
 
     .prologue
-    const/4 v3, 0x0
-
     invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
 
     move-result-object v0
 
     .local v0, action:Ljava/lang/String;
-    const-string v1, "android.intent.action.USER_SWITCHED"
-
-    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v1
-
-    if-eqz v1, :cond_1
-
-    iget-object v1, p0, Lcom/android/server/WallpaperManagerService$1;->this$0:Lcom/android/server/WallpaperManagerService;
-
-    const-string v2, "android.intent.extra.user_id"
-
-    invoke-virtual {p2, v2, v3}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
-
-    move-result v2
-
-    invoke-virtual {v1, v2}, Lcom/android/server/WallpaperManagerService;->switchUser(I)V
-
-    :cond_0
-    :goto_0
-    return-void
-
-    :cond_1
     const-string v1, "android.intent.action.USER_REMOVED"
 
     invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
@@ -79,13 +54,16 @@
 
     iget-object v1, p0, Lcom/android/server/WallpaperManagerService$1;->this$0:Lcom/android/server/WallpaperManagerService;
 
-    const-string v2, "android.intent.extra.user_id"
+    const-string v2, "android.intent.extra.user_handle"
+
+    const/16 v3, -0x2710
 
     invoke-virtual {p2, v2, v3}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
 
     move-result v2
 
-    invoke-virtual {v1, v2}, Lcom/android/server/WallpaperManagerService;->removeUser(I)V
+    invoke-virtual {v1, v2}, Lcom/android/server/WallpaperManagerService;->onRemoveUser(I)V
 
-    goto :goto_0
+    :cond_0
+    return-void
 .end method

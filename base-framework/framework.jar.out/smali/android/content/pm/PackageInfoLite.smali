@@ -28,6 +28,8 @@
 
 .field public verifiers:[Landroid/content/pm/VerifierInfo;
 
+.field public versionCode:I
+
 
 # direct methods
 .method static constructor <clinit>()V
@@ -64,6 +66,12 @@
     move-result-object v1
 
     iput-object v1, p0, Landroid/content/pm/PackageInfoLite;->packageName:Ljava/lang/String;
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v1
+
+    iput v1, p0, Landroid/content/pm/PackageInfoLite;->versionCode:I
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
@@ -189,6 +197,10 @@
     iget-object v0, p0, Landroid/content/pm/PackageInfoLite;->packageName:Ljava/lang/String;
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+
+    iget v0, p0, Landroid/content/pm/PackageInfoLite;->versionCode:I
+
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
     iget v0, p0, Landroid/content/pm/PackageInfoLite;->recommendedInstallLocation:I
 

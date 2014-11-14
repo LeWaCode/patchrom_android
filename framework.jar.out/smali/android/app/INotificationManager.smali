@@ -15,7 +15,7 @@
 
 
 # virtual methods
-.method public abstract addBlackList(Ljava/lang/String;[Ljava/lang/String;)V
+.method public abstract areNotificationsEnabledForPackage(Ljava/lang/String;I)Z
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -23,7 +23,7 @@
     .end annotation
 .end method
 
-.method public abstract areNotificationsEnabledForPackage(Ljava/lang/String;)Z
+.method public abstract cancelAllNotifications(Ljava/lang/String;I)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -31,7 +31,7 @@
     .end annotation
 .end method
 
-.method public abstract cancelAllNotifications(Ljava/lang/String;)V
+.method public abstract cancelAllNotificationsFromListener(Landroid/service/notification/INotificationListener;)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -39,7 +39,7 @@
     .end annotation
 .end method
 
-.method public abstract cancelNotification(Ljava/lang/String;I)V
+.method public abstract cancelNotificationFromListener(Landroid/service/notification/INotificationListener;Ljava/lang/String;Ljava/lang/String;I)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -47,7 +47,7 @@
     .end annotation
 .end method
 
-.method public abstract cancelNotificationWithTag(Ljava/lang/String;Ljava/lang/String;I)V
+.method public abstract cancelNotificationWithTag(Ljava/lang/String;Ljava/lang/String;II)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -63,15 +63,7 @@
     .end annotation
 .end method
 
-.method public abstract enqueueNotification(Ljava/lang/String;ILandroid/app/Notification;[I)V
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
-.method public abstract enqueueNotificationWithTag(Ljava/lang/String;Ljava/lang/String;ILandroid/app/Notification;[I)V
+.method public abstract enqueueNotificationWithTag(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILandroid/app/Notification;[II)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -87,7 +79,47 @@
     .end annotation
 .end method
 
-.method public abstract setNotificationsEnabledForPackage(Ljava/lang/String;Z)V
+.method public abstract getActiveNotifications(Ljava/lang/String;)[Landroid/service/notification/StatusBarNotification;
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract getActiveNotificationsFromListener(Landroid/service/notification/INotificationListener;)[Landroid/service/notification/StatusBarNotification;
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract getHistoricalNotifications(Ljava/lang/String;I)[Landroid/service/notification/StatusBarNotification;
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract registerListener(Landroid/service/notification/INotificationListener;Landroid/content/ComponentName;I)V
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract setNotificationsEnabledForPackage(Ljava/lang/String;IZ)V
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract unregisterListener(Landroid/service/notification/INotificationListener;I)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;

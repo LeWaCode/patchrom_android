@@ -4,27 +4,39 @@
 
 
 # static fields
+.field private static sGetInstanceAllowed:Z
+
 .field private static sRef:Landroid/webkit/CookieSyncManager;
 
 
 # direct methods
-.method private constructor <init>(Landroid/content/Context;)V
+.method static constructor <clinit>()V
     .locals 1
-    .parameter "context"
 
     .prologue
-    const-string v0, "CookieSyncManager"
+    const/4 v0, 0x0
 
-    invoke-direct {p0, p1, v0}, Landroid/webkit/WebSyncManager;-><init>(Landroid/content/Context;Ljava/lang/String;)V
+    sput-boolean v0, Landroid/webkit/CookieSyncManager;->sGetInstanceAllowed:Z
 
     return-void
 .end method
 
-.method private static checkInstanceIsCreated()V
+.method private constructor <init>()V
+    .locals 1
+
+    .prologue
+    const-string v0, "CookieSyncManager"
+
+    invoke-direct {p0, v0}, Landroid/webkit/WebSyncManager;-><init>(Ljava/lang/String;)V
+
+    return-void
+.end method
+
+.method private static checkInstanceIsAllowed()V
     .locals 2
 
     .prologue
-    sget-object v0, Landroid/webkit/CookieSyncManager;->sRef:Landroid/webkit/CookieSyncManager;
+    sget-boolean v0, Landroid/webkit/CookieSyncManager;->sGetInstanceAllowed:Z
 
     if-nez v0, :cond_0
 
@@ -41,61 +53,47 @@
 .end method
 
 .method public static declared-synchronized createInstance(Landroid/content/Context;)Landroid/webkit/CookieSyncManager;
-    .locals 4
+    .locals 3
     .parameter "context"
 
     .prologue
-    const-class v2, Landroid/webkit/CookieSyncManager;
+    const-class v1, Landroid/webkit/CookieSyncManager;
 
-    monitor-enter v2
+    monitor-enter v1
 
     if-nez p0, :cond_0
 
     :try_start_0
-    new-instance v1, Ljava/lang/IllegalArgumentException;
+    new-instance v0, Ljava/lang/IllegalArgumentException;
 
-    const-string v3, "Invalid context argument"
+    const-string v2, "Invalid context argument"
 
-    invoke-direct {v1, v3}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+    invoke-direct {v0, v2}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
 
-    throw v1
+    throw v0
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     :catchall_0
-    move-exception v1
+    move-exception v0
 
-    monitor-exit v2
+    monitor-exit v1
 
-    throw v1
+    throw v0
 
     :cond_0
     :try_start_1
-    invoke-static {p0}, Landroid/webkit/JniUtil;->setContext(Landroid/content/Context;)V
+    invoke-static {}, Landroid/webkit/CookieSyncManager;->setGetInstanceIsAllowed()V
 
-    invoke-virtual {p0}, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
-
-    move-result-object v0
-
-    .local v0, appContext:Landroid/content/Context;
-    sget-object v1, Landroid/webkit/CookieSyncManager;->sRef:Landroid/webkit/CookieSyncManager;
-
-    if-nez v1, :cond_1
-
-    new-instance v1, Landroid/webkit/CookieSyncManager;
-
-    invoke-direct {v1, v0}, Landroid/webkit/CookieSyncManager;-><init>(Landroid/content/Context;)V
-
-    sput-object v1, Landroid/webkit/CookieSyncManager;->sRef:Landroid/webkit/CookieSyncManager;
-
-    :cond_1
-    sget-object v1, Landroid/webkit/CookieSyncManager;->sRef:Landroid/webkit/CookieSyncManager;
+    invoke-static {}, Landroid/webkit/CookieSyncManager;->getInstance()Landroid/webkit/CookieSyncManager;
     :try_end_1
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    monitor-exit v2
+    move-result-object v0
 
-    return-object v1
+    monitor-exit v1
+
+    return-object v0
 .end method
 
 .method public static declared-synchronized getInstance()Landroid/webkit/CookieSyncManager;
@@ -107,8 +105,19 @@
     monitor-enter v1
 
     :try_start_0
-    invoke-static {}, Landroid/webkit/CookieSyncManager;->checkInstanceIsCreated()V
+    invoke-static {}, Landroid/webkit/CookieSyncManager;->checkInstanceIsAllowed()V
 
+    sget-object v0, Landroid/webkit/CookieSyncManager;->sRef:Landroid/webkit/CookieSyncManager;
+
+    if-nez v0, :cond_0
+
+    new-instance v0, Landroid/webkit/CookieSyncManager;
+
+    invoke-direct {v0}, Landroid/webkit/CookieSyncManager;-><init>()V
+
+    sput-object v0, Landroid/webkit/CookieSyncManager;->sRef:Landroid/webkit/CookieSyncManager;
+
+    :cond_0
     sget-object v0, Landroid/webkit/CookieSyncManager;->sRef:Landroid/webkit/CookieSyncManager;
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
@@ -123,6 +132,17 @@
     monitor-exit v1
 
     throw v0
+.end method
+
+.method static setGetInstanceIsAllowed()V
+    .locals 1
+
+    .prologue
+    const/4 v0, 0x1
+
+    sput-boolean v0, Landroid/webkit/CookieSyncManager;->sGetInstanceAllowed:Z
+
+    return-void
 .end method
 
 

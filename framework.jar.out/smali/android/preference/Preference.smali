@@ -4,7 +4,6 @@
 
 # interfaces
 .implements Ljava/lang/Comparable;
-.implements Landroid/preference/OnDependencyChangeListener;
 
 
 # annotations
@@ -23,8 +22,7 @@
         "Ljava/lang/Comparable",
         "<",
         "Landroid/preference/Preference;",
-        ">;",
-        "Landroid/preference/OnDependencyChangeListener;"
+        ">;"
     }
 .end annotation
 
@@ -35,6 +33,8 @@
 
 # instance fields
 .field private mBaseMethodCalled:Z
+
+.field private mCanRecycleLayout:Z
 
 .field private mContext:Landroid/content/Context;
 
@@ -61,8 +61,6 @@
 
 .field private mFragment:Ljava/lang/String;
 
-.field private mHasSpecifiedLayout:Z
-
 .field private mIcon:Landroid/graphics/drawable/Drawable;
 
 .field private mIconResId:I
@@ -82,6 +80,8 @@
 .field private mOnClickListener:Landroid/preference/Preference$OnPreferenceClickListener;
 
 .field private mOrder:I
+
+.field private mParentDependencyMet:Z
 
 .field private mPersistent:Z
 
@@ -135,9 +135,9 @@
     .parameter "defStyle"
 
     .prologue
-    const/4 v4, 0x0
+    const/4 v5, 0x0
 
-    const/4 v5, 0x1
+    const/4 v4, 0x1
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -145,27 +145,29 @@
 
     iput v3, p0, Landroid/preference/Preference;->mOrder:I
 
-    iput-boolean v5, p0, Landroid/preference/Preference;->mEnabled:Z
+    iput-boolean v4, p0, Landroid/preference/Preference;->mEnabled:Z
 
-    iput-boolean v5, p0, Landroid/preference/Preference;->mSelectable:Z
+    iput-boolean v4, p0, Landroid/preference/Preference;->mSelectable:Z
 
-    iput-boolean v5, p0, Landroid/preference/Preference;->mPersistent:Z
+    iput-boolean v4, p0, Landroid/preference/Preference;->mPersistent:Z
 
-    iput-boolean v5, p0, Landroid/preference/Preference;->mDependencyMet:Z
+    iput-boolean v4, p0, Landroid/preference/Preference;->mDependencyMet:Z
 
-    iput-boolean v5, p0, Landroid/preference/Preference;->mShouldDisableView:Z
+    iput-boolean v4, p0, Landroid/preference/Preference;->mParentDependencyMet:Z
 
-    const v3, 0x109007e
+    iput-boolean v4, p0, Landroid/preference/Preference;->mShouldDisableView:Z
+
+    const v3, 0x1090072
 
     iput v3, p0, Landroid/preference/Preference;->mLayoutResId:I
 
-    iput-boolean v4, p0, Landroid/preference/Preference;->mHasSpecifiedLayout:Z
+    iput-boolean v4, p0, Landroid/preference/Preference;->mCanRecycleLayout:Z
 
     iput-object p1, p0, Landroid/preference/Preference;->mContext:Landroid/content/Context;
 
     sget-object v3, Lcom/android/internal/R$styleable;->Preference:[I
 
-    invoke-virtual {p1, p2, v3, p3, v4}, Landroid/content/Context;->obtainStyledAttributes(Landroid/util/AttributeSet;[III)Landroid/content/res/TypedArray;
+    invoke-virtual {p1, p2, v3, p3, v5}, Landroid/content/Context;->obtainStyledAttributes(Landroid/util/AttributeSet;[III)Landroid/content/res/TypedArray;
 
     move-result-object v0
 
@@ -191,7 +193,7 @@
     goto :goto_0
 
     :pswitch_0
-    invoke-virtual {v0, v1, v4}, Landroid/content/res/TypedArray;->getResourceId(II)I
+    invoke-virtual {v0, v1, v5}, Landroid/content/res/TypedArray;->getResourceId(II)I
 
     move-result v3
 
@@ -209,7 +211,7 @@
     goto :goto_1
 
     :pswitch_2
-    invoke-virtual {v0, v1, v4}, Landroid/content/res/TypedArray;->getResourceId(II)I
+    invoke-virtual {v0, v1, v5}, Landroid/content/res/TypedArray;->getResourceId(II)I
 
     move-result v3
 
@@ -275,7 +277,7 @@
     goto :goto_1
 
     :pswitch_8
-    invoke-virtual {v0, v1, v5}, Landroid/content/res/TypedArray;->getBoolean(IZ)Z
+    invoke-virtual {v0, v1, v4}, Landroid/content/res/TypedArray;->getBoolean(IZ)Z
 
     move-result v3
 
@@ -284,7 +286,7 @@
     goto :goto_1
 
     :pswitch_9
-    invoke-virtual {v0, v1, v5}, Landroid/content/res/TypedArray;->getBoolean(IZ)Z
+    invoke-virtual {v0, v1, v4}, Landroid/content/res/TypedArray;->getBoolean(IZ)Z
 
     move-result v3
 
@@ -352,7 +354,23 @@
 
     if-nez v3, :cond_1
 
-    iput-boolean v5, p0, Landroid/preference/Preference;->mHasSpecifiedLayout:Z
+    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/Class;->getName()Ljava/lang/String;
+
+    move-result-object v3
+
+    const-string v4, "com.android"
+
+    invoke-virtual {v3, v4}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v3
+
+    if-nez v3, :cond_1
+
+    iput-boolean v5, p0, Landroid/preference/Preference;->mCanRecycleLayout:Z
 
     :cond_1
     return-void
@@ -422,95 +440,6 @@
     const/4 v2, 0x0
 
     invoke-virtual {p0, v1, v2}, Landroid/preference/Preference;->onSetInitialValue(ZLjava/lang/Object;)V
-
-    goto :goto_0
-.end method
-
-.method private getViewExt(Landroid/view/View;)V
-    .locals 11
-    .parameter "convertView"
-
-    .prologue
-    const/4 v10, 0x0
-
-    instance-of v6, p0, Landroid/preference/PreferenceCategory;
-
-    if-eqz v6, :cond_1
-
-    invoke-virtual {p0}, Landroid/preference/Preference;->getContext()Landroid/content/Context;
-
-    move-result-object v6
-
-    const/4 v7, 0x0
-
-    sget-object v8, Lcom/android/internal/R$styleable;->View:[I
-
-    const v9, 0x1010208
-
-    invoke-virtual {v6, v7, v8, v9, v10}, Landroid/content/Context;->obtainStyledAttributes(Landroid/util/AttributeSet;[III)Landroid/content/res/TypedArray;
-
-    move-result-object v1
-
-    .local v1, a:Landroid/content/res/TypedArray;
-    invoke-virtual {v1}, Landroid/content/res/TypedArray;->getIndexCount()I
-
-    move-result v0
-
-    .local v0, N:I
-    const/4 v4, 0x0
-
-    .local v4, leftPadding:I
-    const/4 v3, 0x0
-
-    .local v3, i:I
-    :goto_0
-    if-ge v3, v0, :cond_0
-
-    invoke-virtual {v1, v3}, Landroid/content/res/TypedArray;->getIndex(I)I
-
-    move-result v2
-
-    .local v2, attr:I
-    const/16 v6, 0xe
-
-    if-ne v2, v6, :cond_2
-
-    const/4 v6, -0x1
-
-    invoke-virtual {v1, v2, v6}, Landroid/content/res/TypedArray;->getDimensionPixelSize(II)I
-
-    move-result v4
-
-    .end local v2           #attr:I
-    :cond_0
-    const v6, 0x1020016
-
-    invoke-virtual {p1, v6}, Landroid/view/View;->findViewById(I)Landroid/view/View;
-
-    move-result-object v5
-
-    check-cast v5, Landroid/widget/TextView;
-
-    .local v5, titleView:Landroid/widget/TextView;
-    if-eqz v5, :cond_1
-
-    invoke-virtual {v5, v4, v10, v10, v10}, Landroid/widget/TextView;->setPadding(IIII)V
-
-    .end local v0           #N:I
-    .end local v1           #a:Landroid/content/res/TypedArray;
-    .end local v3           #i:I
-    .end local v4           #leftPadding:I
-    .end local v5           #titleView:Landroid/widget/TextView;
-    :cond_1
-    return-void
-
-    .restart local v0       #N:I
-    .restart local v1       #a:Landroid/content/res/TypedArray;
-    .restart local v2       #attr:I
-    .restart local v3       #i:I
-    .restart local v4       #leftPadding:I
-    :cond_2
-    add-int/lit8 v3, v3, 0x1
 
     goto :goto_0
 .end method
@@ -772,26 +701,26 @@
     goto :goto_0
 .end method
 
+.method canRecycleLayout()Z
+    .locals 1
+
+    .prologue
+    iget-boolean v0, p0, Landroid/preference/Preference;->mCanRecycleLayout:Z
+
+    return v0
+.end method
+
 .method public compareTo(Landroid/preference/Preference;)I
     .locals 2
     .parameter "another"
 
     .prologue
-    const v1, 0x7fffffff
-
     iget v0, p0, Landroid/preference/Preference;->mOrder:I
 
-    if-ne v0, v1, :cond_0
+    iget v1, p1, Landroid/preference/Preference;->mOrder:I
 
-    iget v0, p0, Landroid/preference/Preference;->mOrder:I
+    if-eq v0, v1, :cond_0
 
-    if-ne v0, v1, :cond_1
-
-    iget v0, p1, Landroid/preference/Preference;->mOrder:I
-
-    if-eq v0, v1, :cond_1
-
-    :cond_0
     iget v0, p0, Landroid/preference/Preference;->mOrder:I
 
     iget v1, p1, Landroid/preference/Preference;->mOrder:I
@@ -800,6 +729,17 @@
 
     :goto_0
     return v0
+
+    :cond_0
+    iget-object v0, p0, Landroid/preference/Preference;->mTitle:Ljava/lang/CharSequence;
+
+    iget-object v1, p1, Landroid/preference/Preference;->mTitle:Ljava/lang/CharSequence;
+
+    if-ne v0, v1, :cond_1
+
+    const/4 v0, 0x0
+
+    goto :goto_0
 
     :cond_1
     iget-object v0, p0, Landroid/preference/Preference;->mTitle:Ljava/lang/CharSequence;
@@ -1500,15 +1440,6 @@
     goto :goto_0
 .end method
 
-.method hasSpecifiedLayout()Z
-    .locals 1
-
-    .prologue
-    iget-boolean v0, p0, Landroid/preference/Preference;->mHasSpecifiedLayout:Z
-
-    return v0
-.end method
-
 .method public isEnabled()Z
     .locals 1
 
@@ -1518,6 +1449,10 @@
     if-eqz v0, :cond_0
 
     iget-boolean v0, p0, Landroid/preference/Preference;->mDependencyMet:Z
+
+    if-eqz v0, :cond_0
+
+    iget-boolean v0, p0, Landroid/preference/Preference;->mParentDependencyMet:Z
 
     if-eqz v0, :cond_0
 
@@ -1929,6 +1864,40 @@
     return v0
 .end method
 
+.method public onParentChanged(Landroid/preference/Preference;Z)V
+    .locals 1
+    .parameter "parent"
+    .parameter "disableChild"
+
+    .prologue
+    iget-boolean v0, p0, Landroid/preference/Preference;->mParentDependencyMet:Z
+
+    if-ne v0, p2, :cond_0
+
+    if-nez p2, :cond_1
+
+    const/4 v0, 0x1
+
+    :goto_0
+    iput-boolean v0, p0, Landroid/preference/Preference;->mParentDependencyMet:Z
+
+    invoke-virtual {p0}, Landroid/preference/Preference;->shouldDisableDependents()Z
+
+    move-result v0
+
+    invoke-virtual {p0, v0}, Landroid/preference/Preference;->notifyDependencyChange(Z)V
+
+    invoke-virtual {p0}, Landroid/preference/Preference;->notifyChanged()V
+
+    :cond_0
+    return-void
+
+    :cond_1
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
 .method protected onPrepareForRemoval()V
     .locals 0
 
@@ -1996,7 +1965,7 @@
     return-object v0
 .end method
 
-.method performClick(Landroid/preference/PreferenceScreen;)V
+.method public performClick(Landroid/preference/PreferenceScreen;)V
     .locals 4
     .parameter "preferenceScreen"
 
@@ -2566,9 +2535,9 @@
 
     if-eq p1, v0, :cond_0
 
-    const/4 v0, 0x1
+    const/4 v0, 0x0
 
-    iput-boolean v0, p0, Landroid/preference/Preference;->mHasSpecifiedLayout:Z
+    iput-boolean v0, p0, Landroid/preference/Preference;->mCanRecycleLayout:Z
 
     :cond_0
     iput p1, p0, Landroid/preference/Preference;->mLayoutResId:I
@@ -2771,9 +2740,9 @@
 
     if-eq p1, v0, :cond_0
 
-    const/4 v0, 0x1
+    const/4 v0, 0x0
 
-    iput-boolean v0, p0, Landroid/preference/Preference;->mHasSpecifiedLayout:Z
+    iput-boolean v0, p0, Landroid/preference/Preference;->mCanRecycleLayout:Z
 
     :cond_0
     iput p1, p0, Landroid/preference/Preference;->mWidgetLayoutResId:I
@@ -2869,4 +2838,93 @@
     move-result-object v0
 
     return-object v0
+.end method
+
+.method private getViewExt(Landroid/view/View;)V
+    .locals 11
+    .parameter "convertView"
+
+    .prologue
+    const/4 v10, 0x0
+
+    instance-of v6, p0, Landroid/preference/PreferenceCategory;
+
+    if-eqz v6, :cond_1
+
+    invoke-virtual {p0}, Landroid/preference/Preference;->getContext()Landroid/content/Context;
+
+    move-result-object v6
+
+    const/4 v7, 0x0
+
+    sget-object v8, Lcom/android/internal/R$styleable;->View:[I
+
+    const v9, 0x1010208
+
+    invoke-virtual {v6, v7, v8, v9, v10}, Landroid/content/Context;->obtainStyledAttributes(Landroid/util/AttributeSet;[III)Landroid/content/res/TypedArray;
+
+    move-result-object v1
+
+    .local v1, a:Landroid/content/res/TypedArray;
+    invoke-virtual {v1}, Landroid/content/res/TypedArray;->getIndexCount()I
+
+    move-result v0
+
+    .local v0, N:I
+    const/4 v4, 0x0
+
+    .local v4, leftPadding:I
+    const/4 v3, 0x0
+
+    .local v3, i:I
+    :goto_0
+    if-ge v3, v0, :cond_0
+
+    invoke-virtual {v1, v3}, Landroid/content/res/TypedArray;->getIndex(I)I
+
+    move-result v2
+
+    .local v2, attr:I
+    const/16 v6, 0xe
+
+    if-ne v2, v6, :cond_2
+
+    const/4 v6, -0x1
+
+    invoke-virtual {v1, v2, v6}, Landroid/content/res/TypedArray;->getDimensionPixelSize(II)I
+
+    move-result v4
+
+    .end local v2           #attr:I
+    :cond_0
+    const v6, 0x1020016
+
+    invoke-virtual {p1, v6}, Landroid/view/View;->findViewById(I)Landroid/view/View;
+
+    move-result-object v5
+
+    check-cast v5, Landroid/widget/TextView;
+
+    .local v5, titleView:Landroid/widget/TextView;
+    if-eqz v5, :cond_1
+
+    invoke-virtual {v5, v4, v10, v10, v10}, Landroid/widget/TextView;->setPadding(IIII)V
+
+    .end local v0           #N:I
+    .end local v1           #a:Landroid/content/res/TypedArray;
+    .end local v3           #i:I
+    .end local v4           #leftPadding:I
+    .end local v5           #titleView:Landroid/widget/TextView;
+    :cond_1
+    return-void
+
+    .restart local v0       #N:I
+    .restart local v1       #a:Landroid/content/res/TypedArray;
+    .restart local v2       #attr:I
+    .restart local v3       #i:I
+    .restart local v4       #leftPadding:I
+    :cond_2
+    add-int/lit8 v3, v3, 0x1
+
+    goto :goto_0
 .end method

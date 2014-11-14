@@ -54,7 +54,7 @@
     return-object v0
 .end method
 
-.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
+.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
     .locals 5
     .parameter "intent"
     .parameter "resultCode"
@@ -62,6 +62,7 @@
     .parameter "extras"
     .parameter "ordered"
     .parameter "sticky"
+    .parameter "sendingUser"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -120,6 +121,8 @@
 
     :goto_3
     invoke-virtual {v0, v1}, Landroid/os/Parcel;->writeInt(I)V
+
+    invoke-virtual {v0, p7}, Landroid/os/Parcel;->writeInt(I)V
 
     iget-object v1, p0, Landroid/content/IIntentReceiver$Stub$Proxy;->mRemote:Landroid/os/IBinder;
 

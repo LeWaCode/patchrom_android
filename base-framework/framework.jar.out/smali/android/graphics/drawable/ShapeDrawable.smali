@@ -192,11 +192,28 @@
 
     invoke-virtual {v1, v4}, Landroid/graphics/Paint;->setAlpha(I)V
 
+    invoke-virtual {v1}, Landroid/graphics/Paint;->getAlpha()I
+
+    move-result v4
+
+    if-nez v4, :cond_0
+
+    invoke-virtual {v1}, Landroid/graphics/Paint;->getXfermode()Landroid/graphics/Xfermode;
+
+    move-result-object v4
+
+    if-nez v4, :cond_0
+
+    iget-boolean v4, v1, Landroid/graphics/Paint;->hasShadow:Z
+
+    if-eqz v4, :cond_1
+
+    :cond_0
     iget-object v4, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
 
     iget-object v4, v4, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mShape:Landroid/graphics/drawable/shapes/Shape;
 
-    if-eqz v4, :cond_0
+    if-eqz v4, :cond_2
 
     invoke-virtual {p1}, Landroid/graphics/Canvas;->save()I
 
@@ -222,15 +239,27 @@
     invoke-virtual {p1, v0}, Landroid/graphics/Canvas;->restoreToCount(I)V
 
     .end local v0           #count:I
+    :cond_1
     :goto_0
     invoke-virtual {v1, v2}, Landroid/graphics/Paint;->setAlpha(I)V
 
     return-void
 
-    :cond_0
+    :cond_2
     invoke-virtual {p1, v3, v1}, Landroid/graphics/Canvas;->drawRect(Landroid/graphics/Rect;Landroid/graphics/Paint;)V
 
     goto :goto_0
+.end method
+
+.method public getAlpha()I
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
+
+    iget v0, v0, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mAlpha:I
+
+    return v0
 .end method
 
 .method public getChangingConfigurations()I
@@ -623,9 +652,11 @@
 .end method
 
 .method public mutate()Landroid/graphics/drawable/Drawable;
-    .locals 4
+    .locals 5
 
     .prologue
+    const/4 v4, 0x1
+
     iget-boolean v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mMutated:Z
 
     if-nez v1, :cond_0
@@ -635,6 +666,12 @@
     move-result-object v1
 
     if-ne v1, p0, :cond_0
+
+    iget-object v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
+
+    iget-object v1, v1, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mPaint:Landroid/graphics/Paint;
+
+    if-eqz v1, :cond_1
 
     iget-object v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
 
@@ -648,6 +685,13 @@
 
     iput-object v2, v1, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mPaint:Landroid/graphics/Paint;
 
+    :goto_0
+    iget-object v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
+
+    iget-object v1, v1, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mPadding:Landroid/graphics/Rect;
+
+    if-eqz v1, :cond_2
+
     iget-object v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
 
     new-instance v2, Landroid/graphics/Rect;
@@ -660,6 +704,7 @@
 
     iput-object v2, v1, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mPadding:Landroid/graphics/Rect;
 
+    :goto_1
     :try_start_0
     iget-object v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
 
@@ -675,23 +720,43 @@
     :try_end_0
     .catch Ljava/lang/CloneNotSupportedException; {:try_start_0 .. :try_end_0} :catch_0
 
-    const/4 v1, 0x1
-
-    iput-boolean v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mMutated:Z
+    iput-boolean v4, p0, Landroid/graphics/drawable/ShapeDrawable;->mMutated:Z
 
     .end local p0
     :cond_0
-    :goto_0
+    :goto_2
     return-object p0
 
     .restart local p0
+    :cond_1
+    iget-object v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
+
+    new-instance v2, Landroid/graphics/Paint;
+
+    invoke-direct {v2, v4}, Landroid/graphics/Paint;-><init>(I)V
+
+    iput-object v2, v1, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mPaint:Landroid/graphics/Paint;
+
+    goto :goto_0
+
+    :cond_2
+    iget-object v1, p0, Landroid/graphics/drawable/ShapeDrawable;->mShapeState:Landroid/graphics/drawable/ShapeDrawable$ShapeState;
+
+    new-instance v2, Landroid/graphics/Rect;
+
+    invoke-direct {v2}, Landroid/graphics/Rect;-><init>()V
+
+    iput-object v2, v1, Landroid/graphics/drawable/ShapeDrawable$ShapeState;->mPadding:Landroid/graphics/Rect;
+
+    goto :goto_1
+
     :catch_0
     move-exception v0
 
     .local v0, e:Ljava/lang/CloneNotSupportedException;
     const/4 p0, 0x0
 
-    goto :goto_0
+    goto :goto_2
 .end method
 
 .method protected onBoundsChange(Landroid/graphics/Rect;)V

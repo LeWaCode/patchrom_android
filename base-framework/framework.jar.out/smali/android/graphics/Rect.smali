@@ -90,6 +90,22 @@
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
+    if-nez p1, :cond_0
+
+    const/4 v0, 0x0
+
+    iput v0, p0, Landroid/graphics/Rect;->bottom:I
+
+    iput v0, p0, Landroid/graphics/Rect;->right:I
+
+    iput v0, p0, Landroid/graphics/Rect;->top:I
+
+    iput v0, p0, Landroid/graphics/Rect;->left:I
+
+    :goto_0
+    return-void
+
+    :cond_0
     iget v0, p1, Landroid/graphics/Rect;->left:I
 
     iput v0, p0, Landroid/graphics/Rect;->left:I
@@ -106,7 +122,7 @@
 
     iput v0, p0, Landroid/graphics/Rect;->bottom:I
 
-    return-void
+    goto :goto_0
 .end method
 
 .method public static intersects(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z

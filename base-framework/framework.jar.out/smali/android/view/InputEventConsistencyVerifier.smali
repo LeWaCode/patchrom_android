@@ -1149,6 +1149,10 @@
 
     const/4 v12, 0x3
 
+    if-eq v0, v12, :cond_1
+
+    const/4 v12, 0x4
+
     if-ne v0, v12, :cond_a
 
     :cond_1
@@ -1751,8 +1755,6 @@
     .catchall {:try_start_2 .. :try_end_2} :catchall_0
 
     goto/16 :goto_3
-
-    nop
 
     :pswitch_data_0
     .packed-switch 0x0

@@ -17,6 +17,8 @@
 # instance fields
 .field final mGroupable:Z
 
+.field mIsSystem:Z
+
 .field mName:Ljava/lang/CharSequence;
 
 .field mNameResId:I
@@ -201,6 +203,15 @@
 
     .prologue
     iget-boolean v0, p0, Landroid/media/MediaRouter$RouteCategory;->mGroupable:Z
+
+    return v0
+.end method
+
+.method public isSystem()Z
+    .locals 1
+
+    .prologue
+    iget-boolean v0, p0, Landroid/media/MediaRouter$RouteCategory;->mIsSystem:Z
 
     return v0
 .end method

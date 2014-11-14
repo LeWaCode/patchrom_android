@@ -14,10 +14,16 @@
 .end annotation
 
 
+# static fields
+.field private static final DEFAULT_GRAVITY:I = 0x800013
+
+
 # instance fields
 .field mActivity:Landroid/app/Activity;
 
 .field mContainer:Landroid/widget/LinearLayout;
+
+.field private mGravity:I
 
 .field mInflater:Landroid/view/LayoutInflater;
 
@@ -61,23 +67,42 @@
 .end method
 
 .method public constructor <init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V
-    .locals 1
+    .locals 3
     .parameter "context"
     .parameter "attrs"
     .parameter "defStyle"
 
     .prologue
+    const/4 v2, 0x0
+
     invoke-direct {p0, p1, p2, p3}, Landroid/view/ViewGroup;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V
 
-    const/4 v0, -0x1
+    const/4 v1, -0x1
 
-    iput v0, p0, Landroid/app/FragmentBreadCrumbs;->mMaxVisible:I
+    iput v1, p0, Landroid/app/FragmentBreadCrumbs;->mMaxVisible:I
 
-    new-instance v0, Landroid/app/FragmentBreadCrumbs$1;
+    new-instance v1, Landroid/app/FragmentBreadCrumbs$1;
 
-    invoke-direct {v0, p0}, Landroid/app/FragmentBreadCrumbs$1;-><init>(Landroid/app/FragmentBreadCrumbs;)V
+    invoke-direct {v1, p0}, Landroid/app/FragmentBreadCrumbs$1;-><init>(Landroid/app/FragmentBreadCrumbs;)V
 
-    iput-object v0, p0, Landroid/app/FragmentBreadCrumbs;->mOnClickListener:Landroid/view/View$OnClickListener;
+    iput-object v1, p0, Landroid/app/FragmentBreadCrumbs;->mOnClickListener:Landroid/view/View$OnClickListener;
+
+    sget-object v1, Lcom/android/internal/R$styleable;->FragmentBreadCrumbs:[I
+
+    invoke-virtual {p1, p2, v1, p3, v2}, Landroid/content/Context;->obtainStyledAttributes(Landroid/util/AttributeSet;[III)Landroid/content/res/TypedArray;
+
+    move-result-object v0
+
+    .local v0, a:Landroid/content/res/TypedArray;
+    const v1, 0x800013
+
+    invoke-virtual {v0, v2, v1}, Landroid/content/res/TypedArray;->getInt(II)I
+
+    move-result v1
+
+    iput v1, p0, Landroid/app/FragmentBreadCrumbs;->mGravity:I
+
+    invoke-virtual {v0}, Landroid/content/res/TypedArray;->recycle()V
 
     return-void
 .end method
@@ -210,7 +235,7 @@
 .end method
 
 .method protected onLayout(ZIIII)V
-    .locals 7
+    .locals 11
     .parameter "changed"
     .parameter "l"
     .parameter "t"
@@ -223,58 +248,159 @@
     move-result v2
 
     .local v2, childCount:I
-    const/4 v4, 0x0
+    if-nez v2, :cond_0
 
-    .local v4, i:I
     :goto_0
-    if-ge v4, v2, :cond_0
+    return-void
 
-    invoke-virtual {p0, v4}, Landroid/app/FragmentBreadCrumbs;->getChildAt(I)Landroid/view/View;
+    :cond_0
+    const/4 v8, 0x0
+
+    invoke-virtual {p0, v8}, Landroid/app/FragmentBreadCrumbs;->getChildAt(I)Landroid/view/View;
 
     move-result-object v0
 
     .local v0, child:Landroid/view/View;
-    iget v5, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingLeft:I
-
-    invoke-virtual {v0}, Landroid/view/View;->getMeasuredWidth()I
-
-    move-result v6
-
-    add-int/2addr v5, v6
-
-    iget v6, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingRight:I
-
-    sub-int v3, v5, v6
-
-    .local v3, childRight:I
     iget v5, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingTop:I
+
+    .local v5, childTop:I
+    iget v8, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingTop:I
 
     invoke-virtual {v0}, Landroid/view/View;->getMeasuredHeight()I
 
-    move-result v6
+    move-result v9
 
-    add-int/2addr v5, v6
+    add-int/2addr v8, v9
 
-    iget v6, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingBottom:I
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingBottom:I
 
-    sub-int v1, v5, v6
+    sub-int v1, v8, v9
 
     .local v1, childBottom:I
-    iget v5, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingLeft:I
+    invoke-virtual {p0}, Landroid/app/FragmentBreadCrumbs;->getLayoutDirection()I
 
-    iget v6, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingTop:I
+    move-result v7
 
-    invoke-virtual {v0, v5, v6, v3, v1}, Landroid/view/View;->layout(IIII)V
+    .local v7, layoutDirection:I
+    iget v8, p0, Landroid/app/FragmentBreadCrumbs;->mGravity:I
 
-    add-int/lit8 v4, v4, 0x1
+    const v9, 0x800007
+
+    and-int v6, v8, v9
+
+    .local v6, horizontalGravity:I
+    invoke-static {v6, v7}, Landroid/view/Gravity;->getAbsoluteGravity(II)I
+
+    move-result v8
+
+    sparse-switch v8, :sswitch_data_0
+
+    iget v3, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingLeft:I
+
+    .local v3, childLeft:I
+    invoke-virtual {v0}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v8
+
+    add-int v4, v3, v8
+
+    .local v4, childRight:I
+    :goto_1
+    iget v8, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingLeft:I
+
+    if-ge v3, v8, :cond_1
+
+    iget v3, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingLeft:I
+
+    :cond_1
+    iget v8, p0, Landroid/app/FragmentBreadCrumbs;->mRight:I
+
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mLeft:I
+
+    sub-int/2addr v8, v9
+
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingRight:I
+
+    sub-int/2addr v8, v9
+
+    if-le v4, v8, :cond_2
+
+    iget v8, p0, Landroid/app/FragmentBreadCrumbs;->mRight:I
+
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mLeft:I
+
+    sub-int/2addr v8, v9
+
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingRight:I
+
+    sub-int v4, v8, v9
+
+    :cond_2
+    invoke-virtual {v0, v3, v5, v4, v1}, Landroid/view/View;->layout(IIII)V
 
     goto :goto_0
 
-    .end local v0           #child:Landroid/view/View;
-    .end local v1           #childBottom:I
-    .end local v3           #childRight:I
-    :cond_0
-    return-void
+    .end local v3           #childLeft:I
+    .end local v4           #childRight:I
+    :sswitch_0
+    iget v8, p0, Landroid/app/FragmentBreadCrumbs;->mRight:I
+
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mLeft:I
+
+    sub-int/2addr v8, v9
+
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingRight:I
+
+    sub-int v4, v8, v9
+
+    .restart local v4       #childRight:I
+    invoke-virtual {v0}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v8
+
+    sub-int v3, v4, v8
+
+    .restart local v3       #childLeft:I
+    goto :goto_1
+
+    .end local v3           #childLeft:I
+    .end local v4           #childRight:I
+    :sswitch_1
+    iget v8, p0, Landroid/app/FragmentBreadCrumbs;->mPaddingLeft:I
+
+    iget v9, p0, Landroid/app/FragmentBreadCrumbs;->mRight:I
+
+    iget v10, p0, Landroid/app/FragmentBreadCrumbs;->mLeft:I
+
+    sub-int/2addr v9, v10
+
+    invoke-virtual {v0}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v10
+
+    sub-int/2addr v9, v10
+
+    div-int/lit8 v9, v9, 0x2
+
+    add-int v3, v8, v9
+
+    .restart local v3       #childLeft:I
+    invoke-virtual {v0}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v8
+
+    add-int v4, v3, v8
+
+    .restart local v4       #childRight:I
+    goto :goto_1
+
+    nop
+
+    :sswitch_data_0
+    .sparse-switch
+        0x1 -> :sswitch_1
+        0x5 -> :sswitch_0
+    .end sparse-switch
 .end method
 
 .method protected onMeasure(II)V
@@ -415,7 +541,7 @@
 
     iget-object v0, p0, Landroid/app/FragmentBreadCrumbs;->mInflater:Landroid/view/LayoutInflater;
 
-    const v1, 0x1090040
+    const v1, 0x1090044
 
     const/4 v2, 0x0
 
@@ -650,7 +776,7 @@
 
     move-object/from16 v18, v0
 
-    const v19, 0x109003f
+    const v19, 0x1090043
 
     const/16 v20, 0x0
 
@@ -690,7 +816,7 @@
 
     if-nez v7, :cond_3
 
-    const v18, 0x1020232
+    const v18, 0x1020251
 
     move/from16 v0, v18
 
@@ -833,7 +959,7 @@
 
     invoke-virtual {v5, v0}, Landroid/view/View;->setVisibility(I)V
 
-    const v18, 0x1020232
+    const v18, 0x1020251
 
     move/from16 v0, v18
 

@@ -25,13 +25,11 @@
     .parameter "withDepthBuffer"
 
     .prologue
-    const/4 v2, 0x5
+    const/16 v2, 0x8
 
     const/4 v5, 0x0
 
     iput-object p1, p0, Landroid/opengl/GLSurfaceView$SimpleEGLConfigChooser;->this$0:Landroid/opengl/GLSurfaceView;
-
-    const/4 v3, 0x6
 
     if-eqz p2, :cond_0
 
@@ -41,6 +39,8 @@
     move-object v0, p0
 
     move-object v1, p1
+
+    move v3, v2
 
     move v4, v2
 

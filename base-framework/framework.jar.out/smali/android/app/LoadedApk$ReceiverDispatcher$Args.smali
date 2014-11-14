@@ -26,8 +26,8 @@
 
 
 # direct methods
-.method public constructor <init>(Landroid/app/LoadedApk$ReceiverDispatcher;Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
-    .locals 8
+.method public constructor <init>(Landroid/app/LoadedApk$ReceiverDispatcher;Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
+    .locals 9
     .parameter
     .parameter "intent"
     .parameter "resultCode"
@@ -35,6 +35,7 @@
     .parameter "resultExtras"
     .parameter "ordered"
     .parameter "sticky"
+    .parameter "sendingUser"
 
     .prologue
     iput-object p1, p0, Landroid/app/LoadedApk$ReceiverDispatcher$Args;->this$0:Landroid/app/LoadedApk$ReceiverDispatcher;
@@ -62,9 +63,11 @@
 
     move v5, p6
 
-    move v6, p7
+    move/from16 v6, p7
 
-    invoke-direct/range {v0 .. v7}, Landroid/content/BroadcastReceiver$PendingResult;-><init>(ILjava/lang/String;Landroid/os/Bundle;IZZLandroid/os/IBinder;)V
+    move/from16 v8, p8
+
+    invoke-direct/range {v0 .. v8}, Landroid/content/BroadcastReceiver$PendingResult;-><init>(ILjava/lang/String;Landroid/os/Bundle;IZZLandroid/os/IBinder;I)V
 
     iput-object p2, p0, Landroid/app/LoadedApk$ReceiverDispatcher$Args;->mCurIntent:Landroid/content/Intent;
 

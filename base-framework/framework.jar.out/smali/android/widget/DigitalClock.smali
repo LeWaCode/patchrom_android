@@ -10,11 +10,8 @@
     }
 .end annotation
 
-
-# static fields
-.field private static final m12:Ljava/lang/String; = "h:mm:ss aa"
-
-.field private static final m24:Ljava/lang/String; = "k:mm:ss"
+.annotation runtime Ljava/lang/Deprecated;
+.end annotation
 
 
 # instance fields
@@ -43,7 +40,7 @@
 
     iput-boolean v0, p0, Landroid/widget/DigitalClock;->mTickerStopped:Z
 
-    invoke-direct {p0, p1}, Landroid/widget/DigitalClock;->initClock(Landroid/content/Context;)V
+    invoke-direct {p0}, Landroid/widget/DigitalClock;->initClock()V
 
     return-void
 .end method
@@ -60,7 +57,7 @@
 
     iput-boolean v0, p0, Landroid/widget/DigitalClock;->mTickerStopped:Z
 
-    invoke-direct {p0, p1}, Landroid/widget/DigitalClock;->initClock(Landroid/content/Context;)V
+    invoke-direct {p0}, Landroid/widget/DigitalClock;->initClock()V
 
     return-void
 .end method
@@ -105,65 +102,42 @@
     return-void
 .end method
 
-.method private get24HourMode()Z
-    .locals 1
+.method private initClock()V
+    .locals 4
 
     .prologue
-    invoke-virtual {p0}, Landroid/widget/DigitalClock;->getContext()Landroid/content/Context;
+    iget-object v0, p0, Landroid/widget/DigitalClock;->mCalendar:Ljava/util/Calendar;
 
-    move-result-object v0
-
-    invoke-static {v0}, Landroid/text/format/DateFormat;->is24HourFormat(Landroid/content/Context;)Z
-
-    move-result v0
-
-    return v0
-.end method
-
-.method private initClock(Landroid/content/Context;)V
-    .locals 5
-    .parameter "context"
-
-    .prologue
-    iget-object v1, p0, Landroid/widget/DigitalClock;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
-
-    move-result-object v0
-
-    .local v0, r:Landroid/content/res/Resources;
-    iget-object v1, p0, Landroid/widget/DigitalClock;->mCalendar:Ljava/util/Calendar;
-
-    if-nez v1, :cond_0
+    if-nez v0, :cond_0
 
     invoke-static {}, Ljava/util/Calendar;->getInstance()Ljava/util/Calendar;
 
-    move-result-object v1
+    move-result-object v0
 
-    iput-object v1, p0, Landroid/widget/DigitalClock;->mCalendar:Ljava/util/Calendar;
+    iput-object v0, p0, Landroid/widget/DigitalClock;->mCalendar:Ljava/util/Calendar;
 
     :cond_0
-    new-instance v1, Landroid/widget/DigitalClock$FormatChangeObserver;
+    new-instance v0, Landroid/widget/DigitalClock$FormatChangeObserver;
 
-    invoke-direct {v1, p0}, Landroid/widget/DigitalClock$FormatChangeObserver;-><init>(Landroid/widget/DigitalClock;)V
+    invoke-direct {v0, p0}, Landroid/widget/DigitalClock$FormatChangeObserver;-><init>(Landroid/widget/DigitalClock;)V
 
-    iput-object v1, p0, Landroid/widget/DigitalClock;->mFormatChangeObserver:Landroid/widget/DigitalClock$FormatChangeObserver;
+    iput-object v0, p0, Landroid/widget/DigitalClock;->mFormatChangeObserver:Landroid/widget/DigitalClock$FormatChangeObserver;
 
     invoke-virtual {p0}, Landroid/widget/DigitalClock;->getContext()Landroid/content/Context;
 
-    move-result-object v1
+    move-result-object v0
 
-    invoke-virtual {v1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
-    move-result-object v1
+    move-result-object v0
 
-    sget-object v2, Landroid/provider/Settings$System;->CONTENT_URI:Landroid/net/Uri;
+    sget-object v1, Landroid/provider/Settings$System;->CONTENT_URI:Landroid/net/Uri;
 
-    const/4 v3, 0x1
+    const/4 v2, 0x1
 
-    iget-object v4, p0, Landroid/widget/DigitalClock;->mFormatChangeObserver:Landroid/widget/DigitalClock$FormatChangeObserver;
+    iget-object v3, p0, Landroid/widget/DigitalClock;->mFormatChangeObserver:Landroid/widget/DigitalClock$FormatChangeObserver;
 
-    invoke-virtual {v1, v2, v3, v4}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;)V
+    invoke-virtual {v0, v1, v2, v3}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;)V
 
     invoke-direct {p0}, Landroid/widget/DigitalClock;->setFormat()V
 
@@ -174,25 +148,17 @@
     .locals 1
 
     .prologue
-    invoke-direct {p0}, Landroid/widget/DigitalClock;->get24HourMode()Z
+    invoke-virtual {p0}, Landroid/widget/DigitalClock;->getContext()Landroid/content/Context;
 
-    move-result v0
+    move-result-object v0
 
-    if-eqz v0, :cond_0
+    invoke-static {v0}, Landroid/text/format/DateFormat;->getTimeFormatString(Landroid/content/Context;)Ljava/lang/String;
 
-    const-string v0, "k:mm:ss"
+    move-result-object v0
 
     iput-object v0, p0, Landroid/widget/DigitalClock;->mFormat:Ljava/lang/String;
 
-    :goto_0
     return-void
-
-    :cond_0
-    const-string v0, "h:mm:ss aa"
-
-    iput-object v0, p0, Landroid/widget/DigitalClock;->mFormat:Ljava/lang/String;
-
-    goto :goto_0
 .end method
 
 

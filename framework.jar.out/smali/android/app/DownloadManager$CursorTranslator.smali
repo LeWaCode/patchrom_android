@@ -252,6 +252,9 @@
 .method private getPausedReason(I)J
     .locals 2
     .parameter "status"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_ACCESS:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
 
     .prologue
     packed-switch p1, :pswitch_data_0

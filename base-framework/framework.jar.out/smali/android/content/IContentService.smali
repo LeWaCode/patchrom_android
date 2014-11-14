@@ -134,7 +134,7 @@
     .end annotation
 .end method
 
-.method public abstract notifyChange(Landroid/net/Uri;Landroid/database/IContentObserver;ZZ)V
+.method public abstract notifyChange(Landroid/net/Uri;Landroid/database/IContentObserver;ZZI)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -142,7 +142,7 @@
     .end annotation
 .end method
 
-.method public abstract registerContentObserver(Landroid/net/Uri;ZLandroid/database/IContentObserver;)V
+.method public abstract registerContentObserver(Landroid/net/Uri;ZLandroid/database/IContentObserver;I)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -191,6 +191,14 @@
 .end method
 
 .method public abstract setSyncAutomatically(Landroid/accounts/Account;Ljava/lang/String;Z)V
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract sync(Landroid/content/SyncRequest;)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;

@@ -12,35 +12,35 @@
 
 
 # static fields
-.field static final BRIGHTNESS_MODE_SENSOR:I = 0x1
+.field public static final BRIGHTNESS_MODE_SENSOR:I = 0x1
 
-.field static final BRIGHTNESS_MODE_USER:I = 0x0
+.field public static final BRIGHTNESS_MODE_USER:I = 0x0
 
 .field private static final DEBUG:Z = false
 
-.field static final LIGHT_FLASH_HARDWARE:I = 0x2
+.field public static final LIGHT_FLASH_HARDWARE:I = 0x2
 
-.field static final LIGHT_FLASH_NONE:I = 0x0
+.field public static final LIGHT_FLASH_NONE:I = 0x0
 
-.field static final LIGHT_FLASH_TIMED:I = 0x1
+.field public static final LIGHT_FLASH_TIMED:I = 0x1
 
-.field static final LIGHT_ID_ATTENTION:I = 0x5
+.field public static final LIGHT_ID_ATTENTION:I = 0x5
 
-.field static final LIGHT_ID_BACKLIGHT:I = 0x0
+.field public static final LIGHT_ID_BACKLIGHT:I = 0x0
 
-.field static final LIGHT_ID_BATTERY:I = 0x3
+.field public static final LIGHT_ID_BATTERY:I = 0x3
 
-.field static final LIGHT_ID_BLUETOOTH:I = 0x6
+.field public static final LIGHT_ID_BLUETOOTH:I = 0x6
 
-.field static final LIGHT_ID_BUTTONS:I = 0x2
+.field public static final LIGHT_ID_BUTTONS:I = 0x2
 
-.field static final LIGHT_ID_COUNT:I = 0x8
+.field public static final LIGHT_ID_COUNT:I = 0x8
 
-.field static final LIGHT_ID_KEYBOARD:I = 0x1
+.field public static final LIGHT_ID_KEYBOARD:I = 0x1
 
-.field static final LIGHT_ID_NOTIFICATIONS:I = 0x4
+.field public static final LIGHT_ID_NOTIFICATIONS:I = 0x4
 
-.field static final LIGHT_ID_WIFI:I = 0x7
+.field public static final LIGHT_ID_WIFI:I = 0x7
 
 .field private static final TAG:Ljava/lang/String; = "LightsService"
 
@@ -206,20 +206,4 @@
     aget-object v0, v0, p1
 
     return-object v0
-.end method
-
-.method setLight(ILcom/android/server/LightsService$Light;)V
-    .locals 1
-    .parameter "id"
-    .parameter "light"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-object v0, p0, Lcom/android/server/LightsService;->mLights:[Lcom/android/server/LightsService$Light;
-
-    aput-object p2, v0, p1
-
-    return-void
 .end method

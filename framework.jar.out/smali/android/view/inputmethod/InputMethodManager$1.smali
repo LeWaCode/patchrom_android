@@ -47,18 +47,18 @@
     invoke-direct {v1, v5}, Ljava/util/concurrent/CountDownLatch;-><init>(I)V
 
     .local v1, latch:Ljava/util/concurrent/CountDownLatch;
-    new-instance v2, Lcom/android/internal/os/HandlerCaller$SomeArgs;
+    invoke-static {}, Lcom/android/internal/os/SomeArgs;->obtain()Lcom/android/internal/os/SomeArgs;
 
-    invoke-direct {v2}, Lcom/android/internal/os/HandlerCaller$SomeArgs;-><init>()V
+    move-result-object v2
 
-    .local v2, sargs:Lcom/android/internal/os/HandlerCaller$SomeArgs;
-    iput-object p1, v2, Lcom/android/internal/os/HandlerCaller$SomeArgs;->arg1:Ljava/lang/Object;
+    .local v2, sargs:Lcom/android/internal/os/SomeArgs;
+    iput-object p1, v2, Lcom/android/internal/os/SomeArgs;->arg1:Ljava/lang/Object;
 
-    iput-object p2, v2, Lcom/android/internal/os/HandlerCaller$SomeArgs;->arg2:Ljava/lang/Object;
+    iput-object p2, v2, Lcom/android/internal/os/SomeArgs;->arg2:Ljava/lang/Object;
 
-    iput-object p3, v2, Lcom/android/internal/os/HandlerCaller$SomeArgs;->arg3:Ljava/lang/Object;
+    iput-object p3, v2, Lcom/android/internal/os/SomeArgs;->arg3:Ljava/lang/Object;
 
-    iput-object v1, v2, Lcom/android/internal/os/HandlerCaller$SomeArgs;->arg4:Ljava/lang/Object;
+    iput-object v1, v2, Lcom/android/internal/os/SomeArgs;->arg4:Ljava/lang/Object;
 
     iget-object v3, p0, Landroid/view/inputmethod/InputMethodManager$1;->this$0:Landroid/view/inputmethod/InputMethodManager;
 

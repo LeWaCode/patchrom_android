@@ -281,8 +281,21 @@
 
     goto :goto_1
 
+    :pswitch_9
+    const-class v3, Landroid/nfc/tech/NfcBarcode;
+
+    invoke-virtual {v3}, Ljava/lang/Class;->getName()Ljava/lang/String;
+
+    move-result-object v3
+
+    aput-object v3, v2, v0
+
+    goto :goto_1
+
     :cond_0
     return-object v2
+
+    nop
 
     :pswitch_data_0
     .packed-switch 0x1
@@ -295,6 +308,7 @@
         :pswitch_4
         :pswitch_1
         :pswitch_2
+        :pswitch_9
     .end packed-switch
 .end method
 

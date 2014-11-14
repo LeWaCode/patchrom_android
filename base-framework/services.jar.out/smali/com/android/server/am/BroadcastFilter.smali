@@ -1,9 +1,13 @@
-.class Lcom/android/server/am/BroadcastFilter;
+.class final Lcom/android/server/am/BroadcastFilter;
 .super Landroid/content/IntentFilter;
 .source "BroadcastFilter.java"
 
 
 # instance fields
+.field final owningUid:I
+
+.field final owningUserId:I
+
 .field final packageName:Ljava/lang/String;
 
 .field final receiverList:Lcom/android/server/am/ReceiverList;
@@ -12,12 +16,14 @@
 
 
 # direct methods
-.method constructor <init>(Landroid/content/IntentFilter;Lcom/android/server/am/ReceiverList;Ljava/lang/String;Ljava/lang/String;)V
+.method constructor <init>(Landroid/content/IntentFilter;Lcom/android/server/am/ReceiverList;Ljava/lang/String;Ljava/lang/String;II)V
     .locals 0
     .parameter "_filter"
     .parameter "_receiverList"
     .parameter "_packageName"
     .parameter "_requiredPermission"
+    .parameter "_owningUid"
+    .parameter "_userId"
 
     .prologue
     invoke-direct {p0, p1}, Landroid/content/IntentFilter;-><init>(Landroid/content/IntentFilter;)V
@@ -27,6 +33,10 @@
     iput-object p3, p0, Lcom/android/server/am/BroadcastFilter;->packageName:Ljava/lang/String;
 
     iput-object p4, p0, Lcom/android/server/am/BroadcastFilter;->requiredPermission:Ljava/lang/String;
+
+    iput p5, p0, Lcom/android/server/am/BroadcastFilter;->owningUid:I
+
+    iput p6, p0, Lcom/android/server/am/BroadcastFilter;->owningUserId:I
 
     return-void
 .end method
@@ -123,6 +133,14 @@
     move-result-object v1
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, " u"
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    iget v1, p0, Lcom/android/server/am/BroadcastFilter;->owningUserId:I
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 
     const/16 v1, 0x20
 

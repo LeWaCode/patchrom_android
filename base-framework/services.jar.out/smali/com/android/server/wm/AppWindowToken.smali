@@ -4,16 +4,7 @@
 
 
 # instance fields
-.field final allAppWindows:Ljava/util/ArrayList;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "Ljava/util/ArrayList",
-            "<",
-            "Lcom/android/server/wm/WindowState;",
-            ">;"
-        }
-    .end annotation
-.end field
+.field final allAppWindows:Lcom/android/server/wm/WindowList;
 
 .field allDrawn:Z
 
@@ -22,6 +13,8 @@
 .field final appToken:Landroid/view/IApplicationToken;
 
 .field clientHidden:Z
+
+.field deferClearAllDrawn:Z
 
 .field firstWindowDrawn:Z
 
@@ -34,6 +27,8 @@
 .field inputDispatchingTimeoutNanos:J
 
 .field lastTransactionSequence:J
+
+.field layoutConfigChanges:Z
 
 .field final mAnimator:Lcom/android/server/wm/WindowAnimator;
 
@@ -52,6 +47,8 @@
 .field reportedVisible:Z
 
 .field requestedOrientation:I
+
+.field showWhenLocked:Z
 
 .field startingData:Lcom/android/server/wm/StartingData;
 
@@ -85,11 +82,11 @@
 
     invoke-direct {p0, p1, v0, v1, v2}, Lcom/android/server/wm/WindowToken;-><init>(Lcom/android/server/wm/WindowManagerService;Landroid/os/IBinder;IZ)V
 
-    new-instance v0, Ljava/util/ArrayList;
+    new-instance v0, Lcom/android/server/wm/WindowList;
 
-    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+    invoke-direct {v0}, Lcom/android/server/wm/WindowList;-><init>()V
 
-    iput-object v0, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Ljava/util/ArrayList;
+    iput-object v0, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
 
     iput v3, p0, Lcom/android/server/wm/AppWindowToken;->groupId:I
 
@@ -117,7 +114,7 @@
 
     new-instance v0, Lcom/android/server/wm/AppWindowAnimator;
 
-    invoke-direct {v0, p1, p0}, Lcom/android/server/wm/AppWindowAnimator;-><init>(Lcom/android/server/wm/WindowManagerService;Lcom/android/server/wm/AppWindowToken;)V
+    invoke-direct {v0, p0}, Lcom/android/server/wm/AppWindowAnimator;-><init>(Lcom/android/server/wm/AppWindowToken;)V
 
     iput-object v0, p0, Lcom/android/server/wm/AppWindowToken;->mAppAnimator:Lcom/android/server/wm/AppWindowAnimator;
 
@@ -145,9 +142,9 @@
     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
 
     :cond_0
-    iget-object v0, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Ljava/util/ArrayList;
+    iget-object v0, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
 
-    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v0}, Lcom/android/server/wm/WindowList;->size()I
 
     move-result v0
 
@@ -159,7 +156,7 @@
 
     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
-    iget-object v0, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Ljava/util/ArrayList;
+    iget-object v0, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
 
     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->println(Ljava/lang/Object;)V
 
@@ -429,9 +426,9 @@
     .locals 4
 
     .prologue
-    iget-object v2, p0, Lcom/android/server/wm/AppWindowToken;->windows:Ljava/util/ArrayList;
+    iget-object v2, p0, Lcom/android/server/wm/AppWindowToken;->windows:Lcom/android/server/wm/WindowList;
 
-    invoke-virtual {v2}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v2}, Lcom/android/server/wm/WindowList;->size()I
 
     move-result v0
 
@@ -441,9 +438,9 @@
 
     add-int/lit8 v0, v0, -0x1
 
-    iget-object v2, p0, Lcom/android/server/wm/AppWindowToken;->windows:Ljava/util/ArrayList;
+    iget-object v2, p0, Lcom/android/server/wm/AppWindowToken;->windows:Lcom/android/server/wm/WindowList;
 
-    invoke-virtual {v2, v0}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    invoke-virtual {v2, v0}, Lcom/android/server/wm/WindowList;->get(I)Ljava/lang/Object;
 
     move-result-object v1
 
@@ -477,13 +474,13 @@
     goto :goto_0
 .end method
 
-.method sendAppVisibilityToClients()V
-    .locals 5
+.method isVisible()Z
+    .locals 4
 
     .prologue
-    iget-object v3, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Ljava/util/ArrayList;
+    iget-object v3, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
 
-    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v3}, Lcom/android/server/wm/WindowList;->size()I
 
     move-result v0
 
@@ -494,9 +491,91 @@
     :goto_0
     if-ge v1, v0, :cond_2
 
-    iget-object v3, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Ljava/util/ArrayList;
+    iget-object v3, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
 
-    invoke-virtual {v3, v1}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    invoke-virtual {v3, v1}, Lcom/android/server/wm/WindowList;->get(I)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Lcom/android/server/wm/WindowState;
+
+    .local v2, win:Lcom/android/server/wm/WindowState;
+    iget-boolean v3, v2, Lcom/android/server/wm/WindowState;->mAppFreezing:Z
+
+    if-nez v3, :cond_1
+
+    iget v3, v2, Lcom/android/server/wm/WindowState;->mViewVisibility:I
+
+    if-eqz v3, :cond_0
+
+    iget-object v3, v2, Lcom/android/server/wm/WindowState;->mWinAnimator:Lcom/android/server/wm/WindowStateAnimator;
+
+    invoke-virtual {v3}, Lcom/android/server/wm/WindowStateAnimator;->isAnimating()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    iget-object v3, p0, Lcom/android/server/wm/AppWindowToken;->service:Lcom/android/server/wm/WindowManagerService;
+
+    iget-object v3, v3, Lcom/android/server/wm/WindowManagerService;->mAppTransition:Lcom/android/server/wm/AppTransition;
+
+    invoke-virtual {v3}, Lcom/android/server/wm/AppTransition;->isTransitionSet()Z
+
+    move-result v3
+
+    if-nez v3, :cond_1
+
+    :cond_0
+    iget-boolean v3, v2, Lcom/android/server/wm/WindowState;->mDestroying:Z
+
+    if-nez v3, :cond_1
+
+    invoke-virtual {v2}, Lcom/android/server/wm/WindowState;->isDrawnLw()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    const/4 v3, 0x1
+
+    .end local v2           #win:Lcom/android/server/wm/WindowState;
+    :goto_1
+    return v3
+
+    .restart local v2       #win:Lcom/android/server/wm/WindowState;
+    :cond_1
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_0
+
+    .end local v2           #win:Lcom/android/server/wm/WindowState;
+    :cond_2
+    const/4 v3, 0x0
+
+    goto :goto_1
+.end method
+
+.method sendAppVisibilityToClients()V
+    .locals 5
+
+    .prologue
+    iget-object v3, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
+
+    invoke-virtual {v3}, Lcom/android/server/wm/WindowList;->size()I
+
+    move-result v0
+
+    .local v0, N:I
+    const/4 v1, 0x0
+
+    .local v1, i:I
+    :goto_0
+    if-ge v1, v0, :cond_2
+
+    iget-object v3, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
+
+    invoke-virtual {v3, v1}, Lcom/android/server/wm/WindowList;->get(I)Ljava/lang/Object;
 
     move-result-object v2
 
@@ -629,9 +708,9 @@
     const/4 v4, 0x1
 
     .local v4, nowGone:Z
-    iget-object v12, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Ljava/util/ArrayList;
+    iget-object v12, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
 
-    invoke-virtual {v12}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v12}, Lcom/android/server/wm/WindowList;->size()I
 
     move-result v0
 
@@ -642,9 +721,9 @@
     :goto_1
     if-ge v1, v0, :cond_6
 
-    iget-object v12, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Ljava/util/ArrayList;
+    iget-object v12, p0, Lcom/android/server/wm/AppWindowToken;->allAppWindows:Lcom/android/server/wm/WindowList;
 
-    invoke-virtual {v12, v1}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    invoke-virtual {v12, v1}, Lcom/android/server/wm/WindowList;->get(I)Ljava/lang/Object;
 
     move-result-object v9
 

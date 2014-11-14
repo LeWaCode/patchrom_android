@@ -100,11 +100,12 @@
 
 
 # virtual methods
-.method public get(Ljava/lang/String;I[I)Lcom/android/server/AttributeCache$Entry;
-    .locals 9
+.method public get(Ljava/lang/String;I[II)Lcom/android/server/AttributeCache$Entry;
+    .locals 10
     .parameter "packageName"
     .parameter "resId"
     .parameter "styleable"
+    .parameter "userId"
 
     .prologue
     const/4 v6, 0x0
@@ -169,7 +170,11 @@
 
     const/4 v8, 0x0
 
-    invoke-virtual {v7, p1, v8}, Landroid/content/Context;->createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+    new-instance v9, Landroid/os/UserHandle;
+
+    invoke-direct {v9, p4}, Landroid/os/UserHandle;-><init>(I)V
+
+    invoke-virtual {v7, p1, v8, v9}, Landroid/content/Context;->createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
     :try_end_1
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
     .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_1 .. :try_end_1} :catch_0

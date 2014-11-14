@@ -1,5 +1,5 @@
 .class Lcom/android/server/wm/WindowManagerService$1;
-.super Landroid/os/TokenWatcher;
+.super Landroid/content/BroadcastReceiver;
 .source "WindowManagerService.java"
 
 
@@ -19,105 +19,50 @@
 
 
 # direct methods
-.method constructor <init>(Lcom/android/server/wm/WindowManagerService;Landroid/os/Handler;Ljava/lang/String;)V
+.method constructor <init>(Lcom/android/server/wm/WindowManagerService;)V
     .locals 0
     .parameter
-    .parameter "x0"
-    .parameter "x1"
 
     .prologue
     iput-object p1, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
 
-    invoke-direct {p0, p2, p3}, Landroid/os/TokenWatcher;-><init>(Landroid/os/Handler;Ljava/lang/String;)V
+    invoke-direct {p0}, Landroid/content/BroadcastReceiver;-><init>()V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public acquired()V
-    .locals 2
+.method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
+    .locals 3
+    .parameter "context"
+    .parameter "intent"
 
     .prologue
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
 
-    #calls: Lcom/android/server/wm/WindowManagerService;->shouldAllowDisableKeyguard()Z
-    invoke-static {v0}, Lcom/android/server/wm/WindowManagerService;->access$000(Lcom/android/server/wm/WindowManagerService;)Z
+    move-result-object v0
 
-    move-result v0
+    .local v0, action:Ljava/lang/String;
+    const-string v1, "android.app.action.DEVICE_POLICY_MANAGER_STATE_CHANGED"
 
-    if-eqz v0, :cond_0
+    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
+    move-result v1
 
-    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mPolicy:Landroid/view/WindowManagerPolicy;
+    if-eqz v1, :cond_0
 
-    const/4 v1, 0x0
+    iget-object v1, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
 
-    invoke-interface {v0, v1}, Landroid/view/WindowManagerPolicy;->enableKeyguard(Z)V
+    #getter for: Lcom/android/server/wm/WindowManagerService;->mKeyguardDisableHandler:Lcom/android/server/wm/KeyguardDisableHandler;
+    invoke-static {v1}, Lcom/android/server/wm/WindowManagerService;->access$000(Lcom/android/server/wm/WindowManagerService;)Lcom/android/server/wm/KeyguardDisableHandler;
 
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
+    move-result-object v1
 
-    const/4 v1, 0x1
+    const/4 v2, 0x3
 
-    #setter for: Lcom/android/server/wm/WindowManagerService;->mKeyguardDisabled:Z
-    invoke-static {v0, v1}, Lcom/android/server/wm/WindowManagerService;->access$102(Lcom/android/server/wm/WindowManagerService;Z)Z
-
-    :goto_0
-    return-void
+    invoke-virtual {v1, v2}, Lcom/android/server/wm/KeyguardDisableHandler;->sendEmptyMessage(I)Z
 
     :cond_0
-    const-string v0, "WindowManager"
-
-    const-string v1, "Not disabling keyguard since device policy is enforced"
-
-    invoke-static {v0, v1}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
-
-    goto :goto_0
-.end method
-
-.method public released()V
-    .locals 3
-
-    .prologue
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
-
-    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mPolicy:Landroid/view/WindowManagerPolicy;
-
-    const/4 v1, 0x1
-
-    invoke-interface {v0, v1}, Landroid/view/WindowManagerPolicy;->enableKeyguard(Z)V
-
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
-
-    iget-object v1, v0, Lcom/android/server/wm/WindowManagerService;->mKeyguardTokenWatcher:Landroid/os/TokenWatcher;
-
-    monitor-enter v1
-
-    :try_start_0
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
-
-    const/4 v2, 0x0
-
-    #setter for: Lcom/android/server/wm/WindowManagerService;->mKeyguardDisabled:Z
-    invoke-static {v0, v2}, Lcom/android/server/wm/WindowManagerService;->access$102(Lcom/android/server/wm/WindowManagerService;Z)Z
-
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$1;->this$0:Lcom/android/server/wm/WindowManagerService;
-
-    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mKeyguardTokenWatcher:Landroid/os/TokenWatcher;
-
-    invoke-virtual {v0}, Ljava/lang/Object;->notifyAll()V
-
-    monitor-exit v1
-
     return-void
-
-    :catchall_0
-    move-exception v0
-
-    monitor-exit v1
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
-
-    throw v0
 .end method

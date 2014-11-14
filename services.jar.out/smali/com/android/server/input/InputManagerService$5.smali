@@ -8,7 +8,7 @@
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/input/InputManagerService;->getKeyboardLayout(Ljava/lang/String;)Landroid/hardware/input/KeyboardLayout;
+    value = Lcom/android/server/input/InputManagerService;->getKeyboardLayouts()[Landroid/hardware/input/KeyboardLayout;
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -20,11 +20,11 @@
 # instance fields
 .field final synthetic this$0:Lcom/android/server/input/InputManagerService;
 
-.field final synthetic val$result:[Landroid/hardware/input/KeyboardLayout;
+.field final synthetic val$list:Ljava/util/ArrayList;
 
 
 # direct methods
-.method constructor <init>(Lcom/android/server/input/InputManagerService;[Landroid/hardware/input/KeyboardLayout;)V
+.method constructor <init>(Lcom/android/server/input/InputManagerService;Ljava/util/ArrayList;)V
     .locals 0
     .parameter
     .parameter
@@ -32,7 +32,7 @@
     .prologue
     iput-object p1, p0, Lcom/android/server/input/InputManagerService$5;->this$0:Lcom/android/server/input/InputManagerService;
 
-    iput-object p2, p0, Lcom/android/server/input/InputManagerService$5;->val$result:[Landroid/hardware/input/KeyboardLayout;
+    iput-object p2, p0, Lcom/android/server/input/InputManagerService$5;->val$list:Ljava/util/ArrayList;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -42,7 +42,7 @@
 
 # virtual methods
 .method public visitKeyboardLayout(Landroid/content/res/Resources;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V
-    .locals 3
+    .locals 2
     .parameter "resources"
     .parameter "descriptor"
     .parameter "label"
@@ -50,15 +50,13 @@
     .parameter "keyboardLayoutResId"
 
     .prologue
-    iget-object v0, p0, Lcom/android/server/input/InputManagerService$5;->val$result:[Landroid/hardware/input/KeyboardLayout;
+    iget-object v0, p0, Lcom/android/server/input/InputManagerService$5;->val$list:Ljava/util/ArrayList;
 
-    const/4 v1, 0x0
+    new-instance v1, Landroid/hardware/input/KeyboardLayout;
 
-    new-instance v2, Landroid/hardware/input/KeyboardLayout;
+    invoke-direct {v1, p2, p3, p4}, Landroid/hardware/input/KeyboardLayout;-><init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 
-    invoke-direct {v2, p2, p3, p4}, Landroid/hardware/input/KeyboardLayout;-><init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-
-    aput-object v2, v0, v1
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     return-void
 .end method

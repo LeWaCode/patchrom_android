@@ -91,7 +91,7 @@
     iget-object v2, p0, Lcom/android/server/BackupManagerService$RunBackupReceiver;->this$0:Lcom/android/server/BackupManagerService;
 
     #getter for: Lcom/android/server/BackupManagerService;->mAlarmManager:Landroid/app/AlarmManager;
-    invoke-static {v2}, Lcom/android/server/BackupManagerService;->access$400(Lcom/android/server/BackupManagerService;)Landroid/app/AlarmManager;
+    invoke-static {v2}, Lcom/android/server/BackupManagerService;->access$200(Lcom/android/server/BackupManagerService;)Landroid/app/AlarmManager;
 
     move-result-object v2
 

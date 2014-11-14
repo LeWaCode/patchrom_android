@@ -20,14 +20,14 @@
 # instance fields
 .field private final mTemp:Lcom/android/server/net/NetworkStatsCollection;
 
-.field private final mUid:I
+.field private final mUids:[I
 
 
 # direct methods
-.method public constructor <init>(JI)V
+.method public constructor <init>(J[I)V
     .locals 1
     .parameter "bucketDuration"
-    .parameter "uid"
+    .parameter "uids"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -38,7 +38,7 @@
 
     iput-object v0, p0, Lcom/android/server/net/NetworkStatsRecorder$RemoveUidRewriter;->mTemp:Lcom/android/server/net/NetworkStatsCollection;
 
-    iput p3, p0, Lcom/android/server/net/NetworkStatsRecorder$RemoveUidRewriter;->mUid:I
+    iput-object p3, p0, Lcom/android/server/net/NetworkStatsRecorder$RemoveUidRewriter;->mUids:[I
 
     return-void
 .end method
@@ -65,9 +65,9 @@
 
     iget-object v0, p0, Lcom/android/server/net/NetworkStatsRecorder$RemoveUidRewriter;->mTemp:Lcom/android/server/net/NetworkStatsCollection;
 
-    iget v1, p0, Lcom/android/server/net/NetworkStatsRecorder$RemoveUidRewriter;->mUid:I
+    iget-object v1, p0, Lcom/android/server/net/NetworkStatsRecorder$RemoveUidRewriter;->mUids:[I
 
-    invoke-virtual {v0, v1}, Lcom/android/server/net/NetworkStatsCollection;->removeUid(I)V
+    invoke-virtual {v0, v1}, Lcom/android/server/net/NetworkStatsCollection;->removeUids([I)V
 
     return-void
 .end method

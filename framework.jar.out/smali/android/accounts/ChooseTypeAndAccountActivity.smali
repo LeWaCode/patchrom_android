@@ -35,6 +35,8 @@
 
 .field public static final EXTRA_SELECTED_ACCOUNT:Ljava/lang/String; = "selectedAccount"
 
+.field private static final KEY_INSTANCE_STATE_ACCOUNT_LIST:Ljava/lang/String; = "accountList"
+
 .field private static final KEY_INSTANCE_STATE_EXISTING_ACCOUNTS:Ljava/lang/String; = "existingAccounts"
 
 .field private static final KEY_INSTANCE_STATE_PENDING_REQUEST:Ljava/lang/String; = "pendingRequest"
@@ -66,29 +68,73 @@
     .end annotation
 .end field
 
+.field private mAlwaysPromptForAccount:Z
+
+.field private mCallingPackage:Ljava/lang/String;
+
+.field private mCallingUid:I
+
+.field private mDescriptionOverride:Ljava/lang/String;
+
+.field private mDisallowAddAccounts:Z
+
+.field private mDontShowPicker:Z
+
 .field private mExistingAccounts:[Landroid/os/Parcelable;
 
 .field private mOkButton:Landroid/widget/Button;
 
 .field private mPendingRequest:I
 
+.field private mSelectedAccountName:Ljava/lang/String;
+
+.field private mSelectedAddNewAccount:Z
+
 .field private mSelectedItemIndex:I
+
+.field private mSetOfAllowableAccounts:Ljava/util/Set;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/util/Set",
+            "<",
+            "Landroid/accounts/Account;",
+            ">;"
+        }
+    .end annotation
+.end field
+
+.field private mSetOfRelevantAccountTypes:Ljava/util/Set;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/util/Set",
+            "<",
+            "Ljava/lang/String;",
+            ">;"
+        }
+    .end annotation
+.end field
 
 
 # direct methods
 .method public constructor <init>()V
-    .locals 1
+    .locals 2
 
     .prologue
-    invoke-direct {p0}, Landroid/app/Activity;-><init>()V
+    const/4 v1, 0x0
 
     const/4 v0, 0x0
+
+    invoke-direct {p0}, Landroid/app/Activity;-><init>()V
+
+    iput-object v1, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAccountName:Ljava/lang/String;
+
+    iput-boolean v0, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAddNewAccount:Z
+
+    iput-boolean v0, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAlwaysPromptForAccount:Z
 
     iput v0, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mPendingRequest:I
 
-    const/4 v0, 0x0
-
-    iput-object v0, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mExistingAccounts:[Landroid/os/Parcelable;
+    iput-object v1, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mExistingAccounts:[Landroid/os/Parcelable;
 
     return-void
 .end method
@@ -112,6 +158,403 @@
     iget-object v0, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mOkButton:Landroid/widget/Button;
 
     return-object v0
+.end method
+
+.method private getAcceptableAccountChoices(Landroid/accounts/AccountManager;)Ljava/util/ArrayList;
+    .locals 8
+    .parameter "accountManager"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/accounts/AccountManager;",
+            ")",
+            "Ljava/util/ArrayList",
+            "<",
+            "Landroid/accounts/Account;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingPackage:Ljava/lang/String;
+
+    iget v7, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingUid:I
+
+    invoke-virtual {p1, v6, v7}, Landroid/accounts/AccountManager;->getAccountsForPackage(Ljava/lang/String;I)[Landroid/accounts/Account;
+
+    move-result-object v1
+
+    .local v1, accounts:[Landroid/accounts/Account;
+    new-instance v2, Ljava/util/ArrayList;
+
+    array-length v6, v1
+
+    invoke-direct {v2, v6}, Ljava/util/ArrayList;-><init>(I)V
+
+    .local v2, accountsToPopulate:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/accounts/Account;>;"
+    move-object v3, v1
+
+    .local v3, arr$:[Landroid/accounts/Account;
+    array-length v5, v3
+
+    .local v5, len$:I
+    const/4 v4, 0x0
+
+    .local v4, i$:I
+    :goto_0
+    if-ge v4, v5, :cond_3
+
+    aget-object v0, v3, v4
+
+    .local v0, account:Landroid/accounts/Account;
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfAllowableAccounts:Ljava/util/Set;
+
+    if-eqz v6, :cond_1
+
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfAllowableAccounts:Ljava/util/Set;
+
+    invoke-interface {v6, v0}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
+
+    move-result v6
+
+    if-nez v6, :cond_1
+
+    :cond_0
+    :goto_1
+    add-int/lit8 v4, v4, 0x1
+
+    goto :goto_0
+
+    :cond_1
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfRelevantAccountTypes:Ljava/util/Set;
+
+    if-eqz v6, :cond_2
+
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfRelevantAccountTypes:Ljava/util/Set;
+
+    iget-object v7, v0, Landroid/accounts/Account;->type:Ljava/lang/String;
+
+    invoke-interface {v6, v7}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
+
+    move-result v6
+
+    if-eqz v6, :cond_0
+
+    :cond_2
+    invoke-virtual {v2, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    goto :goto_1
+
+    .end local v0           #account:Landroid/accounts/Account;
+    :cond_3
+    return-object v2
+.end method
+
+.method private getAllowableAccountSet(Landroid/content/Intent;)Ljava/util/Set;
+    .locals 5
+    .parameter "intent"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            ")",
+            "Ljava/util/Set",
+            "<",
+            "Landroid/accounts/Account;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    const/4 v2, 0x0
+
+    .local v2, setOfAllowableAccounts:Ljava/util/Set;,"Ljava/util/Set<Landroid/accounts/Account;>;"
+    const-string v4, "allowableAccounts"
+
+    invoke-virtual {p1, v4}, Landroid/content/Intent;->getParcelableArrayListExtra(Ljava/lang/String;)Ljava/util/ArrayList;
+
+    move-result-object v3
+
+    .local v3, validAccounts:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/os/Parcelable;>;"
+    if-eqz v3, :cond_0
+
+    new-instance v2, Ljava/util/HashSet;
+
+    .end local v2           #setOfAllowableAccounts:Ljava/util/Set;,"Ljava/util/Set<Landroid/accounts/Account;>;"
+    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
+
+    move-result v4
+
+    invoke-direct {v2, v4}, Ljava/util/HashSet;-><init>(I)V
+
+    .restart local v2       #setOfAllowableAccounts:Ljava/util/Set;,"Ljava/util/Set<Landroid/accounts/Account;>;"
+    invoke-virtual {v3}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+
+    move-result-object v0
+
+    .local v0, i$:Ljava/util/Iterator;
+    :goto_0
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v4
+
+    if-eqz v4, :cond_0
+
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/os/Parcelable;
+
+    .local v1, parcelable:Landroid/os/Parcelable;
+    check-cast v1, Landroid/accounts/Account;
+
+    .end local v1           #parcelable:Landroid/os/Parcelable;
+    invoke-interface {v2, v1}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
+
+    goto :goto_0
+
+    .end local v0           #i$:Ljava/util/Iterator;
+    :cond_0
+    return-object v2
+.end method
+
+.method private getItemIndexToSelect(Ljava/util/ArrayList;Ljava/lang/String;Z)I
+    .locals 2
+    .parameter
+    .parameter "selectedAccountName"
+    .parameter "selectedAddNewAccount"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/ArrayList",
+            "<",
+            "Landroid/accounts/Account;",
+            ">;",
+            "Ljava/lang/String;",
+            "Z)I"
+        }
+    .end annotation
+
+    .prologue
+    .local p1, accounts:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/accounts/Account;>;"
+    if-eqz p3, :cond_1
+
+    invoke-virtual {p1}, Ljava/util/ArrayList;->size()I
+
+    move-result v0
+
+    :cond_0
+    :goto_0
+    return v0
+
+    :cond_1
+    const/4 v0, 0x0
+
+    .local v0, i:I
+    :goto_1
+    invoke-virtual {p1}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    if-ge v0, v1, :cond_2
+
+    invoke-virtual {p1, v0}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/accounts/Account;
+
+    iget-object v1, v1, Landroid/accounts/Account;->name:Ljava/lang/String;
+
+    invoke-virtual {v1, p2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    add-int/lit8 v0, v0, 0x1
+
+    goto :goto_1
+
+    :cond_2
+    const/4 v0, -0x1
+
+    goto :goto_0
+.end method
+
+.method private getListOfDisplayableOptions(Ljava/util/ArrayList;)[Ljava/lang/String;
+    .locals 5
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/ArrayList",
+            "<",
+            "Landroid/accounts/Account;",
+            ">;)[",
+            "Ljava/lang/String;"
+        }
+    .end annotation
+
+    .prologue
+    .local p1, accounts:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/accounts/Account;>;"
+    invoke-virtual {p1}, Ljava/util/ArrayList;->size()I
+
+    move-result v3
+
+    iget-boolean v2, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDisallowAddAccounts:Z
+
+    if-eqz v2, :cond_0
+
+    const/4 v2, 0x0
+
+    :goto_0
+    add-int/2addr v2, v3
+
+    new-array v1, v2, [Ljava/lang/String;
+
+    .local v1, listItems:[Ljava/lang/String;
+    const/4 v0, 0x0
+
+    .local v0, i:I
+    :goto_1
+    invoke-virtual {p1}, Ljava/util/ArrayList;->size()I
+
+    move-result v2
+
+    if-ge v0, v2, :cond_1
+
+    invoke-virtual {p1, v0}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Landroid/accounts/Account;
+
+    iget-object v2, v2, Landroid/accounts/Account;->name:Ljava/lang/String;
+
+    aput-object v2, v1, v0
+
+    add-int/lit8 v0, v0, 0x1
+
+    goto :goto_1
+
+    .end local v0           #i:I
+    .end local v1           #listItems:[Ljava/lang/String;
+    :cond_0
+    const/4 v2, 0x1
+
+    goto :goto_0
+
+    .restart local v0       #i:I
+    .restart local v1       #listItems:[Ljava/lang/String;
+    :cond_1
+    iget-boolean v2, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDisallowAddAccounts:Z
+
+    if-nez v2, :cond_2
+
+    invoke-virtual {p1}, Ljava/util/ArrayList;->size()I
+
+    move-result v2
+
+    invoke-virtual {p0}, Landroid/accounts/ChooseTypeAndAccountActivity;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v3
+
+    const v4, 0x10404e8
+
+    invoke-virtual {v3, v4}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+
+    move-result-object v3
+
+    aput-object v3, v1, v2
+
+    :cond_2
+    return-object v1
+.end method
+
+.method private getReleventAccountTypes(Landroid/content/Intent;)Ljava/util/Set;
+    .locals 9
+    .parameter "intent"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Landroid/content/Intent;",
+            ")",
+            "Ljava/util/Set",
+            "<",
+            "Ljava/lang/String;",
+            ">;"
+        }
+    .end annotation
+
+    .prologue
+    const/4 v6, 0x0
+
+    .local v6, setOfRelevantAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
+    const-string v8, "allowableAccountTypes"
+
+    invoke-virtual {p1, v8}, Landroid/content/Intent;->getStringArrayExtra(Ljava/lang/String;)[Ljava/lang/String;
+
+    move-result-object v0
+
+    .local v0, allowedAccountTypes:[Ljava/lang/String;
+    if-eqz v0, :cond_1
+
+    invoke-static {v0}, Lcom/google/android/collect/Sets;->newHashSet([Ljava/lang/Object;)Ljava/util/HashSet;
+
+    move-result-object v6
+
+    invoke-static {p0}, Landroid/accounts/AccountManager;->get(Landroid/content/Context;)Landroid/accounts/AccountManager;
+
+    move-result-object v8
+
+    invoke-virtual {v8}, Landroid/accounts/AccountManager;->getAuthenticatorTypes()[Landroid/accounts/AuthenticatorDescription;
+
+    move-result-object v3
+
+    .local v3, descs:[Landroid/accounts/AuthenticatorDescription;
+    new-instance v7, Ljava/util/HashSet;
+
+    array-length v8, v3
+
+    invoke-direct {v7, v8}, Ljava/util/HashSet;-><init>(I)V
+
+    .local v7, supportedAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
+    move-object v1, v3
+
+    .local v1, arr$:[Landroid/accounts/AuthenticatorDescription;
+    array-length v5, v1
+
+    .local v5, len$:I
+    const/4 v4, 0x0
+
+    .local v4, i$:I
+    :goto_0
+    if-ge v4, v5, :cond_0
+
+    aget-object v2, v1, v4
+
+    .local v2, desc:Landroid/accounts/AuthenticatorDescription;
+    iget-object v8, v2, Landroid/accounts/AuthenticatorDescription;->type:Ljava/lang/String;
+
+    invoke-interface {v7, v8}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
+
+    add-int/lit8 v4, v4, 0x1
+
+    goto :goto_0
+
+    .end local v2           #desc:Landroid/accounts/AuthenticatorDescription;
+    :cond_0
+    invoke-interface {v6, v7}, Ljava/util/Set;->retainAll(Ljava/util/Collection;)Z
+
+    .end local v1           #arr$:[Landroid/accounts/AuthenticatorDescription;
+    .end local v3           #descs:[Landroid/accounts/AuthenticatorDescription;
+    .end local v4           #i$:I
+    .end local v5           #len$:I
+    .end local v7           #supportedAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
+    :cond_1
+    return-object v6
 .end method
 
 .method private onAccountSelected(Landroid/accounts/Account;)V
@@ -147,6 +590,129 @@
 
     invoke-direct {p0, v0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->setResultAndFinish(Ljava/lang/String;Ljava/lang/String;)V
 
+    return-void
+.end method
+
+.method private overrideDescriptionIfSupplied(Ljava/lang/String;)V
+    .locals 2
+    .parameter "descriptionOverride"
+
+    .prologue
+    const v1, 0x1020280
+
+    invoke-virtual {p0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/TextView;
+
+    .local v0, descriptionView:Landroid/widget/TextView;
+    invoke-static {p1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    invoke-virtual {v0, p1}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    :goto_0
+    return-void
+
+    :cond_0
+    const/16 v1, 0x8
+
+    invoke-virtual {v0, v1}, Landroid/widget/TextView;->setVisibility(I)V
+
+    goto :goto_0
+.end method
+
+.method private final populateUIAccountList([Ljava/lang/String;)V
+    .locals 4
+    .parameter "listItems"
+
+    .prologue
+    const/4 v3, 0x1
+
+    const v1, 0x102000a
+
+    invoke-virtual {p0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/widget/ListView;
+
+    .local v0, list:Landroid/widget/ListView;
+    new-instance v1, Landroid/widget/ArrayAdapter;
+
+    const v2, 0x109000f
+
+    invoke-direct {v1, p0, v2, p1}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;I[Ljava/lang/Object;)V
+
+    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setAdapter(Landroid/widget/ListAdapter;)V
+
+    invoke-virtual {v0, v3}, Landroid/widget/ListView;->setChoiceMode(I)V
+
+    const/4 v1, 0x0
+
+    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setItemsCanFocus(Z)V
+
+    new-instance v1, Landroid/accounts/ChooseTypeAndAccountActivity$1;
+
+    invoke-direct {v1, p0}, Landroid/accounts/ChooseTypeAndAccountActivity$1;-><init>(Landroid/accounts/ChooseTypeAndAccountActivity;)V
+
+    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setOnItemClickListener(Landroid/widget/AdapterView$OnItemClickListener;)V
+
+    iget v1, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
+
+    const/4 v2, -0x1
+
+    if-eq v1, v2, :cond_0
+
+    iget v1, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
+
+    invoke-virtual {v0, v1, v3}, Landroid/widget/ListView;->setItemChecked(IZ)V
+
+    const-string v1, "AccountChooser"
+
+    const/4 v2, 0x2
+
+    invoke-static {v1, v2}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_0
+
+    const-string v1, "AccountChooser"
+
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "List item "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    iget v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, " should be selected"
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-static {v1, v2}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
+
+    :cond_0
     return-void
 .end method
 
@@ -557,7 +1123,11 @@
 
     move-result-object v11
 
-    invoke-virtual {v11}, Landroid/accounts/AccountManager;->getAccounts()[Landroid/accounts/Account;
+    iget-object v12, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingPackage:Ljava/lang/String;
+
+    iget v13, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingUid:I
+
+    invoke-virtual {v11, v12, v13}, Landroid/accounts/AccountManager;->getAccountsForPackage(Ljava/lang/String;I)[Landroid/accounts/Account;
 
     move-result-object v6
 
@@ -654,1089 +1224,330 @@
 .end method
 
 .method public onCreate(Landroid/os/Bundle;)V
-    .locals 34
+    .locals 12
     .parameter "savedInstanceState"
 
     .prologue
-    invoke-super/range {p0 .. p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
+    const/4 v11, 0x2
 
-    const-string v31, "AccountChooser"
+    const/4 v10, 0x1
 
-    const/16 v32, 0x2
+    const/4 v9, 0x0
 
-    invoke-static/range {v31 .. v32}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
+    invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
 
-    move-result v31
+    const-string v6, "AccountChooser"
 
-    if-eqz v31, :cond_0
+    invoke-static {v6, v11}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
 
-    const-string v31, "AccountChooser"
+    move-result v6
 
-    new-instance v32, Ljava/lang/StringBuilder;
+    if-eqz v6, :cond_0
 
-    invoke-direct/range {v32 .. v32}, Ljava/lang/StringBuilder;-><init>()V
+    const-string v6, "AccountChooser"
 
-    const-string v33, "ChooseTypeAndAccountActivity.onCreate(savedInstanceState="
+    new-instance v7, Ljava/lang/StringBuilder;
 
-    invoke-virtual/range {v32 .. v33}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
 
-    move-result-object v32
+    const-string v8, "ChooseTypeAndAccountActivity.onCreate(savedInstanceState="
 
-    move-object/from16 v0, v32
-
-    move-object/from16 v1, p1
-
-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v32
-
-    const-string v33, ")"
-
-    invoke-virtual/range {v32 .. v33}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v32
-
-    invoke-virtual/range {v32 .. v32}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v32
-
-    invoke-static/range {v31 .. v32}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
-
-    :cond_0
-    invoke-static/range {p0 .. p0}, Landroid/accounts/AccountManager;->get(Landroid/content/Context;)Landroid/accounts/AccountManager;
-
-    move-result-object v5
-
-    .local v5, accountManager:Landroid/accounts/AccountManager;
-    invoke-virtual/range {p0 .. p0}, Landroid/accounts/ChooseTypeAndAccountActivity;->getIntent()Landroid/content/Intent;
-
-    move-result-object v16
-
-    .local v16, intent:Landroid/content/Intent;
-    const/16 v22, 0x0
-
-    .local v22, selectedAccountName:Ljava/lang/String;
-    const/16 v23, 0x0
-
-    .local v23, selectedAddNewAccount:Z
-    if-eqz p1, :cond_3
-
-    const-string v31, "pendingRequest"
-
-    move-object/from16 v0, p1
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/os/Bundle;->getInt(Ljava/lang/String;)I
-
-    move-result v31
-
-    move/from16 v0, v31
-
-    move-object/from16 v1, p0
-
-    iput v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mPendingRequest:I
-
-    const-string v31, "existingAccounts"
-
-    move-object/from16 v0, p1
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/os/Bundle;->getParcelableArray(Ljava/lang/String;)[Landroid/os/Parcelable;
-
-    move-result-object v31
-
-    move-object/from16 v0, v31
-
-    move-object/from16 v1, p0
-
-    iput-object v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mExistingAccounts:[Landroid/os/Parcelable;
-
-    const-string v31, "selectedAccountName"
-
-    move-object/from16 v0, p1
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v22
-
-    const-string v31, "selectedAddAccount"
-
-    const/16 v32, 0x0
-
-    move-object/from16 v0, p1
-
-    move-object/from16 v1, v31
-
-    move/from16 v2, v32
-
-    invoke-virtual {v0, v1, v2}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;Z)Z
-
-    move-result v23
-
-    :cond_1
-    :goto_0
-    const-string v31, "AccountChooser"
-
-    const/16 v32, 0x2
-
-    invoke-static/range {v31 .. v32}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
-
-    move-result v31
-
-    if-eqz v31, :cond_2
-
-    const-string v31, "AccountChooser"
-
-    new-instance v32, Ljava/lang/StringBuilder;
-
-    invoke-direct/range {v32 .. v32}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v33, "selected account name is "
-
-    invoke-virtual/range {v32 .. v33}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v32
-
-    move-object/from16 v0, v32
-
-    move-object/from16 v1, v22
-
-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v32
-
-    invoke-virtual/range {v32 .. v32}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v32
-
-    invoke-static/range {v31 .. v32}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
-
-    :cond_2
-    new-instance v29, Ljava/util/HashMap;
-
-    invoke-direct/range {v29 .. v29}, Ljava/util/HashMap;-><init>()V
-
-    .local v29, typeToAuthDescription:Ljava/util/HashMap;,"Ljava/util/HashMap<Ljava/lang/String;Landroid/accounts/AuthenticatorDescription;>;"
-    invoke-virtual {v5}, Landroid/accounts/AccountManager;->getAuthenticatorTypes()[Landroid/accounts/AuthenticatorDescription;
-
-    move-result-object v9
-
-    .local v9, arr$:[Landroid/accounts/AuthenticatorDescription;
-    array-length v0, v9
-
-    move/from16 v17, v0
-
-    .local v17, len$:I
-    const/4 v15, 0x0
-
-    .local v15, i$:I
-    :goto_1
-    move/from16 v0, v17
-
-    if-ge v15, v0, :cond_4
-
-    aget-object v10, v9, v15
-
-    .local v10, desc:Landroid/accounts/AuthenticatorDescription;
-    iget-object v0, v10, Landroid/accounts/AuthenticatorDescription;->type:Ljava/lang/String;
-
-    move-object/from16 v31, v0
-
-    move-object/from16 v0, v29
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1, v10}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-
-    add-int/lit8 v15, v15, 0x1
-
-    goto :goto_1
-
-    .end local v9           #arr$:[Landroid/accounts/AuthenticatorDescription;
-    .end local v10           #desc:Landroid/accounts/AuthenticatorDescription;
-    .end local v15           #i$:I
-    .end local v17           #len$:I
-    .end local v29           #typeToAuthDescription:Ljava/util/HashMap;,"Ljava/util/HashMap<Ljava/lang/String;Landroid/accounts/AuthenticatorDescription;>;"
-    :cond_3
-    const/16 v31, 0x0
-
-    move/from16 v0, v31
-
-    move-object/from16 v1, p0
-
-    iput v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mPendingRequest:I
-
-    const/16 v31, 0x0
-
-    move-object/from16 v0, v31
-
-    move-object/from16 v1, p0
-
-    iput-object v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mExistingAccounts:[Landroid/os/Parcelable;
-
-    const-string v31, "selectedAccount"
-
-    move-object/from16 v0, v16
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->getParcelableExtra(Ljava/lang/String;)Landroid/os/Parcelable;
-
-    move-result-object v21
-
-    check-cast v21, Landroid/accounts/Account;
-
-    .local v21, selectedAccount:Landroid/accounts/Account;
-    if-eqz v21, :cond_1
-
-    move-object/from16 v0, v21
-
-    iget-object v0, v0, Landroid/accounts/Account;->name:Ljava/lang/String;
-
-    move-object/from16 v22, v0
-
-    goto :goto_0
-
-    .end local v21           #selectedAccount:Landroid/accounts/Account;
-    .restart local v9       #arr$:[Landroid/accounts/AuthenticatorDescription;
-    .restart local v15       #i$:I
-    .restart local v17       #len$:I
-    .restart local v29       #typeToAuthDescription:Ljava/util/HashMap;,"Ljava/util/HashMap<Ljava/lang/String;Landroid/accounts/AuthenticatorDescription;>;"
-    :cond_4
-    const/16 v24, 0x0
-
-    .local v24, setOfAllowableAccounts:Ljava/util/Set;,"Ljava/util/Set<Landroid/accounts/Account;>;"
-    const-string v31, "allowableAccounts"
-
-    move-object/from16 v0, v16
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->getParcelableArrayListExtra(Ljava/lang/String;)Ljava/util/ArrayList;
-
-    move-result-object v30
-
-    .local v30, validAccounts:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/os/Parcelable;>;"
-    if-eqz v30, :cond_5
-
-    new-instance v24, Ljava/util/HashSet;
-
-    .end local v24           #setOfAllowableAccounts:Ljava/util/Set;,"Ljava/util/Set<Landroid/accounts/Account;>;"
-    invoke-virtual/range {v30 .. v30}, Ljava/util/ArrayList;->size()I
-
-    move-result v31
-
-    move-object/from16 v0, v24
-
-    move/from16 v1, v31
-
-    invoke-direct {v0, v1}, Ljava/util/HashSet;-><init>(I)V
-
-    .restart local v24       #setOfAllowableAccounts:Ljava/util/Set;,"Ljava/util/Set<Landroid/accounts/Account;>;"
-    invoke-virtual/range {v30 .. v30}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
-
-    move-result-object v15
-
-    .local v15, i$:Ljava/util/Iterator;
-    :goto_2
-    invoke-interface {v15}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v31
-
-    if-eqz v31, :cond_5
-
-    invoke-interface {v15}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-
-    move-result-object v20
-
-    check-cast v20, Landroid/os/Parcelable;
-
-    .local v20, parcelable:Landroid/os/Parcelable;
-    check-cast v20, Landroid/accounts/Account;
-
-    .end local v20           #parcelable:Landroid/os/Parcelable;
-    move-object/from16 v0, v24
-
-    move-object/from16 v1, v20
-
-    invoke-interface {v0, v1}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
-
-    goto :goto_2
-
-    .end local v15           #i$:Ljava/util/Iterator;
-    :cond_5
-    const/16 v26, 0x0
-
-    .local v26, setOfRelevantAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
-    const-string v31, "allowableAccountTypes"
-
-    move-object/from16 v0, v16
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->getStringArrayExtra(Ljava/lang/String;)[Ljava/lang/String;
-
-    move-result-object v8
-
-    .local v8, allowedAccountTypes:[Ljava/lang/String;
-    if-eqz v8, :cond_9
-
-    new-instance v26, Ljava/util/HashSet;
-
-    .end local v26           #setOfRelevantAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
-    array-length v0, v8
-
-    move/from16 v31, v0
-
-    move-object/from16 v0, v26
-
-    move/from16 v1, v31
-
-    invoke-direct {v0, v1}, Ljava/util/HashSet;-><init>(I)V
-
-    .restart local v26       #setOfRelevantAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
-    new-instance v25, Ljava/util/HashSet;
-
-    array-length v0, v8
-
-    move/from16 v31, v0
-
-    move-object/from16 v0, v25
-
-    move/from16 v1, v31
-
-    invoke-direct {v0, v1}, Ljava/util/HashSet;-><init>(I)V
-
-    .local v25, setOfAllowedAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
-    move-object v9, v8
-
-    .local v9, arr$:[Ljava/lang/String;
-    array-length v0, v9
-
-    move/from16 v17, v0
-
-    const/4 v15, 0x0
-
-    .local v15, i$:I
-    :goto_3
-    move/from16 v0, v17
-
-    if-ge v15, v0, :cond_6
-
-    aget-object v28, v9, v15
-
-    .local v28, type:Ljava/lang/String;
-    move-object/from16 v0, v25
-
-    move-object/from16 v1, v28
-
-    invoke-interface {v0, v1}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
-
-    add-int/lit8 v15, v15, 0x1
-
-    goto :goto_3
-
-    .end local v28           #type:Ljava/lang/String;
-    :cond_6
-    invoke-static/range {p0 .. p0}, Landroid/accounts/AccountManager;->get(Landroid/content/Context;)Landroid/accounts/AccountManager;
-
-    move-result-object v31
-
-    invoke-virtual/range {v31 .. v31}, Landroid/accounts/AccountManager;->getAuthenticatorTypes()[Landroid/accounts/AuthenticatorDescription;
-
-    move-result-object v13
-
-    .local v13, descs:[Landroid/accounts/AuthenticatorDescription;
-    new-instance v27, Ljava/util/HashSet;
-
-    array-length v0, v13
-
-    move/from16 v31, v0
-
-    move-object/from16 v0, v27
-
-    move/from16 v1, v31
-
-    invoke-direct {v0, v1}, Ljava/util/HashSet;-><init>(I)V
-
-    .local v27, supportedAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
-    move-object v9, v13
-
-    .local v9, arr$:[Landroid/accounts/AuthenticatorDescription;
-    array-length v0, v9
-
-    move/from16 v17, v0
-
-    const/4 v15, 0x0
-
-    :goto_4
-    move/from16 v0, v17
-
-    if-ge v15, v0, :cond_7
-
-    aget-object v10, v9, v15
-
-    .restart local v10       #desc:Landroid/accounts/AuthenticatorDescription;
-    iget-object v0, v10, Landroid/accounts/AuthenticatorDescription;->type:Ljava/lang/String;
-
-    move-object/from16 v31, v0
-
-    move-object/from16 v0, v27
-
-    move-object/from16 v1, v31
-
-    invoke-interface {v0, v1}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
-
-    add-int/lit8 v15, v15, 0x1
-
-    goto :goto_4
-
-    .end local v10           #desc:Landroid/accounts/AuthenticatorDescription;
-    :cond_7
-    invoke-interface/range {v25 .. v25}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
-
-    move-result-object v15
-
-    .local v15, i$:Ljava/util/Iterator;
-    :cond_8
-    :goto_5
-    invoke-interface {v15}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v31
-
-    if-eqz v31, :cond_9
-
-    invoke-interface {v15}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v7
 
-    check-cast v7, Ljava/lang/String;
+    invoke-virtual {v7, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 
-    .local v7, acctType:Ljava/lang/String;
-    move-object/from16 v0, v27
+    move-result-object v7
 
-    invoke-interface {v0, v7}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
+    const-string v8, ")"
 
-    move-result v31
+    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    if-eqz v31, :cond_8
+    move-result-object v7
 
-    move-object/from16 v0, v26
+    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
-    invoke-interface {v0, v7}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
+    move-result-object v7
 
-    goto :goto_5
+    invoke-static {v6, v7}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
 
-    .end local v7           #acctType:Ljava/lang/String;
-    .end local v13           #descs:[Landroid/accounts/AuthenticatorDescription;
-    .end local v15           #i$:Ljava/util/Iterator;
-    .end local v25           #setOfAllowedAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
-    .end local v27           #supportedAccountTypes:Ljava/util/Set;,"Ljava/util/Set<Ljava/lang/String;>;"
-    :cond_9
-    invoke-virtual {v5}, Landroid/accounts/AccountManager;->getAccounts()[Landroid/accounts/Account;
+    :cond_0
+    const/4 v2, 0x0
+
+    .local v2, message:Ljava/lang/String;
+    :try_start_0
+    invoke-virtual {p0}, Landroid/accounts/ChooseTypeAndAccountActivity;->getActivityToken()Landroid/os/IBinder;
+
+    move-result-object v0
+
+    .local v0, activityToken:Landroid/os/IBinder;
+    invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
 
     move-result-object v6
 
-    .local v6, accounts:[Landroid/accounts/Account;
-    new-instance v31, Ljava/util/ArrayList;
+    invoke-interface {v6, v0}, Landroid/app/IActivityManager;->getLaunchedFromUid(Landroid/os/IBinder;)I
 
-    array-length v0, v6
+    move-result v6
 
-    move/from16 v32, v0
+    iput v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingUid:I
 
-    invoke-direct/range {v31 .. v32}, Ljava/util/ArrayList;-><init>(I)V
+    invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
 
-    move-object/from16 v0, v31
+    move-result-object v6
 
-    move-object/from16 v1, p0
+    invoke-interface {v6, v0}, Landroid/app/IActivityManager;->getLaunchedFromPackage(Landroid/os/IBinder;)Ljava/lang/String;
 
-    iput-object v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+    move-result-object v6
 
-    const/16 v31, -0x1
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingPackage:Ljava/lang/String;
 
-    move/from16 v0, v31
+    iget v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingUid:I
 
-    move-object/from16 v1, p0
+    if-eqz v6, :cond_1
 
-    iput v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingPackage:Ljava/lang/String;
 
-    move-object v9, v6
+    if-eqz v6, :cond_1
 
-    .local v9, arr$:[Landroid/accounts/Account;
-    array-length v0, v9
+    invoke-static {p0}, Landroid/os/UserManager;->get(Landroid/content/Context;)Landroid/os/UserManager;
 
-    move/from16 v17, v0
+    move-result-object v6
 
-    const/4 v15, 0x0
+    new-instance v7, Landroid/os/UserHandle;
 
-    .local v15, i$:I
-    :goto_6
-    move/from16 v0, v17
+    iget v8, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingUid:I
 
-    if-ge v15, v0, :cond_e
+    invoke-static {v8}, Landroid/os/UserHandle;->getUserId(I)I
 
-    aget-object v4, v9, v15
+    move-result v8
 
-    .local v4, account:Landroid/accounts/Account;
-    if-eqz v24, :cond_b
+    invoke-direct {v7, v8}, Landroid/os/UserHandle;-><init>(I)V
 
-    move-object/from16 v0, v24
-
-    invoke-interface {v0, v4}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
-
-    move-result v31
-
-    if-nez v31, :cond_b
-
-    :cond_a
-    :goto_7
-    add-int/lit8 v15, v15, 0x1
-
-    goto :goto_6
-
-    :cond_b
-    if-eqz v26, :cond_c
-
-    iget-object v0, v4, Landroid/accounts/Account;->type:Ljava/lang/String;
-
-    move-object/from16 v31, v0
-
-    move-object/from16 v0, v26
-
-    move-object/from16 v1, v31
-
-    invoke-interface {v0, v1}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
-
-    move-result v31
-
-    if-eqz v31, :cond_a
-
-    :cond_c
-    iget-object v0, v4, Landroid/accounts/Account;->name:Ljava/lang/String;
-
-    move-object/from16 v31, v0
-
-    move-object/from16 v0, v31
-
-    move-object/from16 v1, v22
-
-    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v31
-
-    if-eqz v31, :cond_d
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
-
-    move-object/from16 v31, v0
-
-    invoke-virtual/range {v31 .. v31}, Ljava/util/ArrayList;->size()I
-
-    move-result v31
-
-    move/from16 v0, v31
-
-    move-object/from16 v1, p0
-
-    iput v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
-
-    :cond_d
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
-
-    move-object/from16 v31, v0
-
-    move-object/from16 v0, v31
-
-    invoke-virtual {v0, v4}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    goto :goto_7
-
-    .end local v4           #account:Landroid/accounts/Account;
-    :cond_e
-    move-object/from16 v0, p0
-
-    iget v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mPendingRequest:I
-
-    move/from16 v31, v0
-
-    if-nez v31, :cond_11
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
-
-    move-object/from16 v31, v0
-
-    invoke-virtual/range {v31 .. v31}, Ljava/util/ArrayList;->isEmpty()Z
-
-    move-result v31
-
-    if-eqz v31, :cond_10
-
-    invoke-interface/range {v26 .. v26}, Ljava/util/Set;->size()I
-
-    move-result v31
-
-    const/16 v32, 0x1
-
-    move/from16 v0, v31
-
-    move/from16 v1, v32
-
-    if-ne v0, v1, :cond_f
-
-    invoke-interface/range {v26 .. v26}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
-
-    move-result-object v31
-
-    invoke-interface/range {v31 .. v31}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-
-    move-result-object v31
-
-    check-cast v31, Ljava/lang/String;
-
-    move-object/from16 v0, p0
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->runAddAccountForAuthenticator(Ljava/lang/String;)V
-
-    :goto_8
-    return-void
-
-    :cond_f
-    invoke-direct/range {p0 .. p0}, Landroid/accounts/ChooseTypeAndAccountActivity;->startChooseAccountTypeActivity()V
-
-    goto :goto_8
-
-    :cond_10
-    const-string v31, "alwaysPromptForAccount"
-
-    const/16 v32, 0x0
-
-    move-object/from16 v0, v16
-
-    move-object/from16 v1, v31
-
-    move/from16 v2, v32
-
-    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
-
-    move-result v31
-
-    if-nez v31, :cond_11
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
-
-    move-object/from16 v31, v0
-
-    invoke-virtual/range {v31 .. v31}, Ljava/util/ArrayList;->size()I
-
-    move-result v31
-
-    const/16 v32, 0x1
-
-    move/from16 v0, v31
-
-    move/from16 v1, v32
-
-    if-ne v0, v1, :cond_11
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
-
-    move-object/from16 v31, v0
-
-    const/16 v32, 0x0
-
-    invoke-virtual/range {v31 .. v32}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    invoke-virtual {v6, v7}, Landroid/os/UserManager;->getUserRestrictions(Landroid/os/UserHandle;)Landroid/os/Bundle;
 
     move-result-object v4
 
-    check-cast v4, Landroid/accounts/Account;
+    .local v4, restrictions:Landroid/os/Bundle;
+    const-string v6, "no_modify_accounts"
 
-    .restart local v4       #account:Landroid/accounts/Account;
-    iget-object v0, v4, Landroid/accounts/Account;->name:Ljava/lang/String;
+    const/4 v7, 0x0
 
-    move-object/from16 v31, v0
+    invoke-virtual {v4, v6, v7}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;Z)Z
 
-    iget-object v0, v4, Landroid/accounts/Account;->type:Ljava/lang/String;
+    move-result v6
 
-    move-object/from16 v32, v0
+    iput-boolean v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDisallowAddAccounts:Z
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
-    move-object/from16 v0, p0
+    .end local v0           #activityToken:Landroid/os/IBinder;
+    .end local v4           #restrictions:Landroid/os/Bundle;
+    :cond_1
+    :goto_0
+    invoke-virtual {p0}, Landroid/accounts/ChooseTypeAndAccountActivity;->getIntent()Landroid/content/Intent;
 
-    move-object/from16 v1, v31
+    move-result-object v1
 
-    move-object/from16 v2, v32
+    .local v1, intent:Landroid/content/Intent;
+    if-eqz p1, :cond_5
 
-    invoke-direct {v0, v1, v2}, Landroid/accounts/ChooseTypeAndAccountActivity;->setResultAndFinish(Ljava/lang/String;Ljava/lang/String;)V
+    const-string v6, "pendingRequest"
 
-    goto :goto_8
+    invoke-virtual {p1, v6}, Landroid/os/Bundle;->getInt(Ljava/lang/String;)I
 
-    .end local v4           #account:Landroid/accounts/Account;
-    :cond_11
-    const v31, 0x1090034
+    move-result v6
 
-    move-object/from16 v0, p0
+    iput v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mPendingRequest:I
 
-    move/from16 v1, v31
+    const-string v6, "existingAccounts"
 
-    invoke-virtual {v0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->setContentView(I)V
+    invoke-virtual {p1, v6}, Landroid/os/Bundle;->getParcelableArray(Ljava/lang/String;)[Landroid/os/Parcelable;
 
-    const-string v31, "descriptionTextOverride"
+    move-result-object v6
 
-    move-object/from16 v0, v16
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mExistingAccounts:[Landroid/os/Parcelable;
 
-    move-object/from16 v1, v31
+    const-string v6, "selectedAccountName"
 
-    invoke-virtual {v0, v1}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
+    invoke-virtual {p1, v6}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
 
-    move-result-object v11
+    move-result-object v6
 
-    .local v11, descriptionOverride:Ljava/lang/String;
-    const v31, 0x102026c
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAccountName:Ljava/lang/String;
 
-    move-object/from16 v0, p0
+    const-string v6, "selectedAddAccount"
 
-    move/from16 v1, v31
+    invoke-virtual {p1, v6, v9}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;Z)Z
 
-    invoke-virtual {v0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->findViewById(I)Landroid/view/View;
+    move-result v6
 
-    move-result-object v12
+    iput-boolean v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAddNewAccount:Z
 
-    check-cast v12, Landroid/widget/TextView;
+    const-string v6, "accountList"
 
-    .local v12, descriptionView:Landroid/widget/TextView;
-    invoke-static {v11}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+    invoke-virtual {p1, v6}, Landroid/os/Bundle;->getParcelableArrayList(Ljava/lang/String;)Ljava/util/ArrayList;
 
-    move-result v31
+    move-result-object v6
 
-    if-nez v31, :cond_12
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
 
-    invoke-virtual {v12, v11}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+    :cond_2
+    :goto_1
+    const-string v6, "AccountChooser"
 
-    :goto_9
-    move-object/from16 v0, p0
+    invoke-static {v6, v11}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
 
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+    move-result v6
 
-    move-object/from16 v31, v0
+    if-eqz v6, :cond_3
 
-    invoke-virtual/range {v31 .. v31}, Ljava/util/ArrayList;->size()I
+    const-string v6, "AccountChooser"
 
-    move-result v31
+    new-instance v7, Ljava/lang/StringBuilder;
 
-    add-int/lit8 v31, v31, 0x1
+    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
 
-    move/from16 v0, v31
+    const-string v8, "selected account name is "
 
-    new-array v0, v0, [Ljava/lang/String;
+    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-object/from16 v19, v0
+    move-result-object v7
 
-    .local v19, listItems:[Ljava/lang/String;
-    const/4 v14, 0x0
+    iget-object v8, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAccountName:Ljava/lang/String;
 
-    .local v14, i:I
-    :goto_a
-    move-object/from16 v0, p0
+    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+    move-result-object v7
 
-    move-object/from16 v31, v0
+    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
-    invoke-virtual/range {v31 .. v31}, Ljava/util/ArrayList;->size()I
+    move-result-object v7
 
-    move-result v31
+    invoke-static {v6, v7}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
 
-    move/from16 v0, v31
+    :cond_3
+    invoke-direct {p0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->getAllowableAccountSet(Landroid/content/Intent;)Ljava/util/Set;
 
-    if-ge v14, v0, :cond_13
+    move-result-object v6
 
-    move-object/from16 v0, p0
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfAllowableAccounts:Ljava/util/Set;
 
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+    invoke-direct {p0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->getReleventAccountTypes(Landroid/content/Intent;)Ljava/util/Set;
 
-    move-object/from16 v31, v0
+    move-result-object v6
 
-    move-object/from16 v0, v31
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfRelevantAccountTypes:Ljava/util/Set;
 
-    invoke-virtual {v0, v14}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    const-string v6, "alwaysPromptForAccount"
 
-    move-result-object v31
+    invoke-virtual {v1, v6, v9}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
 
-    check-cast v31, Landroid/accounts/Account;
+    move-result v6
 
-    move-object/from16 v0, v31
+    iput-boolean v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAlwaysPromptForAccount:Z
 
-    iget-object v0, v0, Landroid/accounts/Account;->name:Ljava/lang/String;
+    const-string v6, "descriptionTextOverride"
 
-    move-object/from16 v31, v0
+    invoke-virtual {v1, v6}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
 
-    aput-object v31, v19, v14
+    move-result-object v6
 
-    add-int/lit8 v14, v14, 0x1
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDescriptionOverride:Ljava/lang/String;
 
-    goto :goto_a
+    invoke-static {p0}, Landroid/accounts/AccountManager;->get(Landroid/content/Context;)Landroid/accounts/AccountManager;
 
-    .end local v14           #i:I
-    .end local v19           #listItems:[Ljava/lang/String;
-    :cond_12
-    const/16 v31, 0x8
+    move-result-object v6
 
-    move/from16 v0, v31
+    invoke-direct {p0, v6}, Landroid/accounts/ChooseTypeAndAccountActivity;->getAcceptableAccountChoices(Landroid/accounts/AccountManager;)Ljava/util/ArrayList;
 
-    invoke-virtual {v12, v0}, Landroid/widget/TextView;->setVisibility(I)V
+    move-result-object v6
 
-    goto :goto_9
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
 
-    .restart local v14       #i:I
-    .restart local v19       #listItems:[Ljava/lang/String;
-    :cond_13
-    move-object/from16 v0, p0
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
 
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+    invoke-virtual {v6}, Ljava/util/ArrayList;->isEmpty()Z
 
-    move-object/from16 v31, v0
+    move-result v6
 
-    invoke-virtual/range {v31 .. v31}, Ljava/util/ArrayList;->size()I
+    if-eqz v6, :cond_4
 
-    move-result v31
+    iget-boolean v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDisallowAddAccounts:Z
 
-    invoke-virtual/range {p0 .. p0}, Landroid/accounts/ChooseTypeAndAccountActivity;->getResources()Landroid/content/res/Resources;
+    if-eqz v6, :cond_4
 
-    move-result-object v32
+    invoke-virtual {p0, v10}, Landroid/accounts/ChooseTypeAndAccountActivity;->requestWindowFeature(I)Z
 
-    const v33, 0x10404a8
+    const v6, 0x109002a
 
-    invoke-virtual/range {v32 .. v33}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    invoke-virtual {p0, v6}, Landroid/accounts/ChooseTypeAndAccountActivity;->setContentView(I)V
 
-    move-result-object v32
+    iput-boolean v10, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDontShowPicker:Z
 
-    aput-object v32, v19, v31
+    :cond_4
+    return-void
 
-    const v31, 0x102000a
+    .end local v1           #intent:Landroid/content/Intent;
+    :catch_0
+    move-exception v3
 
-    move-object/from16 v0, p0
+    .local v3, re:Landroid/os/RemoteException;
+    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 
-    move/from16 v1, v31
+    move-result-object v6
 
-    invoke-virtual {v0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->findViewById(I)Landroid/view/View;
+    invoke-virtual {v6}, Ljava/lang/Class;->getSimpleName()Ljava/lang/String;
 
-    move-result-object v18
+    move-result-object v6
 
-    check-cast v18, Landroid/widget/ListView;
+    new-instance v7, Ljava/lang/StringBuilder;
 
-    .local v18, list:Landroid/widget/ListView;
-    new-instance v31, Landroid/widget/ArrayAdapter;
+    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
 
-    const v32, 0x109000f
+    const-string v8, "Unable to get caller identity \n"
 
-    move-object/from16 v0, v31
+    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-object/from16 v1, p0
+    move-result-object v7
 
-    move/from16 v2, v32
+    invoke-virtual {v7, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
 
-    move-object/from16 v3, v19
+    move-result-object v7
 
-    invoke-direct {v0, v1, v2, v3}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;I[Ljava/lang/Object;)V
+    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
-    move-object/from16 v0, v18
+    move-result-object v7
 
-    move-object/from16 v1, v31
+    invoke-static {v6, v7}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
 
-    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setAdapter(Landroid/widget/ListAdapter;)V
+    goto/16 :goto_0
 
-    const/16 v31, 0x1
+    .end local v3           #re:Landroid/os/RemoteException;
+    .restart local v1       #intent:Landroid/content/Intent;
+    :cond_5
+    iput v9, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mPendingRequest:I
 
-    move-object/from16 v0, v18
+    const/4 v6, 0x0
 
-    move/from16 v1, v31
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mExistingAccounts:[Landroid/os/Parcelable;
 
-    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setChoiceMode(I)V
+    const-string v6, "selectedAccount"
 
-    const/16 v31, 0x0
+    invoke-virtual {v1, v6}, Landroid/content/Intent;->getParcelableExtra(Ljava/lang/String;)Landroid/os/Parcelable;
 
-    move-object/from16 v0, v18
+    move-result-object v5
 
-    move/from16 v1, v31
+    check-cast v5, Landroid/accounts/Account;
 
-    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setItemsCanFocus(Z)V
+    .local v5, selectedAccount:Landroid/accounts/Account;
+    if-eqz v5, :cond_2
 
-    new-instance v31, Landroid/accounts/ChooseTypeAndAccountActivity$1;
+    iget-object v6, v5, Landroid/accounts/Account;->name:Ljava/lang/String;
 
-    move-object/from16 v0, v31
+    iput-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAccountName:Ljava/lang/String;
 
-    move-object/from16 v1, p0
-
-    invoke-direct {v0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity$1;-><init>(Landroid/accounts/ChooseTypeAndAccountActivity;)V
-
-    move-object/from16 v0, v18
-
-    move-object/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setOnItemClickListener(Landroid/widget/AdapterView$OnItemClickListener;)V
-
-    if-eqz v23, :cond_14
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
-
-    move-object/from16 v31, v0
-
-    invoke-virtual/range {v31 .. v31}, Ljava/util/ArrayList;->size()I
-
-    move-result v31
-
-    move/from16 v0, v31
-
-    move-object/from16 v1, p0
-
-    iput v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
-
-    :cond_14
-    move-object/from16 v0, p0
-
-    iget v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
-
-    move/from16 v31, v0
-
-    const/16 v32, -0x1
-
-    move/from16 v0, v31
-
-    move/from16 v1, v32
-
-    if-eq v0, v1, :cond_15
-
-    move-object/from16 v0, p0
-
-    iget v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
-
-    move/from16 v31, v0
-
-    const/16 v32, 0x1
-
-    move-object/from16 v0, v18
-
-    move/from16 v1, v31
-
-    move/from16 v2, v32
-
-    invoke-virtual {v0, v1, v2}, Landroid/widget/ListView;->setItemChecked(IZ)V
-
-    const-string v31, "AccountChooser"
-
-    const/16 v32, 0x2
-
-    invoke-static/range {v31 .. v32}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
-
-    move-result v31
-
-    if-eqz v31, :cond_15
-
-    const-string v31, "AccountChooser"
-
-    new-instance v32, Ljava/lang/StringBuilder;
-
-    invoke-direct/range {v32 .. v32}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v33, "List item "
-
-    invoke-virtual/range {v32 .. v33}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v32
-
-    move-object/from16 v0, p0
-
-    iget v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
-
-    move/from16 v33, v0
-
-    invoke-virtual/range {v32 .. v33}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-
-    move-result-object v32
-
-    const-string v33, " should be selected"
-
-    invoke-virtual/range {v32 .. v33}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v32
-
-    invoke-virtual/range {v32 .. v32}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v32
-
-    invoke-static/range {v31 .. v32}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
-
-    :cond_15
-    const v31, 0x102001a
-
-    move-object/from16 v0, p0
-
-    move/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->findViewById(I)Landroid/view/View;
-
-    move-result-object v31
-
-    check-cast v31, Landroid/widget/Button;
-
-    move-object/from16 v0, v31
-
-    move-object/from16 v1, p0
-
-    iput-object v0, v1, Landroid/accounts/ChooseTypeAndAccountActivity;->mOkButton:Landroid/widget/Button;
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mOkButton:Landroid/widget/Button;
-
-    move-object/from16 v32, v0
-
-    move-object/from16 v0, p0
-
-    iget v0, v0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
-
-    move/from16 v31, v0
-
-    const/16 v33, -0x1
-
-    move/from16 v0, v31
-
-    move/from16 v1, v33
-
-    if-eq v0, v1, :cond_16
-
-    const/16 v31, 0x1
-
-    :goto_b
-    move-object/from16 v0, v32
-
-    move/from16 v1, v31
-
-    invoke-virtual {v0, v1}, Landroid/widget/Button;->setEnabled(Z)V
-
-    goto/16 :goto_8
-
-    :cond_16
-    const/16 v31, 0x0
-
-    goto :goto_b
+    goto/16 :goto_1
 .end method
 
 .method protected onDestroy()V
@@ -1808,6 +1619,168 @@
     goto :goto_0
 .end method
 
+.method protected onResume()V
+    .locals 8
+
+    .prologue
+    const/4 v5, 0x0
+
+    const/4 v4, 0x1
+
+    invoke-super {p0}, Landroid/app/Activity;->onResume()V
+
+    iget-boolean v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDontShowPicker:Z
+
+    if-eqz v3, :cond_0
+
+    :goto_0
+    return-void
+
+    :cond_0
+    invoke-static {p0}, Landroid/accounts/AccountManager;->get(Landroid/content/Context;)Landroid/accounts/AccountManager;
+
+    move-result-object v1
+
+    .local v1, accountManager:Landroid/accounts/AccountManager;
+    invoke-direct {p0, v1}, Landroid/accounts/ChooseTypeAndAccountActivity;->getAcceptableAccountChoices(Landroid/accounts/AccountManager;)Ljava/util/ArrayList;
+
+    move-result-object v3
+
+    iput-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+
+    iget v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mPendingRequest:I
+
+    if-nez v3, :cond_3
+
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+
+    invoke-virtual {v3}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_2
+
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfRelevantAccountTypes:Ljava/util/Set;
+
+    invoke-interface {v3}, Ljava/util/Set;->size()I
+
+    move-result v3
+
+    if-ne v3, v4, :cond_1
+
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSetOfRelevantAccountTypes:Ljava/util/Set;
+
+    invoke-interface {v3}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
+
+    move-result-object v3
+
+    invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v3
+
+    check-cast v3, Ljava/lang/String;
+
+    invoke-virtual {p0, v3}, Landroid/accounts/ChooseTypeAndAccountActivity;->runAddAccountForAuthenticator(Ljava/lang/String;)V
+
+    goto :goto_0
+
+    :cond_1
+    invoke-direct {p0}, Landroid/accounts/ChooseTypeAndAccountActivity;->startChooseAccountTypeActivity()V
+
+    goto :goto_0
+
+    :cond_2
+    iget-boolean v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAlwaysPromptForAccount:Z
+
+    if-nez v3, :cond_3
+
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+
+    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
+
+    move-result v3
+
+    if-ne v3, v4, :cond_3
+
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+
+    invoke-virtual {v3, v5}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/accounts/Account;
+
+    .local v0, account:Landroid/accounts/Account;
+    iget-object v3, v0, Landroid/accounts/Account;->name:Ljava/lang/String;
+
+    iget-object v4, v0, Landroid/accounts/Account;->type:Ljava/lang/String;
+
+    invoke-direct {p0, v3, v4}, Landroid/accounts/ChooseTypeAndAccountActivity;->setResultAndFinish(Ljava/lang/String;Ljava/lang/String;)V
+
+    goto :goto_0
+
+    .end local v0           #account:Landroid/accounts/Account;
+    :cond_3
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+
+    invoke-direct {p0, v3}, Landroid/accounts/ChooseTypeAndAccountActivity;->getListOfDisplayableOptions(Ljava/util/ArrayList;)[Ljava/lang/String;
+
+    move-result-object v2
+
+    .local v2, listItems:[Ljava/lang/String;
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAccountName:Ljava/lang/String;
+
+    iget-boolean v7, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedAddNewAccount:Z
+
+    invoke-direct {p0, v3, v6, v7}, Landroid/accounts/ChooseTypeAndAccountActivity;->getItemIndexToSelect(Ljava/util/ArrayList;Ljava/lang/String;Z)I
+
+    move-result v3
+
+    iput v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
+
+    const v3, 0x1090037
+
+    invoke-virtual {p0, v3}, Landroid/accounts/ChooseTypeAndAccountActivity;->setContentView(I)V
+
+    iget-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mDescriptionOverride:Ljava/lang/String;
+
+    invoke-direct {p0, v3}, Landroid/accounts/ChooseTypeAndAccountActivity;->overrideDescriptionIfSupplied(Ljava/lang/String;)V
+
+    invoke-direct {p0, v2}, Landroid/accounts/ChooseTypeAndAccountActivity;->populateUIAccountList([Ljava/lang/String;)V
+
+    const v3, 0x102001a
+
+    invoke-virtual {p0, v3}, Landroid/accounts/ChooseTypeAndAccountActivity;->findViewById(I)Landroid/view/View;
+
+    move-result-object v3
+
+    check-cast v3, Landroid/widget/Button;
+
+    iput-object v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mOkButton:Landroid/widget/Button;
+
+    iget-object v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mOkButton:Landroid/widget/Button;
+
+    iget v3, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mSelectedItemIndex:I
+
+    const/4 v7, -0x1
+
+    if-eq v3, v7, :cond_4
+
+    move v3, v4
+
+    :goto_1
+    invoke-virtual {v6, v3}, Landroid/widget/Button;->setEnabled(Z)V
+
+    goto/16 :goto_0
+
+    :cond_4
+    move v3, v5
+
+    goto :goto_1
+.end method
+
 .method protected onSaveInstanceState(Landroid/os/Bundle;)V
     .locals 3
     .parameter "outState"
@@ -1858,6 +1831,12 @@
 
     :cond_1
     :goto_0
+    const-string v0, "accountList"
+
+    iget-object v1, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mAccounts:Ljava/util/ArrayList;
+
+    invoke-virtual {p1, v0, v1}, Landroid/os/Bundle;->putParcelableArrayList(Ljava/lang/String;Ljava/util/ArrayList;)V
+
     return-void
 
     :cond_2
@@ -1887,7 +1866,7 @@
 .end method
 
 .method public run(Landroid/accounts/AccountManagerFuture;)V
-    .locals 6
+    .locals 7
     .parameter
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -1928,7 +1907,11 @@
 
     move-result-object v4
 
-    invoke-virtual {v4}, Landroid/accounts/AccountManager;->getAccounts()[Landroid/accounts/Account;
+    iget-object v5, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingPackage:Ljava/lang/String;
+
+    iget v6, p0, Landroid/accounts/ChooseTypeAndAccountActivity;->mCallingUid:I
+
+    invoke-virtual {v4, v5, v6}, Landroid/accounts/AccountManager;->getAccountsForPackage(Ljava/lang/String;I)[Landroid/accounts/Account;
 
     move-result-object v4
 

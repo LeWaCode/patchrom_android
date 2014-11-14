@@ -316,7 +316,7 @@
     .local v8, sourceHeight:I
     if-lez v9, :cond_2
 
-    if-lez v9, :cond_2
+    if-lez v8, :cond_2
 
     if-lt v13, v9, :cond_1
 

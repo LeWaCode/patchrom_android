@@ -303,21 +303,18 @@
     .end annotation
 
     .prologue
-    const/16 v0, 0x2710
+    invoke-static {p1}, Landroid/os/UserHandle;->isApp(I)Z
 
-    if-lt p1, v0, :cond_0
+    move-result v0
 
-    const/16 v0, 0x4e1f
+    if-nez v0, :cond_0
 
-    if-le p1, v0, :cond_1
-
-    :cond_0
     const/4 v0, 0x0
 
     :goto_0
     return v0
 
-    :cond_1
+    :cond_0
     const/4 v0, 0x1
 
     goto :goto_0
@@ -364,60 +361,6 @@
 
 
 # virtual methods
-.method public getAppPolicy(I)I
-    .locals 2
-    .parameter "appId"
-
-    .prologue
-    :try_start_0
-    iget-object v1, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
-
-    invoke-interface {v1, p1}, Landroid/net/INetworkPolicyManager;->getAppPolicy(I)I
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result v1
-
-    :goto_0
-    return v1
-
-    :catch_0
-    move-exception v0
-
-    .local v0, e:Landroid/os/RemoteException;
-    const/4 v1, 0x0
-
-    goto :goto_0
-.end method
-
-.method public getAppsWithPolicy(I)[I
-    .locals 2
-    .parameter "policy"
-
-    .prologue
-    :try_start_0
-    iget-object v1, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
-
-    invoke-interface {v1, p1}, Landroid/net/INetworkPolicyManager;->getAppsWithPolicy(I)[I
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result-object v1
-
-    :goto_0
-    return-object v1
-
-    :catch_0
-    move-exception v0
-
-    .local v0, e:Landroid/os/RemoteException;
-    const/4 v1, 0x0
-
-    new-array v1, v1, [I
-
-    goto :goto_0
-.end method
-
 .method public getNetworkPolicies()[Landroid/net/NetworkPolicy;
     .locals 2
 
@@ -468,6 +411,60 @@
     goto :goto_0
 .end method
 
+.method public getUidPolicy(I)I
+    .locals 2
+    .parameter "uid"
+
+    .prologue
+    :try_start_0
+    iget-object v1, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
+
+    invoke-interface {v1, p1}, Landroid/net/INetworkPolicyManager;->getUidPolicy(I)I
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v1
+
+    :goto_0
+    return v1
+
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    const/4 v1, 0x0
+
+    goto :goto_0
+.end method
+
+.method public getUidsWithPolicy(I)[I
+    .locals 2
+    .parameter "policy"
+
+    .prologue
+    :try_start_0
+    iget-object v1, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
+
+    invoke-interface {v1, p1}, Landroid/net/INetworkPolicyManager;->getUidsWithPolicy(I)[I
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v1
+
+    :goto_0
+    return-object v1
+
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    const/4 v1, 0x0
+
+    new-array v1, v1, [I
+
+    goto :goto_0
+.end method
+
 .method public registerListener(Landroid/net/INetworkPolicyListener;)V
     .locals 1
     .parameter "listener"
@@ -477,28 +474,6 @@
     iget-object v0, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
 
     invoke-interface {v0, p1}, Landroid/net/INetworkPolicyManager;->registerListener(Landroid/net/INetworkPolicyListener;)V
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
-
-    :goto_0
-    return-void
-
-    :catch_0
-    move-exception v0
-
-    goto :goto_0
-.end method
-
-.method public setAppPolicy(II)V
-    .locals 1
-    .parameter "appId"
-    .parameter "policy"
-
-    .prologue
-    :try_start_0
-    iget-object v0, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
-
-    invoke-interface {v0, p1, p2}, Landroid/net/INetworkPolicyManager;->setAppPolicy(II)V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
@@ -541,6 +516,28 @@
     iget-object v0, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
 
     invoke-interface {v0, p1}, Landroid/net/INetworkPolicyManager;->setRestrictBackground(Z)V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    :goto_0
+    return-void
+
+    :catch_0
+    move-exception v0
+
+    goto :goto_0
+.end method
+
+.method public setUidPolicy(II)V
+    .locals 1
+    .parameter "uid"
+    .parameter "policy"
+
+    .prologue
+    :try_start_0
+    iget-object v0, p0, Landroid/net/NetworkPolicyManager;->mService:Landroid/net/INetworkPolicyManager;
+
+    invoke-interface {v0, p1, p2}, Landroid/net/INetworkPolicyManager;->setUidPolicy(II)V
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 

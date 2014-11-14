@@ -92,7 +92,7 @@
 
 .field public static final STATE_WIFI_RUNNING_FLAG:I = 0x4000000
 
-.field public static final STATE_WIFI_SCAN_LOCK_FLAG:I = 0x1000000
+.field public static final STATE_WIFI_SCAN_FLAG:I = 0x1000000
 
 .field static final TAG:Ljava/lang/String; = "HistoryItem"
 

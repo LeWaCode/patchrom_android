@@ -541,11 +541,16 @@
     move-result v1
 
     .local v1, count:I
+    invoke-virtual {p0}, Landroid/widget/LinearLayout;->isLayoutRtl()Z
+
+    move-result v3
+
+    .local v3, isLayoutRtl:Z
     const/4 v2, 0x0
 
     .local v2, i:I
     :goto_0
-    if-ge v2, v1, :cond_1
+    if-ge v2, v1, :cond_2
 
     invoke-virtual {p0, v2}, Landroid/widget/LinearLayout;->getVirtualChildAt(I)Landroid/view/View;
 
@@ -575,6 +580,29 @@
     check-cast v4, Landroid/widget/LinearLayout$LayoutParams;
 
     .local v4, lp:Landroid/widget/LinearLayout$LayoutParams;
+    if-eqz v3, :cond_1
+
+    invoke-virtual {v0}, Landroid/view/View;->getRight()I
+
+    move-result v6
+
+    iget v7, v4, Landroid/widget/LinearLayout$LayoutParams;->rightMargin:I
+
+    add-int v5, v6, v7
+
+    .local v5, position:I
+    :goto_1
+    invoke-virtual {p0, p1, v5}, Landroid/widget/LinearLayout;->drawVerticalDivider(Landroid/graphics/Canvas;I)V
+
+    .end local v4           #lp:Landroid/widget/LinearLayout$LayoutParams;
+    .end local v5           #position:I
+    :cond_0
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_0
+
+    .restart local v4       #lp:Landroid/widget/LinearLayout$LayoutParams;
+    :cond_1
     invoke-virtual {v0}, Landroid/view/View;->getLeft()I
 
     move-result v6
@@ -585,25 +613,20 @@
 
     iget v7, p0, Landroid/widget/LinearLayout;->mDividerWidth:I
 
-    sub-int v3, v6, v7
+    sub-int v5, v6, v7
 
-    .local v3, left:I
-    invoke-virtual {p0, p1, v3}, Landroid/widget/LinearLayout;->drawVerticalDivider(Landroid/graphics/Canvas;I)V
-
-    .end local v3           #left:I
-    .end local v4           #lp:Landroid/widget/LinearLayout$LayoutParams;
-    :cond_0
-    add-int/lit8 v2, v2, 0x1
-
-    goto :goto_0
+    .restart local v5       #position:I
+    goto :goto_1
 
     .end local v0           #child:Landroid/view/View;
-    :cond_1
+    .end local v4           #lp:Landroid/widget/LinearLayout$LayoutParams;
+    .end local v5           #position:I
+    :cond_2
     invoke-virtual {p0, v1}, Landroid/widget/LinearLayout;->hasDividerBeforeChildAt(I)Z
 
     move-result v6
 
-    if-eqz v6, :cond_2
+    if-eqz v6, :cond_3
 
     add-int/lit8 v6, v1, -0x1
 
@@ -612,11 +635,25 @@
     move-result-object v0
 
     .restart local v0       #child:Landroid/view/View;
-    const/4 v5, 0x0
+    if-nez v0, :cond_5
 
-    .local v5, right:I
-    if-nez v0, :cond_3
+    if-eqz v3, :cond_4
 
+    invoke-virtual {p0}, Landroid/widget/LinearLayout;->getPaddingLeft()I
+
+    move-result v5
+
+    .restart local v5       #position:I
+    :goto_2
+    invoke-virtual {p0, p1, v5}, Landroid/widget/LinearLayout;->drawVerticalDivider(Landroid/graphics/Canvas;I)V
+
+    .end local v0           #child:Landroid/view/View;
+    .end local v5           #position:I
+    :cond_3
+    return-void
+
+    .restart local v0       #child:Landroid/view/View;
+    :cond_4
     invoke-virtual {p0}, Landroid/widget/LinearLayout;->getWidth()I
 
     move-result v6
@@ -631,17 +668,11 @@
 
     sub-int v5, v6, v7
 
-    :goto_1
-    invoke-virtual {p0, p1, v5}, Landroid/widget/LinearLayout;->drawVerticalDivider(Landroid/graphics/Canvas;I)V
+    .restart local v5       #position:I
+    goto :goto_2
 
-    .end local v0           #child:Landroid/view/View;
-    .end local v5           #right:I
-    :cond_2
-    return-void
-
-    .restart local v0       #child:Landroid/view/View;
-    .restart local v5       #right:I
-    :cond_3
+    .end local v5           #position:I
+    :cond_5
     invoke-virtual {v0}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
     move-result-object v4
@@ -649,6 +680,25 @@
     check-cast v4, Landroid/widget/LinearLayout$LayoutParams;
 
     .restart local v4       #lp:Landroid/widget/LinearLayout$LayoutParams;
+    if-eqz v3, :cond_6
+
+    invoke-virtual {v0}, Landroid/view/View;->getLeft()I
+
+    move-result v6
+
+    iget v7, v4, Landroid/widget/LinearLayout$LayoutParams;->leftMargin:I
+
+    sub-int/2addr v6, v7
+
+    iget v7, p0, Landroid/widget/LinearLayout;->mDividerWidth:I
+
+    sub-int v5, v6, v7
+
+    .restart local v5       #position:I
+    goto :goto_2
+
+    .end local v5           #position:I
+    :cond_6
     invoke-virtual {v0}, Landroid/view/View;->getRight()I
 
     move-result v6
@@ -657,7 +707,8 @@
 
     add-int v5, v6, v7
 
-    goto :goto_1
+    .restart local v5       #position:I
+    goto :goto_2
 .end method
 
 .method drawDividersVertical(Landroid/graphics/Canvas;)V
@@ -1354,8 +1405,12 @@
     return v0
 .end method
 
-.method layoutHorizontal()V
+.method layoutHorizontal(IIII)V
     .locals 30
+    .parameter "left"
+    .parameter "top"
+    .parameter "right"
+    .parameter "bottom"
 
     .prologue
     invoke-virtual/range {p0 .. p0}, Landroid/widget/LinearLayout;->isLayoutRtl()Z
@@ -1370,15 +1425,7 @@
     move/from16 v27, v0
 
     .local v27, paddingTop:I
-    move-object/from16 v0, p0
-
-    iget v2, v0, Landroid/widget/LinearLayout;->mBottom:I
-
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/LinearLayout;->mTop:I
-
-    sub-int v18, v2, v4
+    sub-int v18, p4, p2
 
     .local v18, height:I
     move-object/from16 v0, p0
@@ -1437,7 +1484,7 @@
     move-object/from16 v25, v0
 
     .local v25, maxDescent:[I
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/LinearLayout;->getResolvedLayoutDirection()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/LinearLayout;->getLayoutDirection()I
 
     move-result v21
 
@@ -1518,17 +1565,9 @@
 
     iget v2, v0, Landroid/widget/LinearLayout;->mPaddingLeft:I
 
-    move-object/from16 v0, p0
+    add-int v2, v2, p3
 
-    iget v4, v0, Landroid/widget/LinearLayout;->mRight:I
-
-    add-int/2addr v2, v4
-
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/LinearLayout;->mLeft:I
-
-    sub-int/2addr v2, v4
+    sub-int v2, v2, p1
 
     move-object/from16 v0, p0
 
@@ -1545,17 +1584,7 @@
 
     iget v2, v0, Landroid/widget/LinearLayout;->mPaddingLeft:I
 
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/LinearLayout;->mRight:I
-
-    move-object/from16 v0, p0
-
-    iget v0, v0, Landroid/widget/LinearLayout;->mLeft:I
-
-    move/from16 v29, v0
-
-    sub-int v4, v4, v29
+    sub-int v4, p3, p1
 
     move-object/from16 v0, p0
 
@@ -1805,8 +1834,12 @@
     .end sparse-switch
 .end method
 
-.method layoutVertical()V
+.method layoutVertical(IIII)V
     .locals 21
+    .parameter "left"
+    .parameter "top"
+    .parameter "right"
+    .parameter "bottom"
 
     .prologue
     move-object/from16 v0, p0
@@ -1816,15 +1849,7 @@
     move/from16 v18, v0
 
     .local v18, paddingLeft:I
-    move-object/from16 v0, p0
-
-    iget v1, v0, Landroid/widget/LinearLayout;->mRight:I
-
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/LinearLayout;->mLeft:I
-
-    sub-int v19, v1, v4
+    sub-int v19, p3, p1
 
     .local v19, width:I
     move-object/from16 v0, p0
@@ -1909,17 +1934,9 @@
 
     iget v1, v0, Landroid/widget/LinearLayout;->mPaddingTop:I
 
-    move-object/from16 v0, p0
+    add-int v1, v1, p4
 
-    iget v4, v0, Landroid/widget/LinearLayout;->mBottom:I
-
-    add-int/2addr v1, v4
-
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/LinearLayout;->mTop:I
-
-    sub-int/2addr v1, v4
+    sub-int v1, v1, p2
 
     move-object/from16 v0, p0
 
@@ -1936,17 +1953,7 @@
 
     iget v1, v0, Landroid/widget/LinearLayout;->mPaddingTop:I
 
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/LinearLayout;->mBottom:I
-
-    move-object/from16 v0, p0
-
-    iget v0, v0, Landroid/widget/LinearLayout;->mTop:I
-
-    move/from16 v20, v0
-
-    sub-int v4, v4, v20
+    sub-int v4, p4, p2
 
     move-object/from16 v0, p0
 
@@ -1999,7 +2006,7 @@
     move/from16 v12, v17
 
     :cond_2
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/LinearLayout;->getResolvedLayoutDirection()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/LinearLayout;->getLayoutDirection()I
 
     move-result v14
 
@@ -5356,13 +5363,13 @@
 
     if-ne v0, v1, :cond_0
 
-    invoke-virtual {p0}, Landroid/widget/LinearLayout;->layoutVertical()V
+    invoke-virtual {p0, p2, p3, p4, p5}, Landroid/widget/LinearLayout;->layoutVertical(IIII)V
 
     :goto_0
     return-void
 
     :cond_0
-    invoke-virtual {p0}, Landroid/widget/LinearLayout;->layoutHorizontal()V
+    invoke-virtual {p0, p2, p3, p4, p5}, Landroid/widget/LinearLayout;->layoutHorizontal(IIII)V
 
     goto :goto_0
 .end method

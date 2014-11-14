@@ -3,35 +3,11 @@
 .source "AppWidgetService.java"
 
 
-# annotations
-.annotation system Ldalvik/annotation/MemberClasses;
-    value = {
-        Lcom/android/server/AppWidgetService$ServiceConnectionProxy;,
-        Lcom/android/server/AppWidgetService$AppWidgetId;,
-        Lcom/android/server/AppWidgetService$Host;,
-        Lcom/android/server/AppWidgetService$Provider;
-    }
-.end annotation
-
-
 # static fields
 .field private static final TAG:Ljava/lang/String; = "AppWidgetService"
 
 
 # instance fields
-.field mAlarmManager:Landroid/app/AlarmManager;
-
-.field final mAppWidgetIds:Ljava/util/ArrayList;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "Ljava/util/ArrayList",
-            "<",
-            "Lcom/android/server/AppWidgetService$AppWidgetId;",
-            ">;"
-        }
-    .end annotation
-.end field
-
 .field private final mAppWidgetServices:Landroid/util/SparseArray;
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -47,35 +23,13 @@
 
 .field mContext:Landroid/content/Context;
 
-.field mHosts:Ljava/util/ArrayList;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "Ljava/util/ArrayList",
-            "<",
-            "Lcom/android/server/AppWidgetService$Host;",
-            ">;"
-        }
-    .end annotation
-.end field
-
-.field mInstalledProviders:Ljava/util/ArrayList;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "Ljava/util/ArrayList",
-            "<",
-            "Lcom/android/server/AppWidgetService$Provider;",
-            ">;"
-        }
-    .end annotation
-.end field
-
 .field mLocale:Ljava/util/Locale;
-
-.field mNextAppWidgetId:I
 
 .field mPackageManager:Landroid/content/pm/PackageManager;
 
 .field mSafeMode:Z
+
+.field private final mSaveStateHandler:Landroid/os/Handler;
 
 
 # direct methods
@@ -88,28 +42,6 @@
 
     invoke-direct {p0}, Lcom/android/internal/appwidget/IAppWidgetService$Stub;-><init>()V
 
-    new-instance v1, Ljava/util/ArrayList;
-
-    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
-
-    iput-object v1, p0, Lcom/android/server/AppWidgetService;->mInstalledProviders:Ljava/util/ArrayList;
-
-    const/4 v1, 0x1
-
-    iput v1, p0, Lcom/android/server/AppWidgetService;->mNextAppWidgetId:I
-
-    new-instance v1, Ljava/util/ArrayList;
-
-    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
-
-    iput-object v1, p0, Lcom/android/server/AppWidgetService;->mAppWidgetIds:Ljava/util/ArrayList;
-
-    new-instance v1, Ljava/util/ArrayList;
-
-    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
-
-    iput-object v1, p0, Lcom/android/server/AppWidgetService;->mHosts:Ljava/util/ArrayList;
-
     new-instance v1, Lcom/android/server/AppWidgetService$2;
 
     invoke-direct {v1, p0}, Lcom/android/server/AppWidgetService$2;-><init>(Lcom/android/server/AppWidgetService;)V
@@ -117,6 +49,12 @@
     iput-object v1, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
 
     iput-object p1, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+
+    invoke-static {}, Lcom/android/internal/os/BackgroundThread;->getHandler()Landroid/os/Handler;
+
+    move-result-object v1
+
+    iput-object v1, p0, Lcom/android/server/AppWidgetService;->mSaveStateHandler:Landroid/os/Handler;
 
     new-instance v1, Landroid/util/SparseArray;
 
@@ -128,7 +66,9 @@
 
     new-instance v0, Lcom/android/server/AppWidgetServiceImpl;
 
-    invoke-direct {v0, p1, v3}, Lcom/android/server/AppWidgetServiceImpl;-><init>(Landroid/content/Context;I)V
+    iget-object v1, p0, Lcom/android/server/AppWidgetService;->mSaveStateHandler:Landroid/os/Handler;
+
+    invoke-direct {v0, p1, v3, v1}, Lcom/android/server/AppWidgetServiceImpl;-><init>(Landroid/content/Context;ILandroid/os/Handler;)V
 
     .local v0, primary:Lcom/android/server/AppWidgetServiceImpl;
     iget-object v1, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
@@ -138,12 +78,13 @@
     return-void
 .end method
 
-.method static synthetic access$000(Lcom/android/server/AppWidgetService;)Lcom/android/server/AppWidgetServiceImpl;
+.method static synthetic access$000(Lcom/android/server/AppWidgetService;I)Lcom/android/server/AppWidgetServiceImpl;
     .locals 1
     .parameter "x0"
+    .parameter "x1"
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p1}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -160,101 +101,158 @@
     return-object v0
 .end method
 
-.method static getAppWidgetIds(Lcom/android/server/AppWidgetService$Provider;)[I
-    .locals 4
-    .parameter "p"
+.method private checkPermission(I)V
+    .locals 8
+    .parameter "userId"
 
     .prologue
-    iget-object v3, p0, Lcom/android/server/AppWidgetService$Provider;->instances:Ljava/util/ArrayList;
+    invoke-static {}, Landroid/os/Binder;->getCallingPid()I
 
-    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
+    move-result v0
 
-    move-result v2
-
-    .local v2, instancesSize:I
-    new-array v0, v2, [I
-
-    .local v0, appWidgetIds:[I
-    const/4 v1, 0x0
-
-    .local v1, i:I
-    :goto_0
-    if-ge v1, v2, :cond_0
-
-    iget-object v3, p0, Lcom/android/server/AppWidgetService$Provider;->instances:Ljava/util/ArrayList;
-
-    invoke-virtual {v3, v1}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
-
-    move-result-object v3
-
-    check-cast v3, Lcom/android/server/AppWidgetService$AppWidgetId;
-
-    iget v3, v3, Lcom/android/server/AppWidgetService$AppWidgetId;->appWidgetId:I
-
-    aput v3, v0, v1
-
-    add-int/lit8 v1, v1, 0x1
-
-    goto :goto_0
-
-    :cond_0
-    return-object v0
-.end method
-
-.method private getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
-    .locals 4
-
-    .prologue
-    invoke-static {}, Landroid/os/Binder;->getOrigCallingUser()I
+    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
 
     move-result v1
 
-    .local v1, userId:I
+    const/4 v3, 0x0
+
+    const/4 v4, 0x1
+
+    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/Class;->getSimpleName()Ljava/lang/String;
+
+    move-result-object v5
+
+    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/Class;->getPackage()Ljava/lang/Package;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/Package;->getName()Ljava/lang/String;
+
+    move-result-object v6
+
+    move v2, p1
+
+    invoke-static/range {v0 .. v6}, Landroid/app/ActivityManager;->handleIncomingUser(IIIZZLjava/lang/String;Ljava/lang/String;)I
+
+    move-result v7
+
+    .local v7, realUserId:I
+    return-void
+.end method
+
+.method private getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
+    .locals 6
+    .parameter "userId"
+
+    .prologue
+    invoke-direct {p0, p1}, Lcom/android/server/AppWidgetService;->checkPermission(I)V
+
+    const/4 v0, 0x0
+
+    .local v0, sendInitial:Z
+    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    monitor-enter v3
+
+    :try_start_0
     iget-object v2, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
 
-    invoke-virtual {v2, v1}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
+    invoke-virtual {v2, p1}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
 
-    move-result-object v0
+    move-result-object v1
 
-    check-cast v0, Lcom/android/server/AppWidgetServiceImpl;
+    check-cast v1, Lcom/android/server/AppWidgetServiceImpl;
 
-    .local v0, service:Lcom/android/server/AppWidgetServiceImpl;
-    if-nez v0, :cond_0
+    .local v1, service:Lcom/android/server/AppWidgetServiceImpl;
+    if-nez v1, :cond_0
 
     const-string v2, "AppWidgetService"
 
-    const-string v3, "Unable to find AppWidgetServiceImpl for the current user"
+    new-instance v4, Ljava/lang/StringBuilder;
 
-    invoke-static {v2, v3}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
+    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
 
-    new-instance v0, Lcom/android/server/AppWidgetServiceImpl;
+    const-string v5, "Unable to find AppWidgetServiceImpl for user "
 
-    .end local v0           #service:Lcom/android/server/AppWidgetServiceImpl;
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    invoke-virtual {v4, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    const-string v5, ", adding"
+
+    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v4
+
+    invoke-static {v2, v4}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+    new-instance v1, Lcom/android/server/AppWidgetServiceImpl;
+
+    .end local v1           #service:Lcom/android/server/AppWidgetServiceImpl;
     iget-object v2, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
 
-    invoke-direct {v0, v2, v1}, Lcom/android/server/AppWidgetServiceImpl;-><init>(Landroid/content/Context;I)V
+    iget-object v4, p0, Lcom/android/server/AppWidgetService;->mSaveStateHandler:Landroid/os/Handler;
 
-    .restart local v0       #service:Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {v1, v2, p1, v4}, Lcom/android/server/AppWidgetServiceImpl;-><init>(Landroid/content/Context;ILandroid/os/Handler;)V
+
+    .restart local v1       #service:Lcom/android/server/AppWidgetServiceImpl;
     iget-boolean v2, p0, Lcom/android/server/AppWidgetService;->mSafeMode:Z
 
-    invoke-virtual {v0, v2}, Lcom/android/server/AppWidgetServiceImpl;->systemReady(Z)V
-
-    invoke-virtual {v0}, Lcom/android/server/AppWidgetServiceImpl;->sendInitialBroadcasts()V
+    invoke-virtual {v1, v2}, Lcom/android/server/AppWidgetServiceImpl;->systemReady(Z)V
 
     iget-object v2, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
 
-    invoke-virtual {v2, v1, v0}, Landroid/util/SparseArray;->append(ILjava/lang/Object;)V
+    invoke-virtual {v2, p1, v1}, Landroid/util/SparseArray;->append(ILjava/lang/Object;)V
+
+    const/4 v0, 0x1
 
     :cond_0
-    return-object v0
+    monitor-exit v3
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    if-eqz v0, :cond_1
+
+    invoke-virtual {v1}, Lcom/android/server/AppWidgetServiceImpl;->sendInitialBroadcasts()V
+
+    :cond_1
+    return-object v1
+
+    .end local v1           #service:Lcom/android/server/AppWidgetServiceImpl;
+    :catchall_0
+    move-exception v2
+
+    :try_start_1
+    monitor-exit v3
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    throw v2
 .end method
 
 
 # virtual methods
-.method public allocateAppWidgetId(Ljava/lang/String;I)I
+.method public allocateAppWidgetId(Ljava/lang/String;II)I
     .locals 1
     .parameter "packageName"
     .parameter "hostId"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -262,7 +260,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -273,10 +271,12 @@
     return v0
 .end method
 
-.method public bindAppWidgetId(ILandroid/content/ComponentName;)V
+.method public bindAppWidgetId(ILandroid/content/ComponentName;Landroid/os/Bundle;I)V
     .locals 1
     .parameter "appWidgetId"
     .parameter "provider"
+    .parameter "options"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -284,20 +284,22 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p4}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
-    invoke-virtual {v0, p1, p2}, Lcom/android/server/AppWidgetServiceImpl;->bindAppWidgetId(ILandroid/content/ComponentName;)V
+    invoke-virtual {v0, p1, p2, p3}, Lcom/android/server/AppWidgetServiceImpl;->bindAppWidgetId(ILandroid/content/ComponentName;Landroid/os/Bundle;)V
 
     return-void
 .end method
 
-.method public bindAppWidgetIdIfAllowed(Ljava/lang/String;ILandroid/content/ComponentName;)Z
+.method public bindAppWidgetIdIfAllowed(Ljava/lang/String;ILandroid/content/ComponentName;Landroid/os/Bundle;I)Z
     .locals 1
     .parameter "packageName"
     .parameter "appWidgetId"
     .parameter "provider"
+    .parameter "options"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -305,22 +307,23 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p5}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
-    invoke-virtual {v0, p1, p2, p3}, Lcom/android/server/AppWidgetServiceImpl;->bindAppWidgetIdIfAllowed(Ljava/lang/String;ILandroid/content/ComponentName;)Z
+    invoke-virtual {v0, p1, p2, p3, p4}, Lcom/android/server/AppWidgetServiceImpl;->bindAppWidgetIdIfAllowed(Ljava/lang/String;ILandroid/content/ComponentName;Landroid/os/Bundle;)Z
 
     move-result v0
 
     return v0
 .end method
 
-.method public bindRemoteViewsService(ILandroid/content/Intent;Landroid/os/IBinder;)V
+.method public bindRemoteViewsService(ILandroid/content/Intent;Landroid/os/IBinder;I)V
     .locals 1
     .parameter "appWidgetId"
     .parameter "intent"
     .parameter "connection"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -328,7 +331,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p4}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -337,8 +340,9 @@
     return-void
 .end method
 
-.method public deleteAllHosts()V
+.method public deleteAllHosts(I)V
     .locals 1
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -346,7 +350,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p1}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -355,9 +359,10 @@
     return-void
 .end method
 
-.method public deleteAppWidgetId(I)V
+.method public deleteAppWidgetId(II)V
     .locals 1
     .parameter "appWidgetId"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -365,7 +370,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -374,9 +379,10 @@
     return-void
 .end method
 
-.method public deleteHost(I)V
+.method public deleteHost(II)V
     .locals 1
     .parameter "hostId"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -384,7 +390,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -394,47 +400,111 @@
 .end method
 
 .method public dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;)V
-    .locals 3
+    .locals 6
     .parameter "fd"
     .parameter "pw"
     .parameter "args"
 
     .prologue
+    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+
+    const-string v4, "android.permission.DUMP"
+
+    const-string v5, "AppWidgetService"
+
+    invoke-virtual {v3, v4, v5}, Landroid/content/Context;->enforceCallingOrSelfPermission(Ljava/lang/String;Ljava/lang/String;)V
+
+    iget-object v4, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    monitor-enter v4
+
+    :try_start_0
+    new-instance v1, Lcom/android/internal/util/IndentingPrintWriter;
+
+    const-string v3, "  "
+
+    invoke-direct {v1, p2, v3}, Lcom/android/internal/util/IndentingPrintWriter;-><init>(Ljava/io/Writer;Ljava/lang/String;)V
+
+    .local v1, ipw:Lcom/android/internal/util/IndentingPrintWriter;
     const/4 v0, 0x0
 
     .local v0, i:I
     :goto_0
-    iget-object v2, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
 
-    invoke-virtual {v2}, Landroid/util/SparseArray;->size()I
+    invoke-virtual {v3}, Landroid/util/SparseArray;->size()I
 
-    move-result v2
+    move-result v3
 
-    if-ge v0, v2, :cond_0
+    if-ge v0, v3, :cond_0
 
-    iget-object v2, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+    new-instance v3, Ljava/lang/StringBuilder;
 
-    invoke-virtual {v2, v0}, Landroid/util/SparseArray;->valueAt(I)Ljava/lang/Object;
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
 
-    move-result-object v1
+    const-string v5, "User: "
 
-    check-cast v1, Lcom/android/server/AppWidgetServiceImpl;
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    .local v1, service:Lcom/android/server/AppWidgetServiceImpl;
-    invoke-virtual {v1, p1, p2, p3}, Lcom/android/server/AppWidgetServiceImpl;->dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;)V
+    move-result-object v3
+
+    iget-object v5, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    invoke-virtual {v5, v0}, Landroid/util/SparseArray;->keyAt(I)I
+
+    move-result v5
+
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-virtual {p2, v3}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
+
+    invoke-virtual {v1}, Lcom/android/internal/util/IndentingPrintWriter;->increaseIndent()V
+
+    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    invoke-virtual {v3, v0}, Landroid/util/SparseArray;->valueAt(I)Ljava/lang/Object;
+
+    move-result-object v2
+
+    check-cast v2, Lcom/android/server/AppWidgetServiceImpl;
+
+    .local v2, service:Lcom/android/server/AppWidgetServiceImpl;
+    invoke-virtual {v2, p1, v1, p3}, Lcom/android/server/AppWidgetServiceImpl;->dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;)V
+
+    invoke-virtual {v1}, Lcom/android/internal/util/IndentingPrintWriter;->decreaseIndent()V
 
     add-int/lit8 v0, v0, 0x1
 
     goto :goto_0
 
-    .end local v1           #service:Lcom/android/server/AppWidgetServiceImpl;
+    .end local v2           #service:Lcom/android/server/AppWidgetServiceImpl;
     :cond_0
+    monitor-exit v4
+
     return-void
+
+    .end local v0           #i:I
+    .end local v1           #ipw:Lcom/android/internal/util/IndentingPrintWriter;
+    :catchall_0
+    move-exception v3
+
+    monitor-exit v4
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v3
 .end method
 
-.method public getAppWidgetIds(Landroid/content/ComponentName;)[I
+.method public getAppWidgetIds(Landroid/content/ComponentName;I)[I
     .locals 1
     .parameter "provider"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -442,7 +512,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -453,9 +523,10 @@
     return-object v0
 .end method
 
-.method public getAppWidgetInfo(I)Landroid/appwidget/AppWidgetProviderInfo;
+.method public getAppWidgetIdsForHost(II)[I
     .locals 1
-    .parameter "appWidgetId"
+    .parameter "hostId"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -463,7 +534,29 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
+
+    move-result-object v0
+
+    invoke-virtual {v0, p1}, Lcom/android/server/AppWidgetServiceImpl;->getAppWidgetIdsForHost(I)[I
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public getAppWidgetInfo(II)Landroid/appwidget/AppWidgetProviderInfo;
+    .locals 1
+    .parameter "appWidgetId"
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+
+    .prologue
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -474,12 +567,13 @@
     return-object v0
 .end method
 
-.method public getAppWidgetOptions(I)Landroid/os/Bundle;
+.method public getAppWidgetOptions(II)Landroid/os/Bundle;
     .locals 1
     .parameter "appWidgetId"
+    .parameter "userId"
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -490,9 +584,10 @@
     return-object v0
 .end method
 
-.method public getAppWidgetViews(I)Landroid/widget/RemoteViews;
+.method public getAppWidgetViews(II)Landroid/widget/RemoteViews;
     .locals 1
     .parameter "appWidgetId"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -500,7 +595,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -511,11 +606,13 @@
     return-object v0
 .end method
 
-.method public getInstalledProviders()Ljava/util/List;
+.method public getInstalledProviders(II)Ljava/util/List;
     .locals 1
+    .parameter "categoryFilter"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "()",
+            "(II)",
             "Ljava/util/List",
             "<",
             "Landroid/appwidget/AppWidgetProviderInfo;",
@@ -530,20 +627,21 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
-    invoke-virtual {v0}, Lcom/android/server/AppWidgetServiceImpl;->getInstalledProviders()Ljava/util/List;
+    invoke-virtual {v0, p1}, Lcom/android/server/AppWidgetServiceImpl;->getInstalledProviders(I)Ljava/util/List;
 
     move-result-object v0
 
     return-object v0
 .end method
 
-.method public hasBindAppWidgetPermission(Ljava/lang/String;)Z
+.method public hasBindAppWidgetPermission(Ljava/lang/String;I)Z
     .locals 1
     .parameter "packageName"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -551,7 +649,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -562,10 +660,11 @@
     return v0
 .end method
 
-.method public notifyAppWidgetViewDataChanged([II)V
+.method public notifyAppWidgetViewDataChanged([III)V
     .locals 1
     .parameter "appWidgetIds"
     .parameter "viewId"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -573,7 +672,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -583,10 +682,23 @@
 .end method
 
 .method public onUserRemoved(I)V
-    .locals 2
+    .locals 3
     .parameter "userId"
 
     .prologue
+    const/4 v1, 0x1
+
+    if-ge p1, v1, :cond_0
+
+    :goto_0
+    return-void
+
+    :cond_0
+    iget-object v2, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    monitor-enter v2
+
+    :try_start_0
     iget-object v1, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
 
     invoke-virtual {v1, p1}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
@@ -596,14 +708,10 @@
     check-cast v0, Lcom/android/server/AppWidgetServiceImpl;
 
     .local v0, impl:Lcom/android/server/AppWidgetServiceImpl;
-    const/4 v1, 0x1
+    iget-object v1, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
 
-    if-ge p1, v1, :cond_0
+    invoke-virtual {v1, p1}, Landroid/util/SparseArray;->remove(I)V
 
-    :goto_0
-    return-void
-
-    :cond_0
     if-nez v0, :cond_1
 
     invoke-static {p1}, Lcom/android/server/AppWidgetServiceImpl;->getSettingsFile(I)Ljava/io/File;
@@ -612,18 +720,87 @@
 
     invoke-virtual {v1}, Ljava/io/File;->delete()Z
 
+    :goto_1
+    monitor-exit v2
+
     goto :goto_0
 
+    .end local v0           #impl:Lcom/android/server/AppWidgetServiceImpl;
+    :catchall_0
+    move-exception v1
+
+    monitor-exit v2
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v1
+
+    .restart local v0       #impl:Lcom/android/server/AppWidgetServiceImpl;
     :cond_1
+    :try_start_1
     invoke-virtual {v0}, Lcom/android/server/AppWidgetServiceImpl;->onUserRemoved()V
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    goto :goto_0
+    goto :goto_1
 .end method
 
-.method public partiallyUpdateAppWidgetIds([ILandroid/widget/RemoteViews;)V
+.method public onUserStopping(I)V
+    .locals 3
+    .parameter "userId"
+
+    .prologue
+    const/4 v1, 0x1
+
+    if-ge p1, v1, :cond_0
+
+    :goto_0
+    return-void
+
+    :cond_0
+    iget-object v2, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    monitor-enter v2
+
+    :try_start_0
+    iget-object v1, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    invoke-virtual {v1, p1}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/android/server/AppWidgetServiceImpl;
+
+    .local v0, impl:Lcom/android/server/AppWidgetServiceImpl;
+    if-eqz v0, :cond_1
+
+    iget-object v1, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+
+    invoke-virtual {v1, p1}, Landroid/util/SparseArray;->remove(I)V
+
+    invoke-virtual {v0}, Lcom/android/server/AppWidgetServiceImpl;->onUserStopping()V
+
+    :cond_1
+    monitor-exit v2
+
+    goto :goto_0
+
+    .end local v0           #impl:Lcom/android/server/AppWidgetServiceImpl;
+    :catchall_0
+    move-exception v1
+
+    monitor-exit v2
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v1
+.end method
+
+.method public partiallyUpdateAppWidgetIds([ILandroid/widget/RemoteViews;I)V
     .locals 1
     .parameter "appWidgetIds"
     .parameter "views"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -631,7 +808,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -640,10 +817,11 @@
     return-void
 .end method
 
-.method public setBindAppWidgetPermission(Ljava/lang/String;Z)V
+.method public setBindAppWidgetPermission(Ljava/lang/String;ZI)V
     .locals 1
     .parameter "packageName"
     .parameter "permission"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -651,7 +829,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -660,12 +838,13 @@
     return-void
 .end method
 
-.method public startListening(Lcom/android/internal/appwidget/IAppWidgetHost;Ljava/lang/String;ILjava/util/List;)[I
+.method public startListening(Lcom/android/internal/appwidget/IAppWidgetHost;Ljava/lang/String;ILjava/util/List;I)[I
     .locals 1
     .parameter "host"
     .parameter "packageName"
     .parameter "hostId"
     .parameter
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "(",
@@ -675,7 +854,7 @@
             "Ljava/util/List",
             "<",
             "Landroid/widget/RemoteViews;",
-            ">;)[I"
+            ">;I)[I"
         }
     .end annotation
 
@@ -687,7 +866,7 @@
 
     .prologue
     .local p4, updatedViews:Ljava/util/List;,"Ljava/util/List<Landroid/widget/RemoteViews;>;"
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p5}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -698,9 +877,10 @@
     return-object v0
 .end method
 
-.method public stopListening(I)V
+.method public stopListening(II)V
     .locals 1
     .parameter "hostId"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -708,7 +888,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p2}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -717,121 +897,144 @@
     return-void
 .end method
 
-.method public systemReady(Z)V
-    .locals 8
+.method public systemRunning(Z)V
+    .locals 12
     .parameter "safeMode"
 
     .prologue
-    const/4 v7, 0x0
+    const/4 v4, 0x0
 
     iput-boolean p1, p0, Lcom/android/server/AppWidgetService;->mSafeMode:Z
 
-    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
+    iget-object v0, p0, Lcom/android/server/AppWidgetService;->mAppWidgetServices:Landroid/util/SparseArray;
 
-    const/4 v4, 0x0
+    const/4 v1, 0x0
 
-    invoke-virtual {v3, v4}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
+    invoke-virtual {v0, v1}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
 
-    move-result-object v3
+    move-result-object v0
 
-    check-cast v3, Lcom/android/server/AppWidgetServiceImpl;
+    check-cast v0, Lcom/android/server/AppWidgetServiceImpl;
 
-    invoke-virtual {v3, p1}, Lcom/android/server/AppWidgetServiceImpl;->systemReady(Z)V
+    invoke-virtual {v0, p1}, Lcom/android/server/AppWidgetServiceImpl;->systemReady(Z)V
 
-    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+    iget-object v0, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
 
-    iget-object v4, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
+    iget-object v1, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
 
-    new-instance v5, Landroid/content/IntentFilter;
+    sget-object v2, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
 
-    const-string v6, "android.intent.action.BOOT_COMPLETED"
+    new-instance v3, Landroid/content/IntentFilter;
 
-    invoke-direct {v5, v6}, Landroid/content/IntentFilter;-><init>(Ljava/lang/String;)V
+    const-string v5, "android.intent.action.BOOT_COMPLETED"
 
-    invoke-virtual {v3, v4, v5, v7, v7}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+    invoke-direct {v3, v5}, Landroid/content/IntentFilter;-><init>(Ljava/lang/String;)V
 
-    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+    move-object v5, v4
 
-    iget-object v4, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
+    invoke-virtual/range {v0 .. v5}, Landroid/content/Context;->registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
 
-    new-instance v5, Landroid/content/IntentFilter;
+    iget-object v0, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
 
-    const-string v6, "android.intent.action.CONFIGURATION_CHANGED"
+    iget-object v1, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
 
-    invoke-direct {v5, v6}, Landroid/content/IntentFilter;-><init>(Ljava/lang/String;)V
+    sget-object v2, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
 
-    invoke-virtual {v3, v4, v5, v7, v7}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+    new-instance v3, Landroid/content/IntentFilter;
 
-    new-instance v0, Landroid/content/IntentFilter;
+    const-string v5, "android.intent.action.CONFIGURATION_CHANGED"
 
-    invoke-direct {v0}, Landroid/content/IntentFilter;-><init>()V
+    invoke-direct {v3, v5}, Landroid/content/IntentFilter;-><init>(Ljava/lang/String;)V
 
-    .local v0, filter:Landroid/content/IntentFilter;
-    const-string v3, "android.intent.action.PACKAGE_ADDED"
+    move-object v5, v4
 
-    invoke-virtual {v0, v3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    invoke-virtual/range {v0 .. v5}, Landroid/content/Context;->registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
 
-    const-string v3, "android.intent.action.PACKAGE_CHANGED"
+    new-instance v3, Landroid/content/IntentFilter;
 
-    invoke-virtual {v0, v3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    invoke-direct {v3}, Landroid/content/IntentFilter;-><init>()V
 
-    const-string v3, "android.intent.action.PACKAGE_REMOVED"
+    .local v3, filter:Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.PACKAGE_ADDED"
 
-    invoke-virtual {v0, v3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 
-    const-string v3, "package"
+    const-string v0, "android.intent.action.PACKAGE_CHANGED"
 
-    invoke-virtual {v0, v3}, Landroid/content/IntentFilter;->addDataScheme(Ljava/lang/String;)V
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 
-    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+    const-string v0, "android.intent.action.PACKAGE_REMOVED"
 
-    iget-object v4, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 
-    invoke-virtual {v3, v4, v0}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+    const-string v0, "package"
 
-    new-instance v1, Landroid/content/IntentFilter;
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addDataScheme(Ljava/lang/String;)V
 
-    invoke-direct {v1}, Landroid/content/IntentFilter;-><init>()V
+    iget-object v0, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
 
-    .local v1, sdFilter:Landroid/content/IntentFilter;
-    const-string v3, "android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE"
+    iget-object v1, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
 
-    invoke-virtual {v1, v3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    sget-object v2, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
 
-    const-string v3, "android.intent.action.EXTERNAL_APPLICATIONS_UNAVAILABLE"
+    move-object v5, v4
 
-    invoke-virtual {v1, v3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    invoke-virtual/range {v0 .. v5}, Landroid/content/Context;->registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
 
-    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+    new-instance v8, Landroid/content/IntentFilter;
 
-    iget-object v4, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
+    invoke-direct {v8}, Landroid/content/IntentFilter;-><init>()V
 
-    invoke-virtual {v3, v4, v1}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+    .local v8, sdFilter:Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE"
 
-    new-instance v2, Landroid/content/IntentFilter;
+    invoke-virtual {v8, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 
-    invoke-direct {v2}, Landroid/content/IntentFilter;-><init>()V
+    const-string v0, "android.intent.action.EXTERNAL_APPLICATIONS_UNAVAILABLE"
 
-    .local v2, userFilter:Landroid/content/IntentFilter;
-    const-string v3, "android.intent.action.USER_REMOVED"
+    invoke-virtual {v8, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 
-    invoke-virtual {v2, v3}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    iget-object v5, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
 
-    iget-object v3, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+    iget-object v6, p0, Lcom/android/server/AppWidgetService;->mBroadcastReceiver:Landroid/content/BroadcastReceiver;
 
-    new-instance v4, Lcom/android/server/AppWidgetService$1;
+    sget-object v7, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
 
-    invoke-direct {v4, p0}, Lcom/android/server/AppWidgetService$1;-><init>(Lcom/android/server/AppWidgetService;)V
+    move-object v9, v4
 
-    invoke-virtual {v3, v4, v2}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+    move-object v10, v4
+
+    invoke-virtual/range {v5 .. v10}, Landroid/content/Context;->registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+
+    new-instance v11, Landroid/content/IntentFilter;
+
+    invoke-direct {v11}, Landroid/content/IntentFilter;-><init>()V
+
+    .local v11, userFilter:Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.USER_REMOVED"
+
+    invoke-virtual {v11, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    const-string v0, "android.intent.action.USER_STOPPING"
+
+    invoke-virtual {v11, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    iget-object v0, p0, Lcom/android/server/AppWidgetService;->mContext:Landroid/content/Context;
+
+    new-instance v1, Lcom/android/server/AppWidgetService$1;
+
+    invoke-direct {v1, p0}, Lcom/android/server/AppWidgetService$1;-><init>(Lcom/android/server/AppWidgetService;)V
+
+    invoke-virtual {v0, v1, v11}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
 
     return-void
 .end method
 
-.method public unbindRemoteViewsService(ILandroid/content/Intent;)V
+.method public unbindRemoteViewsService(ILandroid/content/Intent;I)V
     .locals 1
     .parameter "appWidgetId"
     .parameter "intent"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -839,7 +1042,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -848,10 +1051,11 @@
     return-void
 .end method
 
-.method public updateAppWidgetIds([ILandroid/widget/RemoteViews;)V
+.method public updateAppWidgetIds([ILandroid/widget/RemoteViews;I)V
     .locals 1
     .parameter "appWidgetIds"
     .parameter "views"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -859,7 +1063,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -868,13 +1072,14 @@
     return-void
 .end method
 
-.method public updateAppWidgetOptions(ILandroid/os/Bundle;)V
+.method public updateAppWidgetOptions(ILandroid/os/Bundle;I)V
     .locals 1
     .parameter "appWidgetId"
     .parameter "options"
+    .parameter "userId"
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 
@@ -883,10 +1088,11 @@
     return-void
 .end method
 
-.method public updateAppWidgetProvider(Landroid/content/ComponentName;Landroid/widget/RemoteViews;)V
+.method public updateAppWidgetProvider(Landroid/content/ComponentName;Landroid/widget/RemoteViews;I)V
     .locals 1
     .parameter "provider"
     .parameter "views"
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -894,7 +1100,7 @@
     .end annotation
 
     .prologue
-    invoke-direct {p0}, Lcom/android/server/AppWidgetService;->getImplForUser()Lcom/android/server/AppWidgetServiceImpl;
+    invoke-direct {p0, p3}, Lcom/android/server/AppWidgetService;->getImplForUser(I)Lcom/android/server/AppWidgetServiceImpl;
 
     move-result-object v0
 

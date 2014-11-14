@@ -63,7 +63,7 @@
     :cond_0
     iget-object v1, p0, Lcom/android/server/StatusBarManagerService$7;->this$0:Lcom/android/server/StatusBarManagerService;
 
-    invoke-virtual {v1}, Lcom/android/server/StatusBarManagerService;->collapse()V
+    invoke-virtual {v1}, Lcom/android/server/StatusBarManagerService;->collapsePanels()V
 
     :cond_1
     return-void

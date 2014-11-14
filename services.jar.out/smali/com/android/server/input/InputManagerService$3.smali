@@ -1,14 +1,11 @@
 .class Lcom/android/server/input/InputManagerService$3;
-.super Ljava/lang/Object;
+.super Landroid/content/BroadcastReceiver;
 .source "InputManagerService.java"
-
-# interfaces
-.implements Lcom/android/server/input/InputManagerService$KeyboardLayoutVisitor;
 
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/input/InputManagerService;->updateKeyboardLayouts()V
+    value = Lcom/android/server/input/InputManagerService;->systemRunning()V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -20,39 +17,32 @@
 # instance fields
 .field final synthetic this$0:Lcom/android/server/input/InputManagerService;
 
-.field final synthetic val$availableKeyboardLayouts:Ljava/util/HashSet;
-
 
 # direct methods
-.method constructor <init>(Lcom/android/server/input/InputManagerService;Ljava/util/HashSet;)V
+.method constructor <init>(Lcom/android/server/input/InputManagerService;)V
     .locals 0
-    .parameter
     .parameter
 
     .prologue
     iput-object p1, p0, Lcom/android/server/input/InputManagerService$3;->this$0:Lcom/android/server/input/InputManagerService;
 
-    iput-object p2, p0, Lcom/android/server/input/InputManagerService$3;->val$availableKeyboardLayouts:Ljava/util/HashSet;
-
-    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+    invoke-direct {p0}, Landroid/content/BroadcastReceiver;-><init>()V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public visitKeyboardLayout(Landroid/content/res/Resources;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V
+.method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
     .locals 1
-    .parameter "resources"
-    .parameter "descriptor"
-    .parameter "label"
-    .parameter "collection"
-    .parameter "keyboardLayoutResId"
+    .parameter "context"
+    .parameter "intent"
 
     .prologue
-    iget-object v0, p0, Lcom/android/server/input/InputManagerService$3;->val$availableKeyboardLayouts:Ljava/util/HashSet;
+    iget-object v0, p0, Lcom/android/server/input/InputManagerService$3;->this$0:Lcom/android/server/input/InputManagerService;
 
-    invoke-virtual {v0, p2}, Ljava/util/HashSet;->add(Ljava/lang/Object;)Z
+    #calls: Lcom/android/server/input/InputManagerService;->reloadDeviceAliases()V
+    invoke-static {v0}, Lcom/android/server/input/InputManagerService;->access$100(Lcom/android/server/input/InputManagerService;)V
 
     return-void
 .end method

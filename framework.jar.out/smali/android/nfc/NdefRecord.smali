@@ -617,7 +617,7 @@
 
     const/4 v3, 0x0
 
-    sget-object v4, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v4, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
     invoke-virtual {p0, v4}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
 
@@ -663,7 +663,7 @@
 
     move-result-object v3
 
-    sget-object v4, Ljava/util/Locale;->US:Ljava/util/Locale;
+    sget-object v4, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
 
     invoke-virtual {v3, v4}, Ljava/lang/String;->toLowerCase(Ljava/util/Locale;)Ljava/lang/String;
 
@@ -673,7 +673,7 @@
 
     move-result-object v3
 
-    sget-object v4, Ljava/util/Locale;->US:Ljava/util/Locale;
+    sget-object v4, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
 
     invoke-virtual {v3, v4}, Ljava/lang/String;->toLowerCase(Ljava/util/Locale;)Ljava/lang/String;
 
@@ -709,14 +709,14 @@
     throw v3
 
     :cond_3
-    sget-object v3, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v3, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
     invoke-virtual {p0, v3}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
 
     move-result-object v1
 
     .local v1, byteDomain:[B
-    sget-object v3, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v3, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
     invoke-virtual {p1, v3}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
 
@@ -834,7 +834,7 @@
     throw v2
 
     :cond_3
-    sget-object v2, Ljava/nio/charset/Charsets;->US_ASCII:Ljava/nio/charset/Charset;
+    sget-object v2, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
 
     invoke-virtual {p0, v2}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
 
@@ -934,7 +934,7 @@
     move-result-object v4
 
     :cond_2
-    sget-object v5, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v5, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
     invoke-virtual {v4, v5}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
 
@@ -1737,7 +1737,7 @@
 
     move-result-object v3
 
-    sget-object v4, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v4, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
     invoke-direct {v2, v3, v4}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
 
@@ -1766,42 +1766,40 @@
 .end method
 
 .method private toUri(Z)Landroid/net/Uri;
-    .locals 10
+    .locals 11
     .parameter "inSmartPoster"
 
     .prologue
-    iget-short v6, p0, Landroid/nfc/NdefRecord;->mTnf:S
+    const/4 v7, 0x0
 
-    packed-switch v6, :pswitch_data_0
+    iget-short v8, p0, Landroid/nfc/NdefRecord;->mTnf:S
+
+    packed-switch v8, :pswitch_data_0
 
     :cond_0
     :goto_0
     :pswitch_0
-    const/4 v5, 0x0
-
-    :cond_1
-    :goto_1
-    return-object v5
+    return-object v7
 
     :pswitch_1
-    iget-object v6, p0, Landroid/nfc/NdefRecord;->mType:[B
+    iget-object v8, p0, Landroid/nfc/NdefRecord;->mType:[B
 
-    sget-object v7, Landroid/nfc/NdefRecord;->RTD_SMART_POSTER:[B
+    sget-object v9, Landroid/nfc/NdefRecord;->RTD_SMART_POSTER:[B
 
-    invoke-static {v6, v7}, Ljava/util/Arrays;->equals([B[B)Z
+    invoke-static {v8, v9}, Ljava/util/Arrays;->equals([B[B)Z
 
-    move-result v6
+    move-result v8
 
-    if-eqz v6, :cond_2
+    if-eqz v8, :cond_2
 
     if-nez p1, :cond_2
 
     :try_start_0
     new-instance v3, Landroid/nfc/NdefMessage;
 
-    iget-object v6, p0, Landroid/nfc/NdefRecord;->mPayload:[B
+    iget-object v8, p0, Landroid/nfc/NdefRecord;->mPayload:[B
 
-    invoke-direct {v3, v6}, Landroid/nfc/NdefMessage;-><init>([B)V
+    invoke-direct {v3, v8}, Landroid/nfc/NdefMessage;-><init>([B)V
 
     .local v3, nestedMessage:Landroid/nfc/NdefMessage;
     invoke-virtual {v3}, Landroid/nfc/NdefMessage;->getRecords()[Landroid/nfc/NdefRecord;
@@ -1815,26 +1813,31 @@
     const/4 v1, 0x0
 
     .local v1, i$:I
-    :goto_2
+    :goto_1
     if-ge v1, v2, :cond_0
 
     aget-object v4, v0, v1
 
     .local v4, nestedRecord:Landroid/nfc/NdefRecord;
-    const/4 v6, 0x1
+    const/4 v8, 0x1
 
-    invoke-direct {v4, v6}, Landroid/nfc/NdefRecord;->toUri(Z)Landroid/net/Uri;
+    invoke-direct {v4, v8}, Landroid/nfc/NdefRecord;->toUri(Z)Landroid/net/Uri;
     :try_end_0
     .catch Landroid/nfc/FormatException; {:try_start_0 .. :try_end_0} :catch_0
 
     move-result-object v5
 
     .local v5, uri:Landroid/net/Uri;
-    if-nez v5, :cond_1
+    if-eqz v5, :cond_1
 
+    move-object v7, v5
+
+    goto :goto_0
+
+    :cond_1
     add-int/lit8 v1, v1, 0x1
 
-    goto :goto_2
+    goto :goto_1
 
     .end local v0           #arr$:[Landroid/nfc/NdefRecord;
     .end local v1           #i$:I
@@ -1843,84 +1846,88 @@
     .end local v4           #nestedRecord:Landroid/nfc/NdefRecord;
     .end local v5           #uri:Landroid/net/Uri;
     :cond_2
-    iget-object v6, p0, Landroid/nfc/NdefRecord;->mType:[B
+    iget-object v8, p0, Landroid/nfc/NdefRecord;->mType:[B
 
-    sget-object v7, Landroid/nfc/NdefRecord;->RTD_URI:[B
+    sget-object v9, Landroid/nfc/NdefRecord;->RTD_URI:[B
 
-    invoke-static {v6, v7}, Ljava/util/Arrays;->equals([B[B)Z
+    invoke-static {v8, v9}, Ljava/util/Arrays;->equals([B[B)Z
 
-    move-result v6
+    move-result v8
 
-    if-eqz v6, :cond_0
+    if-eqz v8, :cond_0
 
     invoke-direct {p0}, Landroid/nfc/NdefRecord;->parseWktUri()Landroid/net/Uri;
 
     move-result-object v6
 
+    .local v6, wktUri:Landroid/net/Uri;
+    if-eqz v6, :cond_0
+
     invoke-virtual {v6}, Landroid/net/Uri;->normalizeScheme()Landroid/net/Uri;
 
-    move-result-object v5
+    move-result-object v7
 
-    goto :goto_1
+    goto :goto_0
 
+    .end local v6           #wktUri:Landroid/net/Uri;
     :pswitch_2
-    new-instance v6, Ljava/lang/String;
+    new-instance v7, Ljava/lang/String;
 
-    iget-object v7, p0, Landroid/nfc/NdefRecord;->mType:[B
+    iget-object v8, p0, Landroid/nfc/NdefRecord;->mType:[B
 
-    sget-object v8, Ljava/nio/charset/Charsets;->UTF_8:Ljava/nio/charset/Charset;
+    sget-object v9, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
-    invoke-direct {v6, v7, v8}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
+    invoke-direct {v7, v8, v9}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
 
-    invoke-static {v6}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
+    invoke-static {v7}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v5
 
     .restart local v5       #uri:Landroid/net/Uri;
     invoke-virtual {v5}, Landroid/net/Uri;->normalizeScheme()Landroid/net/Uri;
 
-    move-result-object v5
+    move-result-object v7
 
-    goto :goto_1
+    goto :goto_0
 
     .end local v5           #uri:Landroid/net/Uri;
     :pswitch_3
     if-nez p1, :cond_0
 
-    new-instance v6, Ljava/lang/StringBuilder;
+    new-instance v7, Ljava/lang/StringBuilder;
 
-    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
+    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v7, "vnd.android.nfc://ext/"
+    const-string v8, "vnd.android.nfc://ext/"
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v6
+    move-result-object v7
 
-    new-instance v7, Ljava/lang/String;
+    new-instance v8, Ljava/lang/String;
 
-    iget-object v8, p0, Landroid/nfc/NdefRecord;->mType:[B
+    iget-object v9, p0, Landroid/nfc/NdefRecord;->mType:[B
 
-    sget-object v9, Ljava/nio/charset/Charsets;->US_ASCII:Ljava/nio/charset/Charset;
+    sget-object v10, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
 
-    invoke-direct {v7, v8, v9}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
+    invoke-direct {v8, v9, v10}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v6
+    move-result-object v7
 
-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
-    move-result-object v6
+    move-result-object v7
 
-    invoke-static {v6}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
+    invoke-static {v7}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
 
-    move-result-object v5
+    move-result-object v7
 
-    goto :goto_1
+    goto :goto_0
 
     :catch_0
-    move-exception v6
+    move-exception v8
 
     goto :goto_0
 
@@ -2332,7 +2339,7 @@
 
     iget-object v1, p0, Landroid/nfc/NdefRecord;->mType:[B
 
-    sget-object v2, Ljava/nio/charset/Charsets;->US_ASCII:Ljava/nio/charset/Charset;
+    sget-object v2, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
 
     invoke-direct {v0, v1, v2}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
 

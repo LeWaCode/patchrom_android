@@ -1,4 +1,4 @@
-.class Lcom/android/server/am/ReceiverList;
+.class final Lcom/android/server/am/ReceiverList;
 .super Ljava/util/ArrayList;
 .source "ReceiverList.java"
 
@@ -35,14 +35,17 @@
 
 .field public final uid:I
 
+.field public final userId:I
+
 
 # direct methods
-.method constructor <init>(Lcom/android/server/am/ActivityManagerService;Lcom/android/server/am/ProcessRecord;IILandroid/content/IIntentReceiver;)V
+.method constructor <init>(Lcom/android/server/am/ActivityManagerService;Lcom/android/server/am/ProcessRecord;IIILandroid/content/IIntentReceiver;)V
     .locals 1
     .parameter "_owner"
     .parameter "_app"
     .parameter "_pid"
     .parameter "_uid"
+    .parameter "_userId"
     .parameter "_receiver"
 
     .prologue
@@ -58,13 +61,15 @@
 
     iput-object p1, p0, Lcom/android/server/am/ReceiverList;->owner:Lcom/android/server/am/ActivityManagerService;
 
-    iput-object p5, p0, Lcom/android/server/am/ReceiverList;->receiver:Landroid/content/IIntentReceiver;
+    iput-object p6, p0, Lcom/android/server/am/ReceiverList;->receiver:Landroid/content/IIntentReceiver;
 
     iput-object p2, p0, Lcom/android/server/am/ReceiverList;->app:Lcom/android/server/am/ProcessRecord;
 
     iput p3, p0, Lcom/android/server/am/ReceiverList;->pid:I
 
     iput p4, p0, Lcom/android/server/am/ReceiverList;->uid:I
+
+    iput p5, p0, Lcom/android/server/am/ReceiverList;->userId:I
 
     return-void
 .end method
@@ -189,7 +194,16 @@
 
     iget-object v0, p0, Lcom/android/server/am/ReceiverList;->app:Lcom/android/server/am/ProcessRecord;
 
-    invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/Object;)V
+    if-eqz v0, :cond_2
+
+    iget-object v0, p0, Lcom/android/server/am/ReceiverList;->app:Lcom/android/server/am/ProcessRecord;
+
+    invoke-virtual {v0}, Lcom/android/server/am/ProcessRecord;->toShortString()Ljava/lang/String;
+
+    move-result-object v0
+
+    :goto_0
+    invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
     const-string v0, " pid="
 
@@ -204,6 +218,14 @@
     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
     iget v0, p0, Lcom/android/server/am/ReceiverList;->uid:I
+
+    invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(I)V
+
+    const-string v0, " user="
+
+    invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    iget v0, p0, Lcom/android/server/am/ReceiverList;->userId:I
 
     invoke-virtual {p1, v0}, Ljava/io/PrintWriter;->println(I)V
 
@@ -236,6 +258,11 @@
 
     :cond_1
     return-void
+
+    :cond_2
+    const/4 v0, 0x0
+
+    goto :goto_0
 .end method
 
 .method public equals(Ljava/lang/Object;)Z
@@ -328,6 +355,14 @@
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
 
     iget v1, p0, Lcom/android/server/am/ReceiverList;->uid:I
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    const-string v1, "/u"
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    iget v1, p0, Lcom/android/server/am/ReceiverList;->userId:I
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 

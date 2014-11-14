@@ -222,9 +222,10 @@
     return v0
 .end method
 
-.method public instantiate(Landroid/app/Activity;)Landroid/app/Fragment;
+.method public instantiate(Landroid/app/Activity;Landroid/app/Fragment;)Landroid/app/Fragment;
     .locals 3
     .parameter "activity"
+    .parameter "parent"
 
     .prologue
     iget-object v0, p0, Landroid/app/FragmentState;->mInstance:Landroid/app/Fragment;
@@ -283,7 +284,7 @@
 
     iget v1, p0, Landroid/app/FragmentState;->mIndex:I
 
-    invoke-virtual {v0, v1}, Landroid/app/Fragment;->setIndex(I)V
+    invoke-virtual {v0, v1, p2}, Landroid/app/Fragment;->setIndex(ILandroid/app/Fragment;)V
 
     iget-object v0, p0, Landroid/app/FragmentState;->mInstance:Landroid/app/Fragment;
 

@@ -47,7 +47,7 @@
 
 # virtual methods
 .method public run()V
-    .locals 4
+    .locals 6
 
     .prologue
     invoke-static {}, Landroid/app/NotificationManager;->getService()Landroid/app/INotificationManager;
@@ -64,9 +64,15 @@
     :try_start_0
     iget-object v2, p0, Lcom/android/server/am/ServiceRecord$2;->val$localPackageName:Ljava/lang/String;
 
-    iget v3, p0, Lcom/android/server/am/ServiceRecord$2;->val$localForegroundId:I
+    const/4 v3, 0x0
 
-    invoke-interface {v1, v2, v3}, Landroid/app/INotificationManager;->cancelNotification(Ljava/lang/String;I)V
+    iget v4, p0, Lcom/android/server/am/ServiceRecord$2;->val$localForegroundId:I
+
+    iget-object v5, p0, Lcom/android/server/am/ServiceRecord$2;->this$0:Lcom/android/server/am/ServiceRecord;
+
+    iget v5, v5, Lcom/android/server/am/ServiceRecord;->userId:I
+
+    invoke-interface {v1, v2, v3, v4, v5}, Landroid/app/INotificationManager;->cancelNotificationWithTag(Ljava/lang/String;Ljava/lang/String;II)V
     :try_end_0
     .catch Ljava/lang/RuntimeException; {:try_start_0 .. :try_end_0} :catch_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_1

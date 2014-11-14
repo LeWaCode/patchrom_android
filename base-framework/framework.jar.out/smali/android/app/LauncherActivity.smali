@@ -35,7 +35,7 @@
     .locals 2
 
     .prologue
-    const v1, 0x102024d
+    const v1, 0x1020270
 
     invoke-virtual {p0, v1}, Landroid/app/LauncherActivity;->findViewById(I)Landroid/view/View;
 
@@ -148,13 +148,7 @@
     move-result-object v1
 
     .local v1, list:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/ResolveInfo;>;"
-    new-instance v5, Landroid/content/pm/ResolveInfo$DisplayNameComparator;
-
-    iget-object v6, p0, Landroid/app/LauncherActivity;->mPackageManager:Landroid/content/pm/PackageManager;
-
-    invoke-direct {v5, v6}, Landroid/content/pm/ResolveInfo$DisplayNameComparator;-><init>(Landroid/content/pm/PackageManager;)V
-
-    invoke-static {v1, v5}, Ljava/util/Collections;->sort(Ljava/util/List;Ljava/util/Comparator;)V
+    invoke-virtual {p0, v1}, Landroid/app/LauncherActivity;->onSortResultList(Ljava/util/List;)V
 
     new-instance v4, Ljava/util/ArrayList;
 
@@ -334,9 +328,35 @@
     .locals 1
 
     .prologue
-    const v0, 0x1090020
+    const v0, 0x1090021
 
     invoke-virtual {p0, v0}, Landroid/app/LauncherActivity;->setContentView(I)V
+
+    return-void
+.end method
+
+.method protected onSortResultList(Ljava/util/List;)V
+    .locals 2
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/List",
+            "<",
+            "Landroid/content/pm/ResolveInfo;",
+            ">;)V"
+        }
+    .end annotation
+
+    .prologue
+    .local p1, results:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/ResolveInfo;>;"
+    new-instance v0, Landroid/content/pm/ResolveInfo$DisplayNameComparator;
+
+    iget-object v1, p0, Landroid/app/LauncherActivity;->mPackageManager:Landroid/content/pm/PackageManager;
+
+    invoke-direct {v0, v1}, Landroid/content/pm/ResolveInfo$DisplayNameComparator;-><init>(Landroid/content/pm/PackageManager;)V
+
+    invoke-static {p1, v0}, Ljava/util/Collections;->sort(Ljava/util/List;Ljava/util/Comparator;)V
 
     return-void
 .end method

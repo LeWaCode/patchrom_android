@@ -6,7 +6,8 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
+        Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,
+        Landroid/content/pm/RegisteredServicesCache$UserServices;
     }
 .end annotation
 
@@ -21,6 +22,8 @@
 
 
 # static fields
+.field private static final DEBUG:Z = false
+
 .field private static final TAG:Ljava/lang/String; = "PackageManager"
 
 
@@ -28,6 +31,8 @@
 .field private final mAttributesName:Ljava/lang/String;
 
 .field public final mContext:Landroid/content/Context;
+
+.field private final mExternalReceiver:Landroid/content/BroadcastReceiver;
 
 .field private mHandler:Landroid/os/Handler;
 
@@ -44,29 +49,13 @@
 
 .field private final mMetaDataName:Ljava/lang/String;
 
-.field private mPersistentServices:Ljava/util/HashMap;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "Ljava/util/HashMap",
-            "<TV;",
-            "Ljava/lang/Integer;",
-            ">;"
-        }
-    .end annotation
-.end field
+.field private final mPackageReceiver:Landroid/content/BroadcastReceiver;
 
-.field private final mPersistentServicesFile:Lcom/android/internal/os/AtomicFile;
+.field private final mPersistentServicesFile:Landroid/util/AtomicFile;
 
 .field private mPersistentServicesFileDidNotExist:Z
-
-.field private final mReceiver:Ljava/util/concurrent/atomic/AtomicReference;
-    .annotation system Ldalvik/annotation/Signature;
-        value = {
-            "Ljava/util/concurrent/atomic/AtomicReference",
-            "<",
-            "Landroid/content/BroadcastReceiver;",
-            ">;"
-        }
+    .annotation build Lcom/android/internal/annotations/GuardedBy;
+        value = "mServicesLock"
     .end annotation
 .end field
 
@@ -79,18 +68,22 @@
     .end annotation
 .end field
 
-.field private mServices:Ljava/util/Map;
+.field private final mServicesLock:Ljava/lang/Object;
+
+.field private final mUserServices:Landroid/util/SparseArray;
+    .annotation build Lcom/android/internal/annotations/GuardedBy;
+        value = "mServicesLock"
+    .end annotation
+
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "Ljava/util/Map",
-            "<TV;",
-            "Landroid/content/pm/RegisteredServicesCache$ServiceInfo",
+            "Landroid/util/SparseArray",
+            "<",
+            "Landroid/content/pm/RegisteredServicesCache$UserServices",
             "<TV;>;>;"
         }
     .end annotation
 .end field
-
-.field private final mServicesLock:Ljava/lang/Object;
 
 
 # direct methods
@@ -116,13 +109,35 @@
     .prologue
     .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
     .local p5, serializerAndParser:Landroid/content/pm/XmlSerializerAndParser;,"Landroid/content/pm/XmlSerializerAndParser<TV;>;"
+    const/4 v4, 0x0
+
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    new-instance v6, Ljava/lang/Object;
+    new-instance v0, Ljava/lang/Object;
 
-    invoke-direct {v6}, Ljava/lang/Object;-><init>()V
+    invoke-direct {v0}, Ljava/lang/Object;-><init>()V
 
-    iput-object v6, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
+    iput-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
+
+    new-instance v0, Landroid/util/SparseArray;
+
+    const/4 v1, 0x2
+
+    invoke-direct {v0, v1}, Landroid/util/SparseArray;-><init>(I)V
+
+    iput-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mUserServices:Landroid/util/SparseArray;
+
+    new-instance v0, Landroid/content/pm/RegisteredServicesCache$1;
+
+    invoke-direct {v0, p0}, Landroid/content/pm/RegisteredServicesCache$1;-><init>(Landroid/content/pm/RegisteredServicesCache;)V
+
+    iput-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mPackageReceiver:Landroid/content/BroadcastReceiver;
+
+    new-instance v0, Landroid/content/pm/RegisteredServicesCache$2;
+
+    invoke-direct {v0, p0}, Landroid/content/pm/RegisteredServicesCache$2;-><init>(Landroid/content/pm/RegisteredServicesCache;)V
+
+    iput-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mExternalReceiver:Landroid/content/BroadcastReceiver;
 
     iput-object p1, p0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
 
@@ -136,105 +151,113 @@
 
     invoke-static {}, Landroid/os/Environment;->getDataDirectory()Ljava/io/File;
 
-    move-result-object v0
+    move-result-object v6
 
-    .local v0, dataDir:Ljava/io/File;
-    new-instance v5, Ljava/io/File;
+    .local v6, dataDir:Ljava/io/File;
+    new-instance v9, Ljava/io/File;
 
-    const-string v6, "system"
+    const-string v0, "system"
 
-    invoke-direct {v5, v0, v6}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+    invoke-direct {v9, v6, v0}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    .local v5, systemDir:Ljava/io/File;
-    new-instance v4, Ljava/io/File;
+    .local v9, systemDir:Ljava/io/File;
+    new-instance v8, Ljava/io/File;
 
-    const-string v6, "registered_services"
+    const-string v0, "registered_services"
 
-    invoke-direct {v4, v5, v6}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+    invoke-direct {v8, v9, v0}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    .local v4, syncDir:Ljava/io/File;
-    new-instance v6, Lcom/android/internal/os/AtomicFile;
+    .local v8, syncDir:Ljava/io/File;
+    new-instance v0, Landroid/util/AtomicFile;
 
-    new-instance v7, Ljava/io/File;
+    new-instance v1, Ljava/io/File;
 
-    new-instance v8, Ljava/lang/StringBuilder;
+    new-instance v2, Ljava/lang/StringBuilder;
 
-    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
 
-    invoke-virtual {v8, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v2, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v8
+    move-result-object v2
 
-    const-string v9, ".xml"
+    const-string v5, ".xml"
 
-    invoke-virtual {v8, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v2, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v8
+    move-result-object v2
 
-    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
-    move-result-object v8
+    move-result-object v2
 
-    invoke-direct {v7, v4, v8}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
+    invoke-direct {v1, v8, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    invoke-direct {v6, v7}, Lcom/android/internal/os/AtomicFile;-><init>(Ljava/io/File;)V
+    invoke-direct {v0, v1}, Landroid/util/AtomicFile;-><init>(Ljava/io/File;)V
 
-    iput-object v6, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Lcom/android/internal/os/AtomicFile;
+    iput-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {p0}, Landroid/content/pm/RegisteredServicesCache;->generateServicesMap()V
-
-    new-instance v2, Landroid/content/pm/RegisteredServicesCache$1;
-
-    invoke-direct {v2, p0}, Landroid/content/pm/RegisteredServicesCache$1;-><init>(Landroid/content/pm/RegisteredServicesCache;)V
-
-    .local v2, receiver:Landroid/content/BroadcastReceiver;
-    new-instance v6, Ljava/util/concurrent/atomic/AtomicReference;
-
-    invoke-direct {v6, v2}, Ljava/util/concurrent/atomic/AtomicReference;-><init>(Ljava/lang/Object;)V
-
-    iput-object v6, p0, Landroid/content/pm/RegisteredServicesCache;->mReceiver:Ljava/util/concurrent/atomic/AtomicReference;
-
-    new-instance v1, Landroid/content/IntentFilter;
-
-    invoke-direct {v1}, Landroid/content/IntentFilter;-><init>()V
-
-    .local v1, intentFilter:Landroid/content/IntentFilter;
-    const-string v6, "android.intent.action.PACKAGE_ADDED"
-
-    invoke-virtual {v1, v6}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
-
-    const-string v6, "android.intent.action.PACKAGE_CHANGED"
-
-    invoke-virtual {v1, v6}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
-
-    const-string v6, "android.intent.action.PACKAGE_REMOVED"
-
-    invoke-virtual {v1, v6}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
-
-    const-string v6, "package"
-
-    invoke-virtual {v1, v6}, Landroid/content/IntentFilter;->addDataScheme(Ljava/lang/String;)V
-
-    iget-object v6, p0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v6, v2, v1}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+    invoke-direct {p0}, Landroid/content/pm/RegisteredServicesCache;->readPersistentServicesLocked()V
 
     new-instance v3, Landroid/content/IntentFilter;
 
     invoke-direct {v3}, Landroid/content/IntentFilter;-><init>()V
 
-    .local v3, sdFilter:Landroid/content/IntentFilter;
-    const-string v6, "android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE"
+    .local v3, intentFilter:Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.PACKAGE_ADDED"
 
-    invoke-virtual {v3, v6}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 
-    const-string v6, "android.intent.action.EXTERNAL_APPLICATIONS_UNAVAILABLE"
+    const-string v0, "android.intent.action.PACKAGE_CHANGED"
 
-    invoke-virtual {v3, v6}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 
-    iget-object v6, p0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
+    const-string v0, "android.intent.action.PACKAGE_REMOVED"
 
-    invoke-virtual {v6, v2, v3}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    const-string v0, "package"
+
+    invoke-virtual {v3, v0}, Landroid/content/IntentFilter;->addDataScheme(Ljava/lang/String;)V
+
+    iget-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
+
+    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mPackageReceiver:Landroid/content/BroadcastReceiver;
+
+    sget-object v2, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
+
+    move-object v5, v4
+
+    invoke-virtual/range {v0 .. v5}, Landroid/content/Context;->registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+
+    new-instance v7, Landroid/content/IntentFilter;
+
+    invoke-direct {v7}, Landroid/content/IntentFilter;-><init>()V
+
+    .local v7, sdFilter:Landroid/content/IntentFilter;
+    const-string v0, "android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE"
+
+    invoke-virtual {v7, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    const-string v0, "android.intent.action.EXTERNAL_APPLICATIONS_UNAVAILABLE"
+
+    invoke-virtual {v7, v0}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
+
+    iget-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
+
+    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mExternalReceiver:Landroid/content/BroadcastReceiver;
+
+    invoke-virtual {v0, v1, v7}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
+
+    return-void
+.end method
+
+.method static synthetic access$100(Landroid/content/pm/RegisteredServicesCache;I)V
+    .locals 0
+    .parameter "x0"
+    .parameter "x1"
+
+    .prologue
+    invoke-direct {p0, p1}, Landroid/content/pm/RegisteredServicesCache;->generateServicesMap(I)V
 
     return-void
 .end method
@@ -366,6 +389,681 @@
     goto :goto_1
 .end method
 
+.method private findOrCreateUserLocked(I)Landroid/content/pm/RegisteredServicesCache$UserServices;
+    .locals 2
+    .parameter "userId"
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(I)",
+            "Landroid/content/pm/RegisteredServicesCache$UserServices",
+            "<TV;>;"
+        }
+    .end annotation
+
+    .prologue
+    .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
+    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mUserServices:Landroid/util/SparseArray;
+
+    invoke-virtual {v1, p1}, Landroid/util/SparseArray;->get(I)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Landroid/content/pm/RegisteredServicesCache$UserServices;
+
+    .local v0, services:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    if-nez v0, :cond_0
+
+    new-instance v0, Landroid/content/pm/RegisteredServicesCache$UserServices;
+
+    .end local v0           #services:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    const/4 v1, 0x0
+
+    invoke-direct {v0, v1}, Landroid/content/pm/RegisteredServicesCache$UserServices;-><init>(Landroid/content/pm/RegisteredServicesCache$1;)V
+
+    .restart local v0       #services:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mUserServices:Landroid/util/SparseArray;
+
+    invoke-virtual {v1, p1, v0}, Landroid/util/SparseArray;->put(ILjava/lang/Object;)V
+
+    :cond_0
+    return-object v0
+.end method
+
+.method private generateServicesMap(I)V
+    .locals 22
+    .parameter "userId"
+
+    .prologue
+    .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
+    move-object/from16 v0, p0
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
+
+    move-object/from16 v18, v0
+
+    invoke-virtual/range {v18 .. v18}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+
+    move-result-object v10
+
+    .local v10, pm:Landroid/content/pm/PackageManager;
+    new-instance v14, Ljava/util/ArrayList;
+
+    invoke-direct {v14}, Ljava/util/ArrayList;-><init>()V
+
+    .local v14, serviceInfos:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;>;"
+    new-instance v18, Landroid/content/Intent;
+
+    move-object/from16 v0, p0
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache;->mInterfaceName:Ljava/lang/String;
+
+    move-object/from16 v19, v0
+
+    invoke-direct/range {v18 .. v19}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
+
+    const/16 v19, 0x80
+
+    move-object/from16 v0, v18
+
+    move/from16 v1, v19
+
+    move/from16 v2, p1
+
+    invoke-virtual {v10, v0, v1, v2}, Landroid/content/pm/PackageManager;->queryIntentServicesAsUser(Landroid/content/Intent;II)Ljava/util/List;
+
+    move-result-object v13
+
+    .local v13, resolveInfos:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/ResolveInfo;>;"
+    invoke-interface {v13}, Ljava/util/List;->iterator()Ljava/util/Iterator;
+
+    move-result-object v8
+
+    .local v8, i$:Ljava/util/Iterator;
+    :goto_0
+    invoke-interface {v8}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v18
+
+    if-eqz v18, :cond_1
+
+    invoke-interface {v8}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v12
+
+    check-cast v12, Landroid/content/pm/ResolveInfo;
+
+    .local v12, resolveInfo:Landroid/content/pm/ResolveInfo;
+    :try_start_0
+    move-object/from16 v0, p0
+
+    invoke-direct {v0, v12}, Landroid/content/pm/RegisteredServicesCache;->parseServiceInfo(Landroid/content/pm/ResolveInfo;)Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
+
+    move-result-object v9
+
+    .local v9, info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    if-nez v9, :cond_0
+
+    const-string v18, "PackageManager"
+
+    new-instance v19, Ljava/lang/StringBuilder;
+
+    invoke-direct/range {v19 .. v19}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v20, "Unable to load service info "
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v19
+
+    invoke-virtual {v12}, Landroid/content/pm/ResolveInfo;->toString()Ljava/lang/String;
+
+    move-result-object v20
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v19
+
+    invoke-virtual/range {v19 .. v19}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v19
+
+    invoke-static/range {v18 .. v19}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
+    :try_end_0
+    .catch Lorg/xmlpull/v1/XmlPullParserException; {:try_start_0 .. :try_end_0} :catch_0
+    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_1
+
+    goto :goto_0
+
+    .end local v9           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    :catch_0
+    move-exception v6
+
+    .local v6, e:Lorg/xmlpull/v1/XmlPullParserException;
+    const-string v18, "PackageManager"
+
+    new-instance v19, Ljava/lang/StringBuilder;
+
+    invoke-direct/range {v19 .. v19}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v20, "Unable to load service info "
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v19
+
+    invoke-virtual {v12}, Landroid/content/pm/ResolveInfo;->toString()Ljava/lang/String;
+
+    move-result-object v20
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v19
+
+    invoke-virtual/range {v19 .. v19}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v19
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v19
+
+    invoke-static {v0, v1, v6}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    goto :goto_0
+
+    .end local v6           #e:Lorg/xmlpull/v1/XmlPullParserException;
+    .restart local v9       #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    :cond_0
+    :try_start_1
+    invoke-virtual {v14, v9}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+    :try_end_1
+    .catch Lorg/xmlpull/v1/XmlPullParserException; {:try_start_1 .. :try_end_1} :catch_0
+    .catch Ljava/io/IOException; {:try_start_1 .. :try_end_1} :catch_1
+
+    goto :goto_0
+
+    .end local v9           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    :catch_1
+    move-exception v6
+
+    .local v6, e:Ljava/io/IOException;
+    const-string v18, "PackageManager"
+
+    new-instance v19, Ljava/lang/StringBuilder;
+
+    invoke-direct/range {v19 .. v19}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v20, "Unable to load service info "
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v19
+
+    invoke-virtual {v12}, Landroid/content/pm/ResolveInfo;->toString()Ljava/lang/String;
+
+    move-result-object v20
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v19
+
+    invoke-virtual/range {v19 .. v19}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v19
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v19
+
+    invoke-static {v0, v1, v6}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+
+    goto :goto_0
+
+    .end local v6           #e:Ljava/io/IOException;
+    .end local v12           #resolveInfo:Landroid/content/pm/ResolveInfo;
+    :cond_1
+    move-object/from16 v0, p0
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
+
+    move-object/from16 v19, v0
+
+    monitor-enter v19
+
+    :try_start_2
+    invoke-direct/range {p0 .. p1}, Landroid/content/pm/RegisteredServicesCache;->findOrCreateUserLocked(I)Landroid/content/pm/RegisteredServicesCache$UserServices;
+
+    move-result-object v16
+
+    .local v16, user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    if-nez v18, :cond_4
+
+    const/4 v7, 0x1
+
+    .local v7, firstScan:Z
+    :goto_1
+    if-eqz v7, :cond_5
+
+    invoke-static {}, Lcom/google/android/collect/Maps;->newHashMap()Ljava/util/HashMap;
+
+    move-result-object v18
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v16
+
+    iput-object v0, v1, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    :goto_2
+    new-instance v5, Ljava/lang/StringBuilder;
+
+    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
+
+    .local v5, changes:Ljava/lang/StringBuilder;
+    const/4 v4, 0x0
+
+    .local v4, changed:Z
+    invoke-virtual {v14}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+
+    move-result-object v8
+
+    :cond_2
+    :goto_3
+    invoke-interface {v8}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v18
+
+    if-eqz v18, :cond_9
+
+    invoke-interface {v8}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v9
+
+    check-cast v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
+
+    .restart local v9       #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->persistentServices:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v20, v0
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v20
+
+    invoke-interface {v0, v1}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v11
+
+    check-cast v11, Ljava/lang/Integer;
+
+    .local v11, previousUid:Ljava/lang/Integer;
+    if-nez v11, :cond_6
+
+    const/4 v4, 0x1
+
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v20, v0
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v20
+
+    invoke-interface {v0, v1, v9}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->persistentServices:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v20, v0
+
+    iget v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
+
+    move/from16 v21, v0
+
+    invoke-static/range {v21 .. v21}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v21
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v20
+
+    move-object/from16 v2, v21
+
+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-object/from16 v0, p0
+
+    iget-boolean v0, v0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFileDidNotExist:Z
+
+    move/from16 v18, v0
+
+    if-eqz v18, :cond_3
+
+    if-nez v7, :cond_2
+
+    :cond_3
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v18, v0
+
+    const/16 v20, 0x0
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v18
+
+    move/from16 v2, p1
+
+    move/from16 v3, v20
+
+    invoke-direct {v0, v1, v2, v3}, Landroid/content/pm/RegisteredServicesCache;->notifyListener(Ljava/lang/Object;IZ)V
+
+    goto :goto_3
+
+    .end local v4           #changed:Z
+    .end local v5           #changes:Ljava/lang/StringBuilder;
+    .end local v7           #firstScan:Z
+    .end local v9           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    .end local v11           #previousUid:Ljava/lang/Integer;
+    .end local v16           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    :catchall_0
+    move-exception v18
+
+    monitor-exit v19
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+    throw v18
+
+    .restart local v16       #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    :cond_4
+    const/4 v7, 0x0
+
+    goto/16 :goto_1
+
+    .restart local v7       #firstScan:Z
+    :cond_5
+    :try_start_3
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    invoke-interface/range {v18 .. v18}, Ljava/util/Map;->clear()V
+
+    goto/16 :goto_2
+
+    .restart local v4       #changed:Z
+    .restart local v5       #changes:Ljava/lang/StringBuilder;
+    .restart local v9       #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    .restart local v11       #previousUid:Ljava/lang/Integer;
+    :cond_6
+    invoke-virtual {v11}, Ljava/lang/Integer;->intValue()I
+
+    move-result v18
+
+    iget v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
+
+    move/from16 v20, v0
+
+    move/from16 v0, v18
+
+    move/from16 v1, v20
+
+    if-ne v0, v1, :cond_7
+
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v20, v0
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v20
+
+    invoke-interface {v0, v1, v9}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    goto/16 :goto_3
+
+    :cond_7
+    iget v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
+
+    move/from16 v18, v0
+
+    move-object/from16 v0, p0
+
+    move/from16 v1, v18
+
+    invoke-direct {v0, v1}, Landroid/content/pm/RegisteredServicesCache;->inSystemImage(I)Z
+
+    move-result v18
+
+    if-nez v18, :cond_8
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v18, v0
+
+    invoke-virtual {v11}, Ljava/lang/Integer;->intValue()I
+
+    move-result v20
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v18
+
+    move/from16 v2, v20
+
+    invoke-direct {v0, v14, v1, v2}, Landroid/content/pm/RegisteredServicesCache;->containsTypeAndUid(Ljava/util/ArrayList;Ljava/lang/Object;I)Z
+
+    move-result v18
+
+    if-nez v18, :cond_2
+
+    :cond_8
+    const/4 v4, 0x1
+
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v20, v0
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v20
+
+    invoke-interface {v0, v1, v9}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->persistentServices:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v20, v0
+
+    iget v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
+
+    move/from16 v21, v0
+
+    invoke-static/range {v21 .. v21}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v21
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v20
+
+    move-object/from16 v2, v21
+
+    invoke-interface {v0, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+    iget-object v0, v9, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
+
+    move-object/from16 v18, v0
+
+    const/16 v20, 0x0
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v18
+
+    move/from16 v2, p1
+
+    move/from16 v3, v20
+
+    invoke-direct {v0, v1, v2, v3}, Landroid/content/pm/RegisteredServicesCache;->notifyListener(Ljava/lang/Object;IZ)V
+
+    goto/16 :goto_3
+
+    .end local v9           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
+    .end local v11           #previousUid:Ljava/lang/Integer;
+    :cond_9
+    invoke-static {}, Lcom/google/android/collect/Lists;->newArrayList()Ljava/util/ArrayList;
+
+    move-result-object v15
+
+    .local v15, toBeRemoved:Ljava/util/ArrayList;,"Ljava/util/ArrayList<TV;>;"
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->persistentServices:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    invoke-interface/range {v18 .. v18}, Ljava/util/Map;->keySet()Ljava/util/Set;
+
+    move-result-object v18
+
+    invoke-interface/range {v18 .. v18}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
+
+    move-result-object v8
+
+    :cond_a
+    :goto_4
+    invoke-interface {v8}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v18
+
+    if-eqz v18, :cond_b
+
+    invoke-interface {v8}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v17
+
+    .local v17, v1:Ljava/lang/Object;,"TV;"
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v17
+
+    invoke-direct {v0, v14, v1}, Landroid/content/pm/RegisteredServicesCache;->containsType(Ljava/util/ArrayList;Ljava/lang/Object;)Z
+
+    move-result v18
+
+    if-nez v18, :cond_a
+
+    move-object/from16 v0, v17
+
+    invoke-virtual {v15, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    goto :goto_4
+
+    .end local v17           #v1:Ljava/lang/Object;,"TV;"
+    :cond_b
+    invoke-virtual {v15}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+
+    move-result-object v8
+
+    :goto_5
+    invoke-interface {v8}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v18
+
+    if-eqz v18, :cond_c
+
+    invoke-interface {v8}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v17
+
+    .restart local v17       #v1:Ljava/lang/Object;,"TV;"
+    const/4 v4, 0x1
+
+    move-object/from16 v0, v16
+
+    iget-object v0, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->persistentServices:Ljava/util/Map;
+
+    move-object/from16 v18, v0
+
+    move-object/from16 v0, v18
+
+    move-object/from16 v1, v17
+
+    invoke-interface {v0, v1}, Ljava/util/Map;->remove(Ljava/lang/Object;)Ljava/lang/Object;
+
+    const/16 v18, 0x1
+
+    move-object/from16 v0, p0
+
+    move-object/from16 v1, v17
+
+    move/from16 v2, p1
+
+    move/from16 v3, v18
+
+    invoke-direct {v0, v1, v2, v3}, Landroid/content/pm/RegisteredServicesCache;->notifyListener(Ljava/lang/Object;IZ)V
+
+    goto :goto_5
+
+    .end local v17           #v1:Ljava/lang/Object;,"TV;"
+    :cond_c
+    if-eqz v4, :cond_d
+
+    invoke-direct/range {p0 .. p0}, Landroid/content/pm/RegisteredServicesCache;->writePersistentServicesLocked()V
+
+    :cond_d
+    monitor-exit v19
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_0
+
+    return-void
+.end method
+
 .method private inSystemImage(I)Z
     .locals 10
     .parameter "callerUid"
@@ -447,115 +1145,68 @@
     goto :goto_0
 .end method
 
-.method private notifyListener(Ljava/lang/Object;Z)V
-    .locals 6
+.method private notifyListener(Ljava/lang/Object;IZ)V
+    .locals 8
     .parameter
+    .parameter "userId"
     .parameter "removed"
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "(TV;Z)V"
+            "(TV;IZ)V"
         }
     .end annotation
 
     .prologue
     .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
     .local p1, type:Ljava/lang/Object;,"TV;"
-    const-string v3, "PackageManager"
-
-    const/4 v4, 0x2
-
-    invoke-static {v3, v4}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
-
-    move-result v3
-
-    if-eqz v3, :cond_0
-
-    const-string v4, "PackageManager"
-
-    new-instance v3, Ljava/lang/StringBuilder;
-
-    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v5, "notifyListener: "
-
-    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-virtual {v3, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    const-string v5, " is "
-
-    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v5
-
-    if-eqz p2, :cond_1
-
-    const-string v3, "removed"
-
-    :goto_0
-    invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v3
-
-    invoke-static {v4, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    :cond_0
     monitor-enter p0
 
     :try_start_0
-    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mListener:Landroid/content/pm/RegisteredServicesCacheListener;
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mListener:Landroid/content/pm/RegisteredServicesCacheListener;
 
-    .local v1, listener:Landroid/content/pm/RegisteredServicesCacheListener;,"Landroid/content/pm/RegisteredServicesCacheListener<TV;>;"
-    iget-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mHandler:Landroid/os/Handler;
+    .local v7, listener:Landroid/content/pm/RegisteredServicesCacheListener;,"Landroid/content/pm/RegisteredServicesCacheListener<TV;>;"
+    iget-object v6, p0, Landroid/content/pm/RegisteredServicesCache;->mHandler:Landroid/os/Handler;
 
-    .local v0, handler:Landroid/os/Handler;
+    .local v6, handler:Landroid/os/Handler;
+    monitor-exit p0
+
+    if-nez v7, :cond_0
+
+    :goto_0
+    return-void
+
+    .end local v6           #handler:Landroid/os/Handler;
+    .end local v7           #listener:Landroid/content/pm/RegisteredServicesCacheListener;,"Landroid/content/pm/RegisteredServicesCacheListener<TV;>;"
+    :catchall_0
+    move-exception v0
+
     monitor-exit p0
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    if-nez v1, :cond_2
+    throw v0
 
-    :goto_1
-    return-void
-
-    .end local v0           #handler:Landroid/os/Handler;
-    .end local v1           #listener:Landroid/content/pm/RegisteredServicesCacheListener;,"Landroid/content/pm/RegisteredServicesCacheListener<TV;>;"
-    :cond_1
-    const-string v3, "added"
-
-    goto :goto_0
-
-    :catchall_0
-    move-exception v3
-
-    :try_start_1
-    monitor-exit p0
-    :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
-
-    throw v3
-
-    .restart local v0       #handler:Landroid/os/Handler;
-    .restart local v1       #listener:Landroid/content/pm/RegisteredServicesCacheListener;,"Landroid/content/pm/RegisteredServicesCacheListener<TV;>;"
-    :cond_2
-    move-object v2, v1
+    .restart local v6       #handler:Landroid/os/Handler;
+    .restart local v7       #listener:Landroid/content/pm/RegisteredServicesCacheListener;,"Landroid/content/pm/RegisteredServicesCacheListener<TV;>;"
+    :cond_0
+    move-object v2, v7
 
     .local v2, listener2:Landroid/content/pm/RegisteredServicesCacheListener;,"Landroid/content/pm/RegisteredServicesCacheListener<TV;>;"
-    new-instance v3, Landroid/content/pm/RegisteredServicesCache$2;
+    new-instance v0, Landroid/content/pm/RegisteredServicesCache$3;
 
-    invoke-direct {v3, p0, v2, p1, p2}, Landroid/content/pm/RegisteredServicesCache$2;-><init>(Landroid/content/pm/RegisteredServicesCache;Landroid/content/pm/RegisteredServicesCacheListener;Ljava/lang/Object;Z)V
+    move-object v1, p0
 
-    invoke-virtual {v0, v3}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+    move-object v3, p1
 
-    goto :goto_1
+    move v4, p2
+
+    move v5, p3
+
+    invoke-direct/range {v0 .. v5}, Landroid/content/pm/RegisteredServicesCache$3;-><init>(Landroid/content/pm/RegisteredServicesCache;Landroid/content/pm/RegisteredServicesCacheListener;Ljava/lang/Object;IZ)V
+
+    invoke-virtual {v6, v0}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+
+    goto :goto_0
 .end method
 
 .method private parseServiceInfo(Landroid/content/pm/ResolveInfo;)Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
@@ -828,23 +1479,21 @@
 .end method
 
 .method private readPersistentServicesLocked()V
-    .locals 12
+    .locals 14
 
     .prologue
     .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
-    const/4 v9, 0x1
+    const/4 v13, 0x2
 
-    const/4 v11, 0x2
+    const/4 v11, 0x1
 
-    invoke-static {}, Lcom/google/android/collect/Maps;->newHashMap()Ljava/util/HashMap;
+    iget-object v10, p0, Landroid/content/pm/RegisteredServicesCache;->mUserServices:Landroid/util/SparseArray;
 
-    move-result-object v8
+    invoke-virtual {v10}, Landroid/util/SparseArray;->clear()V
 
-    iput-object v8, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
+    iget-object v10, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
 
-    iget-object v8, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
-
-    if-nez v8, :cond_1
+    if-nez v10, :cond_1
 
     :cond_0
     :goto_0
@@ -855,29 +1504,29 @@
 
     .local v2, fis:Ljava/io/FileInputStream;
     :try_start_0
-    iget-object v8, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v10, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v8}, Lcom/android/internal/os/AtomicFile;->getBaseFile()Ljava/io/File;
+    invoke-virtual {v10}, Landroid/util/AtomicFile;->getBaseFile()Ljava/io/File;
 
-    move-result-object v8
+    move-result-object v10
 
-    invoke-virtual {v8}, Ljava/io/File;->exists()Z
+    invoke-virtual {v10}, Ljava/io/File;->exists()Z
 
-    move-result v8
+    move-result v10
 
-    if-nez v8, :cond_2
+    if-nez v10, :cond_2
 
-    move v8, v9
+    move v10, v11
 
     :goto_1
-    iput-boolean v8, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFileDidNotExist:Z
+    iput-boolean v10, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFileDidNotExist:Z
 
-    iget-boolean v8, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFileDidNotExist:Z
+    iget-boolean v10, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFileDidNotExist:Z
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_2
 
-    if-eqz v8, :cond_3
+    if-eqz v10, :cond_3
 
     if-eqz v2, :cond_0
 
@@ -889,20 +1538,20 @@
     goto :goto_0
 
     :catch_0
-    move-exception v8
+    move-exception v10
 
     goto :goto_0
 
     :cond_2
-    const/4 v8, 0x0
+    const/4 v10, 0x0
 
     goto :goto_1
 
     :cond_3
     :try_start_2
-    iget-object v8, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v10, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v8}, Lcom/android/internal/os/AtomicFile;->openRead()Ljava/io/FileInputStream;
+    invoke-virtual {v10}, Landroid/util/AtomicFile;->openRead()Ljava/io/FileInputStream;
 
     move-result-object v2
 
@@ -911,9 +1560,9 @@
     move-result-object v3
 
     .local v3, parser:Lorg/xmlpull/v1/XmlPullParser;
-    const/4 v8, 0x0
+    const/4 v10, 0x0
 
-    invoke-interface {v3, v2, v8}, Lorg/xmlpull/v1/XmlPullParser;->setInput(Ljava/io/InputStream;Ljava/lang/String;)V
+    invoke-interface {v3, v2, v10}, Lorg/xmlpull/v1/XmlPullParser;->setInput(Ljava/io/InputStream;Ljava/lang/String;)V
 
     invoke-interface {v3}, Lorg/xmlpull/v1/XmlPullParser;->getEventType()I
 
@@ -921,6 +1570,8 @@
 
     .local v1, eventType:I
     :goto_2
+    if-eq v1, v13, :cond_4
+
     if-eq v1, v11, :cond_4
 
     invoke-interface {v3}, Lorg/xmlpull/v1/XmlPullParser;->next()I
@@ -935,42 +1586,42 @@
     move-result-object v5
 
     .local v5, tagName:Ljava/lang/String;
-    const-string v8, "services"
+    const-string v10, "services"
 
-    invoke-virtual {v8, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    invoke-virtual {v10, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 
-    move-result v8
+    move-result v10
 
-    if-eqz v8, :cond_6
+    if-eqz v10, :cond_6
 
     invoke-interface {v3}, Lorg/xmlpull/v1/XmlPullParser;->next()I
 
     move-result v1
 
     :cond_5
-    if-ne v1, v11, :cond_8
+    if-ne v1, v13, :cond_8
 
     invoke-interface {v3}, Lorg/xmlpull/v1/XmlPullParser;->getDepth()I
 
-    move-result v8
+    move-result v10
 
-    if-ne v8, v11, :cond_8
+    if-ne v10, v13, :cond_8
 
     invoke-interface {v3}, Lorg/xmlpull/v1/XmlPullParser;->getName()Ljava/lang/String;
 
     move-result-object v5
 
-    const-string v8, "service"
+    const-string v10, "service"
 
-    invoke-virtual {v8, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+    invoke-virtual {v10, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 
-    move-result v8
+    move-result v10
 
-    if-eqz v8, :cond_8
+    if-eqz v10, :cond_8
 
-    iget-object v8, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
+    iget-object v10, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
 
-    invoke-interface {v8, v3}, Landroid/content/pm/XmlSerializerAndParser;->createFromXml(Lorg/xmlpull/v1/XmlPullParser;)Ljava/lang/Object;
+    invoke-interface {v10, v3}, Landroid/content/pm/XmlSerializerAndParser;->createFromXml(Lorg/xmlpull/v1/XmlPullParser;)Ljava/lang/Object;
     :try_end_2
     .catchall {:try_start_2 .. :try_end_2} :catchall_0
     .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_2
@@ -993,18 +1644,18 @@
     goto :goto_0
 
     :catch_1
-    move-exception v8
+    move-exception v10
 
     goto :goto_0
 
     .restart local v4       #service:Ljava/lang/Object;,"TV;"
     :cond_7
-    const/4 v8, 0x0
+    const/4 v10, 0x0
 
     :try_start_4
-    const-string v10, "uid"
+    const-string v12, "uid"
 
-    invoke-interface {v3, v8, v10}, Lorg/xmlpull/v1/XmlPullParser;->getAttributeValue(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    invoke-interface {v3, v10, v12}, Lorg/xmlpull/v1/XmlPullParser;->getAttributeValue(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v7
 
@@ -1014,17 +1665,29 @@
     move-result v6
 
     .local v6, uid:I
-    iget-object v8, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
+    invoke-static {v6}, Landroid/os/UserHandle;->getUserId(I)I
+
+    move-result v9
+
+    .local v9, userId:I
+    invoke-direct {p0, v9}, Landroid/content/pm/RegisteredServicesCache;->findOrCreateUserLocked(I)Landroid/content/pm/RegisteredServicesCache$UserServices;
+
+    move-result-object v8
+
+    .local v8, user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    iget-object v10, v8, Landroid/content/pm/RegisteredServicesCache$UserServices;->persistentServices:Ljava/util/Map;
 
     invoke-static {v6}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
-    move-result-object v10
+    move-result-object v12
 
-    invoke-virtual {v8, v4, v10}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-interface {v10, v4, v12}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 
     .end local v4           #service:Ljava/lang/Object;,"TV;"
     .end local v6           #uid:I
     .end local v7           #uidString:Ljava/lang/String;
+    .end local v8           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    .end local v9           #userId:I
     :cond_8
     invoke-interface {v3}, Lorg/xmlpull/v1/XmlPullParser;->next()I
     :try_end_4
@@ -1033,7 +1696,7 @@
 
     move-result v1
 
-    if-ne v1, v9, :cond_5
+    if-ne v1, v11, :cond_5
 
     goto :goto_3
 
@@ -1045,11 +1708,11 @@
 
     .local v0, e:Ljava/lang/Exception;
     :try_start_5
-    const-string v8, "PackageManager"
+    const-string v10, "PackageManager"
 
-    const-string v9, "Error reading persistent services, starting from scratch"
+    const-string v11, "Error reading persistent services, starting from scratch"
 
-    invoke-static {v8, v9, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+    invoke-static {v10, v11, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
     :try_end_5
     .catchall {:try_start_5 .. :try_end_5} :catchall_0
 
@@ -1063,13 +1726,13 @@
     goto/16 :goto_0
 
     :catch_3
-    move-exception v8
+    move-exception v10
 
     goto/16 :goto_0
 
     .end local v0           #e:Ljava/lang/Exception;
     :catchall_0
-    move-exception v8
+    move-exception v10
 
     if-eqz v2, :cond_9
 
@@ -1080,22 +1743,22 @@
 
     :cond_9
     :goto_4
-    throw v8
+    throw v10
 
     :catch_4
-    move-exception v9
+    move-exception v11
 
     goto :goto_4
 .end method
 
 .method private writePersistentServicesLocked()V
-    .locals 8
+    .locals 10
 
     .prologue
     .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
-    iget-object v5, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
 
-    if-nez v5, :cond_1
+    if-nez v7, :cond_1
 
     :cond_0
     :goto_0
@@ -1106,149 +1769,181 @@
 
     .local v1, fos:Ljava/io/FileOutputStream;
     :try_start_0
-    iget-object v5, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v5}, Lcom/android/internal/os/AtomicFile;->startWrite()Ljava/io/FileOutputStream;
+    invoke-virtual {v7}, Landroid/util/AtomicFile;->startWrite()Ljava/io/FileOutputStream;
 
     move-result-object v1
 
-    new-instance v3, Lcom/android/internal/util/FastXmlSerializer;
+    new-instance v4, Lcom/android/internal/util/FastXmlSerializer;
 
-    invoke-direct {v3}, Lcom/android/internal/util/FastXmlSerializer;-><init>()V
+    invoke-direct {v4}, Lcom/android/internal/util/FastXmlSerializer;-><init>()V
 
-    .local v3, out:Lorg/xmlpull/v1/XmlSerializer;
-    const-string v5, "utf-8"
+    .local v4, out:Lorg/xmlpull/v1/XmlSerializer;
+    const-string v7, "utf-8"
 
-    invoke-interface {v3, v1, v5}, Lorg/xmlpull/v1/XmlSerializer;->setOutput(Ljava/io/OutputStream;Ljava/lang/String;)V
+    invoke-interface {v4, v1, v7}, Lorg/xmlpull/v1/XmlSerializer;->setOutput(Ljava/io/OutputStream;Ljava/lang/String;)V
 
-    const/4 v5, 0x0
+    const/4 v7, 0x0
 
-    const/4 v6, 0x1
+    const/4 v8, 0x1
 
-    invoke-static {v6}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+    invoke-static {v8}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
 
-    move-result-object v6
+    move-result-object v8
 
-    invoke-interface {v3, v5, v6}, Lorg/xmlpull/v1/XmlSerializer;->startDocument(Ljava/lang/String;Ljava/lang/Boolean;)V
+    invoke-interface {v4, v7, v8}, Lorg/xmlpull/v1/XmlSerializer;->startDocument(Ljava/lang/String;Ljava/lang/Boolean;)V
 
-    const-string v5, "http://xmlpull.org/v1/doc/features.html#indent-output"
+    const-string v7, "http://xmlpull.org/v1/doc/features.html#indent-output"
 
-    const/4 v6, 0x1
+    const/4 v8, 0x1
 
-    invoke-interface {v3, v5, v6}, Lorg/xmlpull/v1/XmlSerializer;->setFeature(Ljava/lang/String;Z)V
+    invoke-interface {v4, v7, v8}, Lorg/xmlpull/v1/XmlSerializer;->setFeature(Ljava/lang/String;Z)V
 
-    const/4 v5, 0x0
+    const/4 v7, 0x0
 
-    const-string v6, "services"
+    const-string v8, "services"
 
-    invoke-interface {v3, v5, v6}, Lorg/xmlpull/v1/XmlSerializer;->startTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+    invoke-interface {v4, v7, v8}, Lorg/xmlpull/v1/XmlSerializer;->startTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
 
-    iget-object v5, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
+    const/4 v2, 0x0
 
-    invoke-virtual {v5}, Ljava/util/HashMap;->entrySet()Ljava/util/Set;
-
-    move-result-object v5
-
-    invoke-interface {v5}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
-
-    move-result-object v2
-
-    .local v2, i$:Ljava/util/Iterator;
+    .local v2, i:I
     :goto_1
-    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mUserServices:Landroid/util/SparseArray;
 
-    move-result v5
+    invoke-virtual {v7}, Landroid/util/SparseArray;->size()I
 
-    if-eqz v5, :cond_2
+    move-result v7
 
-    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    if-ge v2, v7, :cond_3
 
-    move-result-object v4
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mUserServices:Landroid/util/SparseArray;
 
-    check-cast v4, Ljava/util/Map$Entry;
-
-    .local v4, service:Ljava/util/Map$Entry;,"Ljava/util/Map$Entry<TV;Ljava/lang/Integer;>;"
-    const/4 v5, 0x0
-
-    const-string v6, "service"
-
-    invoke-interface {v3, v5, v6}, Lorg/xmlpull/v1/XmlSerializer;->startTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
-
-    const/4 v6, 0x0
-
-    const-string v7, "uid"
-
-    invoke-interface {v4}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
-
-    move-result-object v5
-
-    check-cast v5, Ljava/lang/Integer;
-
-    invoke-virtual {v5}, Ljava/lang/Integer;->intValue()I
-
-    move-result v5
-
-    invoke-static {v5}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    invoke-interface {v3, v6, v7, v5}, Lorg/xmlpull/v1/XmlSerializer;->attribute(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
-
-    iget-object v5, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
-
-    invoke-interface {v4}, Ljava/util/Map$Entry;->getKey()Ljava/lang/Object;
+    invoke-virtual {v7, v2}, Landroid/util/SparseArray;->valueAt(I)Ljava/lang/Object;
 
     move-result-object v6
 
-    invoke-interface {v5, v6, v3}, Landroid/content/pm/XmlSerializerAndParser;->writeAsXml(Ljava/lang/Object;Lorg/xmlpull/v1/XmlSerializer;)V
+    check-cast v6, Landroid/content/pm/RegisteredServicesCache$UserServices;
 
-    const/4 v5, 0x0
+    .local v6, user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    iget-object v7, v6, Landroid/content/pm/RegisteredServicesCache$UserServices;->persistentServices:Ljava/util/Map;
 
-    const-string v6, "service"
+    invoke-interface {v7}, Ljava/util/Map;->entrySet()Ljava/util/Set;
 
-    invoke-interface {v3, v5, v6}, Lorg/xmlpull/v1/XmlSerializer;->endTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+    move-result-object v7
+
+    invoke-interface {v7}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
+
+    move-result-object v3
+
+    .local v3, i$:Ljava/util/Iterator;
+    :goto_2
+    invoke-interface {v3}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v7
+
+    if-eqz v7, :cond_2
+
+    invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v5
+
+    check-cast v5, Ljava/util/Map$Entry;
+
+    .local v5, service:Ljava/util/Map$Entry;,"Ljava/util/Map$Entry<TV;Ljava/lang/Integer;>;"
+    const/4 v7, 0x0
+
+    const-string v8, "service"
+
+    invoke-interface {v4, v7, v8}, Lorg/xmlpull/v1/XmlSerializer;->startTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+
+    const/4 v8, 0x0
+
+    const-string v9, "uid"
+
+    invoke-interface {v5}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
+
+    move-result-object v7
+
+    check-cast v7, Ljava/lang/Integer;
+
+    invoke-virtual {v7}, Ljava/lang/Integer;->intValue()I
+
+    move-result v7
+
+    invoke-static {v7}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
+
+    move-result-object v7
+
+    invoke-interface {v4, v8, v9, v7}, Lorg/xmlpull/v1/XmlSerializer;->attribute(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mSerializerAndParser:Landroid/content/pm/XmlSerializerAndParser;
+
+    invoke-interface {v5}, Ljava/util/Map$Entry;->getKey()Ljava/lang/Object;
+
+    move-result-object v8
+
+    invoke-interface {v7, v8, v4}, Landroid/content/pm/XmlSerializerAndParser;->writeAsXml(Ljava/lang/Object;Lorg/xmlpull/v1/XmlSerializer;)V
+
+    const/4 v7, 0x0
+
+    const-string v8, "service"
+
+    invoke-interface {v4, v7, v8}, Lorg/xmlpull/v1/XmlSerializer;->endTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
     :try_end_0
     .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
 
-    goto :goto_1
+    goto :goto_2
 
-    .end local v2           #i$:Ljava/util/Iterator;
-    .end local v3           #out:Lorg/xmlpull/v1/XmlSerializer;
-    .end local v4           #service:Ljava/util/Map$Entry;,"Ljava/util/Map$Entry<TV;Ljava/lang/Integer;>;"
+    .end local v2           #i:I
+    .end local v3           #i$:Ljava/util/Iterator;
+    .end local v4           #out:Lorg/xmlpull/v1/XmlSerializer;
+    .end local v5           #service:Ljava/util/Map$Entry;,"Ljava/util/Map$Entry<TV;Ljava/lang/Integer;>;"
+    .end local v6           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
     :catch_0
     move-exception v0
 
     .local v0, e1:Ljava/io/IOException;
-    const-string v5, "PackageManager"
+    const-string v7, "PackageManager"
 
-    const-string v6, "Error writing accounts"
+    const-string v8, "Error writing accounts"
 
-    invoke-static {v5, v6, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+    invoke-static {v7, v8, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 
     if-eqz v1, :cond_0
 
-    iget-object v5, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v5, v1}, Lcom/android/internal/os/AtomicFile;->failWrite(Ljava/io/FileOutputStream;)V
+    invoke-virtual {v7, v1}, Landroid/util/AtomicFile;->failWrite(Ljava/io/FileOutputStream;)V
 
-    goto :goto_0
+    goto/16 :goto_0
 
     .end local v0           #e1:Ljava/io/IOException;
-    .restart local v2       #i$:Ljava/util/Iterator;
-    .restart local v3       #out:Lorg/xmlpull/v1/XmlSerializer;
+    .restart local v2       #i:I
+    .restart local v3       #i$:Ljava/util/Iterator;
+    .restart local v4       #out:Lorg/xmlpull/v1/XmlSerializer;
+    .restart local v6       #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
     :cond_2
-    const/4 v5, 0x0
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_1
+
+    .end local v3           #i$:Ljava/util/Iterator;
+    .end local v6           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    :cond_3
+    const/4 v7, 0x0
 
     :try_start_1
-    const-string v6, "services"
+    const-string v8, "services"
 
-    invoke-interface {v3, v5, v6}, Lorg/xmlpull/v1/XmlSerializer;->endTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
+    invoke-interface {v4, v7, v8}, Lorg/xmlpull/v1/XmlSerializer;->endTag(Ljava/lang/String;Ljava/lang/String;)Lorg/xmlpull/v1/XmlSerializer;
 
-    invoke-interface {v3}, Lorg/xmlpull/v1/XmlSerializer;->endDocument()V
+    invoke-interface {v4}, Lorg/xmlpull/v1/XmlSerializer;->endDocument()V
 
-    iget-object v5, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Lcom/android/internal/os/AtomicFile;
+    iget-object v7, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFile:Landroid/util/AtomicFile;
 
-    invoke-virtual {v5, v1}, Lcom/android/internal/os/AtomicFile;->finishWrite(Ljava/io/FileOutputStream;)V
+    invoke-virtual {v7, v1}, Landroid/util/AtomicFile;->finishWrite(Ljava/io/FileOutputStream;)V
     :try_end_1
     .catch Ljava/io/IOException; {:try_start_1 .. :try_end_1} :catch_0
 
@@ -1257,37 +1952,12 @@
 
 
 # virtual methods
-.method public close()V
-    .locals 3
-
-    .prologue
-    .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
-    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mReceiver:Ljava/util/concurrent/atomic/AtomicReference;
-
-    const/4 v2, 0x0
-
-    invoke-virtual {v1, v2}, Ljava/util/concurrent/atomic/AtomicReference;->getAndSet(Ljava/lang/Object;)Ljava/lang/Object;
-
-    move-result-object v0
-
-    check-cast v0, Landroid/content/BroadcastReceiver;
-
-    .local v0, receiver:Landroid/content/BroadcastReceiver;
-    if-eqz v0, :cond_0
-
-    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v1, v0}, Landroid/content/Context;->unregisterReceiver(Landroid/content/BroadcastReceiver;)V
-
-    :cond_0
-    return-void
-.end method
-
-.method public dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;)V
-    .locals 5
+.method public dump(Ljava/io/FileDescriptor;Ljava/io/PrintWriter;[Ljava/lang/String;I)V
+    .locals 6
     .parameter "fd"
     .parameter "fout"
     .parameter "args"
+    .parameter "userId"
 
     .prologue
     .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
@@ -1296,34 +1966,38 @@
     monitor-enter v4
 
     :try_start_0
-    iget-object v2, p0, Landroid/content/pm/RegisteredServicesCache;->mServices:Ljava/util/Map;
+    invoke-direct {p0, p4}, Landroid/content/pm/RegisteredServicesCache;->findOrCreateUserLocked(I)Landroid/content/pm/RegisteredServicesCache$UserServices;
 
-    .local v2, services:Ljava/util/Map;,"Ljava/util/Map<TV;Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;>;"
-    monitor-exit v4
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+    move-result-object v2
+
+    .local v2, user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    iget-object v3, v2, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    if-eqz v3, :cond_0
 
     new-instance v3, Ljava/lang/StringBuilder;
 
     invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v4, "RegisteredServicesCache: "
+    const-string v5, "RegisteredServicesCache: "
 
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-interface {v2}, Ljava/util/Map;->size()I
-
-    move-result v4
-
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v3
 
-    const-string v4, " services"
+    iget-object v5, v2, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
 
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-interface {v5}, Ljava/util/Map;->size()I
+
+    move-result v5
+
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    const-string v5, " services"
+
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v3
 
@@ -1333,7 +2007,9 @@
 
     invoke-virtual {p2, v3}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
 
-    invoke-interface {v2}, Ljava/util/Map;->values()Ljava/util/Collection;
+    iget-object v3, v2, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    invoke-interface {v3}, Ljava/util/Map;->values()Ljava/util/Collection;
 
     move-result-object v3
 
@@ -1347,7 +2023,7 @@
 
     move-result v3
 
-    if-eqz v3, :cond_0
+    if-eqz v3, :cond_1
 
     invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
@@ -1355,14 +2031,14 @@
 
     check-cast v1, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
 
-    .local v1, info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
+    .local v1, info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<*>;"
     new-instance v3, Ljava/lang/StringBuilder;
 
     invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string v4, "  "
+    const-string v5, "  "
 
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     move-result-object v3
 
@@ -1379,691 +2055,38 @@
     goto :goto_0
 
     .end local v0           #i$:Ljava/util/Iterator;
-    .end local v1           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
-    .end local v2           #services:Ljava/util/Map;,"Ljava/util/Map<TV;Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;>;"
+    .end local v1           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<*>;"
+    .end local v2           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
     :catchall_0
     move-exception v3
 
+    monitor-exit v4
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v3
+
+    .restart local v2       #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    :cond_0
     :try_start_1
+    const-string v3, "RegisteredServicesCache: services not loaded"
+
+    invoke-virtual {p2, v3}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
+
+    :cond_1
     monitor-exit v4
     :try_end_1
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    throw v3
-
-    .restart local v0       #i$:Ljava/util/Iterator;
-    .restart local v2       #services:Ljava/util/Map;,"Ljava/util/Map<TV;Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;>;"
-    :cond_0
     return-void
 .end method
 
-.method protected finalize()V
-    .locals 2
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Ljava/lang/Throwable;
-        }
-    .end annotation
-
-    .prologue
-    .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
-    iget-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mReceiver:Ljava/util/concurrent/atomic/AtomicReference;
-
-    invoke-virtual {v0}, Ljava/util/concurrent/atomic/AtomicReference;->get()Ljava/lang/Object;
-
-    move-result-object v0
-
-    if-eqz v0, :cond_0
-
-    const-string v0, "PackageManager"
-
-    const-string v1, "RegisteredServicesCache finalized without being closed"
-
-    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
-
-    :cond_0
-    invoke-virtual {p0}, Landroid/content/pm/RegisteredServicesCache;->close()V
-
-    invoke-super {p0}, Ljava/lang/Object;->finalize()V
-
-    return-void
-.end method
-
-.method public generateServicesMap()V
-    .locals 15
-
-    .prologue
-    .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mContext:Landroid/content/Context;
-
-    invoke-virtual {v11}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
-
-    move-result-object v4
-
-    .local v4, pm:Landroid/content/pm/PackageManager;
-    new-instance v8, Ljava/util/ArrayList;
-
-    invoke-direct {v8}, Ljava/util/ArrayList;-><init>()V
-
-    .local v8, serviceInfos:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;>;"
-    new-instance v11, Landroid/content/Intent;
-
-    iget-object v12, p0, Landroid/content/pm/RegisteredServicesCache;->mInterfaceName:Ljava/lang/String;
-
-    invoke-direct {v11, v12}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
-
-    const/16 v12, 0x80
-
-    invoke-virtual {v4, v11, v12}, Landroid/content/pm/PackageManager;->queryIntentServices(Landroid/content/Intent;I)Ljava/util/List;
-
-    move-result-object v7
-
-    .local v7, resolveInfos:Ljava/util/List;,"Ljava/util/List<Landroid/content/pm/ResolveInfo;>;"
-    invoke-interface {v7}, Ljava/util/List;->iterator()Ljava/util/Iterator;
-
-    move-result-object v2
-
-    .local v2, i$:Ljava/util/Iterator;
-    :goto_0
-    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v11
-
-    if-eqz v11, :cond_1
-
-    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-
-    move-result-object v6
-
-    check-cast v6, Landroid/content/pm/ResolveInfo;
-
-    .local v6, resolveInfo:Landroid/content/pm/ResolveInfo;
-    :try_start_0
-    invoke-direct {p0, v6}, Landroid/content/pm/RegisteredServicesCache;->parseServiceInfo(Landroid/content/pm/ResolveInfo;)Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
-
-    move-result-object v3
-
-    .local v3, info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    if-nez v3, :cond_0
-
-    const-string v11, "PackageManager"
-
-    new-instance v12, Ljava/lang/StringBuilder;
-
-    invoke-direct {v12}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v13, "Unable to load service info "
-
-    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v12
-
-    invoke-virtual {v6}, Landroid/content/pm/ResolveInfo;->toString()Ljava/lang/String;
-
-    move-result-object v13
-
-    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v12
-
-    invoke-virtual {v12}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v12
-
-    invoke-static {v11, v12}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
-    :try_end_0
-    .catch Lorg/xmlpull/v1/XmlPullParserException; {:try_start_0 .. :try_end_0} :catch_0
-    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_1
-
-    goto :goto_0
-
-    .end local v3           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    :catch_0
-    move-exception v1
-
-    .local v1, e:Lorg/xmlpull/v1/XmlPullParserException;
-    const-string v11, "PackageManager"
-
-    new-instance v12, Ljava/lang/StringBuilder;
-
-    invoke-direct {v12}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v13, "Unable to load service info "
-
-    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v12
-
-    invoke-virtual {v6}, Landroid/content/pm/ResolveInfo;->toString()Ljava/lang/String;
-
-    move-result-object v13
-
-    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v12
-
-    invoke-virtual {v12}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v12
-
-    invoke-static {v11, v12, v1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
-
-    goto :goto_0
-
-    .end local v1           #e:Lorg/xmlpull/v1/XmlPullParserException;
-    .restart local v3       #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    :cond_0
-    :try_start_1
-    invoke-virtual {v8, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-    :try_end_1
-    .catch Lorg/xmlpull/v1/XmlPullParserException; {:try_start_1 .. :try_end_1} :catch_0
-    .catch Ljava/io/IOException; {:try_start_1 .. :try_end_1} :catch_1
-
-    goto :goto_0
-
-    .end local v3           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    :catch_1
-    move-exception v1
-
-    .local v1, e:Ljava/io/IOException;
-    const-string v11, "PackageManager"
-
-    new-instance v12, Ljava/lang/StringBuilder;
-
-    invoke-direct {v12}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v13, "Unable to load service info "
-
-    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v12
-
-    invoke-virtual {v6}, Landroid/content/pm/ResolveInfo;->toString()Ljava/lang/String;
-
-    move-result-object v13
-
-    invoke-virtual {v12, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v12
-
-    invoke-virtual {v12}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v12
-
-    invoke-static {v11, v12, v1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
-
-    goto :goto_0
-
-    .end local v1           #e:Ljava/io/IOException;
-    .end local v6           #resolveInfo:Landroid/content/pm/ResolveInfo;
-    :cond_1
-    iget-object v12, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
-
-    monitor-enter v12
-
-    :try_start_2
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
-
-    if-nez v11, :cond_2
-
-    invoke-direct {p0}, Landroid/content/pm/RegisteredServicesCache;->readPersistentServicesLocked()V
-
-    :cond_2
-    invoke-static {}, Lcom/google/android/collect/Maps;->newHashMap()Ljava/util/HashMap;
-
-    move-result-object v11
-
-    iput-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mServices:Ljava/util/Map;
-
-    new-instance v0, Ljava/lang/StringBuilder;
-
-    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
-
-    .local v0, changes:Ljava/lang/StringBuilder;
-    invoke-virtual {v8}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
-
-    move-result-object v2
-
-    :cond_3
-    :goto_1
-    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v11
-
-    if-eqz v11, :cond_a
-
-    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-
-    move-result-object v3
-
-    check-cast v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
-
-    .restart local v3       #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
-
-    iget-object v13, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    invoke-virtual {v11, v13}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
-
-    move-result-object v5
-
-    check-cast v5, Ljava/lang/Integer;
-
-    .local v5, previousUid:Ljava/lang/Integer;
-    if-nez v5, :cond_4
-
-    const-string v11, "  New service added: "
-
-    invoke-virtual {v0, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    invoke-virtual {v11, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    const-string v13, "\n"
-
-    invoke-virtual {v11, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mServices:Ljava/util/Map;
-
-    iget-object v13, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    invoke-interface {v11, v13, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
-
-    iget-object v13, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    iget v14, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
-
-    invoke-static {v14}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
-
-    move-result-object v14
-
-    invoke-virtual {v11, v13, v14}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-
-    iget-boolean v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFileDidNotExist:Z
-
-    if-nez v11, :cond_3
-
-    iget-object v11, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    const/4 v13, 0x0
-
-    invoke-direct {p0, v11, v13}, Landroid/content/pm/RegisteredServicesCache;->notifyListener(Ljava/lang/Object;Z)V
-
-    goto :goto_1
-
-    .end local v0           #changes:Ljava/lang/StringBuilder;
-    .end local v3           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    .end local v5           #previousUid:Ljava/lang/Integer;
-    :catchall_0
-    move-exception v11
-
-    monitor-exit v12
-    :try_end_2
-    .catchall {:try_start_2 .. :try_end_2} :catchall_0
-
-    throw v11
-
-    .restart local v0       #changes:Ljava/lang/StringBuilder;
-    .restart local v3       #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    .restart local v5       #previousUid:Ljava/lang/Integer;
-    :cond_4
-    :try_start_3
-    invoke-virtual {v5}, Ljava/lang/Integer;->intValue()I
-
-    move-result v11
-
-    iget v13, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
-
-    if-ne v11, v13, :cond_6
-
-    const-string v11, "PackageManager"
-
-    const/4 v13, 0x2
-
-    invoke-static {v11, v13}, Landroid/util/Log;->isLoggable(Ljava/lang/String;I)Z
-
-    move-result v11
-
-    if-eqz v11, :cond_5
-
-    const-string v11, "  Existing service (nop): "
-
-    invoke-virtual {v0, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    invoke-virtual {v11, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    const-string v13, "\n"
-
-    invoke-virtual {v11, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    :cond_5
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mServices:Ljava/util/Map;
-
-    iget-object v13, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    invoke-interface {v11, v13, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-
-    goto :goto_1
-
-    :cond_6
-    iget v11, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
-
-    invoke-direct {p0, v11}, Landroid/content/pm/RegisteredServicesCache;->inSystemImage(I)Z
-
-    move-result v11
-
-    if-nez v11, :cond_7
-
-    iget-object v11, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    invoke-virtual {v5}, Ljava/lang/Integer;->intValue()I
-
-    move-result v13
-
-    invoke-direct {p0, v8, v11, v13}, Landroid/content/pm/RegisteredServicesCache;->containsTypeAndUid(Ljava/util/ArrayList;Ljava/lang/Object;I)Z
-
-    move-result v11
-
-    if-nez v11, :cond_9
-
-    :cond_7
-    iget v11, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
-
-    invoke-direct {p0, v11}, Landroid/content/pm/RegisteredServicesCache;->inSystemImage(I)Z
-
-    move-result v11
-
-    if-eqz v11, :cond_8
-
-    const-string v11, "  System service replacing existing: "
-
-    invoke-virtual {v0, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    invoke-virtual {v11, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    const-string v13, "\n"
-
-    invoke-virtual {v11, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    :goto_2
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mServices:Ljava/util/Map;
-
-    iget-object v13, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    invoke-interface {v11, v13, v3}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
-
-    iget-object v13, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    iget v14, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->uid:I
-
-    invoke-static {v14}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
-
-    move-result-object v14
-
-    invoke-virtual {v11, v13, v14}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-
-    iget-object v11, v3, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;->type:Ljava/lang/Object;
-
-    const/4 v13, 0x0
-
-    invoke-direct {p0, v11, v13}, Landroid/content/pm/RegisteredServicesCache;->notifyListener(Ljava/lang/Object;Z)V
-
-    goto/16 :goto_1
-
-    :cond_8
-    const-string v11, "  Existing service replacing a removed service: "
-
-    invoke-virtual {v0, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    invoke-virtual {v11, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    const-string v13, "\n"
-
-    invoke-virtual {v11, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    goto :goto_2
-
-    :cond_9
-    const-string v11, "  Existing service with new uid ignored: "
-
-    invoke-virtual {v0, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    invoke-virtual {v11, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    const-string v13, "\n"
-
-    invoke-virtual {v11, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    goto/16 :goto_1
-
-    .end local v3           #info:Landroid/content/pm/RegisteredServicesCache$ServiceInfo;,"Landroid/content/pm/RegisteredServicesCache$ServiceInfo<TV;>;"
-    .end local v5           #previousUid:Ljava/lang/Integer;
-    :cond_a
-    invoke-static {}, Lcom/google/android/collect/Lists;->newArrayList()Ljava/util/ArrayList;
-
-    move-result-object v9
-
-    .local v9, toBeRemoved:Ljava/util/ArrayList;,"Ljava/util/ArrayList<TV;>;"
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
-
-    invoke-virtual {v11}, Ljava/util/HashMap;->keySet()Ljava/util/Set;
-
-    move-result-object v11
-
-    invoke-interface {v11}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
-
-    move-result-object v2
-
-    :cond_b
-    :goto_3
-    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v11
-
-    if-eqz v11, :cond_c
-
-    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-
-    move-result-object v10
-
-    .local v10, v1:Ljava/lang/Object;,"TV;"
-    invoke-direct {p0, v8, v10}, Landroid/content/pm/RegisteredServicesCache;->containsType(Ljava/util/ArrayList;Ljava/lang/Object;)Z
-
-    move-result v11
-
-    if-nez v11, :cond_b
-
-    invoke-virtual {v9, v10}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    goto :goto_3
-
-    .end local v10           #v1:Ljava/lang/Object;,"TV;"
-    :cond_c
-    invoke-virtual {v9}, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
-
-    move-result-object v2
-
-    :goto_4
-    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v11
-
-    if-eqz v11, :cond_d
-
-    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
-
-    move-result-object v10
-
-    .restart local v10       #v1:Ljava/lang/Object;,"TV;"
-    iget-object v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServices:Ljava/util/HashMap;
-
-    invoke-virtual {v11, v10}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
-
-    const-string v11, "  Service removed: "
-
-    invoke-virtual {v0, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    invoke-virtual {v11, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v11
-
-    const-string v13, "\n"
-
-    invoke-virtual {v11, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    const/4 v11, 0x1
-
-    invoke-direct {p0, v10, v11}, Landroid/content/pm/RegisteredServicesCache;->notifyListener(Ljava/lang/Object;Z)V
-
-    goto :goto_4
-
-    .end local v10           #v1:Ljava/lang/Object;,"TV;"
-    :cond_d
-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->length()I
-
-    move-result v11
-
-    if-lez v11, :cond_e
-
-    const-string v11, "PackageManager"
-
-    new-instance v13, Ljava/lang/StringBuilder;
-
-    invoke-direct {v13}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v14, "generateServicesMap("
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    iget-object v14, p0, Landroid/content/pm/RegisteredServicesCache;->mInterfaceName:Ljava/lang/String;
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    const-string v14, "): "
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    invoke-virtual {v8}, Ljava/util/ArrayList;->size()I
-
-    move-result v14
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    const-string v14, " services:\n"
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    invoke-virtual {v13, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    invoke-virtual {v13}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v13
-
-    invoke-static {v11, v13}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-
-    invoke-direct {p0}, Landroid/content/pm/RegisteredServicesCache;->writePersistentServicesLocked()V
-
-    :goto_5
-    const/4 v11, 0x0
-
-    iput-boolean v11, p0, Landroid/content/pm/RegisteredServicesCache;->mPersistentServicesFileDidNotExist:Z
-
-    monitor-exit v12
-
-    return-void
-
-    :cond_e
-    const-string v11, "PackageManager"
-
-    new-instance v13, Ljava/lang/StringBuilder;
-
-    invoke-direct {v13}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v14, "generateServicesMap("
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    iget-object v14, p0, Landroid/content/pm/RegisteredServicesCache;->mInterfaceName:Ljava/lang/String;
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    const-string v14, "): "
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    invoke-virtual {v8}, Ljava/util/ArrayList;->size()I
-
-    move-result v14
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    const-string v14, " services unchanged"
-
-    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v13
-
-    invoke-virtual {v13}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v13
-
-    invoke-static {v11, v13}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-    :try_end_3
-    .catchall {:try_start_3 .. :try_end_3} :catchall_0
-
-    goto :goto_5
-.end method
-
-.method public getAllServices()Ljava/util/Collection;
-    .locals 2
+.method public getAllServices(I)Ljava/util/Collection;
+    .locals 4
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "()",
+            "(I)",
             "Ljava/util/Collection",
             "<",
             "Landroid/content/pm/RegisteredServicesCache$ServiceInfo",
@@ -2073,33 +2096,50 @@
 
     .prologue
     .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
-    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
+    iget-object v2, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
 
-    monitor-enter v1
+    monitor-enter v2
 
     :try_start_0
-    iget-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mServices:Ljava/util/Map;
-
-    invoke-interface {v0}, Ljava/util/Map;->values()Ljava/util/Collection;
+    invoke-direct {p0, p1}, Landroid/content/pm/RegisteredServicesCache;->findOrCreateUserLocked(I)Landroid/content/pm/RegisteredServicesCache$UserServices;
 
     move-result-object v0
 
-    invoke-static {v0}, Ljava/util/Collections;->unmodifiableCollection(Ljava/util/Collection;)Ljava/util/Collection;
+    .local v0, user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    iget-object v1, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
 
-    move-result-object v0
+    if-nez v1, :cond_0
 
-    monitor-exit v1
+    invoke-direct {p0, p1}, Landroid/content/pm/RegisteredServicesCache;->generateServicesMap(I)V
 
-    return-object v0
+    :cond_0
+    new-instance v1, Ljava/util/ArrayList;
 
+    iget-object v3, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    invoke-interface {v3}, Ljava/util/Map;->values()Ljava/util/Collection;
+
+    move-result-object v3
+
+    invoke-direct {v1, v3}, Ljava/util/ArrayList;-><init>(Ljava/util/Collection;)V
+
+    invoke-static {v1}, Ljava/util/Collections;->unmodifiableCollection(Ljava/util/Collection;)Ljava/util/Collection;
+
+    move-result-object v1
+
+    monitor-exit v2
+
+    return-object v1
+
+    .end local v0           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
     :catchall_0
-    move-exception v0
+    move-exception v1
 
-    monitor-exit v1
+    monitor-exit v2
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    throw v0
+    throw v1
 .end method
 
 .method public getListener()Landroid/content/pm/RegisteredServicesCacheListener;
@@ -2133,12 +2173,13 @@
     throw v0
 .end method
 
-.method public getServiceInfo(Ljava/lang/Object;)Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
-    .locals 2
+.method public getServiceInfo(Ljava/lang/Object;I)Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
+    .locals 3
     .parameter
+    .parameter "userId"
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "(TV;)",
+            "(TV;I)",
             "Landroid/content/pm/RegisteredServicesCache$ServiceInfo",
             "<TV;>;"
         }
@@ -2147,31 +2188,79 @@
     .prologue
     .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
     .local p1, type:Ljava/lang/Object;,"TV;"
-    iget-object v1, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
+    iget-object v2, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
 
-    monitor-enter v1
+    monitor-enter v2
 
     :try_start_0
-    iget-object v0, p0, Landroid/content/pm/RegisteredServicesCache;->mServices:Ljava/util/Map;
-
-    invoke-interface {v0, p1}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
+    invoke-direct {p0, p2}, Landroid/content/pm/RegisteredServicesCache;->findOrCreateUserLocked(I)Landroid/content/pm/RegisteredServicesCache$UserServices;
 
     move-result-object v0
 
-    check-cast v0, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
+    .local v0, user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    iget-object v1, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
 
-    monitor-exit v1
+    if-nez v1, :cond_0
 
-    return-object v0
+    invoke-direct {p0, p2}, Landroid/content/pm/RegisteredServicesCache;->generateServicesMap(I)V
 
+    :cond_0
+    iget-object v1, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    invoke-interface {v1, p1}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Landroid/content/pm/RegisteredServicesCache$ServiceInfo;
+
+    monitor-exit v2
+
+    return-object v1
+
+    .end local v0           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
     :catchall_0
-    move-exception v0
+    move-exception v1
 
-    monitor-exit v1
+    monitor-exit v2
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    throw v0
+    throw v1
+.end method
+
+.method public invalidateCache(I)V
+    .locals 3
+    .parameter "userId"
+
+    .prologue
+    .local p0, this:Landroid/content/pm/RegisteredServicesCache;,"Landroid/content/pm/RegisteredServicesCache<TV;>;"
+    iget-object v2, p0, Landroid/content/pm/RegisteredServicesCache;->mServicesLock:Ljava/lang/Object;
+
+    monitor-enter v2
+
+    :try_start_0
+    invoke-direct {p0, p1}, Landroid/content/pm/RegisteredServicesCache;->findOrCreateUserLocked(I)Landroid/content/pm/RegisteredServicesCache$UserServices;
+
+    move-result-object v0
+
+    .local v0, user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    const/4 v1, 0x0
+
+    iput-object v1, v0, Landroid/content/pm/RegisteredServicesCache$UserServices;->services:Ljava/util/Map;
+
+    monitor-exit v2
+
+    return-void
+
+    .end local v0           #user:Landroid/content/pm/RegisteredServicesCache$UserServices;,"Landroid/content/pm/RegisteredServicesCache$UserServices<TV;>;"
+    :catchall_0
+    move-exception v1
+
+    monitor-exit v2
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v1
 .end method
 
 .method public abstract parseServiceAttributes(Landroid/content/res/Resources;Ljava/lang/String;Landroid/util/AttributeSet;)Ljava/lang/Object;

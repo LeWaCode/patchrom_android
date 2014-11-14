@@ -23,6 +23,8 @@
 
 .method public constructor <init>()V
     .locals 0
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -146,13 +148,9 @@
     mul-float v8, v9, v10
 
     .local v8, y:F
-    const/high16 v9, 0x4000
+    add-float v9, p3, p2
 
-    add-float v10, p3, p2
-
-    mul-float/2addr v10, v6
-
-    mul-float v0, v9, v10
+    mul-float v0, v9, v6
 
     .local v0, A:F
     add-float v9, p5, p4

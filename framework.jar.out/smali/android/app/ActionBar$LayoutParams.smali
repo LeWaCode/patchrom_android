@@ -44,6 +44,14 @@
                 to = "RIGHT"
             .end subannotation,
             .subannotation Landroid/view/ViewDebug$IntToString;
+                from = 0x800003
+                to = "START"
+            .end subannotation,
+            .subannotation Landroid/view/ViewDebug$IntToString;
+                from = 0x800005
+                to = "END"
+            .end subannotation,
+            .subannotation Landroid/view/ViewDebug$IntToString;
                 from = 0x10
                 to = "CENTER_VERTICAL"
             .end subannotation,
@@ -95,11 +103,11 @@
     .prologue
     invoke-direct {p0, p1, p2}, Landroid/view/ViewGroup$MarginLayoutParams;-><init>(II)V
 
-    const/4 v0, -0x1
+    const/4 v0, 0x0
 
     iput v0, p0, Landroid/app/ActionBar$LayoutParams;->gravity:I
 
-    const/16 v0, 0x13
+    const v0, 0x800013
 
     iput v0, p0, Landroid/app/ActionBar$LayoutParams;->gravity:I
 
@@ -115,7 +123,7 @@
     .prologue
     invoke-direct {p0, p1, p2}, Landroid/view/ViewGroup$MarginLayoutParams;-><init>(II)V
 
-    const/4 v0, -0x1
+    const/4 v0, 0x0
 
     iput v0, p0, Landroid/app/ActionBar$LayoutParams;->gravity:I
 
@@ -131,7 +139,7 @@
     .prologue
     invoke-direct {p0, p1}, Landroid/view/ViewGroup$MarginLayoutParams;-><init>(Landroid/view/ViewGroup$MarginLayoutParams;)V
 
-    const/4 v0, -0x1
+    const/4 v0, 0x0
 
     iput v0, p0, Landroid/app/ActionBar$LayoutParams;->gravity:I
 
@@ -148,7 +156,7 @@
     .parameter "attrs"
 
     .prologue
-    const/4 v2, -0x1
+    const/4 v2, 0x0
 
     invoke-direct {p0, p1, p2}, Landroid/view/ViewGroup$MarginLayoutParams;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;)V
 
@@ -161,9 +169,7 @@
     move-result-object v0
 
     .local v0, a:Landroid/content/res/TypedArray;
-    const/4 v1, 0x0
-
-    invoke-virtual {v0, v1, v2}, Landroid/content/res/TypedArray;->getInt(II)I
+    invoke-virtual {v0, v2, v2}, Landroid/content/res/TypedArray;->getInt(II)I
 
     move-result v1
 
@@ -181,7 +187,7 @@
     .prologue
     invoke-direct {p0, p1}, Landroid/view/ViewGroup$MarginLayoutParams;-><init>(Landroid/view/ViewGroup$LayoutParams;)V
 
-    const/4 v0, -0x1
+    const/4 v0, 0x0
 
     iput v0, p0, Landroid/app/ActionBar$LayoutParams;->gravity:I
 

@@ -1,4 +1,4 @@
-.class public Lcom/android/server/am/CompatModeDialog;
+.class public final Lcom/android/server/am/CompatModeDialog;
 .super Landroid/app/Dialog;
 .source "CompatModeDialog.java"
 
@@ -59,11 +59,11 @@
 
     iput-object p3, p0, Lcom/android/server/am/CompatModeDialog;->mAppInfo:Landroid/content/pm/ApplicationInfo;
 
-    const v0, 0x1090028
+    const v0, 0x1090029
 
     invoke-virtual {p0, v0}, Lcom/android/server/am/CompatModeDialog;->setContentView(I)V
 
-    const v0, 0x102025a
+    const v0, 0x102027d
 
     invoke-virtual {p0, v0}, Lcom/android/server/am/CompatModeDialog;->findViewById(I)Landroid/view/View;
 
@@ -81,7 +81,7 @@
 
     invoke-virtual {v0, v1}, Landroid/widget/Switch;->setOnCheckedChangeListener(Landroid/widget/CompoundButton$OnCheckedChangeListener;)V
 
-    const v0, 0x102025b
+    const v0, 0x102027e
 
     invoke-virtual {p0, v0}, Lcom/android/server/am/CompatModeDialog;->findViewById(I)Landroid/view/View;
 
@@ -99,7 +99,7 @@
 
     invoke-virtual {v0, v1}, Landroid/widget/CheckBox;->setOnCheckedChangeListener(Landroid/widget/CompoundButton$OnCheckedChangeListener;)V
 
-    const v0, 0x102025c
+    const v0, 0x102027f
 
     invoke-virtual {p0, v0}, Lcom/android/server/am/CompatModeDialog;->findViewById(I)Landroid/view/View;
 

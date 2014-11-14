@@ -175,13 +175,7 @@
 
     const v1, 0x4e6e6b28
 
-    new-instance v3, Landroid/view/Display;
-
-    const/4 v4, 0x0
-
-    invoke-direct {v3, v4, v2}, Landroid/view/Display;-><init>(ILandroid/view/CompatibilityInfoHolder;)V
-
-    invoke-virtual {v3}, Landroid/view/Display;->getRefreshRate()F
+    invoke-static {}, Landroid/view/Choreographer;->getRefreshRate()F
 
     move-result v3
 
@@ -306,6 +300,26 @@
     check-cast v0, Landroid/view/Choreographer;
 
     return-object v0
+.end method
+
+.method private static getRefreshRate()F
+    .locals 3
+
+    .prologue
+    invoke-static {}, Landroid/hardware/display/DisplayManagerGlobal;->getInstance()Landroid/hardware/display/DisplayManagerGlobal;
+
+    move-result-object v1
+
+    const/4 v2, 0x0
+
+    invoke-virtual {v1, v2}, Landroid/hardware/display/DisplayManagerGlobal;->getDisplayInfo(I)Landroid/view/DisplayInfo;
+
+    move-result-object v0
+
+    .local v0, di:Landroid/view/DisplayInfo;
+    iget v1, v0, Landroid/view/DisplayInfo;->refreshRate:F
+
+    return v1
 .end method
 
 .method private isRunningOnLooperThreadLocked()Z
@@ -677,14 +691,14 @@
 
     .local v0, c:Landroid/view/Choreographer$CallbackRecord;
     :goto_1
-    if-eqz v0, :cond_2
+    if-eqz v0, :cond_1
 
     :try_start_1
     invoke-virtual {v0, p2, p3}, Landroid/view/Choreographer$CallbackRecord;->run(J)V
 
     iget-object v0, v0, Landroid/view/Choreographer$CallbackRecord;->next:Landroid/view/Choreographer$CallbackRecord;
     :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_2
 
     goto :goto_1
 
@@ -704,7 +718,41 @@
     .restart local v0       #c:Landroid/view/Choreographer$CallbackRecord;
     .restart local v1       #callbacks:Landroid/view/Choreographer$CallbackRecord;
     .restart local v3       #now:J
+    :cond_1
+    iget-object v6, p0, Landroid/view/Choreographer;->mLock:Ljava/lang/Object;
+
+    monitor-enter v6
+
+    const/4 v5, 0x0
+
+    :try_start_3
+    iput-boolean v5, p0, Landroid/view/Choreographer;->mCallbacksRunning:Z
+
+    :cond_2
+    iget-object v2, v1, Landroid/view/Choreographer$CallbackRecord;->next:Landroid/view/Choreographer$CallbackRecord;
+
+    .local v2, next:Landroid/view/Choreographer$CallbackRecord;
+    invoke-direct {p0, v1}, Landroid/view/Choreographer;->recycleCallbackLocked(Landroid/view/Choreographer$CallbackRecord;)V
+
+    move-object v1, v2
+
+    if-nez v1, :cond_2
+
+    monitor-exit v6
+
+    goto :goto_0
+
+    .end local v2           #next:Landroid/view/Choreographer$CallbackRecord;
     :catchall_1
+    move-exception v5
+
+    monitor-exit v6
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_1
+
+    throw v5
+
+    :catchall_2
     move-exception v5
 
     iget-object v6, p0, Landroid/view/Choreographer;->mLock:Ljava/lang/Object;
@@ -713,45 +761,8 @@
 
     const/4 v7, 0x0
 
-    :try_start_3
-    iput-boolean v7, p0, Landroid/view/Choreographer;->mCallbacksRunning:Z
-
-    :cond_1
-    iget-object v2, v1, Landroid/view/Choreographer$CallbackRecord;->next:Landroid/view/Choreographer$CallbackRecord;
-
-    .local v2, next:Landroid/view/Choreographer$CallbackRecord;
-    invoke-direct {p0, v1}, Landroid/view/Choreographer;->recycleCallbackLocked(Landroid/view/Choreographer$CallbackRecord;)V
-
-    move-object v1, v2
-
-    if-nez v1, :cond_1
-
-    monitor-exit v6
-    :try_end_3
-    .catchall {:try_start_3 .. :try_end_3} :catchall_2
-
-    throw v5
-
-    .end local v2           #next:Landroid/view/Choreographer$CallbackRecord;
-    :catchall_2
-    move-exception v5
-
     :try_start_4
-    monitor-exit v6
-    :try_end_4
-    .catchall {:try_start_4 .. :try_end_4} :catchall_2
-
-    throw v5
-
-    :cond_2
-    iget-object v6, p0, Landroid/view/Choreographer;->mLock:Ljava/lang/Object;
-
-    monitor-enter v6
-
-    const/4 v5, 0x0
-
-    :try_start_5
-    iput-boolean v5, p0, Landroid/view/Choreographer;->mCallbacksRunning:Z
+    iput-boolean v7, p0, Landroid/view/Choreographer;->mCallbacksRunning:Z
 
     :cond_3
     iget-object v2, v1, Landroid/view/Choreographer$CallbackRecord;->next:Landroid/view/Choreographer$CallbackRecord;
@@ -764,13 +775,16 @@
     if-nez v1, :cond_3
 
     monitor-exit v6
+    :try_end_4
+    .catchall {:try_start_4 .. :try_end_4} :catchall_3
 
-    goto :goto_0
+    throw v5
 
     .end local v2           #next:Landroid/view/Choreographer$CallbackRecord;
     :catchall_3
     move-exception v5
 
+    :try_start_5
     monitor-exit v6
     :try_end_5
     .catchall {:try_start_5 .. :try_end_5} :catchall_3
@@ -998,6 +1012,68 @@
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     throw v0
+.end method
+
+.method dump(Ljava/lang/String;Ljava/io/PrintWriter;)V
+    .locals 5
+    .parameter "prefix"
+    .parameter "writer"
+
+    .prologue
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    const-string v2, "  "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    .local v0, innerPrefix:Ljava/lang/String;
+    invoke-virtual {p2, p1}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    const-string v1, "Choreographer:"
+
+    invoke-virtual {p2, v1}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
+
+    invoke-virtual {p2, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    const-string v1, "mFrameScheduled="
+
+    invoke-virtual {p2, v1}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    iget-boolean v1, p0, Landroid/view/Choreographer;->mFrameScheduled:Z
+
+    invoke-virtual {p2, v1}, Ljava/io/PrintWriter;->println(Z)V
+
+    invoke-virtual {p2, v0}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    const-string v1, "mLastFrameTime="
+
+    invoke-virtual {p2, v1}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    iget-wide v1, p0, Landroid/view/Choreographer;->mLastFrameTimeNanos:J
+
+    const-wide/32 v3, 0xf4240
+
+    div-long/2addr v1, v3
+
+    invoke-static {v1, v2}, Landroid/util/TimeUtils;->formatUptime(J)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {p2, v1}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
+
+    return-void
 .end method
 
 .method public getFrameTime()J

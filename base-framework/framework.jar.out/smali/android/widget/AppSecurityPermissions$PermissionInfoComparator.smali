@@ -21,22 +21,19 @@
         "Ljava/lang/Object;",
         "Ljava/util/Comparator",
         "<",
-        "Landroid/content/pm/PermissionInfo;",
+        "Landroid/widget/AppSecurityPermissions$MyPermissionInfo;",
         ">;"
     }
 .end annotation
 
 
 # instance fields
-.field private mPm:Landroid/content/pm/PackageManager;
-
 .field private final sCollator:Ljava/text/Collator;
 
 
 # direct methods
-.method constructor <init>(Landroid/content/pm/PackageManager;)V
+.method constructor <init>()V
     .locals 1
-    .parameter "pm"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -47,40 +44,28 @@
 
     iput-object v0, p0, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->sCollator:Ljava/text/Collator;
 
-    iput-object p1, p0, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->mPm:Landroid/content/pm/PackageManager;
-
     return-void
 .end method
 
 
 # virtual methods
-.method public final compare(Landroid/content/pm/PermissionInfo;Landroid/content/pm/PermissionInfo;)I
+.method public final compare(Landroid/widget/AppSecurityPermissions$MyPermissionInfo;Landroid/widget/AppSecurityPermissions$MyPermissionInfo;)I
     .locals 3
     .parameter "a"
     .parameter "b"
 
     .prologue
-    iget-object v2, p0, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->mPm:Landroid/content/pm/PackageManager;
+    iget-object v0, p0, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->sCollator:Ljava/text/Collator;
 
-    invoke-virtual {p1, v2}, Landroid/content/pm/PermissionInfo;->loadLabel(Landroid/content/pm/PackageManager;)Ljava/lang/CharSequence;
+    iget-object v1, p1, Landroid/widget/AppSecurityPermissions$MyPermissionInfo;->mLabel:Ljava/lang/CharSequence;
 
-    move-result-object v0
+    iget-object v2, p2, Landroid/widget/AppSecurityPermissions$MyPermissionInfo;->mLabel:Ljava/lang/CharSequence;
 
-    .local v0, sa:Ljava/lang/CharSequence;
-    iget-object v2, p0, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->mPm:Landroid/content/pm/PackageManager;
+    invoke-virtual {v0, v1, v2}, Ljava/text/Collator;->compare(Ljava/lang/Object;Ljava/lang/Object;)I
 
-    invoke-virtual {p2, v2}, Landroid/content/pm/PermissionInfo;->loadLabel(Landroid/content/pm/PackageManager;)Ljava/lang/CharSequence;
+    move-result v0
 
-    move-result-object v1
-
-    .local v1, sb:Ljava/lang/CharSequence;
-    iget-object v2, p0, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->sCollator:Ljava/text/Collator;
-
-    invoke-virtual {v2, v0, v1}, Ljava/text/Collator;->compare(Ljava/lang/Object;Ljava/lang/Object;)I
-
-    move-result v2
-
-    return v2
+    return v0
 .end method
 
 .method public bridge synthetic compare(Ljava/lang/Object;Ljava/lang/Object;)I
@@ -89,13 +74,13 @@
     .parameter "x1"
 
     .prologue
-    check-cast p1, Landroid/content/pm/PermissionInfo;
+    check-cast p1, Landroid/widget/AppSecurityPermissions$MyPermissionInfo;
 
     .end local p1
-    check-cast p2, Landroid/content/pm/PermissionInfo;
+    check-cast p2, Landroid/widget/AppSecurityPermissions$MyPermissionInfo;
 
     .end local p2
-    invoke-virtual {p0, p1, p2}, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->compare(Landroid/content/pm/PermissionInfo;Landroid/content/pm/PermissionInfo;)I
+    invoke-virtual {p0, p1, p2}, Landroid/widget/AppSecurityPermissions$PermissionInfoComparator;->compare(Landroid/widget/AppSecurityPermissions$MyPermissionInfo;Landroid/widget/AppSecurityPermissions$MyPermissionInfo;)I
 
     move-result v0
 

@@ -480,7 +480,7 @@
 
     const/16 v3, 0x10
 
-    const v4, 0x1090025
+    const v4, 0x1090026
 
     invoke-virtual {v0, v3, v4}, Landroid/content/res/TypedArray;->getResourceId(II)I
 
@@ -499,7 +499,7 @@
 
     iput-object v3, p0, Landroid/app/ProgressDialog;->mProgress:Landroid/widget/ProgressBar;
 
-    const v3, 0x1020257
+    const v3, 0x102027a
 
     invoke-virtual {v2, v3}, Landroid/view/View;->findViewById(I)Landroid/view/View;
 
@@ -509,7 +509,7 @@
 
     iput-object v3, p0, Landroid/app/ProgressDialog;->mProgressNumber:Landroid/widget/TextView;
 
-    const v3, 0x1020256
+    const v3, 0x1020279
 
     invoke-virtual {v2, v3}, Landroid/view/View;->findViewById(I)Landroid/view/View;
 
@@ -610,13 +610,17 @@
     :cond_8
     const/16 v3, 0xf
 
-    const v4, 0x109008e
+    const v4, 0x1090082
 
     invoke-virtual {v0, v3, v4}, Landroid/content/res/TypedArray;->getResourceId(II)I
 
     move-result v3
 
     invoke-virtual {v1, v3, v7}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
+
+    move-result-object v3
+
+    invoke-direct {p0, v1, v3}, Landroid/app/ProgressDialog;->getProgressDialogView(Landroid/view/LayoutInflater;Landroid/view/View;)Landroid/view/View;
 
     move-result-object v2
 
@@ -873,4 +877,31 @@
     iput p1, p0, Landroid/app/ProgressDialog;->mSecondaryProgressVal:I
 
     goto :goto_0
+.end method
+
+.method private getProgressDialogView(Landroid/view/LayoutInflater;Landroid/view/View;)Landroid/view/View;
+    .locals 2
+    .parameter "inflater"
+    .parameter "view"
+
+    .prologue
+    iget-object v0, p0, Landroid/app/ProgressDialog;->mContext:Landroid/content/Context;
+
+    invoke-static {v0}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    const v0, 0x9090033
+
+    const/4 v1, 0x0
+
+    invoke-virtual {p1, v0, v1}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
+
+    move-result-object p2
+
+    .end local p2
+    :cond_0
+    return-object p2
 .end method

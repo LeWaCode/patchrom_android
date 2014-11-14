@@ -118,51 +118,78 @@
 .end method
 
 .method public equals(Ljava/lang/Object;)Z
-    .locals 4
+    .locals 5
     .parameter "o"
 
     .prologue
-    const/4 v1, 0x0
+    const/4 v1, 0x1
 
-    instance-of v2, p1, Landroid/graphics/Point;
+    const/4 v2, 0x0
 
-    if-eqz v2, :cond_0
+    if-ne p0, p1, :cond_1
 
+    :cond_0
+    :goto_0
+    return v1
+
+    :cond_1
+    if-eqz p1, :cond_2
+
+    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v3
+
+    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v4
+
+    if-eq v3, v4, :cond_3
+
+    :cond_2
+    move v1, v2
+
+    goto :goto_0
+
+    :cond_3
     move-object v0, p1
 
     check-cast v0, Landroid/graphics/Point;
 
-    .local v0, p:Landroid/graphics/Point;
-    iget v2, p0, Landroid/graphics/Point;->x:I
+    .local v0, point:Landroid/graphics/Point;
+    iget v3, p0, Landroid/graphics/Point;->x:I
 
-    iget v3, v0, Landroid/graphics/Point;->x:I
+    iget v4, v0, Landroid/graphics/Point;->x:I
 
-    if-ne v2, v3, :cond_0
+    if-eq v3, v4, :cond_4
 
-    iget v2, p0, Landroid/graphics/Point;->y:I
+    move v1, v2
 
-    iget v3, v0, Landroid/graphics/Point;->y:I
+    goto :goto_0
 
-    if-ne v2, v3, :cond_0
+    :cond_4
+    iget v3, p0, Landroid/graphics/Point;->y:I
 
-    const/4 v1, 0x1
+    iget v4, v0, Landroid/graphics/Point;->y:I
 
-    .end local v0           #p:Landroid/graphics/Point;
-    :cond_0
-    return v1
+    if-eq v3, v4, :cond_0
+
+    move v1, v2
+
+    goto :goto_0
 .end method
 
 .method public hashCode()I
-    .locals 2
+    .locals 3
 
     .prologue
     iget v0, p0, Landroid/graphics/Point;->x:I
 
-    mul-int/lit16 v0, v0, 0x7fc9
+    .local v0, result:I
+    mul-int/lit8 v1, v0, 0x1f
 
-    iget v1, p0, Landroid/graphics/Point;->y:I
+    iget v2, p0, Landroid/graphics/Point;->y:I
 
-    add-int/2addr v0, v1
+    add-int v0, v1, v2
 
     return v0
 .end method

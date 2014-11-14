@@ -23,8 +23,6 @@
 
 .field final synthetic this$0:Landroid/widget/RemoteViews;
 
-.field viewId:I
-
 
 # direct methods
 .method public constructor <init>(Landroid/widget/RemoteViews;ILandroid/app/PendingIntent;)V
@@ -152,6 +150,15 @@
     invoke-static {v3, v4}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 
     goto :goto_0
+.end method
+
+.method public getActionName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    const-string v0, "SetPendingIntentTemplate"
+
+    return-object v0
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V

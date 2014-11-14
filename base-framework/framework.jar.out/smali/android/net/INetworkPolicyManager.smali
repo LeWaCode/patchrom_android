@@ -15,22 +15,6 @@
 
 
 # virtual methods
-.method public abstract getAppPolicy(I)I
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
-.method public abstract getAppsWithPolicy(I)[I
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
 .method public abstract getNetworkPolicies()[Landroid/net/NetworkPolicy;
     .annotation system Ldalvik/annotation/Throws;
         value = {
@@ -48,6 +32,22 @@
 .end method
 
 .method public abstract getRestrictBackground()Z
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract getUidPolicy(I)I
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract getUidsWithPolicy(I)[I
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -79,14 +79,6 @@
     .end annotation
 .end method
 
-.method public abstract setAppPolicy(II)V
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
 .method public abstract setNetworkPolicies([Landroid/net/NetworkPolicy;)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
@@ -96,6 +88,14 @@
 .end method
 
 .method public abstract setRestrictBackground(Z)V
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract setUidPolicy(II)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;

@@ -52,7 +52,7 @@
     .parameter "attrs"
 
     .prologue
-    const v0, 0x10103d9
+    const v0, 0x101041e
 
     invoke-direct {p0, p1, p2, v0}, Landroid/preference/PreferenceFrameLayout;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V
 

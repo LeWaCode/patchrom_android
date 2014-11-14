@@ -55,8 +55,8 @@
 # virtual methods
 .method public get(II)F
     .locals 2
-    .parameter "i"
-    .parameter "j"
+    .parameter "x"
+    .parameter "y"
 
     .prologue
     iget-object v0, p0, Landroid/renderscript/Matrix2f;->mMat:[F
@@ -341,8 +341,8 @@
 
 .method public set(IIF)V
     .locals 2
-    .parameter "i"
-    .parameter "j"
+    .parameter "x"
+    .parameter "y"
     .parameter "v"
 
     .prologue

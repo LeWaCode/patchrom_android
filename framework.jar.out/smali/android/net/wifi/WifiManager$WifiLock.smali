@@ -134,7 +134,7 @@
     iget-object v0, p0, Landroid/net/wifi/WifiManager$WifiLock;->this$0:Landroid/net/wifi/WifiManager;
 
     #getter for: Landroid/net/wifi/WifiManager;->mActiveLockCount:I
-    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$300(Landroid/net/wifi/WifiManager;)I
+    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$500(Landroid/net/wifi/WifiManager;)I
 
     move-result v0
 
@@ -198,7 +198,7 @@
     :try_start_5
     iget-object v0, p0, Landroid/net/wifi/WifiManager$WifiLock;->this$0:Landroid/net/wifi/WifiManager;
 
-    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$308(Landroid/net/wifi/WifiManager;)I
+    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$508(Landroid/net/wifi/WifiManager;)I
 
     monitor-exit v2
     :try_end_5
@@ -258,7 +258,7 @@
     :try_start_2
     iget-object v0, p0, Landroid/net/wifi/WifiManager$WifiLock;->this$0:Landroid/net/wifi/WifiManager;
 
-    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$310(Landroid/net/wifi/WifiManager;)I
+    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$510(Landroid/net/wifi/WifiManager;)I
 
     monitor-exit v2
     :try_end_2
@@ -371,7 +371,7 @@
     :try_start_2
     iget-object v0, p0, Landroid/net/wifi/WifiManager$WifiLock;->this$0:Landroid/net/wifi/WifiManager;
 
-    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$310(Landroid/net/wifi/WifiManager;)I
+    invoke-static {v0}, Landroid/net/wifi/WifiManager;->access$510(Landroid/net/wifi/WifiManager;)I
 
     monitor-exit v2
     :try_end_2
@@ -533,6 +533,8 @@
     return-void
 
     :cond_3
+    invoke-virtual {p1}, Landroid/os/WorkSource;->clearNames()V
+
     iget-object v1, p0, Landroid/net/wifi/WifiManager$WifiLock;->mWorkSource:Landroid/os/WorkSource;
 
     if-nez v1, :cond_5

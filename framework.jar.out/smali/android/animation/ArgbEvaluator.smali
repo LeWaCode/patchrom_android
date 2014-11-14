@@ -33,7 +33,9 @@
     move-result v8
 
     .local v8, startInt:I
-    shr-int/lit8 v5, v8, 0x18
+    shr-int/lit8 v10, v8, 0x18
+
+    and-int/lit16 v5, v10, 0xff
 
     .local v5, startA:I
     shr-int/lit8 v10, v8, 0x10
@@ -57,7 +59,9 @@
     move-result v3
 
     .local v3, endInt:I
-    shr-int/lit8 v0, v3, 0x18
+    shr-int/lit8 v10, v3, 0x18
+
+    and-int/lit16 v0, v10, 0xff
 
     .local v0, endA:I
     shr-int/lit8 v10, v3, 0x10

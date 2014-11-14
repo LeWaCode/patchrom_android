@@ -101,17 +101,15 @@
 
     new-instance v0, Landroid/widget/OverScroller$SplineOverScroller;
 
-    invoke-direct {v0}, Landroid/widget/OverScroller$SplineOverScroller;-><init>()V
+    invoke-direct {v0, p1}, Landroid/widget/OverScroller$SplineOverScroller;-><init>(Landroid/content/Context;)V
 
     iput-object v0, p0, Landroid/widget/OverScroller;->mScrollerX:Landroid/widget/OverScroller$SplineOverScroller;
 
     new-instance v0, Landroid/widget/OverScroller$SplineOverScroller;
 
-    invoke-direct {v0}, Landroid/widget/OverScroller$SplineOverScroller;-><init>()V
+    invoke-direct {v0, p1}, Landroid/widget/OverScroller$SplineOverScroller;-><init>(Landroid/content/Context;)V
 
     iput-object v0, p0, Landroid/widget/OverScroller;->mScrollerY:Landroid/widget/OverScroller$SplineOverScroller;
-
-    invoke-static {p1}, Landroid/widget/OverScroller$SplineOverScroller;->initFromContext(Landroid/content/Context;)V
 
     return-void
 .end method

@@ -1,4 +1,4 @@
-.class public Landroid/os/UEventObserver$UEvent;
+.class public final Landroid/os/UEventObserver$UEvent;
 .super Ljava/lang/Object;
 .source "UEventObserver.java"
 
@@ -9,13 +9,13 @@
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
-    accessFlags = 0x9
+    accessFlags = 0x19
     name = "UEvent"
 .end annotation
 
 
 # instance fields
-.field public mMap:Ljava/util/HashMap;
+.field private final mMap:Ljava/util/HashMap;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/HashMap",

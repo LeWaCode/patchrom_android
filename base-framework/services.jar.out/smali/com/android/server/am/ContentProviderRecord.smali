@@ -1,4 +1,4 @@
-.class Lcom/android/server/am/ContentProviderRecord;
+.class final Lcom/android/server/am/ContentProviderRecord;
 .super Ljava/lang/Object;
 .source "ContentProviderRecord.java"
 
@@ -55,18 +55,21 @@
 
 .field shortStringName:Ljava/lang/String;
 
+.field final singleton:Z
+
 .field stringName:Ljava/lang/String;
 
 .field final uid:I
 
 
 # direct methods
-.method public constructor <init>(Lcom/android/server/am/ActivityManagerService;Landroid/content/pm/ProviderInfo;Landroid/content/pm/ApplicationInfo;Landroid/content/ComponentName;)V
+.method public constructor <init>(Lcom/android/server/am/ActivityManagerService;Landroid/content/pm/ProviderInfo;Landroid/content/pm/ApplicationInfo;Landroid/content/ComponentName;Z)V
     .locals 2
     .parameter "_service"
     .parameter "_info"
     .parameter "ai"
     .parameter "_name"
+    .parameter "_singleton"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -88,6 +91,8 @@
     iput-object p3, p0, Lcom/android/server/am/ContentProviderRecord;->appInfo:Landroid/content/pm/ApplicationInfo;
 
     iput-object p4, p0, Lcom/android/server/am/ContentProviderRecord;->name:Landroid/content/ComponentName;
+
+    iput-boolean p5, p0, Lcom/android/server/am/ContentProviderRecord;->singleton:Z
 
     iget v0, p0, Lcom/android/server/am/ContentProviderRecord;->uid:I
 
@@ -145,6 +150,10 @@
     iget-object v0, p1, Lcom/android/server/am/ContentProviderRecord;->name:Landroid/content/ComponentName;
 
     iput-object v0, p0, Lcom/android/server/am/ContentProviderRecord;->name:Landroid/content/ComponentName;
+
+    iget-boolean v0, p1, Lcom/android/server/am/ContentProviderRecord;->singleton:Z
+
+    iput-boolean v0, p0, Lcom/android/server/am/ContentProviderRecord;->singleton:Z
 
     iget-boolean v0, p1, Lcom/android/server/am/ContentProviderRecord;->noReleaseNeeded:Z
 
@@ -278,30 +287,23 @@
 
     move-result v0
 
-    if-eqz v0, :cond_2
+    if-eqz v0, :cond_1
 
     :cond_0
-    iget v0, p0, Lcom/android/server/am/ContentProviderRecord;->uid:I
-
-    const/16 v1, 0x3e8
-
-    if-eq v0, v1, :cond_1
-
     iget v0, p0, Lcom/android/server/am/ContentProviderRecord;->uid:I
 
     iget-object v1, p1, Lcom/android/server/am/ProcessRecord;->info:Landroid/content/pm/ApplicationInfo;
 
     iget v1, v1, Landroid/content/pm/ApplicationInfo;->uid:I
 
-    if-ne v0, v1, :cond_2
+    if-ne v0, v1, :cond_1
 
-    :cond_1
     const/4 v0, 0x1
 
     :goto_0
     return v0
 
-    :cond_2
+    :cond_1
     const/4 v0, 0x0
 
     goto :goto_0
@@ -387,6 +389,21 @@
     invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->println(Ljava/lang/Object;)V
 
     :cond_2
+    iget-boolean v2, p0, Lcom/android/server/am/ContentProviderRecord;->singleton:Z
+
+    if-eqz v2, :cond_3
+
+    invoke-virtual {p1, p2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    const-string v2, "singleton="
+
+    invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
+
+    iget-boolean v2, p0, Lcom/android/server/am/ContentProviderRecord;->singleton:Z
+
+    invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->println(Z)V
+
+    :cond_3
     invoke-virtual {p1, p2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
     const-string v2, "authority="
@@ -399,27 +416,27 @@
 
     invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
 
-    if-eqz p3, :cond_4
+    if-eqz p3, :cond_5
 
     iget-object v2, p0, Lcom/android/server/am/ContentProviderRecord;->info:Landroid/content/pm/ProviderInfo;
 
     iget-boolean v2, v2, Landroid/content/pm/ProviderInfo;->isSyncable:Z
 
-    if-nez v2, :cond_3
+    if-nez v2, :cond_4
 
     iget-object v2, p0, Lcom/android/server/am/ContentProviderRecord;->info:Landroid/content/pm/ProviderInfo;
 
     iget-boolean v2, v2, Landroid/content/pm/ProviderInfo;->multiprocess:Z
 
-    if-nez v2, :cond_3
+    if-nez v2, :cond_4
 
     iget-object v2, p0, Lcom/android/server/am/ContentProviderRecord;->info:Landroid/content/pm/ProviderInfo;
 
     iget v2, v2, Landroid/content/pm/ProviderInfo;->initOrder:I
 
-    if-eqz v2, :cond_4
+    if-eqz v2, :cond_5
 
-    :cond_3
+    :cond_4
     invoke-virtual {p1, p2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
     const-string v2, "isSyncable="
@@ -452,14 +469,14 @@
 
     invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->println(I)V
 
-    :cond_4
-    if-eqz p3, :cond_8
+    :cond_5
+    if-eqz p3, :cond_9
 
     invoke-virtual {p0}, Lcom/android/server/am/ContentProviderRecord;->hasExternalProcessHandles()Z
 
     move-result v2
 
-    if-eqz v2, :cond_5
+    if-eqz v2, :cond_6
 
     invoke-virtual {p1, p2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
@@ -475,7 +492,7 @@
 
     invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->println(I)V
 
-    :cond_5
+    :cond_6
     :goto_0
     iget-object v2, p0, Lcom/android/server/am/ContentProviderRecord;->connections:Ljava/util/ArrayList;
 
@@ -483,9 +500,9 @@
 
     move-result v2
 
-    if-lez v2, :cond_a
+    if-lez v2, :cond_b
 
-    if-eqz p3, :cond_6
+    if-eqz p3, :cond_7
 
     invoke-virtual {p1, p2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
@@ -493,7 +510,7 @@
 
     invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->println(Ljava/lang/String;)V
 
-    :cond_6
+    :cond_7
     const/4 v1, 0x0
 
     .local v1, i:I
@@ -504,7 +521,7 @@
 
     move-result v2
 
-    if-ge v1, v2, :cond_a
+    if-ge v1, v2, :cond_b
 
     iget-object v2, p0, Lcom/android/server/am/ContentProviderRecord;->connections:Ljava/util/ArrayList;
 
@@ -529,7 +546,7 @@
 
     iget-object v2, v0, Lcom/android/server/am/ContentProviderConnection;->provider:Lcom/android/server/am/ContentProviderRecord;
 
-    if-eq v2, p0, :cond_7
+    if-eq v2, p0, :cond_8
 
     invoke-virtual {p1, p2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
@@ -541,27 +558,27 @@
 
     invoke-virtual {p1, v2}, Ljava/io/PrintWriter;->println(Ljava/lang/Object;)V
 
-    :cond_7
+    :cond_8
     add-int/lit8 v1, v1, 0x1
 
     goto :goto_1
 
     .end local v0           #conn:Lcom/android/server/am/ContentProviderConnection;
     .end local v1           #i:I
-    :cond_8
+    :cond_9
     iget-object v2, p0, Lcom/android/server/am/ContentProviderRecord;->connections:Ljava/util/ArrayList;
 
     invoke-virtual {v2}, Ljava/util/ArrayList;->size()I
 
     move-result v2
 
-    if-gtz v2, :cond_9
+    if-gtz v2, :cond_a
 
     iget v2, p0, Lcom/android/server/am/ContentProviderRecord;->externalProcessNoHandleCount:I
 
-    if-lez v2, :cond_5
+    if-lez v2, :cond_6
 
-    :cond_9
+    :cond_a
     invoke-virtual {p1, p2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
     iget-object v2, p0, Lcom/android/server/am/ContentProviderRecord;->connections:Ljava/util/ArrayList;
@@ -586,7 +603,7 @@
 
     goto :goto_0
 
-    :cond_a
+    :cond_b
     return-void
 .end method
 
@@ -793,6 +810,18 @@
     move-result-object v1
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, " u"
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    iget v1, p0, Lcom/android/server/am/ContentProviderRecord;->uid:I
+
+    invoke-static {v1}, Landroid/os/UserHandle;->getUserId(I)I
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 
     const/16 v1, 0x20
 

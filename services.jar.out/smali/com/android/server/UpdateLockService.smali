@@ -270,7 +270,7 @@
 
     move-result-object v3
 
-    const/high16 v4, 0x800
+    const/high16 v4, 0x400
 
     invoke-virtual {v3, v4}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
 
@@ -279,7 +279,9 @@
     .local v0, intent:Landroid/content/Intent;
     iget-object v3, p0, Lcom/android/server/UpdateLockService;->mContext:Landroid/content/Context;
 
-    invoke-virtual {v3, v0}, Landroid/content/Context;->sendStickyBroadcast(Landroid/content/Intent;)V
+    sget-object v4, Landroid/os/UserHandle;->ALL:Landroid/os/UserHandle;
+
+    invoke-virtual {v3, v0, v4}, Landroid/content/Context;->sendStickyBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 

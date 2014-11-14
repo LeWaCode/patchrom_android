@@ -8,6 +8,7 @@
     value = {
         Landroid/view/HardwareRenderer$Gl20Renderer;,
         Landroid/view/HardwareRenderer$GlRenderer;,
+        Landroid/view/HardwareRenderer$GraphDataProvider;,
         Landroid/view/HardwareRenderer$HardwareDrawCallbacks;
     }
 .end annotation
@@ -18,9 +19,17 @@
 
 .field public static final DEBUG_DIRTY_REGIONS_PROPERTY:Ljava/lang/String; = "debug.hwui.show_dirty_regions"
 
-.field static final DISABLE_VSYNC_PROPERTY:Ljava/lang/String; = "debug.hwui.disable_vsync"
+.field public static final DEBUG_OVERDRAW_PROPERTY:Ljava/lang/String; = "debug.hwui.overdraw"
+
+.field public static final DEBUG_SHOW_LAYERS_UPDATES_PROPERTY:Ljava/lang/String; = "debug.hwui.show_layers_updates"
+
+.field public static final DEBUG_SHOW_NON_RECTANGULAR_CLIP_PROPERTY:Ljava/lang/String; = "debug.hwui.show_non_rect_clip"
 
 .field static final LOG_TAG:Ljava/lang/String; = "HardwareRenderer"
+
+.field public static final OVERDRAW_PROPERTY_COUNT:Ljava/lang/String; = "count"
+
+.field public static final OVERDRAW_PROPERTY_SHOW:Ljava/lang/String; = "show"
 
 .field static final PRINT_CONFIG_PROPERTY:Ljava/lang/String; = "debug.hwui.print_config"
 
@@ -32,7 +41,11 @@
 
 .field public static final PROFILE_PROPERTY:Ljava/lang/String; = "debug.hwui.profile"
 
-.field public static final RENDER_DIRTY_REGIONS:Z = true
+.field public static final PROFILE_PROPERTY_VISUALIZE_BARS:Ljava/lang/String; = "visual_bars"
+
+.field public static final PROFILE_PROPERTY_VISUALIZE_LINES:Ljava/lang/String; = "visual_lines"
+
+.field static final RENDER_DIRTY_REGIONS:Z = true
 
 .field static final RENDER_DIRTY_REGIONS_PROPERTY:Ljava/lang/String; = "debug.hwui.render_dirty_regions"
 
@@ -74,17 +87,18 @@
     return-void
 .end method
 
-.method static synthetic access$200([I)V
-    .locals 0
-    .parameter "x0"
+.method static synthetic access$000()Z
+    .locals 1
 
     .prologue
-    invoke-static {p0}, Landroid/view/HardwareRenderer;->beginFrame([I)V
+    invoke-static {}, Landroid/view/HardwareRenderer;->nLoadProperties()Z
 
-    return-void
+    move-result v0
+
+    return v0
 .end method
 
-.method private static beginFrame([I)V
+.method static beginFrame([I)V
     .locals 0
     .parameter "size"
 
@@ -158,15 +172,6 @@
     return-void
 .end method
 
-.method static disableVsync()V
-    .locals 0
-
-    .prologue
-    invoke-static {}, Landroid/view/HardwareRenderer;->nDisableVsync()V
-
-    return-void
-.end method
-
 .method static endTrimMemory()V
     .locals 0
 
@@ -174,6 +179,17 @@
     invoke-static {}, Landroid/view/HardwareRenderer$Gl20Renderer;->endTrimMemory()V
 
     return-void
+.end method
+
+.method static getSystemTime()J
+    .locals 2
+
+    .prologue
+    invoke-static {}, Landroid/view/HardwareRenderer;->nGetSystemTime()J
+
+    move-result-wide v0
+
+    return-wide v0
 .end method
 
 .method public static isAvailable()Z
@@ -201,10 +217,13 @@
 .method private static native nBeginFrame([I)V
 .end method
 
-.method private static native nDisableVsync()V
+.method private static native nGetSystemTime()J
 .end method
 
 .method private static native nIsBackBufferPreserved()Z
+.end method
+
+.method private static native nLoadProperties()Z
 .end method
 
 .method private static native nPreserveBackBuffer()Z
@@ -271,6 +290,9 @@
 .method abstract attachFunctor(Landroid/view/View$AttachInfo;I)Z
 .end method
 
+.method abstract cancelLayerUpdate(Landroid/view/HardwareLayer;)V
+.end method
+
 .method public abstract createDisplayList(Ljava/lang/String;)Landroid/view/DisplayList;
 .end method
 
@@ -295,10 +317,13 @@
 .method abstract detachFunctor(I)V
 .end method
 
-.method abstract draw(Landroid/view/View;Landroid/view/View$AttachInfo;Landroid/view/HardwareRenderer$HardwareDrawCallbacks;Landroid/graphics/Rect;)Z
+.method abstract draw(Landroid/view/View;Landroid/view/View$AttachInfo;Landroid/view/HardwareRenderer$HardwareDrawCallbacks;Landroid/graphics/Rect;)V
 .end method
 
 .method abstract dumpGfxInfo(Ljava/io/PrintWriter;)V
+.end method
+
+.method abstract flushLayerUpdates()V
 .end method
 
 .method abstract getCanvas()Landroid/view/HardwareCanvas;
@@ -313,7 +338,7 @@
 .method abstract getWidth()I
 .end method
 
-.method abstract initialize(Landroid/view/SurfaceHolder;)Z
+.method abstract initialize(Landroid/view/Surface;)Z
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/view/Surface$OutOfResourcesException;
@@ -321,11 +346,11 @@
     .end annotation
 .end method
 
-.method initializeIfNeeded(IILandroid/view/SurfaceHolder;)V
+.method initializeIfNeeded(IILandroid/view/Surface;)Z
     .locals 1
     .parameter "width"
     .parameter "height"
-    .parameter "holder"
+    .parameter "surface"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/view/Surface$OutOfResourcesException;
@@ -345,7 +370,7 @@
 
     if-nez v0, :cond_0
 
-    invoke-virtual {p0, p3}, Landroid/view/HardwareRenderer;->initialize(Landroid/view/SurfaceHolder;)Z
+    invoke-virtual {p0, p3}, Landroid/view/HardwareRenderer;->initialize(Landroid/view/Surface;)Z
 
     move-result v0
 
@@ -353,11 +378,18 @@
 
     invoke-virtual {p0, p1, p2}, Landroid/view/HardwareRenderer;->setup(II)V
 
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
     :cond_0
-    return-void
+    const/4 v0, 0x0
+
+    goto :goto_0
 .end method
 
-.method abstract invalidate(Landroid/view/SurfaceHolder;)V
+.method abstract invalidate(Landroid/view/Surface;)V
 .end method
 
 .method isEnabled()Z
@@ -378,6 +410,12 @@
     return v0
 .end method
 
+.method abstract loadSystemProperties(Landroid/view/Surface;)Z
+.end method
+
+.method abstract pushLayerUpdate(Landroid/view/HardwareLayer;)V
+.end method
+
 .method abstract safelyRun(Ljava/lang/Runnable;)Z
 .end method
 
@@ -389,6 +427,9 @@
     iput-boolean p1, p0, Landroid/view/HardwareRenderer;->mEnabled:Z
 
     return-void
+.end method
+
+.method abstract setName(Ljava/lang/String;)V
 .end method
 
 .method setRequested(Z)V
@@ -407,7 +448,7 @@
 .method abstract setup(II)V
 .end method
 
-.method abstract updateSurface(Landroid/view/SurfaceHolder;)V
+.method abstract updateSurface(Landroid/view/Surface;)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/view/Surface$OutOfResourcesException;

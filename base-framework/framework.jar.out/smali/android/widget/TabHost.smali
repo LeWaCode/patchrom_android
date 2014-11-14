@@ -24,6 +24,16 @@
 .end annotation
 
 
+# static fields
+.field private static final TABWIDGET_LOCATION_BOTTOM:I = 0x3
+
+.field private static final TABWIDGET_LOCATION_LEFT:I = 0x0
+
+.field private static final TABWIDGET_LOCATION_RIGHT:I = 0x2
+
+.field private static final TABWIDGET_LOCATION_TOP:I = 0x1
+
+
 # instance fields
 .field protected mCurrentTab:I
 
@@ -135,7 +145,7 @@
 
     if-nez v1, :cond_0
 
-    const v1, 0x10900b2
+    const v1, 0x10900a8
 
     iput v1, p0, Landroid/widget/TabHost;->mTabLayoutId:I
 
@@ -173,6 +183,76 @@
     iget v0, p0, Landroid/widget/TabHost;->mTabLayoutId:I
 
     return v0
+.end method
+
+.method private getTabWidgetLocation()I
+    .locals 3
+
+    .prologue
+    const/4 v0, 0x1
+
+    .local v0, location:I
+    iget-object v1, p0, Landroid/widget/TabHost;->mTabWidget:Landroid/widget/TabWidget;
+
+    invoke-virtual {v1}, Landroid/widget/TabWidget;->getOrientation()I
+
+    move-result v1
+
+    packed-switch v1, :pswitch_data_0
+
+    iget-object v1, p0, Landroid/widget/TabHost;->mTabContent:Landroid/widget/FrameLayout;
+
+    invoke-virtual {v1}, Landroid/widget/FrameLayout;->getTop()I
+
+    move-result v1
+
+    iget-object v2, p0, Landroid/widget/TabHost;->mTabWidget:Landroid/widget/TabWidget;
+
+    invoke-virtual {v2}, Landroid/widget/TabWidget;->getTop()I
+
+    move-result v2
+
+    if-ge v1, v2, :cond_1
+
+    const/4 v0, 0x3
+
+    :goto_0
+    return v0
+
+    :pswitch_0
+    iget-object v1, p0, Landroid/widget/TabHost;->mTabContent:Landroid/widget/FrameLayout;
+
+    invoke-virtual {v1}, Landroid/widget/FrameLayout;->getLeft()I
+
+    move-result v1
+
+    iget-object v2, p0, Landroid/widget/TabHost;->mTabWidget:Landroid/widget/TabWidget;
+
+    invoke-virtual {v2}, Landroid/widget/TabWidget;->getLeft()I
+
+    move-result v2
+
+    if-ge v1, v2, :cond_0
+
+    const/4 v0, 0x2
+
+    :goto_1
+    goto :goto_0
+
+    :cond_0
+    const/4 v0, 0x0
+
+    goto :goto_1
+
+    :cond_1
+    const/4 v0, 0x1
+
+    goto :goto_0
+
+    :pswitch_data_0
+    .packed-switch 0x1
+        :pswitch_0
+    .end packed-switch
 .end method
 
 .method private initTabHost()V
@@ -333,84 +413,145 @@
 .end method
 
 .method public dispatchKeyEvent(Landroid/view/KeyEvent;)Z
-    .locals 3
+    .locals 6
     .parameter "event"
 
     .prologue
     invoke-super {p0, p1}, Landroid/widget/FrameLayout;->dispatchKeyEvent(Landroid/view/KeyEvent;)Z
 
-    move-result v0
+    move-result v1
 
-    .local v0, handled:Z
-    if-nez v0, :cond_0
+    .local v1, handled:Z
+    if-nez v1, :cond_0
 
     invoke-virtual {p1}, Landroid/view/KeyEvent;->getAction()I
 
-    move-result v1
+    move-result v4
 
-    if-nez v1, :cond_0
+    if-nez v4, :cond_0
 
-    invoke-virtual {p1}, Landroid/view/KeyEvent;->getKeyCode()I
+    iget-object v4, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
 
-    move-result v1
+    if-eqz v4, :cond_0
+
+    iget-object v4, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
+
+    invoke-virtual {v4}, Landroid/view/View;->isRootNamespace()Z
+
+    move-result v4
+
+    if-eqz v4, :cond_0
+
+    iget-object v4, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
+
+    invoke-virtual {v4}, Landroid/view/View;->hasFocus()Z
+
+    move-result v4
+
+    if-eqz v4, :cond_0
 
     const/16 v2, 0x13
 
-    if-ne v1, v2, :cond_0
+    .local v2, keyCodeShouldChangeFocus:I
+    const/16 v0, 0x21
 
-    iget-object v1, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
+    .local v0, directionShouldChangeFocus:I
+    const/4 v3, 0x2
 
-    if-eqz v1, :cond_0
+    .local v3, soundEffect:I
+    invoke-direct {p0}, Landroid/widget/TabHost;->getTabWidgetLocation()I
 
-    iget-object v1, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
+    move-result v4
 
-    invoke-virtual {v1}, Landroid/view/View;->isRootNamespace()Z
+    packed-switch v4, :pswitch_data_0
 
-    move-result v1
+    :pswitch_0
+    const/16 v2, 0x13
 
-    if-eqz v1, :cond_0
+    const/16 v0, 0x21
 
-    iget-object v1, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
+    const/4 v3, 0x2
 
-    invoke-virtual {v1}, Landroid/view/View;->hasFocus()Z
+    :goto_0
+    invoke-virtual {p1}, Landroid/view/KeyEvent;->getKeyCode()I
 
-    move-result v1
+    move-result v4
 
-    if-eqz v1, :cond_0
+    if-ne v4, v2, :cond_0
 
-    iget-object v1, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
+    iget-object v4, p0, Landroid/widget/TabHost;->mCurrentView:Landroid/view/View;
 
-    invoke-virtual {v1}, Landroid/view/View;->findFocus()Landroid/view/View;
+    invoke-virtual {v4}, Landroid/view/View;->findFocus()Landroid/view/View;
 
-    move-result-object v1
+    move-result-object v4
 
-    const/16 v2, 0x21
+    invoke-virtual {v4, v0}, Landroid/view/View;->focusSearch(I)Landroid/view/View;
 
-    invoke-virtual {v1, v2}, Landroid/view/View;->focusSearch(I)Landroid/view/View;
+    move-result-object v4
 
-    move-result-object v1
+    if-nez v4, :cond_0
 
-    if-nez v1, :cond_0
+    iget-object v4, p0, Landroid/widget/TabHost;->mTabWidget:Landroid/widget/TabWidget;
 
-    iget-object v1, p0, Landroid/widget/TabHost;->mTabWidget:Landroid/widget/TabWidget;
+    iget v5, p0, Landroid/widget/TabHost;->mCurrentTab:I
 
-    iget v2, p0, Landroid/widget/TabHost;->mCurrentTab:I
+    invoke-virtual {v4, v5}, Landroid/widget/TabWidget;->getChildTabViewAt(I)Landroid/view/View;
 
-    invoke-virtual {v1, v2}, Landroid/widget/TabWidget;->getChildTabViewAt(I)Landroid/view/View;
+    move-result-object v4
 
-    move-result-object v1
+    invoke-virtual {v4}, Landroid/view/View;->requestFocus()Z
 
-    invoke-virtual {v1}, Landroid/view/View;->requestFocus()Z
+    invoke-virtual {p0, v3}, Landroid/widget/TabHost;->playSoundEffect(I)V
 
-    const/4 v1, 0x2
+    const/4 v1, 0x1
 
-    invoke-virtual {p0, v1}, Landroid/widget/TabHost;->playSoundEffect(I)V
-
-    const/4 v0, 0x1
-
-    .end local v0           #handled:Z
+    .end local v0           #directionShouldChangeFocus:I
+    .end local v1           #handled:Z
+    .end local v2           #keyCodeShouldChangeFocus:I
+    .end local v3           #soundEffect:I
     :cond_0
-    return v0
+    return v1
+
+    .restart local v0       #directionShouldChangeFocus:I
+    .restart local v1       #handled:Z
+    .restart local v2       #keyCodeShouldChangeFocus:I
+    .restart local v3       #soundEffect:I
+    :pswitch_1
+    const/16 v2, 0x15
+
+    const/16 v0, 0x11
+
+    const/4 v3, 0x1
+
+    goto :goto_0
+
+    :pswitch_2
+    const/16 v2, 0x16
+
+    const/16 v0, 0x42
+
+    const/4 v3, 0x3
+
+    goto :goto_0
+
+    :pswitch_3
+    const/16 v2, 0x14
+
+    const/16 v0, 0x82
+
+    const/4 v3, 0x4
+
+    goto :goto_0
+
+    nop
+
+    :pswitch_data_0
+    .packed-switch 0x0
+        :pswitch_1
+        :pswitch_0
+        :pswitch_2
+        :pswitch_3
+    .end packed-switch
 .end method
 
 .method public dispatchWindowFocusChanged(Z)V

@@ -1,5 +1,5 @@
 .class Lcom/android/server/net/NetworkStatsService$8;
-.super Landroid/telephony/PhoneStateListener;
+.super Lcom/android/server/net/BaseNetworkObserver;
 .source "NetworkStatsService.java"
 
 
@@ -26,100 +26,76 @@
     .prologue
     iput-object p1, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
 
-    invoke-direct {p0}, Landroid/telephony/PhoneStateListener;-><init>()V
+    invoke-direct {p0}, Lcom/android/server/net/BaseNetworkObserver;-><init>()V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public onDataConnectionStateChanged(II)V
-    .locals 6
-    .parameter "state"
-    .parameter "networkType"
+.method public limitReached(Ljava/lang/String;Ljava/lang/String;)V
+    .locals 5
+    .parameter "limitName"
+    .parameter "iface"
 
     .prologue
-    const/4 v2, 0x1
+    const/4 v4, 0x1
 
-    const/4 v3, 0x0
+    iget-object v1, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
 
-    iget-object v4, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
+    #getter for: Lcom/android/server/net/NetworkStatsService;->mContext:Landroid/content/Context;
+    invoke-static {v1}, Lcom/android/server/net/NetworkStatsService;->access$1300(Lcom/android/server/net/NetworkStatsService;)Landroid/content/Context;
 
-    #getter for: Lcom/android/server/net/NetworkStatsService;->mLastPhoneState:I
-    invoke-static {v4}, Lcom/android/server/net/NetworkStatsService;->access$1400(Lcom/android/server/net/NetworkStatsService;)I
+    move-result-object v1
 
-    move-result v4
+    const-string v2, "android.permission.CONNECTIVITY_INTERNAL"
 
-    if-eq p1, v4, :cond_1
+    const-string v3, "NetworkStats"
 
-    move v1, v2
+    invoke-virtual {v1, v2, v3}, Landroid/content/Context;->enforceCallingOrSelfPermission(Ljava/lang/String;Ljava/lang/String;)V
 
-    .local v1, stateChanged:Z
-    :goto_0
-    iget-object v4, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
+    const-string v1, "globalAlert"
 
-    #getter for: Lcom/android/server/net/NetworkStatsService;->mLastPhoneNetworkType:I
-    invoke-static {v4}, Lcom/android/server/net/NetworkStatsService;->access$1500(Lcom/android/server/net/NetworkStatsService;)I
+    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 
-    move-result v4
+    move-result v1
 
-    if-eq p2, v4, :cond_2
+    if-eqz v1, :cond_0
 
-    move v0, v2
+    const/4 v0, 0x1
 
-    .local v0, networkTypeChanged:Z
-    :goto_1
-    if-eqz v0, :cond_0
-
-    if-nez v1, :cond_0
-
-    iget-object v2, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
+    .local v0, flags:I
+    iget-object v1, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
 
     #getter for: Lcom/android/server/net/NetworkStatsService;->mHandler:Landroid/os/Handler;
-    invoke-static {v2}, Lcom/android/server/net/NetworkStatsService;->access$1300(Lcom/android/server/net/NetworkStatsService;)Landroid/os/Handler;
+    invoke-static {v1}, Lcom/android/server/net/NetworkStatsService;->access$1400(Lcom/android/server/net/NetworkStatsService;)Landroid/os/Handler;
 
-    move-result-object v2
+    move-result-object v1
 
-    iget-object v3, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
+    const/4 v2, 0x0
+
+    invoke-virtual {v1, v4, v4, v2}, Landroid/os/Handler;->obtainMessage(III)Landroid/os/Message;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Landroid/os/Message;->sendToTarget()V
+
+    iget-object v1, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
 
     #getter for: Lcom/android/server/net/NetworkStatsService;->mHandler:Landroid/os/Handler;
-    invoke-static {v3}, Lcom/android/server/net/NetworkStatsService;->access$1300(Lcom/android/server/net/NetworkStatsService;)Landroid/os/Handler;
+    invoke-static {v1}, Lcom/android/server/net/NetworkStatsService;->access$1400(Lcom/android/server/net/NetworkStatsService;)Landroid/os/Handler;
 
-    move-result-object v3
+    move-result-object v1
 
-    const/4 v4, 0x2
+    const/4 v2, 0x3
 
-    invoke-virtual {v3, v4}, Landroid/os/Handler;->obtainMessage(I)Landroid/os/Message;
+    invoke-virtual {v1, v2}, Landroid/os/Handler;->obtainMessage(I)Landroid/os/Message;
 
-    move-result-object v3
+    move-result-object v1
 
-    const-wide/16 v4, 0x3e8
+    invoke-virtual {v1}, Landroid/os/Message;->sendToTarget()V
 
-    invoke-virtual {v2, v3, v4, v5}, Landroid/os/Handler;->sendMessageDelayed(Landroid/os/Message;J)Z
-
+    .end local v0           #flags:I
     :cond_0
-    iget-object v2, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
-
-    #setter for: Lcom/android/server/net/NetworkStatsService;->mLastPhoneState:I
-    invoke-static {v2, p1}, Lcom/android/server/net/NetworkStatsService;->access$1402(Lcom/android/server/net/NetworkStatsService;I)I
-
-    iget-object v2, p0, Lcom/android/server/net/NetworkStatsService$8;->this$0:Lcom/android/server/net/NetworkStatsService;
-
-    #setter for: Lcom/android/server/net/NetworkStatsService;->mLastPhoneNetworkType:I
-    invoke-static {v2, p2}, Lcom/android/server/net/NetworkStatsService;->access$1502(Lcom/android/server/net/NetworkStatsService;I)I
-
     return-void
-
-    .end local v0           #networkTypeChanged:Z
-    .end local v1           #stateChanged:Z
-    :cond_1
-    move v1, v3
-
-    goto :goto_0
-
-    .restart local v1       #stateChanged:Z
-    :cond_2
-    move v0, v3
-
-    goto :goto_1
 .end method

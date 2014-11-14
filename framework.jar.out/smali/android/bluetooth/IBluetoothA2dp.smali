@@ -15,7 +15,7 @@
 
 
 # virtual methods
-.method public abstract allowIncomingConnect(Landroid/bluetooth/BluetoothDevice;Z)Z
+.method public abstract adjustAvrcpAbsoluteVolume(I)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -31,23 +31,7 @@
     .end annotation
 .end method
 
-.method public abstract connectSinkInternal(Landroid/bluetooth/BluetoothDevice;)Z
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
 .method public abstract disconnect(Landroid/bluetooth/BluetoothDevice;)Z
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
-.method public abstract disconnectSinkInternal(Landroid/bluetooth/BluetoothDevice;)Z
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -115,7 +99,15 @@
     .end annotation
 .end method
 
-.method public abstract resumeSink(Landroid/bluetooth/BluetoothDevice;)Z
+.method public abstract isAvrcpAbsoluteVolumeSupported()Z
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/os/RemoteException;
+        }
+    .end annotation
+.end method
+
+.method public abstract setAvrcpAbsoluteVolume(I)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -124,14 +116,6 @@
 .end method
 
 .method public abstract setPriority(Landroid/bluetooth/BluetoothDevice;I)Z
-    .annotation system Ldalvik/annotation/Throws;
-        value = {
-            Landroid/os/RemoteException;
-        }
-    .end annotation
-.end method
-
-.method public abstract suspendSink(Landroid/bluetooth/BluetoothDevice;)Z
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;

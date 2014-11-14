@@ -27,24 +27,13 @@
 
 # virtual methods
 .method public createService(Landroid/app/ContextImpl;)Ljava/lang/Object;
-    .locals 3
+    .locals 1
     .parameter "ctx"
 
     .prologue
-    const-string v1, "location"
-
-    invoke-static {v1}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
+    invoke-static {}, Landroid/view/textservice/TextServicesManager;->getInstance()Landroid/view/textservice/TextServicesManager;
 
     move-result-object v0
 
-    .local v0, b:Landroid/os/IBinder;
-    new-instance v1, Landroid/location/LocationManager;
-
-    invoke-static {v0}, Landroid/location/ILocationManager$Stub;->asInterface(Landroid/os/IBinder;)Landroid/location/ILocationManager;
-
-    move-result-object v2
-
-    invoke-direct {v1, p1, v2}, Landroid/location/LocationManager;-><init>(Landroid/content/Context;Landroid/location/ILocationManager;)V
-
-    return-object v1
+    return-object v0
 .end method

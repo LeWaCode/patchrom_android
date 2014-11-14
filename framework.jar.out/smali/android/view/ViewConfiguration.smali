@@ -4,11 +4,9 @@
 
 
 # static fields
-.field public static final ALPHA_THRESHOLD:F = 0.020833334f
-
-.field public static final ALPHA_THRESHOLD_INT:F = 5.2916665f
-
 .field private static final DEFAULT_LONG_PRESS_TIMEOUT:I = 0x1f4
+
+.field private static final DOUBLE_TAP_MIN_TIME:I = 0x28
 
 .field private static final DOUBLE_TAP_SLOP:I = 0x64
 
@@ -44,8 +42,6 @@
 .field private static final OVERSCROLL_DISTANCE:I = 0x0
 
 .field private static final PAGING_TOUCH_SLOP:I = 0x10
-
-.field public static final PANEL_BIT_DEPTH:F = 24.0f
 
 .field private static final PRESSED_STATE_DURATION:I = 0x40
 
@@ -191,18 +187,10 @@
 .end method
 
 .method private constructor <init>(Landroid/content/Context;)V
-    .locals 13
+    .locals 12
     .parameter "context"
 
     .prologue
-    const/4 v8, 0x1
-
-    const/4 v9, 0x0
-
-    const/high16 v11, 0x4140
-
-    const/high16 v12, 0x3f00
-
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
@@ -233,21 +221,29 @@
 
     const/high16 v10, 0x3fc0
 
-    mul-float v6, v1, v10
+    mul-float v7, v1, v10
 
-    .local v6, sizeAndDensity:F
+    .local v7, sizeAndDensity:F
     :goto_0
-    mul-float v10, v6, v11
+    const/high16 v10, 0x4140
 
-    add-float/2addr v10, v12
+    mul-float/2addr v10, v7
+
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
     iput v10, p0, Landroid/view/ViewConfiguration;->mEdgeSlop:I
 
-    mul-float v10, v6, v11
+    const/high16 v10, 0x4140
 
-    add-float/2addr v10, v12
+    mul-float/2addr v10, v7
+
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
@@ -257,7 +253,9 @@
 
     mul-float/2addr v10, v1
 
-    add-float/2addr v10, v12
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
@@ -267,7 +265,9 @@
 
     mul-float/2addr v10, v1
 
-    add-float/2addr v10, v12
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
@@ -277,7 +277,9 @@
 
     mul-float/2addr v10, v1
 
-    add-float/2addr v10, v12
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
@@ -285,9 +287,11 @@
 
     const/high16 v10, 0x42c8
 
-    mul-float/2addr v10, v6
+    mul-float/2addr v10, v7
 
-    add-float/2addr v10, v12
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
@@ -295,32 +299,42 @@
 
     const/high16 v10, 0x4180
 
-    mul-float/2addr v10, v6
+    mul-float/2addr v10, v7
 
-    add-float/2addr v10, v12
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
     iput v10, p0, Landroid/view/ViewConfiguration;->mWindowTouchSlop:I
 
-    invoke-static {}, Landroid/view/WindowManagerImpl;->getDefault()Landroid/view/WindowManagerImpl;
+    const-string v10, "window"
 
-    move-result-object v10
+    invoke-virtual {p1, v10}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
 
-    invoke-virtual {v10}, Landroid/view/WindowManagerImpl;->getDefaultDisplay()Landroid/view/Display;
+    move-result-object v8
+
+    check-cast v8, Landroid/view/WindowManager;
+
+    .local v8, win:Landroid/view/WindowManager;
+    invoke-interface {v8}, Landroid/view/WindowManager;->getDefaultDisplay()Landroid/view/Display;
 
     move-result-object v2
 
     .local v2, display:Landroid/view/Display;
-    invoke-virtual {v2}, Landroid/view/Display;->getRawWidth()I
+    new-instance v6, Landroid/graphics/Point;
 
-    move-result v10
+    invoke-direct {v6}, Landroid/graphics/Point;-><init>()V
+
+    .local v6, size:Landroid/graphics/Point;
+    invoke-virtual {v2, v6}, Landroid/view/Display;->getRealSize(Landroid/graphics/Point;)V
+
+    iget v10, v6, Landroid/graphics/Point;->x:I
 
     mul-int/lit8 v10, v10, 0x4
 
-    invoke-virtual {v2}, Landroid/view/Display;->getRawHeight()I
-
-    move-result v11
+    iget v11, v6, Landroid/graphics/Point;->y:I
 
     mul-int/2addr v10, v11
 
@@ -328,9 +342,11 @@
 
     const/4 v10, 0x0
 
-    mul-float/2addr v10, v6
+    mul-float/2addr v10, v7
 
-    add-float/2addr v10, v12
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
@@ -338,9 +354,11 @@
 
     const/high16 v10, 0x40c0
 
-    mul-float/2addr v10, v6
+    mul-float/2addr v10, v7
 
-    add-float/2addr v10, v12
+    const/high16 v11, 0x3f00
+
+    add-float/2addr v10, v11
 
     float-to-int v10, v10
 
@@ -350,76 +368,76 @@
 
     if-nez v10, :cond_0
 
-    invoke-static {}, Landroid/view/Display;->getWindowManager()Landroid/view/IWindowManager;
+    invoke-static {}, Landroid/view/WindowManagerGlobal;->getWindowManagerService()Landroid/view/IWindowManager;
 
-    move-result-object v7
+    move-result-object v9
 
-    .local v7, wm:Landroid/view/IWindowManager;
+    .local v9, wm:Landroid/view/IWindowManager;
     :try_start_0
-    invoke-interface {v7}, Landroid/view/IWindowManager;->hasSystemNavBar()Z
+    invoke-interface {v9}, Landroid/view/IWindowManager;->hasNavigationBar()Z
 
     move-result v10
 
     if-nez v10, :cond_2
 
-    invoke-interface {v7}, Landroid/view/IWindowManager;->hasNavigationBar()Z
-
-    move-result v10
-
-    if-nez v10, :cond_2
+    const/4 v10, 0x1
 
     :goto_1
-    iput-boolean v8, p0, Landroid/view/ViewConfiguration;->sHasPermanentMenuKey:Z
+    iput-boolean v10, p0, Landroid/view/ViewConfiguration;->sHasPermanentMenuKey:Z
 
-    const/4 v8, 0x1
+    const/4 v10, 0x1
 
-    iput-boolean v8, p0, Landroid/view/ViewConfiguration;->sHasPermanentMenuKeySet:Z
+    iput-boolean v10, p0, Landroid/view/ViewConfiguration;->sHasPermanentMenuKeySet:Z
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
 
-    .end local v7           #wm:Landroid/view/IWindowManager;
+    .end local v9           #wm:Landroid/view/IWindowManager;
     :cond_0
     :goto_2
-    const v8, 0x111000c
+    const v10, 0x1110014
 
-    invoke-virtual {v5, v8}, Landroid/content/res/Resources;->getBoolean(I)Z
+    invoke-virtual {v5, v10}, Landroid/content/res/Resources;->getBoolean(I)Z
 
-    move-result v8
+    move-result v10
 
-    iput-boolean v8, p0, Landroid/view/ViewConfiguration;->mFadingMarqueeEnabled:Z
+    iput-boolean v10, p0, Landroid/view/ViewConfiguration;->mFadingMarqueeEnabled:Z
 
-    const v8, 0x1050008
+    const v10, 0x1050008
 
-    invoke-virtual {v5, v8}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
+    invoke-virtual {v5, v10}, Landroid/content/res/Resources;->getDimensionPixelSize(I)I
 
-    move-result v8
+    move-result v10
 
-    iput v8, p0, Landroid/view/ViewConfiguration;->mTouchSlop:I
+    iput v10, p0, Landroid/view/ViewConfiguration;->mTouchSlop:I
 
-    iget v8, p0, Landroid/view/ViewConfiguration;->mTouchSlop:I
+    iget v10, p0, Landroid/view/ViewConfiguration;->mTouchSlop:I
 
-    mul-int/lit8 v8, v8, 0x2
+    mul-int/lit8 v10, v10, 0x2
 
-    iput v8, p0, Landroid/view/ViewConfiguration;->mPagingTouchSlop:I
+    iput v10, p0, Landroid/view/ViewConfiguration;->mPagingTouchSlop:I
 
-    iget v8, p0, Landroid/view/ViewConfiguration;->mTouchSlop:I
+    iget v10, p0, Landroid/view/ViewConfiguration;->mTouchSlop:I
 
-    iput v8, p0, Landroid/view/ViewConfiguration;->mDoubleTapTouchSlop:I
+    iput v10, p0, Landroid/view/ViewConfiguration;->mDoubleTapTouchSlop:I
 
     return-void
 
     .end local v2           #display:Landroid/view/Display;
-    .end local v6           #sizeAndDensity:F
+    .end local v6           #size:Landroid/graphics/Point;
+    .end local v7           #sizeAndDensity:F
+    .end local v8           #win:Landroid/view/WindowManager;
     :cond_1
-    move v6, v1
+    move v7, v1
 
-    .restart local v6       #sizeAndDensity:F
+    .restart local v7       #sizeAndDensity:F
     goto/16 :goto_0
 
     .restart local v2       #display:Landroid/view/Display;
-    .restart local v7       #wm:Landroid/view/IWindowManager;
+    .restart local v6       #size:Landroid/graphics/Point;
+    .restart local v8       #win:Landroid/view/WindowManager;
+    .restart local v9       #wm:Landroid/view/IWindowManager;
     :cond_2
-    move v8, v9
+    const/4 v10, 0x0
 
     goto :goto_1
 
@@ -427,7 +445,9 @@
     move-exception v3
 
     .local v3, ex:Landroid/os/RemoteException;
-    iput-boolean v9, p0, Landroid/view/ViewConfiguration;->sHasPermanentMenuKey:Z
+    const/4 v10, 0x0
+
+    iput-boolean v10, p0, Landroid/view/ViewConfiguration;->sHasPermanentMenuKey:Z
 
     goto :goto_2
 .end method
@@ -478,6 +498,15 @@
 
     :cond_0
     return-object v0
+.end method
+
+.method public static getDoubleTapMinTime()I
+    .locals 1
+
+    .prologue
+    const/16 v0, 0x28
+
+    return v0
 .end method
 
 .method public static getDoubleTapSlop()I

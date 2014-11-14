@@ -14,6 +14,8 @@
 
 .field mDataDescription:Landroid/content/ClipDescription;
 
+.field mDisplay:Landroid/view/Display;
+
 .field mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
 
 .field mDragInProgress:Z
@@ -43,7 +45,7 @@
 
 .field final mService:Lcom/android/server/wm/WindowManagerService;
 
-.field mSurface:Landroid/view/Surface;
+.field mSurfaceControl:Landroid/view/SurfaceControl;
 
 .field mTargetWindow:Lcom/android/server/wm/WindowState;
 
@@ -57,7 +59,7 @@
 
 
 # direct methods
-.method constructor <init>(Lcom/android/server/wm/WindowManagerService;Landroid/os/IBinder;Landroid/view/Surface;ILandroid/os/IBinder;)V
+.method constructor <init>(Lcom/android/server/wm/WindowManagerService;Landroid/os/IBinder;Landroid/view/SurfaceControl;ILandroid/os/IBinder;)V
     .locals 1
     .parameter "service"
     .parameter "token"
@@ -78,7 +80,7 @@
 
     iput-object p2, p0, Lcom/android/server/wm/DragState;->mToken:Landroid/os/IBinder;
 
-    iput-object p3, p0, Lcom/android/server/wm/DragState;->mSurface:Landroid/view/Surface;
+    iput-object p3, p0, Lcom/android/server/wm/DragState;->mSurfaceControl:Landroid/view/SurfaceControl;
 
     iput p4, p0, Lcom/android/server/wm/DragState;->mFlags:I
 
@@ -94,7 +96,7 @@
 .end method
 
 .method private getTouchedWinAtPointLw(FF)Lcom/android/server/wm/WindowState;
-    .locals 10
+    .locals 11
     .parameter "xf"
     .parameter "yf"
 
@@ -110,10 +112,22 @@
     .local v8, y:I
     iget-object v9, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
 
-    iget-object v6, v9, Lcom/android/server/wm/WindowManagerService;->mWindows:Ljava/util/ArrayList;
+    iget-object v10, p0, Lcom/android/server/wm/DragState;->mDisplay:Landroid/view/Display;
 
-    .local v6, windows:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Lcom/android/server/wm/WindowState;>;"
-    invoke-virtual {v6}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v9, v10}, Lcom/android/server/wm/WindowManagerService;->getWindowListLocked(Landroid/view/Display;)Lcom/android/server/wm/WindowList;
+
+    move-result-object v6
+
+    .local v6, windows:Lcom/android/server/wm/WindowList;
+    if-nez v6, :cond_0
+
+    const/4 v9, 0x0
+
+    :goto_0
+    return-object v9
+
+    :cond_0
+    invoke-virtual {v6}, Lcom/android/server/wm/WindowList;->size()I
 
     move-result v0
 
@@ -121,10 +135,10 @@
     add-int/lit8 v3, v0, -0x1
 
     .local v3, i:I
-    :goto_0
-    if-ltz v3, :cond_3
+    :goto_1
+    if-ltz v3, :cond_4
 
-    invoke-virtual {v6, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    invoke-virtual {v6, v3}, Lcom/android/server/wm/WindowList;->get(I)Ljava/lang/Object;
 
     move-result-object v1
 
@@ -140,17 +154,17 @@
 
     move-result v9
 
-    if-nez v9, :cond_1
-
-    :cond_0
-    add-int/lit8 v3, v3, -0x1
-
-    goto :goto_0
+    if-nez v9, :cond_2
 
     :cond_1
+    add-int/lit8 v3, v3, -0x1
+
+    goto :goto_1
+
+    :cond_2
     and-int/lit8 v9, v2, 0x10
 
-    if-nez v9, :cond_0
+    if-nez v9, :cond_1
 
     iget-object v9, p0, Lcom/android/server/wm/DragState;->mTmpRegion:Landroid/graphics/Region;
 
@@ -165,18 +179,20 @@
 
     move-result v9
 
-    if-nez v9, :cond_2
+    if-nez v9, :cond_3
 
-    if-nez v4, :cond_0
+    if-nez v4, :cond_1
 
-    :cond_2
+    :cond_3
     move-object v5, v1
 
     .end local v1           #child:Lcom/android/server/wm/WindowState;
     .end local v2           #flags:I
     .end local v4           #touchFlags:I
-    :cond_3
-    return-object v5
+    :cond_4
+    move-object v9, v5
+
+    goto :goto_0
 .end method
 
 .method private static obtainDragEvent(Lcom/android/server/wm/WindowState;IFFLjava/lang/Object;Landroid/content/ClipDescription;Landroid/content/ClipData;Z)Landroid/view/DragEvent;
@@ -490,37 +506,44 @@
 .end method
 
 .method broadcastDragStartedLw(FF)V
-    .locals 4
+    .locals 5
     .parameter "touchX"
     .parameter "touchY"
 
     .prologue
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mData:Landroid/content/ClipData;
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mData:Landroid/content/ClipData;
 
-    if-eqz v2, :cond_0
+    if-eqz v3, :cond_0
 
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mData:Landroid/content/ClipData;
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mData:Landroid/content/ClipData;
 
-    invoke-virtual {v2}, Landroid/content/ClipData;->getDescription()Landroid/content/ClipDescription;
+    invoke-virtual {v3}, Landroid/content/ClipData;->getDescription()Landroid/content/ClipDescription;
+
+    move-result-object v3
+
+    :goto_0
+    iput-object v3, p0, Lcom/android/server/wm/DragState;->mDataDescription:Landroid/content/ClipDescription;
+
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mNotifiedWindows:Ljava/util/ArrayList;
+
+    invoke-virtual {v3}, Ljava/util/ArrayList;->clear()V
+
+    const/4 v3, 0x1
+
+    iput-boolean v3, p0, Lcom/android/server/wm/DragState;->mDragInProgress:Z
+
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
+
+    iget-object v4, p0, Lcom/android/server/wm/DragState;->mDisplay:Landroid/view/Display;
+
+    invoke-virtual {v3, v4}, Lcom/android/server/wm/WindowManagerService;->getWindowListLocked(Landroid/view/Display;)Lcom/android/server/wm/WindowList;
 
     move-result-object v2
 
-    :goto_0
-    iput-object v2, p0, Lcom/android/server/wm/DragState;->mDataDescription:Landroid/content/ClipDescription;
+    .local v2, windows:Lcom/android/server/wm/WindowList;
+    if-eqz v2, :cond_1
 
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mNotifiedWindows:Ljava/util/ArrayList;
-
-    invoke-virtual {v2}, Ljava/util/ArrayList;->clear()V
-
-    const/4 v2, 0x1
-
-    iput-boolean v2, p0, Lcom/android/server/wm/DragState;->mDragInProgress:Z
-
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
-
-    iget-object v2, v2, Lcom/android/server/wm/WindowManagerService;->mWindows:Ljava/util/ArrayList;
-
-    invoke-virtual {v2}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v2}, Lcom/android/server/wm/WindowList;->size()I
 
     move-result v0
 
@@ -531,19 +554,15 @@
     :goto_1
     if-ge v1, v0, :cond_1
 
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
+    invoke-virtual {v2, v1}, Lcom/android/server/wm/WindowList;->get(I)Ljava/lang/Object;
 
-    iget-object v2, v2, Lcom/android/server/wm/WindowManagerService;->mWindows:Ljava/util/ArrayList;
+    move-result-object v3
 
-    invoke-virtual {v2, v1}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    check-cast v3, Lcom/android/server/wm/WindowState;
 
-    move-result-object v2
+    iget-object v4, p0, Lcom/android/server/wm/DragState;->mDataDescription:Landroid/content/ClipDescription;
 
-    check-cast v2, Lcom/android/server/wm/WindowState;
-
-    iget-object v3, p0, Lcom/android/server/wm/DragState;->mDataDescription:Landroid/content/ClipDescription;
-
-    invoke-direct {p0, v2, p1, p2, v3}, Lcom/android/server/wm/DragState;->sendDragStartedLw(Lcom/android/server/wm/WindowState;FFLandroid/content/ClipDescription;)V
+    invoke-direct {p0, v3, p1, p2, v4}, Lcom/android/server/wm/DragState;->sendDragStartedLw(Lcom/android/server/wm/WindowState;FFLandroid/content/ClipDescription;)V
 
     add-int/lit8 v1, v1, 0x1
 
@@ -551,13 +570,13 @@
 
     .end local v0           #N:I
     .end local v1           #i:I
+    .end local v2           #windows:Lcom/android/server/wm/WindowList;
     :cond_0
-    const/4 v2, 0x0
+    const/4 v3, 0x0
 
     goto :goto_0
 
-    .restart local v0       #N:I
-    .restart local v1       #i:I
+    .restart local v2       #windows:Lcom/android/server/wm/WindowList;
     :cond_1
     return-void
 .end method
@@ -796,10 +815,10 @@
     move-result v10
 
     .local v10, myPid:I
-    invoke-static {}, Landroid/view/Surface;->openTransaction()V
+    invoke-static {}, Landroid/view/SurfaceControl;->openTransaction()V
 
     :try_start_0
-    iget-object v0, p0, Lcom/android/server/wm/DragState;->mSurface:Landroid/view/Surface;
+    iget-object v0, p0, Lcom/android/server/wm/DragState;->mSurfaceControl:Landroid/view/SurfaceControl;
 
     iget v1, p0, Lcom/android/server/wm/DragState;->mThumbOffsetX:F
 
@@ -809,11 +828,11 @@
 
     sub-float v2, p2, v2
 
-    invoke-virtual {v0, v1, v2}, Landroid/view/Surface;->setPosition(FF)V
+    invoke-virtual {v0, v1, v2}, Landroid/view/SurfaceControl;->setPosition(FF)V
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    invoke-static {}, Landroid/view/Surface;->closeTransaction()V
+    invoke-static {}, Landroid/view/SurfaceControl;->closeTransaction()V
 
     invoke-direct {p0, p1, p2}, Lcom/android/server/wm/DragState;->getTouchedWinAtPointLw(FF)Lcom/android/server/wm/WindowState;
 
@@ -829,7 +848,7 @@
     :catchall_0
     move-exception v0
 
-    invoke-static {}, Landroid/view/Surface;->closeTransaction()V
+    invoke-static {}, Landroid/view/SurfaceControl;->closeTransaction()V
 
     throw v0
 
@@ -961,212 +980,230 @@
     goto :goto_1
 .end method
 
-.method register()V
-    .locals 10
+.method register(Landroid/view/Display;)V
+    .locals 11
+    .parameter "display"
 
     .prologue
-    const-wide v8, 0x12a05f200L
+    const-wide v9, 0x12a05f200L
 
-    const/4 v7, 0x0
+    const/4 v8, 0x0
 
-    const/4 v6, 0x1
+    const/4 v7, 0x1
 
-    const/4 v5, 0x0
+    const/4 v6, 0x0
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mClientChannel:Landroid/view/InputChannel;
+    iput-object p1, p0, Lcom/android/server/wm/DragState;->mDisplay:Landroid/view/Display;
 
-    if-eqz v1, :cond_0
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mClientChannel:Landroid/view/InputChannel;
 
-    const-string v1, "WindowManager"
+    if-eqz v2, :cond_0
 
-    const-string v2, "Duplicate register of drag input channel"
+    const-string v2, "WindowManager"
 
-    invoke-static {v1, v2}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
+    const-string v3, "Duplicate register of drag input channel"
+
+    invoke-static {v2, v3}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
 
     :goto_0
     return-void
 
     :cond_0
-    const-string v1, "drag"
+    const-string v2, "drag"
 
-    invoke-static {v1}, Landroid/view/InputChannel;->openInputChannelPair(Ljava/lang/String;)[Landroid/view/InputChannel;
+    invoke-static {v2}, Landroid/view/InputChannel;->openInputChannelPair(Ljava/lang/String;)[Landroid/view/InputChannel;
 
     move-result-object v0
 
     .local v0, channels:[Landroid/view/InputChannel;
-    aget-object v1, v0, v5
+    aget-object v2, v0, v6
 
-    iput-object v1, p0, Lcom/android/server/wm/DragState;->mServerChannel:Landroid/view/InputChannel;
+    iput-object v2, p0, Lcom/android/server/wm/DragState;->mServerChannel:Landroid/view/InputChannel;
 
-    aget-object v1, v0, v6
+    aget-object v2, v0, v7
 
-    iput-object v1, p0, Lcom/android/server/wm/DragState;->mClientChannel:Landroid/view/InputChannel;
-
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
-
-    iget-object v1, v1, Lcom/android/server/wm/WindowManagerService;->mInputManager:Lcom/android/server/input/InputManagerService;
-
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mServerChannel:Landroid/view/InputChannel;
-
-    invoke-virtual {v1, v2, v7}, Lcom/android/server/input/InputManagerService;->registerInputChannel(Landroid/view/InputChannel;Lcom/android/server/input/InputWindowHandle;)V
-
-    new-instance v1, Lcom/android/server/wm/WindowManagerService$DragInputEventReceiver;
+    iput-object v2, p0, Lcom/android/server/wm/DragState;->mClientChannel:Landroid/view/InputChannel;
 
     iget-object v2, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
 
-    invoke-virtual {v2}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+    iget-object v2, v2, Lcom/android/server/wm/WindowManagerService;->mInputManager:Lcom/android/server/input/InputManagerService;
 
-    iget-object v3, p0, Lcom/android/server/wm/DragState;->mClientChannel:Landroid/view/InputChannel;
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mServerChannel:Landroid/view/InputChannel;
 
-    iget-object v4, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
+    invoke-virtual {v2, v3, v8}, Lcom/android/server/input/InputManagerService;->registerInputChannel(Landroid/view/InputChannel;Lcom/android/server/input/InputWindowHandle;)V
 
-    iget-object v4, v4, Lcom/android/server/wm/WindowManagerService;->mH:Lcom/android/server/wm/WindowManagerService$H;
+    new-instance v2, Lcom/android/server/wm/WindowManagerService$DragInputEventReceiver;
 
-    invoke-virtual {v4}, Lcom/android/server/wm/WindowManagerService$H;->getLooper()Landroid/os/Looper;
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
 
-    move-result-object v4
+    invoke-virtual {v3}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 
-    invoke-direct {v1, v2, v3, v4}, Lcom/android/server/wm/WindowManagerService$DragInputEventReceiver;-><init>(Lcom/android/server/wm/WindowManagerService;Landroid/view/InputChannel;Landroid/os/Looper;)V
+    iget-object v4, p0, Lcom/android/server/wm/DragState;->mClientChannel:Landroid/view/InputChannel;
 
-    iput-object v1, p0, Lcom/android/server/wm/DragState;->mInputEventReceiver:Lcom/android/server/wm/WindowManagerService$DragInputEventReceiver;
+    iget-object v5, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
 
-    new-instance v1, Lcom/android/server/input/InputApplicationHandle;
+    iget-object v5, v5, Lcom/android/server/wm/WindowManagerService;->mH:Lcom/android/server/wm/WindowManagerService$H;
 
-    invoke-direct {v1, v7}, Lcom/android/server/input/InputApplicationHandle;-><init>(Ljava/lang/Object;)V
+    invoke-virtual {v5}, Lcom/android/server/wm/WindowManagerService$H;->getLooper()Landroid/os/Looper;
 
-    iput-object v1, p0, Lcom/android/server/wm/DragState;->mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
+    move-result-object v5
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
+    invoke-direct {v2, v3, v4, v5}, Lcom/android/server/wm/WindowManagerService$DragInputEventReceiver;-><init>(Lcom/android/server/wm/WindowManagerService;Landroid/view/InputChannel;Landroid/os/Looper;)V
 
-    const-string v2, "drag"
+    iput-object v2, p0, Lcom/android/server/wm/DragState;->mInputEventReceiver:Lcom/android/server/wm/WindowManagerService$DragInputEventReceiver;
 
-    iput-object v2, v1, Lcom/android/server/input/InputApplicationHandle;->name:Ljava/lang/String;
+    new-instance v2, Lcom/android/server/input/InputApplicationHandle;
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
+    invoke-direct {v2, v8}, Lcom/android/server/input/InputApplicationHandle;-><init>(Ljava/lang/Object;)V
 
-    iput-wide v8, v1, Lcom/android/server/input/InputApplicationHandle;->dispatchingTimeoutNanos:J
-
-    new-instance v1, Lcom/android/server/input/InputWindowHandle;
+    iput-object v2, p0, Lcom/android/server/wm/DragState;->mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
 
     iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
 
-    invoke-direct {v1, v2, v7}, Lcom/android/server/input/InputWindowHandle;-><init>(Lcom/android/server/input/InputApplicationHandle;Ljava/lang/Object;)V
+    const-string v3, "drag"
 
-    iput-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iput-object v3, v2, Lcom/android/server/input/InputApplicationHandle;->name:Ljava/lang/String;
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
 
-    const-string v2, "drag"
+    iput-wide v9, v2, Lcom/android/server/input/InputApplicationHandle;->dispatchingTimeoutNanos:J
 
-    iput-object v2, v1, Lcom/android/server/input/InputWindowHandle;->name:Ljava/lang/String;
+    new-instance v2, Lcom/android/server/input/InputWindowHandle;
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mDragApplicationHandle:Lcom/android/server/input/InputApplicationHandle;
 
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mServerChannel:Landroid/view/InputChannel;
+    iget-object v4, p0, Lcom/android/server/wm/DragState;->mDisplay:Landroid/view/Display;
 
-    iput-object v2, v1, Lcom/android/server/input/InputWindowHandle;->inputChannel:Landroid/view/InputChannel;
+    invoke-virtual {v4}, Landroid/view/Display;->getDisplayId()I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    move-result v4
+
+    invoke-direct {v2, v3, v8, v4}, Lcom/android/server/input/InputWindowHandle;-><init>(Lcom/android/server/input/InputApplicationHandle;Ljava/lang/Object;I)V
+
+    iput-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+
+    const-string v3, "drag"
+
+    iput-object v3, v2, Lcom/android/server/input/InputWindowHandle;->name:Ljava/lang/String;
+
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+
+    iget-object v3, p0, Lcom/android/server/wm/DragState;->mServerChannel:Landroid/view/InputChannel;
+
+    iput-object v3, v2, Lcom/android/server/input/InputWindowHandle;->inputChannel:Landroid/view/InputChannel;
+
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
     invoke-virtual {p0}, Lcom/android/server/wm/DragState;->getDragLayerLw()I
 
-    move-result v2
+    move-result v3
 
-    iput v2, v1, Lcom/android/server/input/InputWindowHandle;->layer:I
+    iput v3, v2, Lcom/android/server/input/InputWindowHandle;->layer:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput v5, v1, Lcom/android/server/input/InputWindowHandle;->layoutParamsFlags:I
+    iput v6, v2, Lcom/android/server/input/InputWindowHandle;->layoutParamsFlags:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    const/16 v2, 0x7e0
+    iput v6, v2, Lcom/android/server/input/InputWindowHandle;->layoutParamsPrivateFlags:I
 
-    iput v2, v1, Lcom/android/server/input/InputWindowHandle;->layoutParamsType:I
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    const/16 v3, 0x7e0
 
-    iput-wide v8, v1, Lcom/android/server/input/InputWindowHandle;->dispatchingTimeoutNanos:J
+    iput v3, v2, Lcom/android/server/input/InputWindowHandle;->layoutParamsType:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput-boolean v6, v1, Lcom/android/server/input/InputWindowHandle;->visible:Z
+    iput-wide v9, v2, Lcom/android/server/input/InputWindowHandle;->dispatchingTimeoutNanos:J
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput-boolean v5, v1, Lcom/android/server/input/InputWindowHandle;->canReceiveKeys:Z
+    iput-boolean v7, v2, Lcom/android/server/input/InputWindowHandle;->visible:Z
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput-boolean v6, v1, Lcom/android/server/input/InputWindowHandle;->hasFocus:Z
+    iput-boolean v6, v2, Lcom/android/server/input/InputWindowHandle;->canReceiveKeys:Z
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput-boolean v5, v1, Lcom/android/server/input/InputWindowHandle;->hasWallpaper:Z
+    iput-boolean v7, v2, Lcom/android/server/input/InputWindowHandle;->hasFocus:Z
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput-boolean v5, v1, Lcom/android/server/input/InputWindowHandle;->paused:Z
+    iput-boolean v6, v2, Lcom/android/server/input/InputWindowHandle;->hasWallpaper:Z
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+
+    iput-boolean v6, v2, Lcom/android/server/input/InputWindowHandle;->paused:Z
+
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
     invoke-static {}, Landroid/os/Process;->myPid()I
 
-    move-result v2
+    move-result v3
 
-    iput v2, v1, Lcom/android/server/input/InputWindowHandle;->ownerPid:I
+    iput v3, v2, Lcom/android/server/input/InputWindowHandle;->ownerPid:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
     invoke-static {}, Landroid/os/Process;->myUid()I
 
-    move-result v2
+    move-result v3
 
-    iput v2, v1, Lcom/android/server/input/InputWindowHandle;->ownerUid:I
+    iput v3, v2, Lcom/android/server/input/InputWindowHandle;->ownerUid:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput v5, v1, Lcom/android/server/input/InputWindowHandle;->inputFeatures:I
+    iput v6, v2, Lcom/android/server/input/InputWindowHandle;->inputFeatures:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    const/high16 v2, 0x3f80
+    const/high16 v3, 0x3f80
 
-    iput v2, v1, Lcom/android/server/input/InputWindowHandle;->scaleFactor:F
+    iput v3, v2, Lcom/android/server/input/InputWindowHandle;->scaleFactor:F
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iget-object v1, v1, Lcom/android/server/input/InputWindowHandle;->touchableRegion:Landroid/graphics/Region;
+    iget-object v2, v2, Lcom/android/server/input/InputWindowHandle;->touchableRegion:Landroid/graphics/Region;
 
-    invoke-virtual {v1}, Landroid/graphics/Region;->setEmpty()V
+    invoke-virtual {v2}, Landroid/graphics/Region;->setEmpty()V
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput v5, v1, Lcom/android/server/input/InputWindowHandle;->frameLeft:I
+    iput v6, v2, Lcom/android/server/input/InputWindowHandle;->frameLeft:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
 
-    iput v5, v1, Lcom/android/server/input/InputWindowHandle;->frameTop:I
+    iput v6, v2, Lcom/android/server/input/InputWindowHandle;->frameTop:I
 
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+    new-instance v1, Landroid/graphics/Point;
+
+    invoke-direct {v1}, Landroid/graphics/Point;-><init>()V
+
+    .local v1, p:Landroid/graphics/Point;
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDisplay:Landroid/view/Display;
+
+    invoke-virtual {v2, v1}, Landroid/view/Display;->getRealSize(Landroid/graphics/Point;)V
+
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+
+    iget v3, v1, Landroid/graphics/Point;->x:I
+
+    iput v3, v2, Lcom/android/server/input/InputWindowHandle;->frameRight:I
+
+    iget-object v2, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
+
+    iget v3, v1, Landroid/graphics/Point;->y:I
+
+    iput v3, v2, Lcom/android/server/input/InputWindowHandle;->frameBottom:I
 
     iget-object v2, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
 
-    iget v2, v2, Lcom/android/server/wm/WindowManagerService;->mCurDisplayWidth:I
-
-    iput v2, v1, Lcom/android/server/input/InputWindowHandle;->frameRight:I
-
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mDragWindowHandle:Lcom/android/server/input/InputWindowHandle;
-
-    iget-object v2, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
-
-    iget v2, v2, Lcom/android/server/wm/WindowManagerService;->mCurDisplayHeight:I
-
-    iput v2, v1, Lcom/android/server/input/InputWindowHandle;->frameBottom:I
-
-    iget-object v1, p0, Lcom/android/server/wm/DragState;->mService:Lcom/android/server/wm/WindowManagerService;
-
-    invoke-virtual {v1}, Lcom/android/server/wm/WindowManagerService;->pauseRotationLocked()V
+    invoke-virtual {v2}, Lcom/android/server/wm/WindowManagerService;->pauseRotationLocked()V
 
     goto/16 :goto_0
 .end method
@@ -1177,16 +1214,16 @@
     .prologue
     const/4 v1, 0x0
 
-    iget-object v0, p0, Lcom/android/server/wm/DragState;->mSurface:Landroid/view/Surface;
+    iget-object v0, p0, Lcom/android/server/wm/DragState;->mSurfaceControl:Landroid/view/SurfaceControl;
 
     if-eqz v0, :cond_0
 
-    iget-object v0, p0, Lcom/android/server/wm/DragState;->mSurface:Landroid/view/Surface;
+    iget-object v0, p0, Lcom/android/server/wm/DragState;->mSurfaceControl:Landroid/view/SurfaceControl;
 
-    invoke-virtual {v0}, Landroid/view/Surface;->destroy()V
+    invoke-virtual {v0}, Landroid/view/SurfaceControl;->destroy()V
 
     :cond_0
-    iput-object v1, p0, Lcom/android/server/wm/DragState;->mSurface:Landroid/view/Surface;
+    iput-object v1, p0, Lcom/android/server/wm/DragState;->mSurfaceControl:Landroid/view/SurfaceControl;
 
     const/4 v0, 0x0
 

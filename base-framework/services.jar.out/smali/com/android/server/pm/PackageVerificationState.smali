@@ -6,6 +6,8 @@
 # instance fields
 .field private final mArgs:Lcom/android/server/pm/PackageManagerService$InstallArgs;
 
+.field private mExtendedTimeout:Z
+
 .field private mRequiredVerificationComplete:Z
 
 .field private mRequiredVerificationPassed:Z
@@ -38,6 +40,10 @@
 
     iput-object v0, p0, Lcom/android/server/pm/PackageVerificationState;->mSufficientVerifierUids:Landroid/util/SparseBooleanArray;
 
+    const/4 v0, 0x0
+
+    iput-boolean v0, p0, Lcom/android/server/pm/PackageVerificationState;->mExtendedTimeout:Z
+
     return-void
 .end method
 
@@ -54,6 +60,22 @@
 
     invoke-virtual {v0, p1, v1}, Landroid/util/SparseBooleanArray;->put(IZ)V
 
+    return-void
+.end method
+
+.method public extendTimeout()V
+    .locals 1
+
+    .prologue
+    iget-boolean v0, p0, Lcom/android/server/pm/PackageVerificationState;->mExtendedTimeout:Z
+
+    if-nez v0, :cond_0
+
+    const/4 v0, 0x1
+
+    iput-boolean v0, p0, Lcom/android/server/pm/PackageVerificationState;->mExtendedTimeout:Z
+
+    :cond_0
     return-void
 .end method
 
@@ -202,4 +224,13 @@
         :pswitch_1
         :pswitch_0
     .end packed-switch
+.end method
+
+.method public timeoutExtended()Z
+    .locals 1
+
+    .prologue
+    iget-boolean v0, p0, Lcom/android/server/pm/PackageVerificationState;->mExtendedTimeout:Z
+
+    return v0
 .end method

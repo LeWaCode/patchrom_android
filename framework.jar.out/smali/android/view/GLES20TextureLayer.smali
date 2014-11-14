@@ -10,25 +10,6 @@
 
 
 # direct methods
-.method constructor <init>(Landroid/graphics/SurfaceTexture;Z)V
-    .locals 2
-    .parameter "surface"
-    .parameter "isOpaque"
-
-    .prologue
-    invoke-direct {p0, p2}, Landroid/view/GLES20TextureLayer;-><init>(Z)V
-
-    iput-object p1, p0, Landroid/view/GLES20TextureLayer;->mSurface:Landroid/graphics/SurfaceTexture;
-
-    iget-object v0, p0, Landroid/view/GLES20TextureLayer;->mSurface:Landroid/graphics/SurfaceTexture;
-
-    iget v1, p0, Landroid/view/GLES20TextureLayer;->mTexture:I
-
-    invoke-virtual {v0, v1}, Landroid/graphics/SurfaceTexture;->attachToGLContext(I)V
-
-    return-void
-.end method
-
 .method constructor <init>(Z)V
     .locals 3
     .parameter "isOpaque"
@@ -96,7 +77,7 @@
 .end method
 
 .method getSurfaceTexture()Landroid/graphics/SurfaceTexture;
-    .locals 3
+    .locals 2
 
     .prologue
     iget-object v0, p0, Landroid/view/GLES20TextureLayer;->mSurface:Landroid/graphics/SurfaceTexture;
@@ -107,9 +88,7 @@
 
     iget v1, p0, Landroid/view/GLES20TextureLayer;->mTexture:I
 
-    const/4 v2, 0x0
-
-    invoke-direct {v0, v1, v2}, Landroid/graphics/SurfaceTexture;-><init>(IZ)V
+    invoke-direct {v0, v1}, Landroid/graphics/SurfaceTexture;-><init>(I)V
 
     iput-object v0, p0, Landroid/view/GLES20TextureLayer;->mSurface:Landroid/graphics/SurfaceTexture;
 
@@ -142,7 +121,7 @@
     goto :goto_0
 .end method
 
-.method redraw(Landroid/view/DisplayList;Landroid/graphics/Rect;)V
+.method redrawLater(Landroid/view/DisplayList;Landroid/graphics/Rect;)V
     .locals 0
     .parameter "displayList"
     .parameter "dirtyRect"
@@ -151,13 +130,31 @@
     return-void
 .end method
 
-.method resize(II)V
-    .locals 0
+.method resize(II)Z
+    .locals 1
     .parameter "width"
     .parameter "height"
 
     .prologue
-    return-void
+    invoke-virtual {p0}, Landroid/view/GLES20TextureLayer;->isValid()Z
+
+    move-result v0
+
+    return v0
+.end method
+
+.method setOpaque(Z)V
+    .locals 2
+    .parameter "isOpaque"
+
+    .prologue
+    new-instance v0, Ljava/lang/UnsupportedOperationException;
+
+    const-string v1, "Use update(int, int, boolean) instead"
+
+    invoke-direct {v0, v1}, Ljava/lang/UnsupportedOperationException;-><init>(Ljava/lang/String;)V
+
+    throw v0
 .end method
 
 .method setSurfaceTexture(Landroid/graphics/SurfaceTexture;)V
@@ -202,6 +199,17 @@
 .method start(Landroid/graphics/Canvas;)Landroid/view/HardwareCanvas;
     .locals 1
     .parameter "currentCanvas"
+
+    .prologue
+    const/4 v0, 0x0
+
+    return-object v0
+.end method
+
+.method start(Landroid/graphics/Canvas;Landroid/graphics/Rect;)Landroid/view/HardwareCanvas;
+    .locals 1
+    .parameter "currentCanvas"
+    .parameter "dirty"
 
     .prologue
     const/4 v0, 0x0

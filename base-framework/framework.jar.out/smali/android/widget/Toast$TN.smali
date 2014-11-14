@@ -33,7 +33,7 @@
 
 .field mView:Landroid/view/View;
 
-.field mWM:Landroid/view/WindowManagerImpl;
+.field mWM:Landroid/view/WindowManager;
 
 .field mX:I
 
@@ -73,20 +73,12 @@
 
     iput-object v1, p0, Landroid/widget/Toast$TN;->mHandler:Landroid/os/Handler;
 
-    const/16 v1, 0x51
-
-    iput v1, p0, Landroid/widget/Toast$TN;->mGravity:I
-
     iget-object v0, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
 
     .local v0, params:Landroid/view/WindowManager$LayoutParams;
     iput v2, v0, Landroid/view/WindowManager$LayoutParams;->height:I
 
     iput v2, v0, Landroid/view/WindowManager$LayoutParams;->width:I
-
-    const/16 v1, 0x98
-
-    iput v1, v0, Landroid/view/WindowManager$LayoutParams;->flags:I
 
     const/4 v1, -0x3
 
@@ -103,6 +95,10 @@
     const-string v1, "Toast"
 
     invoke-virtual {v0, v1}, Landroid/view/WindowManager$LayoutParams;->setTitle(Ljava/lang/CharSequence;)V
+
+    const/16 v1, 0x98
+
+    iput v1, v0, Landroid/view/WindowManager$LayoutParams;->flags:I
 
     return-void
 .end method
@@ -188,11 +184,11 @@
 
     if-eqz v0, :cond_0
 
-    iget-object v0, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManagerImpl;
+    iget-object v0, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManager;
 
     iget-object v1, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
 
-    invoke-virtual {v0, v1}, Landroid/view/WindowManagerImpl;->removeView(Landroid/view/View;)V
+    invoke-interface {v0, v1}, Landroid/view/WindowManager;->removeView(Landroid/view/View;)V
 
     :cond_0
     const/4 v0, 0x0
@@ -204,109 +200,158 @@
 .end method
 
 .method public handleShow()V
-    .locals 4
+    .locals 6
 
     .prologue
-    const/high16 v3, 0x3f80
+    const/high16 v5, 0x3f80
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
 
-    iget-object v2, p0, Landroid/widget/Toast$TN;->mNextView:Landroid/view/View;
+    iget-object v4, p0, Landroid/widget/Toast$TN;->mNextView:Landroid/view/View;
 
-    if-eq v1, v2, :cond_3
+    if-eq v3, v4, :cond_4
 
     invoke-virtual {p0}, Landroid/widget/Toast$TN;->handleHide()V
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mNextView:Landroid/view/View;
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mNextView:Landroid/view/View;
 
-    iput-object v1, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+    iput-object v3, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
 
-    invoke-static {}, Landroid/view/WindowManagerImpl;->getDefault()Landroid/view/WindowManagerImpl;
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+
+    invoke-virtual {v3}, Landroid/view/View;->getContext()Landroid/content/Context;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
 
     move-result-object v1
 
-    iput-object v1, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManagerImpl;
+    .local v1, context:Landroid/content/Context;
+    if-nez v1, :cond_0
 
-    iget v0, p0, Landroid/widget/Toast$TN;->mGravity:I
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
 
-    .local v0, gravity:I
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+    invoke-virtual {v3}, Landroid/view/View;->getContext()Landroid/content/Context;
 
-    iput v0, v1, Landroid/view/WindowManager$LayoutParams;->gravity:I
-
-    and-int/lit8 v1, v0, 0x7
-
-    const/4 v2, 0x7
-
-    if-ne v1, v2, :cond_0
-
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
-
-    iput v3, v1, Landroid/view/WindowManager$LayoutParams;->horizontalWeight:F
+    move-result-object v1
 
     :cond_0
-    and-int/lit8 v1, v0, 0x70
+    const-string v3, "window"
 
-    const/16 v2, 0x70
+    invoke-virtual {v1, v3}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
 
-    if-ne v1, v2, :cond_1
+    move-result-object v3
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+    check-cast v3, Landroid/view/WindowManager;
 
-    iput v3, v1, Landroid/view/WindowManager$LayoutParams;->verticalWeight:F
+    iput-object v3, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManager;
 
-    :cond_1
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
 
-    iget v2, p0, Landroid/widget/Toast$TN;->mX:I
+    invoke-virtual {v3}, Landroid/view/View;->getContext()Landroid/content/Context;
 
-    iput v2, v1, Landroid/view/WindowManager$LayoutParams;->x:I
+    move-result-object v3
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+    invoke-virtual {v3}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
 
-    iget v2, p0, Landroid/widget/Toast$TN;->mY:I
+    move-result-object v3
 
-    iput v2, v1, Landroid/view/WindowManager$LayoutParams;->y:I
+    invoke-virtual {v3}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+    move-result-object v0
 
-    iget v2, p0, Landroid/widget/Toast$TN;->mVerticalMargin:F
+    .local v0, config:Landroid/content/res/Configuration;
+    iget v3, p0, Landroid/widget/Toast$TN;->mGravity:I
 
-    iput v2, v1, Landroid/view/WindowManager$LayoutParams;->verticalMargin:F
+    invoke-virtual {v0}, Landroid/content/res/Configuration;->getLayoutDirection()I
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+    move-result v4
 
-    iget v2, p0, Landroid/widget/Toast$TN;->mHorizontalMargin:F
+    invoke-static {v3, v4}, Landroid/view/Gravity;->getAbsoluteGravity(II)I
 
-    iput v2, v1, Landroid/view/WindowManager$LayoutParams;->horizontalMargin:F
+    move-result v2
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+    .local v2, gravity:I
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
 
-    invoke-virtual {v1}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
+    iput v2, v3, Landroid/view/WindowManager$LayoutParams;->gravity:I
 
-    move-result-object v1
+    and-int/lit8 v3, v2, 0x7
 
-    if-eqz v1, :cond_2
+    const/4 v4, 0x7
 
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManagerImpl;
-
-    iget-object v2, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
-
-    invoke-virtual {v1, v2}, Landroid/view/WindowManagerImpl;->removeView(Landroid/view/View;)V
-
-    :cond_2
-    iget-object v1, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManagerImpl;
-
-    iget-object v2, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+    if-ne v3, v4, :cond_1
 
     iget-object v3, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
 
-    invoke-virtual {v1, v2, v3}, Landroid/view/WindowManagerImpl;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
+    iput v5, v3, Landroid/view/WindowManager$LayoutParams;->horizontalWeight:F
+
+    :cond_1
+    and-int/lit8 v3, v2, 0x70
+
+    const/16 v4, 0x70
+
+    if-ne v3, v4, :cond_2
+
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+
+    iput v5, v3, Landroid/view/WindowManager$LayoutParams;->verticalWeight:F
+
+    :cond_2
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+
+    iget v4, p0, Landroid/widget/Toast$TN;->mX:I
+
+    iput v4, v3, Landroid/view/WindowManager$LayoutParams;->x:I
+
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+
+    iget v4, p0, Landroid/widget/Toast$TN;->mY:I
+
+    iput v4, v3, Landroid/view/WindowManager$LayoutParams;->y:I
+
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+
+    iget v4, p0, Landroid/widget/Toast$TN;->mVerticalMargin:F
+
+    iput v4, v3, Landroid/view/WindowManager$LayoutParams;->verticalMargin:F
+
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+
+    iget v4, p0, Landroid/widget/Toast$TN;->mHorizontalMargin:F
+
+    iput v4, v3, Landroid/view/WindowManager$LayoutParams;->horizontalMargin:F
+
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+
+    invoke-virtual {v3}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
+
+    move-result-object v3
+
+    if-eqz v3, :cond_3
+
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManager;
+
+    iget-object v4, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+
+    invoke-interface {v3, v4}, Landroid/view/WindowManager;->removeView(Landroid/view/View;)V
+
+    :cond_3
+    iget-object v3, p0, Landroid/widget/Toast$TN;->mWM:Landroid/view/WindowManager;
+
+    iget-object v4, p0, Landroid/widget/Toast$TN;->mView:Landroid/view/View;
+
+    iget-object v5, p0, Landroid/widget/Toast$TN;->mParams:Landroid/view/WindowManager$LayoutParams;
+
+    invoke-interface {v3, v4, v5}, Landroid/view/WindowManager;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
 
     invoke-direct {p0}, Landroid/widget/Toast$TN;->trySendAccessibilityEvent()V
 
-    .end local v0           #gravity:I
-    :cond_3
+    .end local v0           #config:Landroid/content/res/Configuration;
+    .end local v1           #context:Landroid/content/Context;
+    .end local v2           #gravity:I
+    :cond_4
     return-void
 .end method
 

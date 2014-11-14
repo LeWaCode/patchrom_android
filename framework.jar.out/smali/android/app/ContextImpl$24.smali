@@ -27,31 +27,23 @@
 
 # virtual methods
 .method public createService(Landroid/app/ContextImpl;)Ljava/lang/Object;
-    .locals 4
+    .locals 2
     .parameter "ctx"
 
     .prologue
-    const-string v2, "power"
+    new-instance v0, Landroid/net/NetworkPolicyManager;
 
-    invoke-static {v2}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
+    const-string v1, "netpolicy"
 
-    move-result-object v0
-
-    .local v0, b:Landroid/os/IBinder;
-    invoke-static {v0}, Landroid/os/IPowerManager$Stub;->asInterface(Landroid/os/IBinder;)Landroid/os/IPowerManager;
+    invoke-static {v1}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
 
     move-result-object v1
 
-    .local v1, service:Landroid/os/IPowerManager;
-    new-instance v2, Landroid/os/PowerManager;
+    invoke-static {v1}, Landroid/net/INetworkPolicyManager$Stub;->asInterface(Landroid/os/IBinder;)Landroid/net/INetworkPolicyManager;
 
-    iget-object v3, p1, Landroid/app/ContextImpl;->mMainThread:Landroid/app/ActivityThread;
+    move-result-object v1
 
-    invoke-virtual {v3}, Landroid/app/ActivityThread;->getHandler()Landroid/os/Handler;
+    invoke-direct {v0, v1}, Landroid/net/NetworkPolicyManager;-><init>(Landroid/net/INetworkPolicyManager;)V
 
-    move-result-object v3
-
-    invoke-direct {v2, v1, v3}, Landroid/os/PowerManager;-><init>(Landroid/os/IPowerManager;Landroid/os/Handler;)V
-
-    return-object v2
+    return-object v0
 .end method

@@ -18,25 +18,43 @@
 
 .field public static final AUDIO_STATUS_SERVER_DIED:I = 0x64
 
-.field public static final DEVICE_IN_AMBIENT:I = 0x20000
+.field public static final DEVICE_BIT_DEFAULT:I = 0x40000000
 
-.field public static final DEVICE_IN_AUX_DIGITAL:I = 0x800000
+.field public static final DEVICE_BIT_IN:I = -0x80000000
 
-.field public static final DEVICE_IN_BLUETOOTH_SCO_HEADSET:I = 0x200000
+.field public static final DEVICE_IN_ALL:I = -0x3fffe001
 
-.field public static final DEVICE_IN_BUILTIN_MIC1:I = 0x40000
+.field public static final DEVICE_IN_ALL_SCO:I = -0x7ffffff8
 
-.field public static final DEVICE_IN_BUILTIN_MIC2:I = 0x80000
+.field public static final DEVICE_IN_AMBIENT:I = -0x7ffffffe
 
-.field public static final DEVICE_IN_COMMUNICATION:I = 0x10000
+.field public static final DEVICE_IN_ANLG_DOCK_HEADSET:I = -0x7ffffe00
 
-.field public static final DEVICE_IN_DEFAULT:I = -0x80000000
+.field public static final DEVICE_IN_AUX_DIGITAL:I = -0x7fffffe0
 
-.field public static final DEVICE_IN_MIC_ARRAY:I = 0x100000
+.field public static final DEVICE_IN_BACK_MIC:I = -0x7fffff80
 
-.field public static final DEVICE_IN_WIRED_HEADSET:I = 0x400000
+.field public static final DEVICE_IN_BLUETOOTH_SCO_HEADSET:I = -0x7ffffff8
 
-.field public static final DEVICE_OUT_ALL:I = 0xffff
+.field public static final DEVICE_IN_BUILTIN_MIC:I = -0x7ffffffc
+
+.field public static final DEVICE_IN_COMMUNICATION:I = -0x7fffffff
+
+.field public static final DEVICE_IN_DEFAULT:I = -0x40000000
+
+.field public static final DEVICE_IN_DGTL_DOCK_HEADSET:I = -0x7ffffc00
+
+.field public static final DEVICE_IN_REMOTE_SUBMIX:I = -0x7fffff00
+
+.field public static final DEVICE_IN_USB_ACCESSORY:I = -0x7ffff800
+
+.field public static final DEVICE_IN_USB_DEVICE:I = -0x7ffff000
+
+.field public static final DEVICE_IN_VOICE_CALL:I = -0x7fffffc0
+
+.field public static final DEVICE_IN_WIRED_HEADSET:I = -0x7ffffff0
+
+.field public static final DEVICE_OUT_ALL:I = 0x4000ffff
 
 .field public static final DEVICE_OUT_ALL_A2DP:I = 0x380
 
@@ -76,7 +94,7 @@
 
 .field public static final DEVICE_OUT_BLUETOOTH_SCO_NAME:Ljava/lang/String; = "bt_sco"
 
-.field public static final DEVICE_OUT_DEFAULT:I = 0x8000
+.field public static final DEVICE_OUT_DEFAULT:I = 0x40000000
 
 .field public static final DEVICE_OUT_DGTL_DOCK_HEADSET:I = 0x1000
 
@@ -85,6 +103,10 @@
 .field public static final DEVICE_OUT_EARPIECE:I = 0x1
 
 .field public static final DEVICE_OUT_EARPIECE_NAME:Ljava/lang/String; = "earpiece"
+
+.field public static final DEVICE_OUT_REMOTE_SUBMIX:I = 0x8000
+
+.field public static final DEVICE_OUT_REMOTE_SUBMIX_NAME:Ljava/lang/String; = "remote_submix"
 
 .field public static final DEVICE_OUT_SPEAKER:I = 0x2
 
@@ -132,6 +154,8 @@
 
 .field public static final FORCE_SPEAKER:I = 0x1
 
+.field public static final FORCE_SYSTEM_ENFORCED:I = 0xb
+
 .field public static final FORCE_WIRED_ACCESSORY:I = 0x5
 
 .field public static final FOR_COMMUNICATION:I = 0x0
@@ -141,6 +165,8 @@
 .field public static final FOR_MEDIA:I = 0x1
 
 .field public static final FOR_RECORD:I = 0x2
+
+.field public static final FOR_SYSTEM:I = 0x4
 
 .field public static final MODE_CURRENT:I = -0x1
 
@@ -156,9 +182,9 @@
 
 .field private static final NUM_DEVICE_STATES:I = 0x1
 
-.field private static final NUM_FORCE_CONFIG:I = 0xb
+.field private static final NUM_FORCE_CONFIG:I = 0xc
 
-.field private static final NUM_FORCE_USE:I = 0x4
+.field private static final NUM_FORCE_USE:I = 0x5
 
 .field public static final NUM_MODES:I = 0x4
 
@@ -242,6 +268,9 @@
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     return-void
+.end method
+
+.method public static native checkAudioFlinger()I
 .end method
 
 .method private static errorCallbackFromNative(I)V
@@ -376,6 +405,11 @@
 
     goto :goto_0
 
+    :sswitch_f
+    const-string v0, "remote_submix"
+
+    goto :goto_0
+
     :sswitch_data_0
     .sparse-switch
         0x1 -> :sswitch_0
@@ -393,6 +427,7 @@
         0x1000 -> :sswitch_c
         0x2000 -> :sswitch_d
         0x4000 -> :sswitch_e
+        0x8000 -> :sswitch_f
     .end sparse-switch
 .end method
 
@@ -417,7 +452,16 @@
     return v0
 .end method
 
+.method public static native getOutputLatency(I)I
+.end method
+
 .method public static native getParameters(Ljava/lang/String;)Ljava/lang/String;
+.end method
+
+.method public static native getPrimaryOutputFrameCount()I
+.end method
+
+.method public static native getPrimaryOutputSamplingRate()I
 .end method
 
 .method public static native getStreamVolumeIndex(II)I
@@ -429,7 +473,13 @@
 .method public static native isMicrophoneMuted()Z
 .end method
 
+.method public static native isSourceActive(I)Z
+.end method
+
 .method public static native isStreamActive(II)Z
+.end method
+
+.method public static native isStreamActiveRemotely(II)Z
 .end method
 
 .method public static native muteMicrophone(Z)I
@@ -450,26 +500,33 @@
     :try_start_0
     sput-object p0, Landroid/media/AudioSystem;->mErrorCallback:Landroid/media/AudioSystem$ErrorCallback;
 
-    monitor-exit v1
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+    if-eqz p0, :cond_0
 
-    invoke-static {}, Landroid/media/AudioSystem;->isMicrophoneMuted()Z
+    invoke-static {}, Landroid/media/AudioSystem;->checkAudioFlinger()I
+
+    move-result v0
+
+    invoke-interface {p0, v0}, Landroid/media/AudioSystem$ErrorCallback;->onError(I)V
+
+    :cond_0
+    monitor-exit v1
 
     return-void
 
     :catchall_0
     move-exception v0
 
-    :try_start_1
     monitor-exit v1
-    :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     throw v0
 .end method
 
 .method public static native setForceUse(II)I
+.end method
+
+.method public static native setLowRamDevice(Z)I
 .end method
 
 .method public static native setMasterMute(Z)I

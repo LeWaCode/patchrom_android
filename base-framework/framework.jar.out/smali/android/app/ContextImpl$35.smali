@@ -27,31 +27,24 @@
 
 # virtual methods
 .method public createService(Landroid/app/ContextImpl;)Ljava/lang/Object;
-    .locals 4
+    .locals 3
     .parameter "ctx"
 
     .prologue
-    const-string v2, "wifi"
+    const-string v1, "serial"
 
-    invoke-static {v2}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
+    invoke-static {v1}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
 
     move-result-object v0
 
     .local v0, b:Landroid/os/IBinder;
-    invoke-static {v0}, Landroid/net/wifi/IWifiManager$Stub;->asInterface(Landroid/os/IBinder;)Landroid/net/wifi/IWifiManager;
+    new-instance v1, Landroid/hardware/SerialManager;
 
-    move-result-object v1
+    invoke-static {v0}, Landroid/hardware/ISerialManager$Stub;->asInterface(Landroid/os/IBinder;)Landroid/hardware/ISerialManager;
 
-    .local v1, service:Landroid/net/wifi/IWifiManager;
-    new-instance v2, Landroid/net/wifi/WifiManager;
+    move-result-object v2
 
-    iget-object v3, p1, Landroid/app/ContextImpl;->mMainThread:Landroid/app/ActivityThread;
+    invoke-direct {v1, p1, v2}, Landroid/hardware/SerialManager;-><init>(Landroid/content/Context;Landroid/hardware/ISerialManager;)V
 
-    invoke-virtual {v3}, Landroid/app/ActivityThread;->getHandler()Landroid/os/Handler;
-
-    move-result-object v3
-
-    invoke-direct {v2, v1, v3}, Landroid/net/wifi/WifiManager;-><init>(Landroid/net/wifi/IWifiManager;Landroid/os/Handler;)V
-
-    return-object v2
+    return-object v1
 .end method

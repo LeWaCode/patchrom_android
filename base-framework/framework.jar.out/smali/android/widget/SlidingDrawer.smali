@@ -15,6 +15,9 @@
     }
 .end annotation
 
+.annotation runtime Ljava/lang/Deprecated;
+.end annotation
+
 
 # static fields
 .field private static final ANIMATION_FRAME_DURATION:I = 0x10

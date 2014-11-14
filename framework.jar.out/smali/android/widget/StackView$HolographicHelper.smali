@@ -185,7 +185,7 @@
 .end method
 
 .method createOutline(Landroid/view/View;II)Landroid/graphics/Bitmap;
-    .locals 10
+    .locals 11
     .parameter "v"
     .parameter "type"
     .parameter "color"
@@ -193,7 +193,7 @@
     .prologue
     const/4 v5, 0x0
 
-    const/4 v9, 0x0
+    const/4 v10, 0x0
 
     iget-object v6, p0, Landroid/widget/StackView$HolographicHelper;->mHolographicPaint:Landroid/graphics/Paint;
 
@@ -241,17 +241,25 @@
     goto :goto_0
 
     :cond_3
+    invoke-virtual {p1}, Landroid/view/View;->getResources()Landroid/content/res/Resources;
+
+    move-result-object v6
+
+    invoke-virtual {v6}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
+
+    move-result-object v6
+
     invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
-
-    move-result v6
-
-    invoke-virtual {p1}, Landroid/view/View;->getMeasuredHeight()I
 
     move-result v7
 
-    sget-object v8, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredHeight()I
 
-    invoke-static {v6, v7, v8}, Landroid/graphics/Bitmap;->createBitmap(IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
+    move-result v8
+
+    sget-object v9, Landroid/graphics/Bitmap$Config;->ARGB_8888:Landroid/graphics/Bitmap$Config;
+
+    invoke-static {v6, v7, v8, v9}, Landroid/graphics/Bitmap;->createBitmap(Landroid/util/DisplayMetrics;IILandroid/graphics/Bitmap$Config;)Landroid/graphics/Bitmap;
 
     move-result-object v0
 
@@ -280,13 +288,13 @@
     move-result v3
 
     .local v3, translationX:F
-    invoke-virtual {p1, v9}, Landroid/view/View;->setRotationX(F)V
+    invoke-virtual {p1, v10}, Landroid/view/View;->setRotationX(F)V
 
-    invoke-virtual {p1, v9}, Landroid/view/View;->setRotation(F)V
+    invoke-virtual {p1, v10}, Landroid/view/View;->setRotation(F)V
 
-    invoke-virtual {p1, v9}, Landroid/view/View;->setTranslationY(F)V
+    invoke-virtual {p1, v10}, Landroid/view/View;->setTranslationY(F)V
 
-    invoke-virtual {p1, v9}, Landroid/view/View;->setTranslationX(F)V
+    invoke-virtual {p1, v10}, Landroid/view/View;->setTranslationX(F)V
 
     iget-object v6, p0, Landroid/widget/StackView$HolographicHelper;->mCanvas:Landroid/graphics/Canvas;
 

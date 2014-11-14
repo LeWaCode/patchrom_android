@@ -235,6 +235,17 @@
     goto :goto_0
 .end method
 
+.method public getSendingUserId()I
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/content/BroadcastReceiver;->mPendingResult:Landroid/content/BroadcastReceiver$PendingResult;
+
+    iget v0, v0, Landroid/content/BroadcastReceiver$PendingResult;->mSendingUser:I
+
+    return v0
+.end method
+
 .method public final goAsync()Landroid/content/BroadcastReceiver$PendingResult;
     .locals 2
 
@@ -308,10 +319,8 @@
     const/4 v1, 0x0
 
     .local v1, binder:Landroid/os/IBinder;
-    const/4 v2, 0x0
-
     :try_start_0
-    invoke-virtual {p2, v2}, Landroid/content/Intent;->setAllowFds(Z)V
+    invoke-virtual {p2}, Landroid/content/Intent;->prepareToLeaveProcess()V
 
     invoke-virtual {p1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 

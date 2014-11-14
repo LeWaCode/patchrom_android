@@ -54,7 +54,7 @@
 
     iget-object v1, p0, Lcom/android/server/ClipboardService$1;->this$0:Lcom/android/server/ClipboardService;
 
-    const-string v2, "android.intent.extra.user_id"
+    const-string v2, "android.intent.extra.user_handle"
 
     const/4 v3, 0x0
 

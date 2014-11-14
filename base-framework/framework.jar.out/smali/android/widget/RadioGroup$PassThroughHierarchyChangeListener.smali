@@ -83,7 +83,7 @@
 
     if-ne v0, v1, :cond_0
 
-    invoke-virtual {p2}, Ljava/lang/Object;->hashCode()I
+    invoke-static {}, Landroid/view/View;->generateViewId()I
 
     move-result v0
 

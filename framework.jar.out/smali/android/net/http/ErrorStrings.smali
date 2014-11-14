@@ -22,7 +22,7 @@
     .parameter "errorCode"
 
     .prologue
-    const v0, 0x1040112
+    const v0, 0x104009e
 
     packed-switch p0, :pswitch_data_0
 
@@ -53,47 +53,47 @@
     return v0
 
     :pswitch_1
-    const v0, 0x1040111
+    const v0, 0x104009d
 
     goto :goto_0
 
     :pswitch_2
-    const v0, 0x1040113
+    const v0, 0x104009f
 
     goto :goto_0
 
     :pswitch_3
-    const v0, 0x1040114
+    const v0, 0x10400a0
 
     goto :goto_0
 
     :pswitch_4
-    const v0, 0x1040115
+    const v0, 0x10400a1
 
     goto :goto_0
 
     :pswitch_5
-    const v0, 0x1040116
+    const v0, 0x10400a2
 
     goto :goto_0
 
     :pswitch_6
-    const v0, 0x1040117
+    const v0, 0x10400a3
 
     goto :goto_0
 
     :pswitch_7
-    const v0, 0x1040118
+    const v0, 0x10400a4
 
     goto :goto_0
 
     :pswitch_8
-    const v0, 0x1040119
+    const v0, 0x10400a5
 
     goto :goto_0
 
     :pswitch_9
-    const v0, 0x104011a
+    const v0, 0x10400a6
 
     goto :goto_0
 
@@ -103,7 +103,7 @@
     goto :goto_0
 
     :pswitch_b
-    const v0, 0x104011b
+    const v0, 0x10400a7
 
     goto :goto_0
 
@@ -113,17 +113,17 @@
     goto :goto_0
 
     :pswitch_d
-    const v0, 0x104011c
+    const v0, 0x10400a8
 
     goto :goto_0
 
     :pswitch_e
-    const v0, 0x104011d
+    const v0, 0x10400a9
 
     goto :goto_0
 
     :pswitch_f
-    const v0, 0x104011e
+    const v0, 0x10400aa
 
     goto :goto_0
 

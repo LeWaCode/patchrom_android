@@ -127,27 +127,107 @@
     goto :goto_1
 .end method
 
-.method protected bridge synthetic packageForFilter(Landroid/content/IntentFilter;)Ljava/lang/String;
+.method protected bridge synthetic isPackageForFilter(Ljava/lang/String;Landroid/content/IntentFilter;)Z
+    .locals 1
+    .parameter "x0"
+    .parameter "x1"
+
+    .prologue
+    check-cast p2, Lcom/android/server/am/BroadcastFilter;
+
+    .end local p2
+    invoke-virtual {p0, p1, p2}, Lcom/android/server/am/ActivityManagerService$1;->isPackageForFilter(Ljava/lang/String;Lcom/android/server/am/BroadcastFilter;)Z
+
+    move-result v0
+
+    return v0
+.end method
+
+.method protected isPackageForFilter(Ljava/lang/String;Lcom/android/server/am/BroadcastFilter;)Z
+    .locals 1
+    .parameter "packageName"
+    .parameter "filter"
+
+    .prologue
+    iget-object v0, p2, Lcom/android/server/am/BroadcastFilter;->packageName:Ljava/lang/String;
+
+    invoke-virtual {p1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v0
+
+    return v0
+.end method
+
+.method protected bridge synthetic newArray(I)[Landroid/content/IntentFilter;
     .locals 1
     .parameter "x0"
 
     .prologue
-    check-cast p1, Lcom/android/server/am/BroadcastFilter;
-
-    .end local p1
-    invoke-virtual {p0, p1}, Lcom/android/server/am/ActivityManagerService$1;->packageForFilter(Lcom/android/server/am/BroadcastFilter;)Ljava/lang/String;
+    invoke-virtual {p0, p1}, Lcom/android/server/am/ActivityManagerService$1;->newArray(I)[Lcom/android/server/am/BroadcastFilter;
 
     move-result-object v0
 
     return-object v0
 .end method
 
-.method protected packageForFilter(Lcom/android/server/am/BroadcastFilter;)Ljava/lang/String;
+.method protected newArray(I)[Lcom/android/server/am/BroadcastFilter;
     .locals 1
-    .parameter "filter"
+    .parameter "size"
 
     .prologue
-    iget-object v0, p1, Lcom/android/server/am/BroadcastFilter;->packageName:Ljava/lang/String;
+    new-array v0, p1, [Lcom/android/server/am/BroadcastFilter;
+
+    return-object v0
+.end method
+
+.method protected newResult(Lcom/android/server/am/BroadcastFilter;II)Lcom/android/server/am/BroadcastFilter;
+    .locals 2
+    .parameter "filter"
+    .parameter "match"
+    .parameter "userId"
+
+    .prologue
+    const/4 v1, -0x1
+
+    if-eq p3, v1, :cond_0
+
+    iget v0, p1, Lcom/android/server/am/BroadcastFilter;->owningUserId:I
+
+    if-eq v0, v1, :cond_0
+
+    iget v0, p1, Lcom/android/server/am/BroadcastFilter;->owningUserId:I
+
+    if-ne p3, v0, :cond_1
+
+    :cond_0
+    invoke-super {p0, p1, p2, p3}, Lcom/android/server/IntentResolver;->newResult(Landroid/content/IntentFilter;II)Ljava/lang/Object;
+
+    move-result-object v0
+
+    check-cast v0, Lcom/android/server/am/BroadcastFilter;
+
+    :goto_0
+    return-object v0
+
+    :cond_1
+    const/4 v0, 0x0
+
+    goto :goto_0
+.end method
+
+.method protected bridge synthetic newResult(Landroid/content/IntentFilter;II)Ljava/lang/Object;
+    .locals 1
+    .parameter "x0"
+    .parameter "x1"
+    .parameter "x2"
+
+    .prologue
+    check-cast p1, Lcom/android/server/am/BroadcastFilter;
+
+    .end local p1
+    invoke-virtual {p0, p1, p2, p3}, Lcom/android/server/am/ActivityManagerService$1;->newResult(Lcom/android/server/am/BroadcastFilter;II)Lcom/android/server/am/BroadcastFilter;
+
+    move-result-object v0
 
     return-object v0
 .end method

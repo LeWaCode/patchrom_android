@@ -12,6 +12,12 @@
 # instance fields
 .field private final mContext:Landroid/content/Context;
 
+.field private mCurrentSettings:Lcom/android/server/usb/UsbSettingsManager;
+    .annotation build Lcom/android/internal/annotations/GuardedBy;
+        value = "mLock"
+    .end annotation
+.end field
+
 .field private final mDevices:Ljava/util/HashMap;
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -27,8 +33,6 @@
 .field private final mHostBlacklist:[Ljava/lang/String;
 
 .field private final mLock:Ljava/lang/Object;
-
-.field private final mSettingsManager:Lcom/android/server/usb/UsbSettingsManager;
 
 
 # direct methods
@@ -47,10 +51,9 @@
     return-void
 .end method
 
-.method public constructor <init>(Landroid/content/Context;Lcom/android/server/usb/UsbSettingsManager;)V
+.method public constructor <init>(Landroid/content/Context;)V
     .locals 2
     .parameter "context"
-    .parameter "settingsManager"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -69,13 +72,11 @@
 
     iput-object p1, p0, Lcom/android/server/usb/UsbHostManager;->mContext:Landroid/content/Context;
 
-    iput-object p2, p0, Lcom/android/server/usb/UsbHostManager;->mSettingsManager:Lcom/android/server/usb/UsbSettingsManager;
-
     invoke-virtual {p1}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
 
     move-result-object v0
 
-    const v1, 0x107001f
+    const v1, 0x1070017
 
     invoke-virtual {v0, v1}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
 
@@ -94,6 +95,31 @@
     invoke-direct {p0}, Lcom/android/server/usb/UsbHostManager;->monitorUsbHostBus()V
 
     return-void
+.end method
+
+.method private getCurrentSettings()Lcom/android/server/usb/UsbSettingsManager;
+    .locals 2
+
+    .prologue
+    iget-object v1, p0, Lcom/android/server/usb/UsbHostManager;->mLock:Ljava/lang/Object;
+
+    monitor-enter v1
+
+    :try_start_0
+    iget-object v0, p0, Lcom/android/server/usb/UsbHostManager;->mCurrentSettings:Lcom/android/server/usb/UsbSettingsManager;
+
+    monitor-exit v1
+
+    return-object v0
+
+    :catchall_0
+    move-exception v0
+
+    monitor-exit v1
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
 .end method
 
 .method private isBlackListed(III)Z
@@ -538,9 +564,9 @@
 
     invoke-virtual {v4, v0, v10}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 
-    move-object/from16 v0, p0
+    invoke-direct/range {p0 .. p0}, Lcom/android/server/usb/UsbHostManager;->getCurrentSettings()Lcom/android/server/usb/UsbSettingsManager;
 
-    iget-object v4, v0, Lcom/android/server/usb/UsbHostManager;->mSettingsManager:Lcom/android/server/usb/UsbSettingsManager;
+    move-result-object v4
 
     invoke-virtual {v4, v10}, Lcom/android/server/usb/UsbSettingsManager;->deviceAttached(Landroid/hardware/usb/UsbDevice;)V
 
@@ -600,7 +626,9 @@
     .local v0, device:Landroid/hardware/usb/UsbDevice;
     if-eqz v0, :cond_0
 
-    iget-object v1, p0, Lcom/android/server/usb/UsbHostManager;->mSettingsManager:Lcom/android/server/usb/UsbSettingsManager;
+    invoke-direct {p0}, Lcom/android/server/usb/UsbHostManager;->getCurrentSettings()Lcom/android/server/usb/UsbSettingsManager;
+
+    move-result-object v1
 
     invoke-virtual {v1, v0}, Lcom/android/server/usb/UsbSettingsManager;->deviceDetached(Landroid/hardware/usb/UsbDevice;)V
 
@@ -866,7 +894,9 @@
     throw v1
 
     :cond_1
-    iget-object v1, p0, Lcom/android/server/usb/UsbHostManager;->mSettingsManager:Lcom/android/server/usb/UsbSettingsManager;
+    invoke-direct {p0}, Lcom/android/server/usb/UsbHostManager;->getCurrentSettings()Lcom/android/server/usb/UsbSettingsManager;
+
+    move-result-object v1
 
     invoke-virtual {v1, v0}, Lcom/android/server/usb/UsbSettingsManager;->checkPermission(Landroid/hardware/usb/UsbDevice;)V
 
@@ -879,6 +909,32 @@
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
     return-object v1
+.end method
+
+.method public setCurrentSettings(Lcom/android/server/usb/UsbSettingsManager;)V
+    .locals 2
+    .parameter "settings"
+
+    .prologue
+    iget-object v1, p0, Lcom/android/server/usb/UsbHostManager;->mLock:Ljava/lang/Object;
+
+    monitor-enter v1
+
+    :try_start_0
+    iput-object p1, p0, Lcom/android/server/usb/UsbHostManager;->mCurrentSettings:Lcom/android/server/usb/UsbSettingsManager;
+
+    monitor-exit v1
+
+    return-void
+
+    :catchall_0
+    move-exception v0
+
+    monitor-exit v1
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
 .end method
 
 .method public systemReady()V

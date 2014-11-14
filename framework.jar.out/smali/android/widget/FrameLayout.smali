@@ -15,7 +15,7 @@
 
 
 # static fields
-.field private static final DEFAULT_CHILD_GRAVITY:I = 0x33
+.field private static final DEFAULT_CHILD_GRAVITY:I = 0x800033
 
 
 # instance fields
@@ -276,64 +276,6 @@
     goto :goto_0
 .end method
 
-.method private getPaddingLeftWithForeground()I
-    .locals 2
-
-    .prologue
-    iget-boolean v0, p0, Landroid/widget/FrameLayout;->mForegroundInPadding:Z
-
-    if-eqz v0, :cond_0
-
-    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingLeft:I
-
-    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingLeft:I
-
-    invoke-static {v0, v1}, Ljava/lang/Math;->max(II)I
-
-    move-result v0
-
-    :goto_0
-    return v0
-
-    :cond_0
-    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingLeft:I
-
-    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingLeft:I
-
-    add-int/2addr v0, v1
-
-    goto :goto_0
-.end method
-
-.method private getPaddingRightWithForeground()I
-    .locals 2
-
-    .prologue
-    iget-boolean v0, p0, Landroid/widget/FrameLayout;->mForegroundInPadding:Z
-
-    if-eqz v0, :cond_0
-
-    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingRight:I
-
-    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingRight:I
-
-    invoke-static {v0, v1}, Ljava/lang/Math;->max(II)I
-
-    move-result v0
-
-    :goto_0
-    return v0
-
-    :cond_0
-    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingRight:I
-
-    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingRight:I
-
-    add-int/2addr v0, v1
-
-    goto :goto_0
-.end method
-
 .method private getPaddingTopWithForeground()I
     .locals 2
 
@@ -424,7 +366,7 @@
     invoke-virtual {v3, v2, v2, v8, v7}, Landroid/graphics/Rect;->set(IIII)V
 
     :goto_0
-    invoke-virtual {p0}, Landroid/widget/FrameLayout;->getResolvedLayoutDirection()I
+    invoke-virtual {p0}, Landroid/widget/FrameLayout;->getLayoutDirection()I
 
     move-result v5
 
@@ -636,6 +578,64 @@
     return v0
 .end method
 
+.method getPaddingLeftWithForeground()I
+    .locals 2
+
+    .prologue
+    iget-boolean v0, p0, Landroid/widget/FrameLayout;->mForegroundInPadding:Z
+
+    if-eqz v0, :cond_0
+
+    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingLeft:I
+
+    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingLeft:I
+
+    invoke-static {v0, v1}, Ljava/lang/Math;->max(II)I
+
+    move-result v0
+
+    :goto_0
+    return v0
+
+    :cond_0
+    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingLeft:I
+
+    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingLeft:I
+
+    add-int/2addr v0, v1
+
+    goto :goto_0
+.end method
+
+.method getPaddingRightWithForeground()I
+    .locals 2
+
+    .prologue
+    iget-boolean v0, p0, Landroid/widget/FrameLayout;->mForegroundInPadding:Z
+
+    if-eqz v0, :cond_0
+
+    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingRight:I
+
+    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingRight:I
+
+    invoke-static {v0, v1}, Ljava/lang/Math;->max(II)I
+
+    move-result v0
+
+    :goto_0
+    return v0
+
+    :cond_0
+    iget v0, p0, Landroid/widget/FrameLayout;->mPaddingRight:I
+
+    iget v1, p0, Landroid/widget/FrameLayout;->mForegroundPaddingRight:I
+
+    add-int/2addr v0, v1
+
+    goto :goto_0
+.end method
+
 .method public jumpDrawablesToCurrentState()V
     .locals 1
 
@@ -652,6 +652,291 @@
 
     :cond_0
     return-void
+.end method
+
+.method layoutChildren(IIIIZ)V
+    .locals 20
+    .parameter "left"
+    .parameter "top"
+    .parameter "right"
+    .parameter "bottom"
+    .parameter "forceLeftGravity"
+
+    .prologue
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getChildCount()I
+
+    move-result v6
+
+    .local v6, count:I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
+
+    move-result v13
+
+    .local v13, parentLeft:I
+    sub-int v18, p3, p1
+
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
+
+    move-result v19
+
+    sub-int v14, v18, v19
+
+    .local v14, parentRight:I
+    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingTopWithForeground()I
+
+    move-result v15
+
+    .local v15, parentTop:I
+    sub-int v18, p4, p2
+
+    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingBottomWithForeground()I
+
+    move-result v19
+
+    sub-int v12, v18, v19
+
+    .local v12, parentBottom:I
+    const/16 v18, 0x1
+
+    move/from16 v0, v18
+
+    move-object/from16 v1, p0
+
+    iput-boolean v0, v1, Landroid/widget/FrameLayout;->mForegroundBoundsChanged:Z
+
+    const/4 v9, 0x0
+
+    .local v9, i:I
+    :goto_0
+    if-ge v9, v6, :cond_3
+
+    move-object/from16 v0, p0
+
+    invoke-virtual {v0, v9}, Landroid/widget/FrameLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v3
+
+    .local v3, child:Landroid/view/View;
+    invoke-virtual {v3}, Landroid/view/View;->getVisibility()I
+
+    move-result v18
+
+    const/16 v19, 0x8
+
+    move/from16 v0, v18
+
+    move/from16 v1, v19
+
+    if-eq v0, v1, :cond_2
+
+    invoke-virtual {v3}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
+
+    move-result-object v11
+
+    check-cast v11, Landroid/widget/FrameLayout$LayoutParams;
+
+    .local v11, lp:Landroid/widget/FrameLayout$LayoutParams;
+    invoke-virtual {v3}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v17
+
+    .local v17, width:I
+    invoke-virtual {v3}, Landroid/view/View;->getMeasuredHeight()I
+
+    move-result v8
+
+    .local v8, height:I
+    iget v7, v11, Landroid/widget/FrameLayout$LayoutParams;->gravity:I
+
+    .local v7, gravity:I
+    const/16 v18, -0x1
+
+    move/from16 v0, v18
+
+    if-ne v7, v0, :cond_0
+
+    const v7, 0x800033
+
+    :cond_0
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getLayoutDirection()I
+
+    move-result v10
+
+    .local v10, layoutDirection:I
+    invoke-static {v7, v10}, Landroid/view/Gravity;->getAbsoluteGravity(II)I
+
+    move-result v2
+
+    .local v2, absoluteGravity:I
+    and-int/lit8 v16, v7, 0x70
+
+    .local v16, verticalGravity:I
+    and-int/lit8 v18, v2, 0x7
+
+    sparse-switch v18, :sswitch_data_0
+
+    :cond_1
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->leftMargin:I
+
+    move/from16 v18, v0
+
+    add-int v4, v13, v18
+
+    .local v4, childLeft:I
+    :goto_1
+    sparse-switch v16, :sswitch_data_1
+
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->topMargin:I
+
+    move/from16 v18, v0
+
+    add-int v5, v15, v18
+
+    .local v5, childTop:I
+    :goto_2
+    add-int v18, v4, v17
+
+    add-int v19, v5, v8
+
+    move/from16 v0, v18
+
+    move/from16 v1, v19
+
+    invoke-virtual {v3, v4, v5, v0, v1}, Landroid/view/View;->layout(IIII)V
+
+    .end local v2           #absoluteGravity:I
+    .end local v4           #childLeft:I
+    .end local v5           #childTop:I
+    .end local v7           #gravity:I
+    .end local v8           #height:I
+    .end local v10           #layoutDirection:I
+    .end local v11           #lp:Landroid/widget/FrameLayout$LayoutParams;
+    .end local v16           #verticalGravity:I
+    .end local v17           #width:I
+    :cond_2
+    add-int/lit8 v9, v9, 0x1
+
+    goto :goto_0
+
+    .restart local v2       #absoluteGravity:I
+    .restart local v7       #gravity:I
+    .restart local v8       #height:I
+    .restart local v10       #layoutDirection:I
+    .restart local v11       #lp:Landroid/widget/FrameLayout$LayoutParams;
+    .restart local v16       #verticalGravity:I
+    .restart local v17       #width:I
+    :sswitch_0
+    sub-int v18, v14, v13
+
+    sub-int v18, v18, v17
+
+    div-int/lit8 v18, v18, 0x2
+
+    add-int v18, v18, v13
+
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->leftMargin:I
+
+    move/from16 v19, v0
+
+    add-int v18, v18, v19
+
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->rightMargin:I
+
+    move/from16 v19, v0
+
+    sub-int v4, v18, v19
+
+    .restart local v4       #childLeft:I
+    goto :goto_1
+
+    .end local v4           #childLeft:I
+    :sswitch_1
+    if-nez p5, :cond_1
+
+    sub-int v18, v14, v17
+
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->rightMargin:I
+
+    move/from16 v19, v0
+
+    sub-int v4, v18, v19
+
+    .restart local v4       #childLeft:I
+    goto :goto_1
+
+    :sswitch_2
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->topMargin:I
+
+    move/from16 v18, v0
+
+    add-int v5, v15, v18
+
+    .restart local v5       #childTop:I
+    goto :goto_2
+
+    .end local v5           #childTop:I
+    :sswitch_3
+    sub-int v18, v12, v15
+
+    sub-int v18, v18, v8
+
+    div-int/lit8 v18, v18, 0x2
+
+    add-int v18, v18, v15
+
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->topMargin:I
+
+    move/from16 v19, v0
+
+    add-int v18, v18, v19
+
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->bottomMargin:I
+
+    move/from16 v19, v0
+
+    sub-int v5, v18, v19
+
+    .restart local v5       #childTop:I
+    goto :goto_2
+
+    .end local v5           #childTop:I
+    :sswitch_4
+    sub-int v18, v12, v8
+
+    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->bottomMargin:I
+
+    move/from16 v19, v0
+
+    sub-int v5, v18, v19
+
+    .restart local v5       #childTop:I
+    goto :goto_2
+
+    .end local v2           #absoluteGravity:I
+    .end local v3           #child:Landroid/view/View;
+    .end local v4           #childLeft:I
+    .end local v5           #childTop:I
+    .end local v7           #gravity:I
+    .end local v8           #height:I
+    .end local v10           #layoutDirection:I
+    .end local v11           #lp:Landroid/widget/FrameLayout$LayoutParams;
+    .end local v16           #verticalGravity:I
+    .end local v17           #width:I
+    :cond_3
+    return-void
+
+    :sswitch_data_0
+    .sparse-switch
+        0x1 -> :sswitch_0
+        0x5 -> :sswitch_1
+    .end sparse-switch
+
+    :sswitch_data_1
+    .sparse-switch
+        0x10 -> :sswitch_3
+        0x30 -> :sswitch_2
+        0x50 -> :sswitch_4
+    .end sparse-switch
 .end method
 
 .method public onInitializeAccessibilityEvent(Landroid/view/accessibility/AccessibilityEvent;)V
@@ -691,7 +976,7 @@
 .end method
 
 .method protected onLayout(ZIIII)V
-    .locals 20
+    .locals 6
     .parameter "changed"
     .parameter "left"
     .parameter "top"
@@ -699,292 +984,21 @@
     .parameter "bottom"
 
     .prologue
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getChildCount()I
+    const/4 v5, 0x0
 
-    move-result v6
+    move-object v0, p0
 
-    .local v6, count:I
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
+    move v1, p2
 
-    move-result v13
+    move v2, p3
 
-    .local v13, parentLeft:I
-    sub-int v18, p4, p2
+    move v3, p4
 
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
+    move v4, p5
 
-    move-result v19
+    invoke-virtual/range {v0 .. v5}, Landroid/widget/FrameLayout;->layoutChildren(IIIIZ)V
 
-    sub-int v14, v18, v19
-
-    .local v14, parentRight:I
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingTopWithForeground()I
-
-    move-result v15
-
-    .local v15, parentTop:I
-    sub-int v18, p5, p3
-
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingBottomWithForeground()I
-
-    move-result v19
-
-    sub-int v12, v18, v19
-
-    .local v12, parentBottom:I
-    const/16 v18, 0x1
-
-    move/from16 v0, v18
-
-    move-object/from16 v1, p0
-
-    iput-boolean v0, v1, Landroid/widget/FrameLayout;->mForegroundBoundsChanged:Z
-
-    const/4 v9, 0x0
-
-    .local v9, i:I
-    :goto_0
-    if-ge v9, v6, :cond_2
-
-    move-object/from16 v0, p0
-
-    invoke-virtual {v0, v9}, Landroid/widget/FrameLayout;->getChildAt(I)Landroid/view/View;
-
-    move-result-object v3
-
-    .local v3, child:Landroid/view/View;
-    invoke-virtual {v3}, Landroid/view/View;->getVisibility()I
-
-    move-result v18
-
-    const/16 v19, 0x8
-
-    move/from16 v0, v18
-
-    move/from16 v1, v19
-
-    if-eq v0, v1, :cond_1
-
-    invoke-virtual {v3}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
-
-    move-result-object v11
-
-    check-cast v11, Landroid/widget/FrameLayout$LayoutParams;
-
-    .local v11, lp:Landroid/widget/FrameLayout$LayoutParams;
-    invoke-virtual {v3}, Landroid/view/View;->getMeasuredWidth()I
-
-    move-result v17
-
-    .local v17, width:I
-    invoke-virtual {v3}, Landroid/view/View;->getMeasuredHeight()I
-
-    move-result v8
-
-    .local v8, height:I
-    iget v7, v11, Landroid/widget/FrameLayout$LayoutParams;->gravity:I
-
-    .local v7, gravity:I
-    const/16 v18, -0x1
-
-    move/from16 v0, v18
-
-    if-ne v7, v0, :cond_0
-
-    const/16 v7, 0x33
-
-    :cond_0
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getResolvedLayoutDirection()I
-
-    move-result v10
-
-    .local v10, layoutDirection:I
-    invoke-static {v7, v10}, Landroid/view/Gravity;->getAbsoluteGravity(II)I
-
-    move-result v2
-
-    .local v2, absoluteGravity:I
-    and-int/lit8 v16, v7, 0x70
-
-    .local v16, verticalGravity:I
-    and-int/lit8 v18, v2, 0x7
-
-    packed-switch v18, :pswitch_data_0
-
-    :pswitch_0
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->leftMargin:I
-
-    move/from16 v18, v0
-
-    add-int v4, v13, v18
-
-    .local v4, childLeft:I
-    :goto_1
-    sparse-switch v16, :sswitch_data_0
-
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->topMargin:I
-
-    move/from16 v18, v0
-
-    add-int v5, v15, v18
-
-    .local v5, childTop:I
-    :goto_2
-    add-int v18, v4, v17
-
-    add-int v19, v5, v8
-
-    move/from16 v0, v18
-
-    move/from16 v1, v19
-
-    invoke-virtual {v3, v4, v5, v0, v1}, Landroid/view/View;->layout(IIII)V
-
-    .end local v2           #absoluteGravity:I
-    .end local v4           #childLeft:I
-    .end local v5           #childTop:I
-    .end local v7           #gravity:I
-    .end local v8           #height:I
-    .end local v10           #layoutDirection:I
-    .end local v11           #lp:Landroid/widget/FrameLayout$LayoutParams;
-    .end local v16           #verticalGravity:I
-    .end local v17           #width:I
-    :cond_1
-    add-int/lit8 v9, v9, 0x1
-
-    goto :goto_0
-
-    .restart local v2       #absoluteGravity:I
-    .restart local v7       #gravity:I
-    .restart local v8       #height:I
-    .restart local v10       #layoutDirection:I
-    .restart local v11       #lp:Landroid/widget/FrameLayout$LayoutParams;
-    .restart local v16       #verticalGravity:I
-    .restart local v17       #width:I
-    :pswitch_1
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->leftMargin:I
-
-    move/from16 v18, v0
-
-    add-int v4, v13, v18
-
-    .restart local v4       #childLeft:I
-    goto :goto_1
-
-    .end local v4           #childLeft:I
-    :pswitch_2
-    sub-int v18, v14, v13
-
-    sub-int v18, v18, v17
-
-    div-int/lit8 v18, v18, 0x2
-
-    add-int v18, v18, v13
-
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->leftMargin:I
-
-    move/from16 v19, v0
-
-    add-int v18, v18, v19
-
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->rightMargin:I
-
-    move/from16 v19, v0
-
-    sub-int v4, v18, v19
-
-    .restart local v4       #childLeft:I
-    goto :goto_1
-
-    .end local v4           #childLeft:I
-    :pswitch_3
-    sub-int v18, v14, v17
-
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->rightMargin:I
-
-    move/from16 v19, v0
-
-    sub-int v4, v18, v19
-
-    .restart local v4       #childLeft:I
-    goto :goto_1
-
-    :sswitch_0
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->topMargin:I
-
-    move/from16 v18, v0
-
-    add-int v5, v15, v18
-
-    .restart local v5       #childTop:I
-    goto :goto_2
-
-    .end local v5           #childTop:I
-    :sswitch_1
-    sub-int v18, v12, v15
-
-    sub-int v18, v18, v8
-
-    div-int/lit8 v18, v18, 0x2
-
-    add-int v18, v18, v15
-
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->topMargin:I
-
-    move/from16 v19, v0
-
-    add-int v18, v18, v19
-
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->bottomMargin:I
-
-    move/from16 v19, v0
-
-    sub-int v5, v18, v19
-
-    .restart local v5       #childTop:I
-    goto :goto_2
-
-    .end local v5           #childTop:I
-    :sswitch_2
-    sub-int v18, v12, v8
-
-    iget v0, v11, Landroid/widget/FrameLayout$LayoutParams;->bottomMargin:I
-
-    move/from16 v19, v0
-
-    sub-int v5, v18, v19
-
-    .restart local v5       #childTop:I
-    goto :goto_2
-
-    .end local v2           #absoluteGravity:I
-    .end local v3           #child:Landroid/view/View;
-    .end local v4           #childLeft:I
-    .end local v5           #childTop:I
-    .end local v7           #gravity:I
-    .end local v8           #height:I
-    .end local v10           #layoutDirection:I
-    .end local v11           #lp:Landroid/widget/FrameLayout$LayoutParams;
-    .end local v16           #verticalGravity:I
-    .end local v17           #width:I
-    :cond_2
     return-void
-
-    :pswitch_data_0
-    .packed-switch 0x1
-        :pswitch_2
-        :pswitch_0
-        :pswitch_1
-        :pswitch_0
-        :pswitch_3
-    .end packed-switch
-
-    :sswitch_data_0
-    .sparse-switch
-        0x10 -> :sswitch_1
-        0x30 -> :sswitch_0
-        0x50 -> :sswitch_2
-    .end sparse-switch
 .end method
 
 .method protected onMeasure(II)V
@@ -1165,11 +1179,11 @@
     .restart local v15       #maxWidth:I
     .restart local v16       #measureMatchParentChildren:Z
     :cond_5
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
 
     move-result v1
 
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
 
     move-result v3
 
@@ -1292,13 +1306,13 @@
 
     move-result v1
 
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
 
     move-result v3
 
     sub-int/2addr v1, v3
 
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
 
     move-result v3
 
@@ -1367,11 +1381,11 @@
     .end local v7           #childHeightMeasureSpec:I
     .end local v9           #childWidthMeasureSpec:I
     :cond_7
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingLeftWithForeground()I
 
     move-result v1
 
-    invoke-direct/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/FrameLayout;->getPaddingRightWithForeground()I
 
     move-result v3
 

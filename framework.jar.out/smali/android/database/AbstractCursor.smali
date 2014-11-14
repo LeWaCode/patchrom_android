@@ -274,7 +274,23 @@
     invoke-virtual {v0, v1}, Landroid/content/ContentResolver;->unregisterContentObserver(Landroid/database/ContentObserver;)V
 
     :cond_0
+    :try_start_0
+    iget-boolean v0, p0, Landroid/database/AbstractCursor;->mClosed:Z
+
+    if-nez v0, :cond_1
+
+    invoke-virtual {p0}, Landroid/database/AbstractCursor;->close()V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    :cond_1
+    :goto_0
     return-void
+
+    :catch_0
+    move-exception v0
+
+    goto :goto_0
 .end method
 
 .method public getBlob(I)[B
@@ -481,12 +497,28 @@
 .end method
 
 .method public getNotificationUri()Landroid/net/Uri;
-    .locals 1
+    .locals 2
 
     .prologue
+    iget-object v1, p0, Landroid/database/AbstractCursor;->mSelfObserverLock:Ljava/lang/Object;
+
+    monitor-enter v1
+
+    :try_start_0
     iget-object v0, p0, Landroid/database/AbstractCursor;->mNotifyUri:Landroid/net/Uri;
 
+    monitor-exit v1
+
     return-object v0
+
+    :catchall_0
+    move-exception v0
+
+    monitor-exit v1
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v0
 .end method
 
 .method public final getPosition()I
@@ -994,9 +1026,25 @@
 .end method
 
 .method public setNotificationUri(Landroid/content/ContentResolver;Landroid/net/Uri;)V
+    .locals 1
+    .parameter "cr"
+    .parameter "notifyUri"
+
+    .prologue
+    invoke-static {}, Landroid/os/UserHandle;->myUserId()I
+
+    move-result v0
+
+    invoke-virtual {p0, p1, p2, v0}, Landroid/database/AbstractCursor;->setNotificationUri(Landroid/content/ContentResolver;Landroid/net/Uri;I)V
+
+    return-void
+.end method
+
+.method public setNotificationUri(Landroid/content/ContentResolver;Landroid/net/Uri;I)V
     .locals 5
     .parameter "cr"
     .parameter "notifyUri"
+    .parameter "userHandle"
 
     .prologue
     iget-object v1, p0, Landroid/database/AbstractCursor;->mSelfObserverLock:Ljava/lang/Object;
@@ -1033,7 +1081,7 @@
 
     iget-object v4, p0, Landroid/database/AbstractCursor;->mSelfObserver:Landroid/database/ContentObserver;
 
-    invoke-virtual {v0, v2, v3, v4}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;)V
+    invoke-virtual {v0, v2, v3, v4, p3}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;I)V
 
     const/4 v0, 0x1
 

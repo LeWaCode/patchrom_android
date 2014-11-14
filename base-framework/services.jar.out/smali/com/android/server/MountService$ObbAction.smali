@@ -152,13 +152,13 @@
     iget-object v2, p0, Lcom/android/server/MountService$ObbAction;->this$0:Lcom/android/server/MountService;
 
     #getter for: Lcom/android/server/MountService;->mContainerService:Lcom/android/internal/app/IMediaContainerService;
-    invoke-static {v2}, Lcom/android/server/MountService;->access$1900(Lcom/android/server/MountService;)Lcom/android/internal/app/IMediaContainerService;
+    invoke-static {v2}, Lcom/android/server/MountService;->access$2000(Lcom/android/server/MountService;)Lcom/android/internal/app/IMediaContainerService;
 
     move-result-object v2
 
     iget-object v3, p0, Lcom/android/server/MountService$ObbAction;->mObbState:Lcom/android/server/MountService$ObbState;
 
-    iget-object v3, v3, Lcom/android/server/MountService$ObbState;->filename:Ljava/lang/String;
+    iget-object v3, v3, Lcom/android/server/MountService$ObbState;->ownerPath:Ljava/lang/String;
 
     invoke-interface {v2, v3}, Lcom/android/internal/app/IMediaContainerService;->getObbInfo(Ljava/lang/String;)Landroid/content/res/ObbInfo;
     :try_end_0
@@ -184,7 +184,7 @@
 
     iget-object v4, p0, Lcom/android/server/MountService$ObbAction;->mObbState:Lcom/android/server/MountService$ObbState;
 
-    iget-object v4, v4, Lcom/android/server/MountService$ObbState;->filename:Ljava/lang/String;
+    iget-object v4, v4, Lcom/android/server/MountService$ObbState;->ownerPath:Ljava/lang/String;
 
     invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -217,7 +217,7 @@
 
     iget-object v4, p0, Lcom/android/server/MountService$ObbAction;->mObbState:Lcom/android/server/MountService$ObbState;
 
-    iget-object v4, v4, Lcom/android/server/MountService$ObbState;->filename:Ljava/lang/String;
+    iget-object v4, v4, Lcom/android/server/MountService$ObbState;->ownerPath:Ljava/lang/String;
 
     invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -278,7 +278,7 @@
 
     iget-object v2, p0, Lcom/android/server/MountService$ObbAction;->mObbState:Lcom/android/server/MountService$ObbState;
 
-    iget-object v2, v2, Lcom/android/server/MountService$ObbState;->filename:Ljava/lang/String;
+    iget-object v2, v2, Lcom/android/server/MountService$ObbState;->rawPath:Ljava/lang/String;
 
     iget-object v3, p0, Lcom/android/server/MountService$ObbAction;->mObbState:Lcom/android/server/MountService$ObbState;
 

@@ -1014,11 +1014,11 @@
     .end annotation
 
     .prologue
-    new-instance v5, Lcom/android/internal/os/AtomicFile;
+    new-instance v5, Landroid/util/AtomicFile;
 
-    invoke-direct {v5, p1}, Lcom/android/internal/os/AtomicFile;-><init>(Ljava/io/File;)V
+    invoke-direct {v5, p1}, Landroid/util/AtomicFile;-><init>(Ljava/io/File;)V
 
-    .local v5, inputFile:Lcom/android/internal/os/AtomicFile;
+    .local v5, inputFile:Landroid/util/AtomicFile;
     const/4 v3, 0x0
 
     .local v3, in:Ljava/io/DataInputStream;
@@ -1027,7 +1027,7 @@
 
     new-instance v10, Ljava/io/BufferedInputStream;
 
-    invoke-virtual {v5}, Lcom/android/internal/os/AtomicFile;->openRead()Ljava/io/FileInputStream;
+    invoke-virtual {v5}, Landroid/util/AtomicFile;->openRead()Ljava/io/FileInputStream;
 
     move-result-object v11
 
@@ -1237,13 +1237,13 @@
     .end annotation
 
     .prologue
-    new-instance v8, Lcom/android/internal/os/AtomicFile;
+    new-instance v8, Landroid/util/AtomicFile;
 
     move-object/from16 v0, p1
 
-    invoke-direct {v8, v0}, Lcom/android/internal/os/AtomicFile;-><init>(Ljava/io/File;)V
+    invoke-direct {v8, v0}, Landroid/util/AtomicFile;-><init>(Ljava/io/File;)V
 
-    .local v8, inputFile:Lcom/android/internal/os/AtomicFile;
+    .local v8, inputFile:Landroid/util/AtomicFile;
     const/4 v6, 0x0
 
     .local v6, in:Ljava/io/DataInputStream;
@@ -1252,7 +1252,7 @@
 
     new-instance v17, Ljava/io/BufferedInputStream;
 
-    invoke-virtual {v8}, Lcom/android/internal/os/AtomicFile;->openRead()Ljava/io/FileInputStream;
+    invoke-virtual {v8}, Landroid/util/AtomicFile;->openRead()Ljava/io/FileInputStream;
 
     move-result-object v18
 
@@ -1635,9 +1635,9 @@
     return-void
 .end method
 
-.method public removeUid(I)V
+.method public removeUids([I)V
     .locals 8
-    .parameter "uid"
+    .parameter "uids"
 
     .prologue
     const/4 v7, 0x0
@@ -1677,7 +1677,11 @@
     .local v1, key:Lcom/android/server/net/NetworkStatsCollection$Key;
     iget v5, v1, Lcom/android/server/net/NetworkStatsCollection$Key;->uid:I
 
-    if-ne v5, p1, :cond_0
+    invoke-static {p1, v5}, Lcom/android/internal/util/ArrayUtils;->contains([II)Z
+
+    move-result v5
+
+    if-eqz v5, :cond_0
 
     iget v5, v1, Lcom/android/server/net/NetworkStatsCollection$Key;->tag:I
 

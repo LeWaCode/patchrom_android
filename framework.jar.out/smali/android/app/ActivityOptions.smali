@@ -18,9 +18,9 @@
 
 .field public static final ANIM_SCALE_UP:I = 0x2
 
-.field public static final ANIM_THUMBNAIL:I = 0x3
+.field public static final ANIM_THUMBNAIL_SCALE_DOWN:I = 0x4
 
-.field public static final ANIM_THUMBNAIL_DELAYED:I = 0x4
+.field public static final ANIM_THUMBNAIL_SCALE_UP:I = 0x3
 
 .field public static final KEY_ANIM_ENTER_RES_ID:Ljava/lang/String; = "android:animEnterRes"
 
@@ -306,34 +306,6 @@
     return-object v0
 .end method
 
-.method public static makeDelayedThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;)Landroid/app/ActivityOptions;
-    .locals 6
-    .parameter "source"
-    .parameter "thumbnail"
-    .parameter "startX"
-    .parameter "startY"
-    .parameter "listener"
-
-    .prologue
-    const/4 v5, 0x1
-
-    move-object v0, p0
-
-    move-object v1, p1
-
-    move v2, p2
-
-    move v3, p3
-
-    move-object v4, p4
-
-    invoke-static/range {v0 .. v5}, Landroid/app/ActivityOptions;->makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;Z)Landroid/app/ActivityOptions;
-
-    move-result-object v0
-
-    return-object v0
-.end method
-
 .method public static makeScaleUpAnimation(Landroid/view/View;IIII)Landroid/app/ActivityOptions;
     .locals 4
     .parameter "source"
@@ -390,59 +362,14 @@
     return-object v0
 .end method
 
-.method public static makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;II)Landroid/app/ActivityOptions;
-    .locals 1
-    .parameter "source"
-    .parameter "thumbnail"
-    .parameter "startX"
-    .parameter "startY"
-
-    .prologue
-    const/4 v0, 0x0
-
-    invoke-static {p0, p1, p2, p3, v0}, Landroid/app/ActivityOptions;->makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;)Landroid/app/ActivityOptions;
-
-    move-result-object v0
-
-    return-object v0
-.end method
-
-.method public static makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;)Landroid/app/ActivityOptions;
-    .locals 6
-    .parameter "source"
-    .parameter "thumbnail"
-    .parameter "startX"
-    .parameter "startY"
-    .parameter "listener"
-
-    .prologue
-    const/4 v5, 0x0
-
-    move-object v0, p0
-
-    move-object v1, p1
-
-    move v2, p2
-
-    move v3, p3
-
-    move-object v4, p4
-
-    invoke-static/range {v0 .. v5}, Landroid/app/ActivityOptions;->makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;Z)Landroid/app/ActivityOptions;
-
-    move-result-object v0
-
-    return-object v0
-.end method
-
-.method private static makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;Z)Landroid/app/ActivityOptions;
+.method private static makeThumbnailAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;Z)Landroid/app/ActivityOptions;
     .locals 3
     .parameter "source"
     .parameter "thumbnail"
     .parameter "startX"
     .parameter "startY"
     .parameter "listener"
-    .parameter "delayed"
+    .parameter "scaleUp"
 
     .prologue
     new-instance v0, Landroid/app/ActivityOptions;
@@ -462,7 +389,7 @@
 
     if-eqz p5, :cond_0
 
-    const/4 v2, 0x4
+    const/4 v2, 0x3
 
     :goto_0
     iput v2, v0, Landroid/app/ActivityOptions;->mAnimationType:I
@@ -502,9 +429,82 @@
 
     .end local v1           #pts:[I
     :cond_0
-    const/4 v2, 0x3
+    const/4 v2, 0x4
 
     goto :goto_0
+.end method
+
+.method public static makeThumbnailScaleDownAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;)Landroid/app/ActivityOptions;
+    .locals 6
+    .parameter "source"
+    .parameter "thumbnail"
+    .parameter "startX"
+    .parameter "startY"
+    .parameter "listener"
+
+    .prologue
+    const/4 v5, 0x0
+
+    move-object v0, p0
+
+    move-object v1, p1
+
+    move v2, p2
+
+    move v3, p3
+
+    move-object v4, p4
+
+    invoke-static/range {v0 .. v5}, Landroid/app/ActivityOptions;->makeThumbnailAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;Z)Landroid/app/ActivityOptions;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public static makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;II)Landroid/app/ActivityOptions;
+    .locals 1
+    .parameter "source"
+    .parameter "thumbnail"
+    .parameter "startX"
+    .parameter "startY"
+
+    .prologue
+    const/4 v0, 0x0
+
+    invoke-static {p0, p1, p2, p3, v0}, Landroid/app/ActivityOptions;->makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;)Landroid/app/ActivityOptions;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public static makeThumbnailScaleUpAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;)Landroid/app/ActivityOptions;
+    .locals 6
+    .parameter "source"
+    .parameter "thumbnail"
+    .parameter "startX"
+    .parameter "startY"
+    .parameter "listener"
+
+    .prologue
+    const/4 v5, 0x1
+
+    move-object v0, p0
+
+    move-object v1, p1
+
+    move v2, p2
+
+    move v3, p3
+
+    move-object v4, p4
+
+    invoke-static/range {v0 .. v5}, Landroid/app/ActivityOptions;->makeThumbnailAnimation(Landroid/view/View;Landroid/graphics/Bitmap;IILandroid/app/ActivityOptions$OnAnimationStartedListener;Z)Landroid/app/ActivityOptions;
+
+    move-result-object v0
+
+    return-object v0
 .end method
 
 .method private setListener(Landroid/os/Handler;Landroid/app/ActivityOptions$OnAnimationStartedListener;)V

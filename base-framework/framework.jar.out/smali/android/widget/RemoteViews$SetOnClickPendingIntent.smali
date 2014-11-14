@@ -23,8 +23,6 @@
 
 .field final synthetic this$0:Landroid/widget/RemoteViews;
 
-.field viewId:I
-
 
 # direct methods
 .method public constructor <init>(Landroid/widget/RemoteViews;ILandroid/app/PendingIntent;)V
@@ -162,8 +160,6 @@
 
     .end local v0           #appInfo:Landroid/content/pm/ApplicationInfo;
     :cond_2
-    if-eqz v2, :cond_0
-
     const/4 v1, 0x0
 
     .local v1, listener:Landroid/view/View$OnClickListener;
@@ -181,6 +177,15 @@
     invoke-virtual {v2, v1}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
     goto :goto_0
+.end method
+
+.method public getActionName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    const-string v0, "SetOnClickPendingIntent"
+
+    return-object v0
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V

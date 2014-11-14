@@ -8,7 +8,7 @@
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Landroid/bluetooth/BluetoothTetheringDataTracker;->startReverseTether(Ljava/lang/String;Landroid/bluetooth/BluetoothDevice;)V
+    value = Landroid/bluetooth/BluetoothTetheringDataTracker;->startReverseTether(Landroid/net/LinkProperties;)V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -20,14 +20,19 @@
 # instance fields
 .field final synthetic this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
 
+.field final synthetic val$linkProperties:Landroid/net/LinkProperties;
+
 
 # direct methods
-.method constructor <init>(Landroid/bluetooth/BluetoothTetheringDataTracker;)V
+.method constructor <init>(Landroid/bluetooth/BluetoothTetheringDataTracker;Landroid/net/LinkProperties;)V
     .locals 0
+    .parameter
     .parameter
 
     .prologue
     iput-object p1, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+
+    iput-object p2, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->val$linkProperties:Landroid/net/LinkProperties;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -37,142 +42,213 @@
 
 # virtual methods
 .method public run()V
-    .locals 6
+    .locals 9
 
     .prologue
-    const/4 v4, 0x0
+    new-instance v0, Landroid/net/DhcpResults;
 
-    const/4 v5, 0x1
+    invoke-direct {v0}, Landroid/net/DhcpResults;-><init>()V
 
-    new-instance v0, Landroid/net/DhcpInfoInternal;
+    .local v0, dhcpResults:Landroid/net/DhcpResults;
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->val$linkProperties:Landroid/net/LinkProperties;
 
-    invoke-direct {v0}, Landroid/net/DhcpInfoInternal;-><init>()V
+    invoke-virtual {v3}, Landroid/net/LinkProperties;->getInterfaceName()Ljava/lang/String;
 
-    .local v0, dhcpInfoInternal:Landroid/net/DhcpInfoInternal;
-    invoke-static {}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$100()Ljava/lang/String;
+    move-result-object v3
 
-    move-result-object v2
-
-    invoke-static {v2, v0}, Landroid/net/NetworkUtils;->runDhcp(Ljava/lang/String;Landroid/net/DhcpInfoInternal;)Z
+    invoke-static {v3, v0}, Landroid/net/NetworkUtils;->runDhcp(Ljava/lang/String;Landroid/net/DhcpResults;)Z
 
     move-result v2
 
-    if-nez v2, :cond_0
+    .local v2, success:Z
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
 
-    const-string v2, "BluetoothTethering"
-
-    new-instance v3, Ljava/lang/StringBuilder;
-
-    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v4, "DHCP request error:"
-
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v3
-
-    invoke-static {}, Landroid/net/NetworkUtils;->getDhcpError()Ljava/lang/String;
+    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mLinkPropertiesLock:Ljava/lang/Object;
+    invoke-static {v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$100(Landroid/bluetooth/BluetoothTetheringDataTracker;)Ljava/lang/Object;
 
     move-result-object v4
 
-    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    monitor-enter v4
+
+    :try_start_0
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->val$linkProperties:Landroid/net/LinkProperties;
+
+    invoke-virtual {v3}, Landroid/net/LinkProperties;->getInterfaceName()Ljava/lang/String;
 
     move-result-object v3
 
-    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    iget-object v5, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
 
-    move-result-object v3
+    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mLinkProperties:Landroid/net/LinkProperties;
+    invoke-static {v5}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$200(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/LinkProperties;
 
-    invoke-static {v2, v3}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+    move-result-object v5
+
+    invoke-virtual {v5}, Landroid/net/LinkProperties;->getInterfaceName()Ljava/lang/String;
+
+    move-result-object v5
+
+    if-eq v3, v5, :cond_0
+
+    const-string v3, "BluetoothTethering"
+
+    const-string v5, "obsolete DHCP run aborted"
+
+    invoke-static {v3, v5}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    monitor-exit v4
 
     :goto_0
     return-void
 
     :cond_0
-    iget-object v2, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+    if-nez v2, :cond_1
 
-    invoke-virtual {v0}, Landroid/net/DhcpInfoInternal;->makeLinkProperties()Landroid/net/LinkProperties;
+    const-string v3, "BluetoothTethering"
 
-    move-result-object v3
+    new-instance v5, Ljava/lang/StringBuilder;
+
+    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v6, "DHCP request error:"
+
+    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v5
+
+    invoke-static {}, Landroid/net/NetworkUtils;->getDhcpError()Ljava/lang/String;
+
+    move-result-object v6
+
+    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v5
+
+    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v5
+
+    invoke-static {v3, v5}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    monitor-exit v4
+
+    goto :goto_0
+
+    :catchall_0
+    move-exception v3
+
+    monitor-exit v4
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    throw v3
+
+    :cond_1
+    :try_start_1
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+
+    iget-object v5, v0, Landroid/net/DhcpResults;->linkProperties:Landroid/net/LinkProperties;
 
     #setter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mLinkProperties:Landroid/net/LinkProperties;
-    invoke-static {v2, v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$202(Landroid/bluetooth/BluetoothTetheringDataTracker;Landroid/net/LinkProperties;)Landroid/net/LinkProperties;
+    invoke-static {v3, v5}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$302(Landroid/bluetooth/BluetoothTetheringDataTracker;Landroid/net/LinkProperties;)Landroid/net/LinkProperties;
 
-    iget-object v2, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
 
-    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mLinkProperties:Landroid/net/LinkProperties;
-    invoke-static {v2}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$200(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/LinkProperties;
+    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mNetworkInfoLock:Ljava/lang/Object;
+    invoke-static {v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$400(Landroid/bluetooth/BluetoothTetheringDataTracker;)Ljava/lang/Object;
 
-    move-result-object v2
+    move-result-object v5
 
-    invoke-static {}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$100()Ljava/lang/String;
+    monitor-enter v5
+    :try_end_1
+    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+
+    :try_start_2
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+
+    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
+    invoke-static {v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$500(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/NetworkInfo;
 
     move-result-object v3
 
-    invoke-virtual {v2, v3}, Landroid/net/LinkProperties;->setInterfaceName(Ljava/lang/String;)V
+    const/4 v6, 0x1
 
-    iget-object v2, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+    invoke-virtual {v3, v6}, Landroid/net/NetworkInfo;->setIsAvailable(Z)V
 
-    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
-    invoke-static {v2}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$300(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/NetworkInfo;
-
-    move-result-object v2
-
-    invoke-virtual {v2, v5}, Landroid/net/NetworkInfo;->setIsAvailable(Z)V
-
-    iget-object v2, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
 
     #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
-    invoke-static {v2}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$300(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/NetworkInfo;
+    invoke-static {v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$600(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/NetworkInfo;
 
-    move-result-object v2
+    move-result-object v3
 
-    sget-object v3, Landroid/net/NetworkInfo$DetailedState;->CONNECTED:Landroid/net/NetworkInfo$DetailedState;
+    sget-object v6, Landroid/net/NetworkInfo$DetailedState;->CONNECTED:Landroid/net/NetworkInfo$DetailedState;
 
-    invoke-virtual {v2, v3, v4, v4}, Landroid/net/NetworkInfo;->setDetailedState(Landroid/net/NetworkInfo$DetailedState;Ljava/lang/String;Ljava/lang/String;)V
+    const/4 v7, 0x0
 
-    iget-object v2, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+    const/4 v8, 0x0
+
+    invoke-virtual {v3, v6, v7, v8}, Landroid/net/NetworkInfo;->setDetailedState(Landroid/net/NetworkInfo$DetailedState;Ljava/lang/String;Ljava/lang/String;)V
+
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
 
     #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mCsHandler:Landroid/os/Handler;
-    invoke-static {v2}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$400(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/os/Handler;
+    invoke-static {v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$700(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/os/Handler;
 
-    move-result-object v2
+    move-result-object v3
 
-    const/4 v3, 0x3
+    if-eqz v3, :cond_2
 
-    iget-object v4, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+
+    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mCsHandler:Landroid/os/Handler;
+    invoke-static {v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$700(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/os/Handler;
+
+    move-result-object v3
+
+    const/high16 v6, 0x7
+
+    new-instance v7, Landroid/net/NetworkInfo;
+
+    iget-object v8, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
 
     #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
-    invoke-static {v4}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$300(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/NetworkInfo;
+    invoke-static {v8}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$800(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/NetworkInfo;
 
-    move-result-object v4
+    move-result-object v8
 
-    invoke-virtual {v2, v3, v4}, Landroid/os/Handler;->obtainMessage(ILjava/lang/Object;)Landroid/os/Message;
+    invoke-direct {v7, v8}, Landroid/net/NetworkInfo;-><init>(Landroid/net/NetworkInfo;)V
+
+    invoke-virtual {v3, v6, v7}, Landroid/os/Handler;->obtainMessage(ILjava/lang/Object;)Landroid/os/Message;
 
     move-result-object v1
 
     .local v1, msg:Landroid/os/Message;
     invoke-virtual {v1}, Landroid/os/Message;->sendToTarget()V
 
-    iget-object v2, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
+    .end local v1           #msg:Landroid/os/Message;
+    :cond_2
+    monitor-exit v5
+    :try_end_2
+    .catchall {:try_start_2 .. :try_end_2} :catchall_1
 
-    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mCsHandler:Landroid/os/Handler;
-    invoke-static {v2}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$400(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/os/Handler;
-
-    move-result-object v2
-
-    iget-object v3, p0, Landroid/bluetooth/BluetoothTetheringDataTracker$2;->this$0:Landroid/bluetooth/BluetoothTetheringDataTracker;
-
-    #getter for: Landroid/bluetooth/BluetoothTetheringDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
-    invoke-static {v3}, Landroid/bluetooth/BluetoothTetheringDataTracker;->access$300(Landroid/bluetooth/BluetoothTetheringDataTracker;)Landroid/net/NetworkInfo;
-
-    move-result-object v3
-
-    invoke-virtual {v2, v5, v3}, Landroid/os/Handler;->obtainMessage(ILjava/lang/Object;)Landroid/os/Message;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Landroid/os/Message;->sendToTarget()V
+    :try_start_3
+    monitor-exit v4
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_0
 
     goto :goto_0
+
+    :catchall_1
+    move-exception v3
+
+    :try_start_4
+    monitor-exit v5
+    :try_end_4
+    .catchall {:try_start_4 .. :try_end_4} :catchall_1
+
+    :try_start_5
+    throw v3
+    :try_end_5
+    .catchall {:try_start_5 .. :try_end_5} :catchall_0
 .end method

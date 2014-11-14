@@ -401,11 +401,11 @@
 
     if-eqz v0, :cond_1
 
-    invoke-virtual {v0}, Landroid/location/Location;->getTime()J
+    invoke-virtual {v0}, Landroid/location/Location;->getElapsedRealtimeNanos()J
 
     move-result-wide v5
 
-    invoke-virtual {v2}, Landroid/location/Location;->getTime()J
+    invoke-virtual {v2}, Landroid/location/Location;->getElapsedRealtimeNanos()J
 
     move-result-wide v7
 

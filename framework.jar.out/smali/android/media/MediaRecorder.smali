@@ -19,6 +19,8 @@
 
 
 # static fields
+.field public static final MEDIA_ERROR_SERVER_DIED:I = 0x64
+
 .field public static final MEDIA_RECORDER_ERROR_UNKNOWN:I = 0x1
 
 .field public static final MEDIA_RECORDER_INFO_MAX_DURATION_REACHED:I = 0x320
@@ -85,7 +87,7 @@
 .end method
 
 .method public constructor <init>()V
-    .locals 2
+    .locals 3
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -97,21 +99,27 @@
     .local v0, looper:Landroid/os/Looper;
     if-eqz v0, :cond_0
 
-    new-instance v1, Landroid/media/MediaRecorder$EventHandler;
+    new-instance v2, Landroid/media/MediaRecorder$EventHandler;
 
-    invoke-direct {v1, p0, p0, v0}, Landroid/media/MediaRecorder$EventHandler;-><init>(Landroid/media/MediaRecorder;Landroid/media/MediaRecorder;Landroid/os/Looper;)V
+    invoke-direct {v2, p0, p0, v0}, Landroid/media/MediaRecorder$EventHandler;-><init>(Landroid/media/MediaRecorder;Landroid/media/MediaRecorder;Landroid/os/Looper;)V
 
-    iput-object v1, p0, Landroid/media/MediaRecorder;->mEventHandler:Landroid/media/MediaRecorder$EventHandler;
+    iput-object v2, p0, Landroid/media/MediaRecorder;->mEventHandler:Landroid/media/MediaRecorder$EventHandler;
 
     :goto_0
-    new-instance v1, Ljava/lang/ref/WeakReference;
+    invoke-static {}, Landroid/app/ActivityThread;->currentPackageName()Ljava/lang/String;
 
-    invoke-direct {v1, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
+    move-result-object v1
 
-    invoke-direct {p0, v1}, Landroid/media/MediaRecorder;->native_setup(Ljava/lang/Object;)V
+    .local v1, packageName:Ljava/lang/String;
+    new-instance v2, Ljava/lang/ref/WeakReference;
+
+    invoke-direct {v2, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
+
+    invoke-direct {p0, v2, v1}, Landroid/media/MediaRecorder;->native_setup(Ljava/lang/Object;Ljava/lang/String;)V
 
     return-void
 
+    .end local v1           #packageName:Ljava/lang/String;
     :cond_0
     invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
 
@@ -119,18 +127,18 @@
 
     if-eqz v0, :cond_1
 
-    new-instance v1, Landroid/media/MediaRecorder$EventHandler;
+    new-instance v2, Landroid/media/MediaRecorder$EventHandler;
 
-    invoke-direct {v1, p0, p0, v0}, Landroid/media/MediaRecorder$EventHandler;-><init>(Landroid/media/MediaRecorder;Landroid/media/MediaRecorder;Landroid/os/Looper;)V
+    invoke-direct {v2, p0, p0, v0}, Landroid/media/MediaRecorder$EventHandler;-><init>(Landroid/media/MediaRecorder;Landroid/media/MediaRecorder;Landroid/os/Looper;)V
 
-    iput-object v1, p0, Landroid/media/MediaRecorder;->mEventHandler:Landroid/media/MediaRecorder$EventHandler;
+    iput-object v2, p0, Landroid/media/MediaRecorder;->mEventHandler:Landroid/media/MediaRecorder$EventHandler;
 
     goto :goto_0
 
     :cond_1
-    const/4 v1, 0x0
+    const/4 v2, 0x0
 
-    iput-object v1, p0, Landroid/media/MediaRecorder;->mEventHandler:Landroid/media/MediaRecorder$EventHandler;
+    iput-object v2, p0, Landroid/media/MediaRecorder;->mEventHandler:Landroid/media/MediaRecorder$EventHandler;
 
     goto :goto_0
 .end method
@@ -187,7 +195,7 @@
     .locals 1
 
     .prologue
-    const/4 v0, 0x7
+    const/16 v0, 0x8
 
     return v0
 .end method
@@ -201,7 +209,7 @@
 .method private native native_reset()V
 .end method
 
-.method private final native native_setup(Ljava/lang/Object;)V
+.method private final native native_setup(Ljava/lang/Object;Ljava/lang/String;)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Ljava/lang/IllegalStateException;
@@ -538,19 +546,11 @@
 .end method
 
 .method public setCaptureRate(D)V
-    .locals 7
+    .locals 5
     .parameter "fps"
 
     .prologue
-    const/4 v6, 0x0
-
     const-string v3, "time-lapse-enable=1"
-
-    new-array v4, v6, [Ljava/lang/Object;
-
-    invoke-static {v3, v4}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v3
 
     invoke-direct {p0, v3}, Landroid/media/MediaRecorder;->setParameter(Ljava/lang/String;)V
 
@@ -566,19 +566,21 @@
     double-to-int v2, v3
 
     .local v2, timeBetweenFrameCaptureMs:I
-    const-string v3, "time-between-time-lapse-frame-capture=%d"
+    new-instance v3, Ljava/lang/StringBuilder;
 
-    const/4 v4, 0x1
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
 
-    new-array v4, v4, [Ljava/lang/Object;
+    const-string v4, "time-between-time-lapse-frame-capture="
 
-    invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    move-result-object v5
+    move-result-object v3
 
-    aput-object v5, v4, v6
+    invoke-virtual {v3, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 
-    invoke-static {v3, v4}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
     move-result-object v3
 

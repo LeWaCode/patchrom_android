@@ -14,8 +14,6 @@
 # static fields
 .field private static final DEBUG:Z = false
 
-.field private static final LOCAL_LOGV:Z = false
-
 .field public static final STATEMENT_ABORT:I = 0x6
 
 .field public static final STATEMENT_ATTACH:I = 0x3
@@ -38,28 +36,14 @@
 
 .field private static final TAG:Ljava/lang/String; = "DatabaseUtils"
 
-.field private static final countProjection:[Ljava/lang/String;
-
 .field private static mColl:Ljava/text/Collator;
 
 
 # direct methods
 .method static constructor <clinit>()V
-    .locals 3
+    .locals 1
 
     .prologue
-    const/4 v0, 0x1
-
-    new-array v0, v0, [Ljava/lang/String;
-
-    const/4 v1, 0x0
-
-    const-string v2, "count(*)"
-
-    aput-object v2, v0, v1
-
-    sput-object v0, Landroid/database/DatabaseUtils;->countProjection:[Ljava/lang/String;
-
     const/4 v0, 0x0
 
     sput-object v0, Landroid/database/DatabaseUtils;->mColl:Ljava/text/Collator;
@@ -1859,7 +1843,7 @@
 
     move-result-object v4
 
-    sget-object v5, Ljava/util/Locale;->US:Ljava/util/Locale;
+    sget-object v5, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
 
     invoke-virtual {v4, v5}, Ljava/lang/String;->toUpperCase(Ljava/util/Locale;)Ljava/lang/String;
 
@@ -2154,6 +2138,60 @@
     move-result-wide v0
 
     return-wide v0
+.end method
+
+.method public static queryIsEmpty(Landroid/database/sqlite/SQLiteDatabase;Ljava/lang/String;)Z
+    .locals 4
+    .parameter "db"
+    .parameter "table"
+
+    .prologue
+    new-instance v2, Ljava/lang/StringBuilder;
+
+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v3, "select exists(select 1 from "
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    const-string v3, ")"
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    const/4 v3, 0x0
+
+    invoke-static {p0, v2, v3}, Landroid/database/DatabaseUtils;->longForQuery(Landroid/database/sqlite/SQLiteDatabase;Ljava/lang/String;[Ljava/lang/String;)J
+
+    move-result-wide v0
+
+    .local v0, isEmpty:J
+    const-wide/16 v2, 0x0
+
+    cmp-long v2, v0, v2
+
+    if-nez v2, :cond_0
+
+    const/4 v2, 0x1
+
+    :goto_0
+    return v2
+
+    :cond_0
+    const/4 v2, 0x0
+
+    goto :goto_0
 .end method
 
 .method public static queryNumEntries(Landroid/database/sqlite/SQLiteDatabase;Ljava/lang/String;)J

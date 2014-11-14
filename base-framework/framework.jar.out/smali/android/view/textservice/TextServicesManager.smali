@@ -142,6 +142,20 @@
     :try_start_0
     sget-object v2, Landroid/view/textservice/TextServicesManager;->sService:Lcom/android/internal/textservice/ITextServicesManager;
 
+    if-nez v2, :cond_0
+
+    sget-object v2, Landroid/view/textservice/TextServicesManager;->TAG:Ljava/lang/String;
+
+    const-string v3, "sService is null."
+
+    invoke-static {v2, v3}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+
+    :goto_0
+    return-object v1
+
+    :cond_0
+    sget-object v2, Landroid/view/textservice/TextServicesManager;->sService:Lcom/android/internal/textservice/ITextServicesManager;
+
     const/4 v3, 0x0
 
     invoke-interface {v2, v3, p1}, Lcom/android/internal/textservice/ITextServicesManager;->getCurrentSpellCheckerSubtype(Ljava/lang/String;Z)Landroid/view/textservice/SpellCheckerSubtype;
@@ -150,8 +164,7 @@
 
     move-result-object v1
 
-    :goto_0
-    return-object v1
+    goto :goto_0
 
     :catch_0
     move-exception v0

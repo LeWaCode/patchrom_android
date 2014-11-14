@@ -3,7 +3,7 @@
 .source "WifiP2pService.java"
 
 # interfaces
-.implements Landroid/content/DialogInterface$OnClickListener;
+.implements Landroid/content/DialogInterface$OnCancelListener;
 
 
 # annotations
@@ -36,10 +36,9 @@
 
 
 # virtual methods
-.method public onClick(Landroid/content/DialogInterface;I)V
+.method public onCancel(Landroid/content/DialogInterface;)V
     .locals 2
-    .parameter "dialog"
-    .parameter "which"
+    .parameter "arg0"
 
     .prologue
     iget-object v0, p0, Landroid/net/wifi/p2p/WifiP2pService$P2pStateMachine$2;->this$1:Landroid/net/wifi/p2p/WifiP2pService$P2pStateMachine;

@@ -1,5 +1,5 @@
 .class final Landroid/app/ContextImpl$12;
-.super Landroid/app/ContextImpl$ServiceFetcher;
+.super Landroid/app/ContextImpl$StaticServiceFetcher;
 .source "ContextImpl.java"
 
 
@@ -19,32 +19,31 @@
     .locals 0
 
     .prologue
-    invoke-direct {p0}, Landroid/app/ContextImpl$ServiceFetcher;-><init>()V
+    invoke-direct {p0}, Landroid/app/ContextImpl$StaticServiceFetcher;-><init>()V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public createService(Landroid/app/ContextImpl;)Ljava/lang/Object;
+.method public createStaticService()Ljava/lang/Object;
     .locals 3
-    .parameter "ctx"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
-    new-instance v0, Landroid/app/LewaDownloadManager;
+    const-string v1, "country_detector"
 
-    invoke-virtual {p1}, Landroid/app/ContextImpl;->getContentResolver()Landroid/content/ContentResolver;
+    invoke-static {v1}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
 
-    move-result-object v1
+    move-result-object v0
 
-    invoke-virtual {p1}, Landroid/app/ContextImpl;->getPackageName()Ljava/lang/String;
+    .local v0, b:Landroid/os/IBinder;
+    new-instance v1, Landroid/location/CountryDetector;
+
+    invoke-static {v0}, Landroid/location/ICountryDetector$Stub;->asInterface(Landroid/os/IBinder;)Landroid/location/ICountryDetector;
 
     move-result-object v2
 
-    invoke-direct {v0, v1, v2}, Landroid/app/LewaDownloadManager;-><init>(Landroid/content/ContentResolver;Ljava/lang/String;)V
+    invoke-direct {v1, v2}, Landroid/location/CountryDetector;-><init>(Landroid/location/ICountryDetector;)V
 
-    return-object v0
+    return-object v1
 .end method

@@ -51,6 +51,8 @@
 
 .field public static final GLOBAL_ACTION_NOTIFICATIONS:I = 0x4
 
+.field public static final GLOBAL_ACTION_QUICK_SETTINGS:I = 0x5
+
 .field public static final GLOBAL_ACTION_RECENTS:I = 0x3
 
 .field private static final LOG_TAG:Ljava/lang/String; = "AccessibilityService"
@@ -239,6 +241,16 @@
 .end method
 
 .method public abstract onInterrupt()V
+.end method
+
+.method protected onKeyEvent(Landroid/view/KeyEvent;)Z
+    .locals 1
+    .parameter "event"
+
+    .prologue
+    const/4 v0, 0x0
+
+    return v0
 .end method
 
 .method protected onServiceConnected()V

@@ -32,12 +32,16 @@
 
 .field public static final enum INIT:Landroid/bluetooth/BluetoothSocket$SocketState;
 
+.field public static final enum LISTENING:Landroid/bluetooth/BluetoothSocket$SocketState;
+
 
 # direct methods
 .method static constructor <clinit>()V
-    .locals 5
+    .locals 6
 
     .prologue
+    const/4 v5, 0x3
+
     const/4 v4, 0x2
 
     const/4 v3, 0x1
@@ -62,13 +66,21 @@
 
     new-instance v0, Landroid/bluetooth/BluetoothSocket$SocketState;
 
-    const-string v1, "CLOSED"
+    const-string v1, "LISTENING"
 
     invoke-direct {v0, v1, v4}, Landroid/bluetooth/BluetoothSocket$SocketState;-><init>(Ljava/lang/String;I)V
 
+    sput-object v0, Landroid/bluetooth/BluetoothSocket$SocketState;->LISTENING:Landroid/bluetooth/BluetoothSocket$SocketState;
+
+    new-instance v0, Landroid/bluetooth/BluetoothSocket$SocketState;
+
+    const-string v1, "CLOSED"
+
+    invoke-direct {v0, v1, v5}, Landroid/bluetooth/BluetoothSocket$SocketState;-><init>(Ljava/lang/String;I)V
+
     sput-object v0, Landroid/bluetooth/BluetoothSocket$SocketState;->CLOSED:Landroid/bluetooth/BluetoothSocket$SocketState;
 
-    const/4 v0, 0x3
+    const/4 v0, 0x4
 
     new-array v0, v0, [Landroid/bluetooth/BluetoothSocket$SocketState;
 
@@ -80,9 +92,13 @@
 
     aput-object v1, v0, v3
 
-    sget-object v1, Landroid/bluetooth/BluetoothSocket$SocketState;->CLOSED:Landroid/bluetooth/BluetoothSocket$SocketState;
+    sget-object v1, Landroid/bluetooth/BluetoothSocket$SocketState;->LISTENING:Landroid/bluetooth/BluetoothSocket$SocketState;
 
     aput-object v1, v0, v4
+
+    sget-object v1, Landroid/bluetooth/BluetoothSocket$SocketState;->CLOSED:Landroid/bluetooth/BluetoothSocket$SocketState;
+
+    aput-object v1, v0, v5
 
     sput-object v0, Landroid/bluetooth/BluetoothSocket$SocketState;->$VALUES:[Landroid/bluetooth/BluetoothSocket$SocketState;
 

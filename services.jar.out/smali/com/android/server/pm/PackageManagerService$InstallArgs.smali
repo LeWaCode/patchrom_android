@@ -25,15 +25,18 @@
 
 .field final packageURI:Landroid/net/Uri;
 
+.field final user:Landroid/os/UserHandle;
+
 
 # direct methods
-.method constructor <init>(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;Landroid/content/pm/ManifestDigest;)V
+.method constructor <init>(Landroid/net/Uri;Landroid/content/pm/IPackageInstallObserver;ILjava/lang/String;Landroid/content/pm/ManifestDigest;Landroid/os/UserHandle;)V
     .locals 0
     .parameter "packageURI"
     .parameter "observer"
     .parameter "flags"
     .parameter "installerPackageName"
     .parameter "manifestDigest"
+    .parameter "user"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -47,6 +50,8 @@
     iput-object p4, p0, Lcom/android/server/pm/PackageManagerService$InstallArgs;->installerPackageName:Ljava/lang/String;
 
     iput-object p5, p0, Lcom/android/server/pm/PackageManagerService$InstallArgs;->manifestDigest:Landroid/content/pm/ManifestDigest;
+
+    iput-object p6, p0, Lcom/android/server/pm/PackageManagerService$InstallArgs;->user:Landroid/os/UserHandle;
 
     return-void
 .end method
@@ -113,6 +118,15 @@
 .end method
 
 .method abstract getResourcePath()Ljava/lang/String;
+.end method
+
+.method getUser()Landroid/os/UserHandle;
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Lcom/android/server/pm/PackageManagerService$InstallArgs;->user:Landroid/os/UserHandle;
+
+    return-object v0
 .end method
 
 .method protected isFwdLocked()Z

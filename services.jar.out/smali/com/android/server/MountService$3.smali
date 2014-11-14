@@ -1,11 +1,11 @@
 .class Lcom/android/server/MountService$3;
-.super Ljava/lang/Thread;
+.super Landroid/content/BroadcastReceiver;
 .source "MountService.java"
 
 
 # annotations
-.annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/MountService;->onEvent(ILjava/lang/String;[Ljava/lang/String;)Z
+.annotation system Ldalvik/annotation/EnclosingClass;
+    value = Lcom/android/server/MountService;
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -17,47 +17,55 @@
 # instance fields
 .field final synthetic this$0:Lcom/android/server/MountService;
 
-.field final synthetic val$path:Ljava/lang/String;
-
 
 # direct methods
-.method constructor <init>(Lcom/android/server/MountService;Ljava/lang/String;)V
+.method constructor <init>(Lcom/android/server/MountService;)V
     .locals 0
-    .parameter
     .parameter
 
     .prologue
     iput-object p1, p0, Lcom/android/server/MountService$3;->this$0:Lcom/android/server/MountService;
 
-    iput-object p2, p0, Lcom/android/server/MountService$3;->val$path:Ljava/lang/String;
-
-    invoke-direct {p0}, Ljava/lang/Thread;-><init>()V
+    invoke-direct {p0}, Landroid/content/BroadcastReceiver;-><init>()V
 
     return-void
 .end method
 
 
 # virtual methods
-.method public run()V
+.method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
     .locals 7
+    .parameter "context"
+    .parameter "intent"
 
     .prologue
+    iget-object v2, p0, Lcom/android/server/MountService$3;->this$0:Lcom/android/server/MountService;
+
+    #calls: Lcom/android/server/MountService;->waitForReady()V
+    invoke-static {v2}, Lcom/android/server/MountService;->access$1100(Lcom/android/server/MountService;)V
+
+    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+
+    move-result-object v0
+
+    .local v0, action:Ljava/lang/String;
+    const-string v2, "android.intent.action.ACTION_IDLE_MAINTENANCE_START"
+
+    invoke-virtual {v2, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_0
+
     :try_start_0
     iget-object v2, p0, Lcom/android/server/MountService$3;->this$0:Lcom/android/server/MountService;
 
-    iget-object v3, p0, Lcom/android/server/MountService$3;->val$path:Ljava/lang/String;
+    #getter for: Lcom/android/server/MountService;->mConnector:Lcom/android/server/NativeDaemonConnector;
+    invoke-static {v2}, Lcom/android/server/MountService;->access$1200(Lcom/android/server/MountService;)Lcom/android/server/NativeDaemonConnector;
 
-    #calls: Lcom/android/server/MountService;->doMountVolume(Ljava/lang/String;)I
-    invoke-static {v2, v3}, Lcom/android/server/MountService;->access$800(Lcom/android/server/MountService;Ljava/lang/String;)I
+    move-result-object v2
 
-    move-result v1
-
-    .local v1, rc:I
-    if-eqz v1, :cond_0
-
-    const-string v2, "MountService"
-
-    const-string v3, "Insertion mount failed (%d)"
+    const-string v3, "fstrim"
 
     const/4 v4, 0x1
 
@@ -65,34 +73,33 @@
 
     const/4 v5, 0x0
 
-    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
-
-    move-result-object v6
+    const-string v6, "dotrim"
 
     aput-object v6, v4, v5
 
-    invoke-static {v3, v4}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    invoke-virtual {v2, v3, v4}, Lcom/android/server/NativeDaemonConnector;->execute(Ljava/lang/String;[Ljava/lang/Object;)Lcom/android/server/NativeDaemonEvent;
 
-    move-result-object v3
+    invoke-static {}, Landroid/os/SystemClock;->elapsedRealtime()J
 
-    invoke-static {v2, v3}, Landroid/util/Slog;->w(Ljava/lang/String;Ljava/lang/String;)I
+    move-result-wide v2
+
+    invoke-static {v2, v3}, Lcom/android/server/EventLogTags;->writeFstrimStart(J)V
     :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+    .catch Lcom/android/server/NativeDaemonConnectorException; {:try_start_0 .. :try_end_0} :catch_0
 
-    .end local v1           #rc:I
     :cond_0
     :goto_0
     return-void
 
     :catch_0
-    move-exception v0
+    move-exception v1
 
-    .local v0, ex:Ljava/lang/Exception;
+    .local v1, ndce:Lcom/android/server/NativeDaemonConnectorException;
     const-string v2, "MountService"
 
-    const-string v3, "Failed to mount media on insertion"
+    const-string v3, "Failed to run fstrim!"
 
-    invoke-static {v2, v3, v0}, Landroid/util/Slog;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
+    invoke-static {v2, v3}, Landroid/util/Slog;->e(Ljava/lang/String;Ljava/lang/String;)I
 
     goto :goto_0
 .end method

@@ -182,6 +182,15 @@
     goto :goto_0
 .end method
 
+.method public getAnimateFirstView()Z
+    .locals 1
+
+    .prologue
+    iget-boolean v0, p0, Landroid/widget/ViewAnimator;->mAnimateFirstTime:Z
+
+    return v0
+.end method
+
 .method public getBaseline()I
     .locals 1
 

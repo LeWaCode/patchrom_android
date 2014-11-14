@@ -40,89 +40,17 @@
 
 # virtual methods
 .method public createFromParcel(Landroid/os/Parcel;)Landroid/os/storage/StorageVolume;
-    .locals 14
+    .locals 2
     .parameter "in"
 
     .prologue
-    const/4 v10, 0x0
-
-    const/4 v7, 0x1
-
-    invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
-
-    move-result-object v1
-
-    .local v1, path:Ljava/lang/String;
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v2
-
-    .local v2, descriptionId:I
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v13
-
-    .local v13, removable:I
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v12
-
-    .local v12, emulated:I
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v6
-
-    .local v6, storageId:I
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v5
-
-    .local v5, mtpReserveSpace:I
-    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
-
-    move-result v11
-
-    .local v11, allowMassStorage:I
-    invoke-virtual {p1}, Landroid/os/Parcel;->readLong()J
-
-    move-result-wide v8
-
-    .local v8, maxFileSize:J
     new-instance v0, Landroid/os/storage/StorageVolume;
 
-    if-ne v13, v7, :cond_0
+    const/4 v1, 0x0
 
-    move v3, v7
-
-    :goto_0
-    if-ne v12, v7, :cond_1
-
-    move v4, v7
-
-    :goto_1
-    if-ne v11, v7, :cond_2
-
-    :goto_2
-    const/4 v10, 0x0
-
-    invoke-direct/range {v0 .. v10}, Landroid/os/storage/StorageVolume;-><init>(Ljava/lang/String;IZZIIZJLandroid/os/storage/StorageVolume$1;)V
+    invoke-direct {v0, p1, v1}, Landroid/os/storage/StorageVolume;-><init>(Landroid/os/Parcel;Landroid/os/storage/StorageVolume$1;)V
 
     return-object v0
-
-    :cond_0
-    move v3, v10
-
-    goto :goto_0
-
-    :cond_1
-    move v4, v10
-
-    goto :goto_1
-
-    :cond_2
-    move v7, v10
-
-    goto :goto_2
 .end method
 
 .method public bridge synthetic createFromParcel(Landroid/os/Parcel;)Ljava/lang/Object;

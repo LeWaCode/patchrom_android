@@ -1,9 +1,6 @@
 .class public Landroid/net/EthernetDataTracker;
-.super Ljava/lang/Object;
+.super Landroid/net/BaseNetworkStateTracker;
 .source "EthernetDataTracker.java"
-
-# interfaces
-.implements Landroid/net/NetworkStateTracker;
 
 
 # annotations
@@ -29,8 +26,6 @@
 
 
 # instance fields
-.field private mContext:Landroid/content/Context;
-
 .field private mCsHandler:Landroid/os/Handler;
 
 .field private mDefaultGatewayAddr:Ljava/util/concurrent/atomic/AtomicInteger;
@@ -41,13 +36,7 @@
 
 .field private mInterfaceObserver:Landroid/net/EthernetDataTracker$InterfaceObserver;
 
-.field private mLinkCapabilities:Landroid/net/LinkCapabilities;
-
-.field private mLinkProperties:Landroid/net/LinkProperties;
-
 .field private mNMService:Landroid/os/INetworkManagementService;
-
-.field private mNetworkInfo:Landroid/net/NetworkInfo;
 
 .field private mPrivateDnsRouteSet:Ljava/util/concurrent/atomic/AtomicBoolean;
 
@@ -76,7 +65,7 @@
     .prologue
     const/4 v4, 0x0
 
-    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+    invoke-direct {p0}, Landroid/net/BaseNetworkStateTracker;-><init>()V
 
     new-instance v0, Ljava/util/concurrent/atomic/AtomicBoolean;
 
@@ -138,15 +127,6 @@
     return-object v0
 .end method
 
-.method static synthetic access$100()Z
-    .locals 1
-
-    .prologue
-    sget-boolean v0, Landroid/net/EthernetDataTracker;->mLinkUp:Z
-
-    return v0
-.end method
-
 .method static synthetic access$102(Z)Z
     .locals 0
     .parameter "x0"
@@ -157,17 +137,7 @@
     return p0
 .end method
 
-.method static synthetic access$200(Landroid/net/EthernetDataTracker;)Landroid/net/NetworkInfo;
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    iget-object v0, p0, Landroid/net/EthernetDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
-
-    return-object v0
-.end method
-
-.method static synthetic access$300(Landroid/net/EthernetDataTracker;Ljava/lang/String;)V
+.method static synthetic access$200(Landroid/net/EthernetDataTracker;Ljava/lang/String;)V
     .locals 0
     .parameter "x0"
     .parameter "x1"
@@ -178,7 +148,7 @@
     return-void
 .end method
 
-.method static synthetic access$400(Landroid/net/EthernetDataTracker;Ljava/lang/String;)V
+.method static synthetic access$300(Landroid/net/EthernetDataTracker;Ljava/lang/String;)V
     .locals 0
     .parameter "x0"
     .parameter "x1"
@@ -189,28 +159,7 @@
     return-void
 .end method
 
-.method static synthetic access$500(Landroid/net/EthernetDataTracker;)Landroid/net/LinkProperties;
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    iget-object v0, p0, Landroid/net/EthernetDataTracker;->mLinkProperties:Landroid/net/LinkProperties;
-
-    return-object v0
-.end method
-
-.method static synthetic access$502(Landroid/net/EthernetDataTracker;Landroid/net/LinkProperties;)Landroid/net/LinkProperties;
-    .locals 0
-    .parameter "x0"
-    .parameter "x1"
-
-    .prologue
-    iput-object p1, p0, Landroid/net/EthernetDataTracker;->mLinkProperties:Landroid/net/LinkProperties;
-
-    return-object p1
-.end method
-
-.method static synthetic access$600(Landroid/net/EthernetDataTracker;)Ljava/lang/String;
+.method static synthetic access$400(Landroid/net/EthernetDataTracker;)Ljava/lang/String;
     .locals 1
     .parameter "x0"
 
@@ -220,7 +169,7 @@
     return-object v0
 .end method
 
-.method static synthetic access$700(Landroid/net/EthernetDataTracker;)Landroid/os/Handler;
+.method static synthetic access$500(Landroid/net/EthernetDataTracker;)Landroid/os/Handler;
     .locals 1
     .parameter "x0"
 
@@ -353,7 +302,7 @@
 
     iget-object v2, p0, Landroid/net/EthernetDataTracker;->mCsHandler:Landroid/os/Handler;
 
-    const/4 v3, 0x3
+    const v3, 0x70001
 
     iget-object v4, p0, Landroid/net/EthernetDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
 
@@ -490,6 +439,33 @@
     throw v0
 .end method
 
+.method public addStackedLink(Landroid/net/LinkProperties;)V
+    .locals 1
+    .parameter "link"
+
+    .prologue
+    iget-object v0, p0, Landroid/net/EthernetDataTracker;->mLinkProperties:Landroid/net/LinkProperties;
+
+    invoke-virtual {v0, p1}, Landroid/net/LinkProperties;->addStackedLink(Landroid/net/LinkProperties;)Z
+
+    return-void
+.end method
+
+.method public captivePortalCheckComplete()V
+    .locals 0
+
+    .prologue
+    return-void
+.end method
+
+.method public captivePortalCheckCompleted(Z)V
+    .locals 0
+    .parameter "isCaptivePortal"
+
+    .prologue
+    return-void
+.end method
+
 .method public defaultRouteSet(Z)V
     .locals 1
     .parameter "enabled"
@@ -532,7 +508,7 @@
 
     iget-object v4, p0, Landroid/net/EthernetDataTracker;->mCsHandler:Landroid/os/Handler;
 
-    const/4 v5, 0x3
+    const v5, 0x70001
 
     iget-object v6, p0, Landroid/net/EthernetDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
 
@@ -545,7 +521,7 @@
 
     iget-object v4, p0, Landroid/net/EthernetDataTracker;->mCsHandler:Landroid/os/Handler;
 
-    const/4 v5, 0x1
+    const/high16 v5, 0x7
 
     iget-object v6, p0, Landroid/net/EthernetDataTracker;->mNetworkInfo:Landroid/net/NetworkInfo;
 
@@ -791,6 +767,18 @@
     return v0
 .end method
 
+.method public removeStackedLink(Landroid/net/LinkProperties;)V
+    .locals 1
+    .parameter "link"
+
+    .prologue
+    iget-object v0, p0, Landroid/net/EthernetDataTracker;->mLinkProperties:Landroid/net/LinkProperties;
+
+    invoke-virtual {v0, p1}, Landroid/net/LinkProperties;->removeStackedLink(Landroid/net/LinkProperties;)Z
+
+    return-void
+.end method
+
 .method public setDependencyMet(Z)V
     .locals 0
     .parameter "met"
@@ -978,7 +966,9 @@
     move-result-object v2
 
     .local v2, config:Landroid/net/InterfaceConfiguration;
-    invoke-virtual {v2}, Landroid/net/InterfaceConfiguration;->isActive()Z
+    const-string v8, "up"
+
+    invoke-virtual {v2, v8}, Landroid/net/InterfaceConfiguration;->hasFlag(Ljava/lang/String;)Z
 
     move-result v8
 
@@ -1007,6 +997,10 @@
     invoke-virtual {v8, v9}, Landroid/net/NetworkInfo;->setExtraInfo(Ljava/lang/String;)V
 
     :cond_0
+    sget-object v8, Landroid/net/EthernetDataTracker;->mIface:Ljava/lang/String;
+
+    invoke-static {v8}, Landroid/net/NetworkUtils;->stopDhcp(Ljava/lang/String;)Z
+
     invoke-virtual {p0}, Landroid/net/EthernetDataTracker;->reconnect()Z
     :try_end_0
     .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
@@ -1126,6 +1120,14 @@
     const/4 v0, -0x1
 
     return v0
+.end method
+
+.method public supplyMessenger(Landroid/os/Messenger;)V
+    .locals 0
+    .parameter "messenger"
+
+    .prologue
+    return-void
 .end method
 
 .method public teardown()Z

@@ -25,24 +25,6 @@
 
 .field public static final DELETED:Ljava/lang/String; = "deleted"
 
-.field public static final INDEX_IN_SIM:Ljava/lang/String; = "index_in_sim"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field public static final INDICATE_PHONE_SIM:Ljava/lang/String; = "indicate_phone_or_sim_contact"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
-.field public static final IS_SDN_CONTACT:Ljava/lang/String; = "is_sdn_contact"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field public static final NAME_VERIFIED:Ljava/lang/String; = "name_verified"
 
 .field public static final RAW_CONTACT_IS_READ_ONLY:Ljava/lang/String; = "raw_contact_is_read_only"
@@ -56,6 +38,24 @@
 .end field
 
 .field public static final SEND_TO_VOICEMAIL_VT:Ljava/lang/String; = "send_to_voicemail_vt"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field public static final INDEX_IN_SIM:Ljava/lang/String; = "index_in_sim"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field public static final INDICATE_PHONE_SIM:Ljava/lang/String; = "indicate_phone_or_sim_contact"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end field
+
+.field public static final IS_SDN_CONTACT:Ljava/lang/String; = "is_sdn_contact"
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation

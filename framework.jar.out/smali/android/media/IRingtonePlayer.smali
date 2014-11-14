@@ -31,7 +31,7 @@
     .end annotation
 .end method
 
-.method public abstract playAsync(Landroid/net/Uri;ZI)V
+.method public abstract playAsync(Landroid/net/Uri;Landroid/os/UserHandle;ZI)V
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;

@@ -41,7 +41,7 @@
     .parameter "object"
 
     .prologue
-    invoke-virtual {p1}, Landroid/view/View;->getRotation()F
+    invoke-virtual {p1}, Landroid/view/View;->getRotationX()F
 
     move-result v0
 
@@ -73,7 +73,7 @@
     .parameter "value"
 
     .prologue
-    invoke-virtual {p1, p2}, Landroid/view/View;->setRotation(F)V
+    invoke-virtual {p1, p2}, Landroid/view/View;->setRotationX(F)V
 
     return-void
 .end method

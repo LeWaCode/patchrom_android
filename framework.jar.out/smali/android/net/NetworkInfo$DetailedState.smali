@@ -30,6 +30,8 @@
 
 .field public static final enum BLOCKED:Landroid/net/NetworkInfo$DetailedState;
 
+.field public static final enum CAPTIVE_PORTAL_CHECK:Landroid/net/NetworkInfo$DetailedState;
+
 .field public static final enum CONNECTED:Landroid/net/NetworkInfo$DetailedState;
 
 .field public static final enum CONNECTING:Landroid/net/NetworkInfo$DetailedState;
@@ -176,7 +178,17 @@
 
     sput-object v0, Landroid/net/NetworkInfo$DetailedState;->VERIFYING_POOR_LINK:Landroid/net/NetworkInfo$DetailedState;
 
-    const/16 v0, 0xc
+    new-instance v0, Landroid/net/NetworkInfo$DetailedState;
+
+    const-string v1, "CAPTIVE_PORTAL_CHECK"
+
+    const/16 v2, 0xc
+
+    invoke-direct {v0, v1, v2}, Landroid/net/NetworkInfo$DetailedState;-><init>(Ljava/lang/String;I)V
+
+    sput-object v0, Landroid/net/NetworkInfo$DetailedState;->CAPTIVE_PORTAL_CHECK:Landroid/net/NetworkInfo$DetailedState;
+
+    const/16 v0, 0xd
 
     new-array v0, v0, [Landroid/net/NetworkInfo$DetailedState;
 
@@ -239,6 +251,12 @@
     const/16 v1, 0xb
 
     sget-object v2, Landroid/net/NetworkInfo$DetailedState;->VERIFYING_POOR_LINK:Landroid/net/NetworkInfo$DetailedState;
+
+    aput-object v2, v0, v1
+
+    const/16 v1, 0xc
+
+    sget-object v2, Landroid/net/NetworkInfo$DetailedState;->CAPTIVE_PORTAL_CHECK:Landroid/net/NetworkInfo$DetailedState;
 
     aput-object v2, v0, v1
 

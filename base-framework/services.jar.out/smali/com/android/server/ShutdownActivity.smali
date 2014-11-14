@@ -54,12 +54,12 @@
 
     invoke-virtual {p0}, Lcom/android/server/ShutdownActivity;->getIntent()Landroid/content/Intent;
 
-    move-result-object v1
+    move-result-object v0
 
-    .local v1, intent:Landroid/content/Intent;
+    .local v0, intent:Landroid/content/Intent;
     const-string v2, "android.intent.action.REBOOT"
 
-    invoke-virtual {v1}, Landroid/content/Intent;->getAction()Ljava/lang/String;
+    invoke-virtual {v0}, Landroid/content/Intent;->getAction()Ljava/lang/String;
 
     move-result-object v3
 
@@ -73,7 +73,7 @@
 
     const/4 v3, 0x0
 
-    invoke-virtual {v1, v2, v3}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
+    invoke-virtual {v0, v2, v3}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
 
     move-result v2
 
@@ -103,16 +103,27 @@
 
     invoke-static {v2, v3}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
 
-    new-instance v0, Landroid/os/Handler;
+    new-instance v1, Lcom/android/server/ShutdownActivity$1;
 
-    invoke-direct {v0}, Landroid/os/Handler;-><init>()V
+    const-string v2, "ShutdownActivity"
 
-    .local v0, h:Landroid/os/Handler;
-    new-instance v2, Lcom/android/server/ShutdownActivity$1;
+    invoke-direct {v1, p0, v2}, Lcom/android/server/ShutdownActivity$1;-><init>(Lcom/android/server/ShutdownActivity;Ljava/lang/String;)V
 
-    invoke-direct {v2, p0}, Lcom/android/server/ShutdownActivity$1;-><init>(Lcom/android/server/ShutdownActivity;)V
+    .local v1, thr:Ljava/lang/Thread;
+    invoke-virtual {v1}, Ljava/lang/Thread;->start()V
 
-    invoke-virtual {v0, v2}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
+    invoke-virtual {p0}, Lcom/android/server/ShutdownActivity;->finish()V
 
+    :try_start_0
+    invoke-virtual {v1}, Ljava/lang/Thread;->join()V
+    :try_end_0
+    .catch Ljava/lang/InterruptedException; {:try_start_0 .. :try_end_0} :catch_0
+
+    :goto_0
     return-void
+
+    :catch_0
+    move-exception v2
+
+    goto :goto_0
 .end method

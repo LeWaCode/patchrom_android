@@ -185,6 +185,21 @@
     return-void
 .end method
 
+.method public getAlpha()I
+    .locals 1
+
+    .prologue
+    iget-object v0, p0, Landroid/graphics/drawable/ScaleDrawable;->mScaleState:Landroid/graphics/drawable/ScaleDrawable$ScaleState;
+
+    iget-object v0, v0, Landroid/graphics/drawable/ScaleDrawable$ScaleState;->mDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v0}, Landroid/graphics/drawable/Drawable;->getAlpha()I
+
+    move-result v0
+
+    return v0
+.end method
+
 .method public getChangingConfigurations()I
     .locals 2
 
@@ -637,7 +652,7 @@
 
     .end local v6           #ih:I
     :cond_1
-    invoke-virtual {p0}, Landroid/graphics/drawable/ScaleDrawable;->getResolvedLayoutDirectionSelf()I
+    invoke-virtual {p0}, Landroid/graphics/drawable/ScaleDrawable;->getLayoutDirection()I
 
     move-result v5
 

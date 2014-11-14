@@ -394,7 +394,62 @@
     iput-wide v1, p0, Landroid/net/NetworkStatsHistory;->totalBytes:J
 
     :goto_0
-    return-void
+    iget-object v1, p0, Landroid/net/NetworkStatsHistory;->bucketStart:[J
+
+    array-length v1, v1
+
+    iget v2, p0, Landroid/net/NetworkStatsHistory;->bucketCount:I
+
+    if-ne v1, v2, :cond_0
+
+    iget-object v1, p0, Landroid/net/NetworkStatsHistory;->rxBytes:[J
+
+    array-length v1, v1
+
+    iget v2, p0, Landroid/net/NetworkStatsHistory;->bucketCount:I
+
+    if-ne v1, v2, :cond_0
+
+    iget-object v1, p0, Landroid/net/NetworkStatsHistory;->rxPackets:[J
+
+    array-length v1, v1
+
+    iget v2, p0, Landroid/net/NetworkStatsHistory;->bucketCount:I
+
+    if-ne v1, v2, :cond_0
+
+    iget-object v1, p0, Landroid/net/NetworkStatsHistory;->txBytes:[J
+
+    array-length v1, v1
+
+    iget v2, p0, Landroid/net/NetworkStatsHistory;->bucketCount:I
+
+    if-ne v1, v2, :cond_0
+
+    iget-object v1, p0, Landroid/net/NetworkStatsHistory;->txPackets:[J
+
+    array-length v1, v1
+
+    iget v2, p0, Landroid/net/NetworkStatsHistory;->bucketCount:I
+
+    if-ne v1, v2, :cond_0
+
+    iget-object v1, p0, Landroid/net/NetworkStatsHistory;->operations:[J
+
+    array-length v1, v1
+
+    iget v2, p0, Landroid/net/NetworkStatsHistory;->bucketCount:I
+
+    if-eq v1, v2, :cond_2
+
+    :cond_0
+    new-instance v1, Ljava/net/ProtocolException;
+
+    const-string v2, "Mismatched history lengths"
+
+    invoke-direct {v1, v2}, Ljava/net/ProtocolException;-><init>(Ljava/lang/String;)V
+
+    throw v1
 
     :pswitch_1
     invoke-virtual {p1}, Ljava/io/DataInputStream;->readLong()J
@@ -411,7 +466,7 @@
 
     const/4 v1, 0x3
 
-    if-lt v0, v1, :cond_0
+    if-lt v0, v1, :cond_1
 
     invoke-static {p1}, Landroid/net/NetworkStatsHistory$DataStreamUtils;->readVarLongArray(Ljava/io/DataInputStream;)[J
 
@@ -474,7 +529,7 @@
 
     goto :goto_0
 
-    :cond_0
+    :cond_1
     iget-object v1, p0, Landroid/net/NetworkStatsHistory;->bucketStart:[J
 
     array-length v1, v1
@@ -482,6 +537,9 @@
     new-array v1, v1, [J
 
     goto :goto_1
+
+    :cond_2
+    return-void
 
     :pswitch_data_0
     .packed-switch 0x1

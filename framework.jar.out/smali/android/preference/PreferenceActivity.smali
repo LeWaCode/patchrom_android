@@ -51,6 +51,8 @@
 
 .field private static final PREFERENCES_TAG:Ljava/lang/String; = ":android:preferences"
 
+.field private static final TAG:Ljava/lang/String; = "PreferenceActivity"
+
 
 # instance fields
 .field private mCurHeader:Landroid/preference/PreferenceActivity$Header;
@@ -267,6 +269,37 @@
 
     invoke-virtual {v2, v3, v4}, Landroid/app/FragmentManager;->popBackStack(Ljava/lang/String;I)V
 
+    invoke-virtual {p0, p1}, Landroid/preference/PreferenceActivity;->isValidFragment(Ljava/lang/String;)Z
+
+    move-result v2
+
+    if-nez v2, :cond_0
+
+    new-instance v2, Ljava/lang/IllegalArgumentException;
+
+    new-instance v3, Ljava/lang/StringBuilder;
+
+    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v4, "Invalid fragment for this activity: "
+
+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+
+    throw v2
+
+    :cond_0
     invoke-static {p0, p1, p2}, Landroid/app/Fragment;->instantiate(Landroid/content/Context;Ljava/lang/String;Landroid/os/Bundle;)Landroid/app/Fragment;
 
     move-result-object v0
@@ -285,7 +318,7 @@
 
     invoke-virtual {v1, v2}, Landroid/app/FragmentTransaction;->setTransition(I)Landroid/app/FragmentTransaction;
 
-    const v2, 0x1020303
+    const v2, 0x10202f6
 
     invoke-virtual {v1, v2, v0}, Landroid/app/FragmentTransaction;->replace(ILandroid/app/Fragment;)Landroid/app/FragmentTransaction;
 
@@ -797,6 +830,75 @@
     const/4 v0, 0x0
 
     goto :goto_0
+.end method
+
+.method protected isValidFragment(Ljava/lang/String;)Z
+    .locals 3
+    .parameter "fragmentName"
+
+    .prologue
+    invoke-virtual {p0}, Landroid/preference/PreferenceActivity;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
+
+    move-result-object v0
+
+    iget v0, v0, Landroid/content/pm/ApplicationInfo;->targetSdkVersion:I
+
+    const/16 v1, 0x13
+
+    if-lt v0, v1, :cond_0
+
+    new-instance v0, Ljava/lang/RuntimeException;
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "Subclasses of PreferenceActivity must override isValidFragment(String) to verify that the Fragment class is valid! "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/lang/Class;->getName()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    const-string v2, " has not checked if fragment "
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    const-string v2, " is valid."
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-direct {v0, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+
+    :cond_0
+    const/4 v0, 0x1
+
+    return v0
 .end method
 
 .method public loadHeadersFromResource(ILjava/util/List;)V
@@ -1444,7 +1546,13 @@
     .prologue
     invoke-super/range {p0 .. p1}, Landroid/app/ListActivity;->onCreate(Landroid/os/Bundle;)V
 
-    const v17, 0x1090087
+    invoke-static/range {p0 .. p0}, Llewa/util/LewaUiUtil;->isV5Ui(Landroid/content/Context;)Z
+
+    move-result v17
+
+    if-eqz v17, :cond_lewa0
+
+    const v17, 0x909003b
 
     move-object/from16 v0, p0
 
@@ -1452,7 +1560,8 @@
 
     invoke-virtual {v0, v1}, Landroid/preference/PreferenceActivity;->setContentView(I)V
 
-    const v17, 0x1020301
+    :goto_lewa0
+    const v17, 0x10202f4
 
     move-object/from16 v0, p0
 
@@ -1470,7 +1579,7 @@
 
     iput-object v0, v1, Landroid/preference/PreferenceActivity;->mListFooter:Landroid/widget/FrameLayout;
 
-    const v17, 0x1020302
+    const v17, 0x10202f5
 
     move-object/from16 v0, p0
 
@@ -1649,7 +1758,7 @@
 
     if-eqz v17, :cond_c
 
-    const v17, 0x1020300
+    const v17, 0x10202f3
 
     move-object/from16 v0, p0
 
@@ -1719,7 +1828,7 @@
 
     if-eqz v17, :cond_5
 
-    const v17, 0x102026d
+    const v17, 0x1020281
 
     move-object/from16 v0, p0
 
@@ -1733,7 +1842,7 @@
 
     invoke-virtual/range {v17 .. v18}, Landroid/view/View;->setVisibility(I)V
 
-    const v17, 0x1020304
+    const v17, 0x10202f7
 
     move-object/from16 v0, p0
 
@@ -1758,7 +1867,7 @@
 
     invoke-virtual {v3, v0}, Landroid/widget/Button;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
-    const v17, 0x1020305
+    const v17, 0x10202f8
 
     move-object/from16 v0, p0
 
@@ -1781,7 +1890,7 @@
 
     invoke-virtual/range {v16 .. v17}, Landroid/widget/Button;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
-    const v17, 0x1020306
+    const v17, 0x10202f9
 
     move-object/from16 v0, p0
 
@@ -1910,11 +2019,25 @@
     :cond_5
     return-void
 
+    .end local v8           #hidingHeaders:Z
     .end local v9           #initialArguments:Landroid/os/Bundle;
     .end local v10           #initialFragment:Ljava/lang/String;
     .end local v11           #initialShortTitle:I
     .end local v13           #initialTitle:I
     .end local v15           #intent:Landroid/content/Intent;
+    
+    :cond_lewa0
+    const v17, 0x109007b
+
+    move-object/from16 v0, p0
+
+    move/from16 v1, v17
+
+    invoke-virtual {v0, v1}, Landroid/preference/PreferenceActivity;->setContentView(I)V
+
+    goto/16 :goto_lewa0
+
+    .restart local v8       #hidingHeaders:Z
     :cond_6
     const/16 v17, 0x0
 
@@ -2117,7 +2240,7 @@
     goto/16 :goto_3
 
     :cond_e
-    const v17, 0x1090088
+    const v17, 0x109007c
 
     move-object/from16 v0, p0
 
@@ -2125,7 +2248,7 @@
 
     invoke-virtual {v0, v1}, Landroid/preference/PreferenceActivity;->setContentView(I)V
 
-    const v17, 0x1020301
+    const v17, 0x10202f4
 
     move-object/from16 v0, p0
 
@@ -2143,7 +2266,7 @@
 
     iput-object v0, v1, Landroid/preference/PreferenceActivity;->mListFooter:Landroid/widget/FrameLayout;
 
-    const v17, 0x1020303
+    const v17, 0x10202f6
 
     move-object/from16 v0, p0
 
@@ -2217,9 +2340,21 @@
 .end method
 
 .method protected onDestroy()V
-    .locals 1
+    .locals 2
 
     .prologue
+    iget-object v0, p0, Landroid/preference/PreferenceActivity;->mHandler:Landroid/os/Handler;
+
+    const/4 v1, 0x1
+
+    invoke-virtual {v0, v1}, Landroid/os/Handler;->removeMessages(I)V
+
+    iget-object v0, p0, Landroid/preference/PreferenceActivity;->mHandler:Landroid/os/Handler;
+
+    const/4 v1, 0x2
+
+    invoke-virtual {v0, v1}, Landroid/os/Handler;->removeMessages(I)V
+
     invoke-super {p0}, Landroid/app/ListActivity;->onDestroy()V
 
     iget-object v0, p0, Landroid/preference/PreferenceActivity;->mPreferenceManager:Landroid/preference/PreferenceManager;
@@ -2235,20 +2370,50 @@
 .end method
 
 .method public onGetInitialHeader()Landroid/preference/PreferenceActivity$Header;
-    .locals 2
+    .locals 4
 
     .prologue
-    iget-object v0, p0, Landroid/preference/PreferenceActivity;->mHeaders:Ljava/util/ArrayList;
-
     const/4 v1, 0x0
 
-    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    .local v1, i:I
+    :goto_0
+    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mHeaders:Ljava/util/ArrayList;
+
+    invoke-virtual {v2}, Ljava/util/ArrayList;->size()I
+
+    move-result v2
+
+    if-ge v1, v2, :cond_1
+
+    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mHeaders:Ljava/util/ArrayList;
+
+    invoke-virtual {v2, v1}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
 
     move-result-object v0
 
     check-cast v0, Landroid/preference/PreferenceActivity$Header;
 
+    .local v0, h:Landroid/preference/PreferenceActivity$Header;
+    iget-object v2, v0, Landroid/preference/PreferenceActivity$Header;->fragment:Ljava/lang/String;
+
+    if-eqz v2, :cond_0
+
     return-object v0
+
+    :cond_0
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_0
+
+    .end local v0           #h:Landroid/preference/PreferenceActivity$Header;
+    :cond_1
+    new-instance v2, Ljava/lang/IllegalStateException;
+
+    const-string v3, "Must have at least one header with a fragment"
+
+    invoke-direct {v2, v3}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
+
+    throw v2
 .end method
 
 .method public onGetNewHeader()Landroid/preference/PreferenceActivity$Header;
@@ -2349,7 +2514,7 @@
 
     move-result-object v1
 
-    const v2, 0x1110003
+    const v2, 0x1110007
 
     invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getBoolean(I)Z
 
@@ -2367,6 +2532,17 @@
     .parameter "id"
 
     .prologue
+    invoke-virtual {p0}, Landroid/preference/PreferenceActivity;->isResumed()Z
+
+    move-result v1
+
+    if-nez v1, :cond_1
+
+    :cond_0
+    :goto_0
+    return-void
+
+    :cond_1
     invoke-super/range {p0 .. p5}, Landroid/app/ListActivity;->onListItemClick(Landroid/widget/ListView;Landroid/view/View;IJ)V
 
     iget-object v1, p0, Landroid/preference/PreferenceActivity;->mAdapter:Landroid/widget/ListAdapter;
@@ -2389,8 +2565,7 @@
     .end local v0           #item:Ljava/lang/Object;
     invoke-virtual {p0, v0, p3}, Landroid/preference/PreferenceActivity;->onHeaderClick(Landroid/preference/PreferenceActivity$Header;I)V
 
-    :cond_0
-    return-void
+    goto :goto_0
 .end method
 
 .method protected onNewIntent(Landroid/content/Intent;)V
@@ -2768,35 +2943,37 @@
 .end method
 
 .method public showBreadCrumbs(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)V
-    .locals 5
+    .locals 6
     .parameter "title"
     .parameter "shortTitle"
 
     .prologue
-    const/4 v4, 0x0
+    const/16 v4, 0x8
 
-    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+    const/4 v5, 0x0
 
-    if-nez v2, :cond_2
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
 
-    const v2, 0x1020016
+    if-nez v3, :cond_4
 
-    invoke-virtual {p0, v2}, Landroid/preference/PreferenceActivity;->findViewById(I)Landroid/view/View;
+    const v3, 0x1020016
 
-    move-result-object v0
+    invoke-virtual {p0, v3}, Landroid/preference/PreferenceActivity;->findViewById(I)Landroid/view/View;
 
-    .local v0, crumbs:Landroid/view/View;
+    move-result-object v1
+
+    .local v1, crumbs:Landroid/view/View;
     :try_start_0
-    check-cast v0, Landroid/app/FragmentBreadCrumbs;
+    check-cast v1, Landroid/app/FragmentBreadCrumbs;
 
-    .end local v0           #crumbs:Landroid/view/View;
-    iput-object v0, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+    .end local v1           #crumbs:Landroid/view/View;
+    iput-object v1, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
     :try_end_0
     .catch Ljava/lang/ClassCastException; {:try_start_0 .. :try_end_0} :catch_0
 
-    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
 
-    if-nez v2, :cond_1
+    if-nez v3, :cond_1
 
     if-eqz p1, :cond_0
 
@@ -2807,31 +2984,70 @@
     return-void
 
     :catch_0
-    move-exception v1
+    move-exception v2
 
-    .local v1, e:Ljava/lang/ClassCastException;
+    .local v2, e:Ljava/lang/ClassCastException;
+    invoke-virtual {p0, p1}, Landroid/preference/PreferenceActivity;->setTitle(Ljava/lang/CharSequence;)V
+
     goto :goto_0
 
-    .end local v1           #e:Ljava/lang/ClassCastException;
+    .end local v2           #e:Ljava/lang/ClassCastException;
     :cond_1
-    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+    iget-boolean v3, p0, Landroid/preference/PreferenceActivity;->mSinglePane:Z
 
-    const/4 v3, 0x2
+    if-eqz v3, :cond_3
 
-    invoke-virtual {v2, v3}, Landroid/app/FragmentBreadCrumbs;->setMaxVisible(I)V
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
 
-    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+    invoke-virtual {v3, v4}, Landroid/app/FragmentBreadCrumbs;->setVisibility(I)V
 
-    invoke-virtual {v2, p0}, Landroid/app/FragmentBreadCrumbs;->setActivity(Landroid/app/Activity;)V
+    const v3, 0x102028a
+
+    invoke-virtual {p0, v3}, Landroid/preference/PreferenceActivity;->findViewById(I)Landroid/view/View;
+
+    move-result-object v0
+
+    .local v0, bcSection:Landroid/view/View;
+    if-eqz v0, :cond_2
+
+    invoke-virtual {v0, v4}, Landroid/view/View;->setVisibility(I)V
 
     :cond_2
-    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+    invoke-virtual {p0, p1}, Landroid/preference/PreferenceActivity;->setTitle(Ljava/lang/CharSequence;)V
 
-    invoke-virtual {v2, p1, p2}, Landroid/app/FragmentBreadCrumbs;->setTitle(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)V
+    .end local v0           #bcSection:Landroid/view/View;
+    :cond_3
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
 
-    iget-object v2, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+    const/4 v4, 0x2
 
-    invoke-virtual {v2, v4, v4, v4}, Landroid/app/FragmentBreadCrumbs;->setParentTitle(Ljava/lang/CharSequence;Ljava/lang/CharSequence;Landroid/view/View$OnClickListener;)V
+    invoke-virtual {v3, v4}, Landroid/app/FragmentBreadCrumbs;->setMaxVisible(I)V
+
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+
+    invoke-virtual {v3, p0}, Landroid/app/FragmentBreadCrumbs;->setActivity(Landroid/app/Activity;)V
+
+    :cond_4
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+
+    invoke-virtual {v3}, Landroid/app/FragmentBreadCrumbs;->getVisibility()I
+
+    move-result v3
+
+    if-eqz v3, :cond_5
+
+    invoke-virtual {p0, p1}, Landroid/preference/PreferenceActivity;->setTitle(Ljava/lang/CharSequence;)V
+
+    goto :goto_0
+
+    :cond_5
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+
+    invoke-virtual {v3, p1, p2}, Landroid/app/FragmentBreadCrumbs;->setTitle(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)V
+
+    iget-object v3, p0, Landroid/preference/PreferenceActivity;->mFragmentBreadCrumbs:Landroid/app/FragmentBreadCrumbs;
+
+    invoke-virtual {v3, v5, v5, v5}, Landroid/app/FragmentBreadCrumbs;->setParentTitle(Ljava/lang/CharSequence;Ljava/lang/CharSequence;Landroid/view/View$OnClickListener;)V
 
     goto :goto_0
 .end method
@@ -2851,7 +3067,7 @@
     move-result-object v0
 
     .local v0, transaction:Landroid/app/FragmentTransaction;
-    const v1, 0x1020303
+    const v1, 0x10202f6
 
     invoke-virtual {v0, v1, p1}, Landroid/app/FragmentTransaction;->replace(ILandroid/app/Fragment;)Landroid/app/FragmentTransaction;
 
@@ -2931,7 +3147,7 @@
     move-result-object v8
 
     .local v8, transaction:Landroid/app/FragmentTransaction;
-    const v0, 0x1020303
+    const v0, 0x10202f6
 
     invoke-virtual {v8, v0, v7}, Landroid/app/FragmentTransaction;->replace(ILandroid/app/Fragment;)Landroid/app/FragmentTransaction;
 
@@ -3039,6 +3255,19 @@
     return-void
 
     :cond_0
+    iget-object v1, p1, Landroid/preference/PreferenceActivity$Header;->fragment:Ljava/lang/String;
+
+    if-nez v1, :cond_1
+
+    new-instance v1, Ljava/lang/IllegalStateException;
+
+    const-string v2, "can\'t switch to header that has no fragment"
+
+    invoke-direct {v1, v2}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
+
+    throw v1
+
+    :cond_1
     iget-object v1, p0, Landroid/preference/PreferenceActivity;->mHeaders:Ljava/util/ArrayList;
 
     invoke-virtual {v1, p1}, Ljava/util/ArrayList;->indexOf(Ljava/lang/Object;)I

@@ -30,15 +30,11 @@
 
 # virtual methods
 .method public run()V
-    .locals 2
+    .locals 0
 
     .prologue
-    #calls: Landroid/os/Trace;->nativeGetEnabledTags()J
-    invoke-static {}, Landroid/os/Trace;->access$100()J
-
-    move-result-wide v0
-
-    invoke-static {v0, v1}, Landroid/os/Trace;->access$002(J)J
+    #calls: Landroid/os/Trace;->cacheEnabledTags()J
+    invoke-static {}, Landroid/os/Trace;->access$000()J
 
     return-void
 .end method

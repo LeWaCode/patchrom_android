@@ -15,7 +15,7 @@
 
 
 # virtual methods
-.method public abstract computeFrameLw(Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;)V
+.method public abstract computeFrameLw(Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;Landroid/graphics/Rect;)V
 .end method
 
 .method public abstract getAppToken()Landroid/view/IApplicationToken;
@@ -45,6 +45,15 @@
 .method public abstract getNeedsMenuLw(Landroid/view/WindowManagerPolicy$WindowState;)Z
 .end method
 
+.method public abstract getOverscanFrameLw()Landroid/graphics/Rect;
+.end method
+
+.method public abstract getOwningPackage()Ljava/lang/String;
+.end method
+
+.method public abstract getOwningUid()I
+.end method
+
 .method public abstract getShownFrameLw()Landroid/graphics/RectF;
 .end method
 
@@ -70,6 +79,9 @@
 .end method
 
 .method public abstract isAnimatingLw()Z
+.end method
+
+.method public abstract isDefaultDisplay()Z
 .end method
 
 .method public abstract isDisplayedLw()Z

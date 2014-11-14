@@ -63,7 +63,7 @@
 
     invoke-virtual {p0, v3}, Landroid/app/TimePickerDialog;->setIcon(I)V
 
-    const v3, 0x1040420
+    const v3, 0x1040458
 
     invoke-virtual {p0, v3}, Landroid/app/TimePickerDialog;->setTitle(I)V
 
@@ -74,7 +74,7 @@
     .local v1, themeContext:Landroid/content/Context;
     const/4 v3, -0x1
 
-    const v4, 0x1040423
+    const v4, 0x104045b
 
     invoke-virtual {v1, v4}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
 
@@ -82,15 +82,7 @@
 
     invoke-virtual {p0, v3, v4, p0}, Landroid/app/TimePickerDialog;->setButton(ILjava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)V
 
-    const/4 v3, -0x2
-
-    const/high16 v4, 0x104
-
-    invoke-virtual {v1, v4}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
-
-    move-result-object v4
-
-    invoke-virtual {p0, v3, v4, p0}, Landroid/app/TimePickerDialog;->setButton(ILjava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)V
+    invoke-direct {p0, v1, p0}, Landroid/app/TimePickerDialog;->setButton(Landroid/content/Context;Landroid/app/TimePickerDialog;)V
 
     const-string v3, "layout_inflater"
 
@@ -101,7 +93,7 @@
     check-cast v0, Landroid/view/LayoutInflater;
 
     .local v0, inflater:Landroid/view/LayoutInflater;
-    const v3, 0x10900bd
+    const v3, 0x10900b3
 
     const/4 v4, 0x0
 
@@ -112,7 +104,7 @@
     .local v2, view:Landroid/view/View;
     invoke-virtual {p0, v2}, Landroid/app/TimePickerDialog;->setView(Landroid/view/View;)V
 
-    const v3, 0x102034c
+    const v3, 0x102034d
 
     invoke-virtual {v2, v3}, Landroid/view/View;->findViewById(I)Landroid/view/View;
 
@@ -232,7 +224,7 @@
 
 # virtual methods
 .method public onClick(Landroid/content/DialogInterface;I)V
-    .locals 1
+    .locals 0
     .parameter "dialog"
     .parameter "which"
     .annotation build Landroid/annotation/LewaHook;
@@ -240,13 +232,8 @@
     .end annotation
 
     .prologue
-    const/4 v0, -0x1
+    invoke-direct {p0, p2}, Landroid/app/TimePickerDialog;->tryNotifyTimeSetExt(I)V
 
-    if-ne v0, p2, :cond_0
-
-    invoke-direct {p0}, Landroid/app/TimePickerDialog;->tryNotifyTimeSet()V
-
-    :cond_0
     return-void
 .end method
 
@@ -399,3 +386,44 @@
 
     return-void
 .end method
+
+.method private setButton(Landroid/content/Context;Landroid/app/TimePickerDialog;)V
+    .locals 2
+    .parameter "context"
+    .parameter "dialog"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v0, -0x2
+
+    const/high16 v1, 0x104
+
+    invoke-virtual {p1, v1}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
+
+    move-result-object v1
+
+    invoke-virtual {p0, v0, v1, p2}, Landroid/app/TimePickerDialog;->setButton(ILjava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)V
+
+    return-void
+.end method
+
+.method private tryNotifyTimeSetExt(I)V
+    .locals 1
+    .parameter "which"
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    const/4 v0, -0x1
+
+    if-ne v0, p1, :cond_0
+
+    invoke-direct {p0}, Landroid/app/TimePickerDialog;->tryNotifyTimeSet()V
+
+    :cond_0
+    return-void
+.end method
+

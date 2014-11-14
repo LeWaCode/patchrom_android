@@ -3,6 +3,11 @@
 .source "TwoLineListItem.java"
 
 
+# annotations
+.annotation runtime Ljava/lang/Deprecated;
+.end annotation
+
+
 # instance fields
 .field private mText1:Landroid/widget/TextView;
 

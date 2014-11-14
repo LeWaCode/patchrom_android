@@ -13,9 +13,16 @@
 
 
 # instance fields
+.field private mMutated:Z
+
 .field private final mPaint:Landroid/graphics/Paint;
 
 .field private mState:Landroid/graphics/drawable/ColorDrawable$ColorState;
+    .annotation runtime Landroid/view/ViewDebug$ExportedProperty;
+        deepExport = true
+        prefix = "state_"
+    .end annotation
+.end field
 
 
 # direct methods
@@ -250,6 +257,36 @@
     invoke-virtual {v0}, Landroid/content/res/TypedArray;->recycle()V
 
     return-void
+.end method
+
+.method public mutate()Landroid/graphics/drawable/Drawable;
+    .locals 2
+
+    .prologue
+    iget-boolean v0, p0, Landroid/graphics/drawable/ColorDrawable;->mMutated:Z
+
+    if-nez v0, :cond_0
+
+    invoke-super {p0}, Landroid/graphics/drawable/Drawable;->mutate()Landroid/graphics/drawable/Drawable;
+
+    move-result-object v0
+
+    if-ne v0, p0, :cond_0
+
+    new-instance v0, Landroid/graphics/drawable/ColorDrawable$ColorState;
+
+    iget-object v1, p0, Landroid/graphics/drawable/ColorDrawable;->mState:Landroid/graphics/drawable/ColorDrawable$ColorState;
+
+    invoke-direct {v0, v1}, Landroid/graphics/drawable/ColorDrawable$ColorState;-><init>(Landroid/graphics/drawable/ColorDrawable$ColorState;)V
+
+    iput-object v0, p0, Landroid/graphics/drawable/ColorDrawable;->mState:Landroid/graphics/drawable/ColorDrawable$ColorState;
+
+    const/4 v0, 0x1
+
+    iput-boolean v0, p0, Landroid/graphics/drawable/ColorDrawable;->mMutated:Z
+
+    :cond_0
+    return-object p0
 .end method
 
 .method public setAlpha(I)V

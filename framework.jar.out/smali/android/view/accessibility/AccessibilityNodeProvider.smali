@@ -15,28 +15,7 @@
 
 
 # virtual methods
-.method public accessibilityFocusSearch(II)Landroid/view/accessibility/AccessibilityNodeInfo;
-    .locals 1
-    .parameter "direction"
-    .parameter "virtualViewId"
-
-    .prologue
-    const/4 v0, 0x0
-
-    return-object v0
-.end method
-
 .method public createAccessibilityNodeInfo(I)Landroid/view/accessibility/AccessibilityNodeInfo;
-    .locals 1
-    .parameter "virtualViewId"
-
-    .prologue
-    const/4 v0, 0x0
-
-    return-object v0
-.end method
-
-.method public findAccessibilityFocus(I)Landroid/view/accessibility/AccessibilityNodeInfo;
     .locals 1
     .parameter "virtualViewId"
 
@@ -61,6 +40,16 @@
             ">;"
         }
     .end annotation
+
+    .prologue
+    const/4 v0, 0x0
+
+    return-object v0
+.end method
+
+.method public findFocus(I)Landroid/view/accessibility/AccessibilityNodeInfo;
+    .locals 1
+    .parameter "focus"
 
     .prologue
     const/4 v0, 0x0

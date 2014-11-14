@@ -37,13 +37,15 @@
 
 .field mResultExtras:Landroid/os/Bundle;
 
+.field final mSendingUser:I
+
 .field final mToken:Landroid/os/IBinder;
 
 .field final mType:I
 
 
 # direct methods
-.method public constructor <init>(ILjava/lang/String;Landroid/os/Bundle;IZZLandroid/os/IBinder;)V
+.method public constructor <init>(ILjava/lang/String;Landroid/os/Bundle;IZZLandroid/os/IBinder;I)V
     .locals 0
     .parameter "resultCode"
     .parameter "resultData"
@@ -52,6 +54,7 @@
     .parameter "ordered"
     .parameter "sticky"
     .parameter "token"
+    .parameter "userId"
 
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -69,6 +72,8 @@
     iput-boolean p6, p0, Landroid/content/BroadcastReceiver$PendingResult;->mInitialStickyHint:Z
 
     iput-object p7, p0, Landroid/content/BroadcastReceiver$PendingResult;->mToken:Landroid/os/IBinder;
+
+    iput p8, p0, Landroid/content/BroadcastReceiver$PendingResult;->mSendingUser:I
 
     return-void
 .end method
@@ -261,6 +266,15 @@
     .end local v0           #e:Landroid/os/Bundle;
     .restart local v1       #e:Landroid/os/Bundle;
     goto :goto_0
+.end method
+
+.method public getSendingUserId()I
+    .locals 1
+
+    .prologue
+    iget v0, p0, Landroid/content/BroadcastReceiver$PendingResult;->mSendingUser:I
+
+    return v0
 .end method
 
 .method public sendFinished(Landroid/app/IActivityManager;)V

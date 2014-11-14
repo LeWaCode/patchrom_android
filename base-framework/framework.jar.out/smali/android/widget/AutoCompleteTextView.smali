@@ -9,9 +9,9 @@
 # annotations
 .annotation system Ldalvik/annotation/MemberClasses;
     value = {
-        Landroid/widget/AutoCompleteTextView$1;,
         Landroid/widget/AutoCompleteTextView$PopupDataSetObserver;,
         Landroid/widget/AutoCompleteTextView$PassThroughClickListener;,
+        Landroid/widget/AutoCompleteTextView$OnDismissListener;,
         Landroid/widget/AutoCompleteTextView$Validator;,
         Landroid/widget/AutoCompleteTextView$DropDownItemClickListener;,
         Landroid/widget/AutoCompleteTextView$MyWatcher;
@@ -217,7 +217,7 @@
 
     invoke-virtual {v2, v3}, Landroid/widget/ListPopupWindow;->setHeight(I)V
 
-    const v2, 0x10900a9
+    const v2, 0x109009e
 
     invoke-virtual {v0, v4, v2}, Landroid/content/res/TypedArray;->getResourceId(II)I
 
@@ -1928,6 +1928,30 @@
 
     #setter for: Landroid/widget/AutoCompleteTextView$PassThroughClickListener;->mWrapped:Landroid/view/View$OnClickListener;
     invoke-static {v0, p1}, Landroid/widget/AutoCompleteTextView$PassThroughClickListener;->access$302(Landroid/widget/AutoCompleteTextView$PassThroughClickListener;Landroid/view/View$OnClickListener;)Landroid/view/View$OnClickListener;
+
+    return-void
+.end method
+
+.method public setOnDismissListener(Landroid/widget/AutoCompleteTextView$OnDismissListener;)V
+    .locals 2
+    .parameter "dismissListener"
+
+    .prologue
+    const/4 v0, 0x0
+
+    .local v0, wrappedListener:Landroid/widget/PopupWindow$OnDismissListener;
+    if-eqz p1, :cond_0
+
+    new-instance v0, Landroid/widget/AutoCompleteTextView$1;
+
+    .end local v0           #wrappedListener:Landroid/widget/PopupWindow$OnDismissListener;
+    invoke-direct {v0, p0, p1}, Landroid/widget/AutoCompleteTextView$1;-><init>(Landroid/widget/AutoCompleteTextView;Landroid/widget/AutoCompleteTextView$OnDismissListener;)V
+
+    .restart local v0       #wrappedListener:Landroid/widget/PopupWindow$OnDismissListener;
+    :cond_0
+    iget-object v1, p0, Landroid/widget/AutoCompleteTextView;->mPopup:Landroid/widget/ListPopupWindow;
+
+    invoke-virtual {v1, v0}, Landroid/widget/ListPopupWindow;->setOnDismissListener(Landroid/widget/PopupWindow$OnDismissListener;)V
 
     return-void
 .end method

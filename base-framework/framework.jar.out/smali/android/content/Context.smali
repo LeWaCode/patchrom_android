@@ -14,6 +14,8 @@
 
 .field public static final APPWIDGET_SERVICE:Ljava/lang/String; = "appwidget"
 
+.field public static final APP_OPS_SERVICE:Ljava/lang/String; = "appops"
+
 .field public static final AUDIO_SERVICE:Ljava/lang/String; = "audio"
 
 .field public static final BACKUP_SERVICE:Ljava/lang/String; = "backup"
@@ -34,11 +36,23 @@
 
 .field public static final BIND_NOT_VISIBLE:I = 0x40000000
 
+.field public static final BIND_SHOWING_UI:I = 0x20000000
+
+.field public static final BIND_VISIBLE:I = 0x10000000
+
 .field public static final BIND_WAIVE_PRIORITY:I = 0x20
+
+.field public static final BLUETOOTH_SERVICE:Ljava/lang/String; = "bluetooth"
+
+.field public static final CAMERA_SERVICE:Ljava/lang/String; = "camera"
+
+.field public static final CAPTIONING_SERVICE:Ljava/lang/String; = "captioning"
 
 .field public static final CLIPBOARD_SERVICE:Ljava/lang/String; = "clipboard"
 
 .field public static final CONNECTIVITY_SERVICE:Ljava/lang/String; = "connectivity"
+
+.field public static final CONSUMER_IR_SERVICE:Ljava/lang/String; = "consumer_ir"
 
 .field public static final CONTEXT_IGNORE_SECURITY:I = 0x2
 
@@ -49,6 +63,8 @@
 .field public static final COUNTRY_DETECTOR:Ljava/lang/String; = "country_detector"
 
 .field public static final DEVICE_POLICY_SERVICE:Ljava/lang/String; = "device_policy"
+
+.field public static final DISPLAY_SERVICE:Ljava/lang/String; = "display"
 
 .field public static final DOWNLOAD_SERVICE:Ljava/lang/String; = "download"
 
@@ -75,8 +91,14 @@
 .field public static final MODE_PRIVATE:I = 0x0
 
 .field public static final MODE_WORLD_READABLE:I = 0x1
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
+.end field
 
 .field public static final MODE_WORLD_WRITEABLE:I = 0x2
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
+.end field
 
 .field public static final NETWORKMANAGEMENT_SERVICE:Ljava/lang/String; = "network_management"
 
@@ -92,7 +114,7 @@
 
 .field public static final POWER_SERVICE:Ljava/lang/String; = "power"
 
-.field public static final SCHEDULING_POLICY_SERVICE:Ljava/lang/String; = "scheduling_policy"
+.field public static final PRINT_SERVICE:Ljava/lang/String; = "print"
 
 .field public static final SEARCH_SERVICE:Ljava/lang/String; = "search"
 
@@ -110,13 +132,13 @@
 
 .field public static final TEXT_SERVICES_MANAGER_SERVICE:Ljava/lang/String; = "textservices"
 
-.field public static final THROTTLE_SERVICE:Ljava/lang/String; = "throttle"
-
 .field public static final UI_MODE_SERVICE:Ljava/lang/String; = "uimode"
 
 .field public static final UPDATE_LOCK_SERVICE:Ljava/lang/String; = "updatelock"
 
 .field public static final USB_SERVICE:Ljava/lang/String; = "usb"
+
+.field public static final USER_SERVICE:Ljava/lang/String; = "user"
 
 .field public static final VIBRATOR_SERVICE:Ljava/lang/String; = "vibrator"
 
@@ -144,12 +166,12 @@
 .method public abstract bindService(Landroid/content/Intent;Landroid/content/ServiceConnection;I)Z
 .end method
 
-.method public bindService(Landroid/content/Intent;Landroid/content/ServiceConnection;II)Z
+.method public bindServiceAsUser(Landroid/content/Intent;Landroid/content/ServiceConnection;ILandroid/os/UserHandle;)Z
     .locals 2
     .parameter "service"
     .parameter "conn"
     .parameter "flags"
-    .parameter "userId"
+    .parameter "user"
 
     .prologue
     new-instance v0, Ljava/lang/RuntimeException;
@@ -193,7 +215,21 @@
     .end annotation
 .end method
 
+.method public abstract createConfigurationContext(Landroid/content/res/Configuration;)Landroid/content/Context;
+.end method
+
+.method public abstract createDisplayContext(Landroid/view/Display;)Landroid/content/Context;
+.end method
+
 .method public abstract createPackageContext(Ljava/lang/String;I)Landroid/content/Context;
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Landroid/content/pm/PackageManager$NameNotFoundException;
+        }
+    .end annotation
+.end method
+
+.method public abstract createPackageContextAsUser(Ljava/lang/String;ILandroid/os/UserHandle;)Landroid/content/Context;
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/content/pm/PackageManager$NameNotFoundException;
@@ -243,6 +279,9 @@
 .method public abstract getAssets()Landroid/content/res/AssetManager;
 .end method
 
+.method public abstract getBasePackageName()Ljava/lang/String;
+.end method
+
 .method public abstract getCacheDir()Ljava/io/File;
 .end method
 
@@ -258,10 +297,19 @@
 .method public abstract getDir(Ljava/lang/String;I)Ljava/io/File;
 .end method
 
+.method public abstract getDisplayAdjustments(I)Landroid/view/DisplayAdjustments;
+.end method
+
 .method public abstract getExternalCacheDir()Ljava/io/File;
 .end method
 
+.method public abstract getExternalCacheDirs()[Ljava/io/File;
+.end method
+
 .method public abstract getExternalFilesDir(Ljava/lang/String;)Ljava/io/File;
+.end method
+
+.method public abstract getExternalFilesDirs(Ljava/lang/String;)[Ljava/io/File;
 .end method
 
 .method public abstract getFileStreamPath(Ljava/lang/String;)Ljava/io/File;
@@ -274,6 +322,12 @@
 .end method
 
 .method public abstract getObbDir()Ljava/io/File;
+.end method
+
+.method public abstract getObbDirs()[Ljava/io/File;
+.end method
+
+.method public abstract getOpPackageName()Ljava/lang/String;
 .end method
 
 .method public abstract getPackageCodePath()Ljava/lang/String;
@@ -359,6 +413,9 @@
     const/4 v0, 0x0
 
     return v0
+.end method
+
+.method public abstract getUserId()I
 .end method
 
 .method public abstract getWallpaper()Landroid/graphics/drawable/Drawable;
@@ -511,7 +568,13 @@
 .method public abstract registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
 .end method
 
+.method public abstract registerReceiverAsUser(Landroid/content/BroadcastReceiver;Landroid/os/UserHandle;Landroid/content/IntentFilter;Ljava/lang/String;Landroid/os/Handler;)Landroid/content/Intent;
+.end method
+
 .method public abstract removeStickyBroadcast(Landroid/content/Intent;)V
+.end method
+
+.method public abstract removeStickyBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
 .end method
 
 .method public abstract revokeUriPermission(Landroid/net/Uri;I)V
@@ -520,34 +583,40 @@
 .method public abstract sendBroadcast(Landroid/content/Intent;)V
 .end method
 
-.method public sendBroadcast(Landroid/content/Intent;I)V
-    .locals 2
-    .parameter "intent"
-    .parameter "userId"
-
-    .prologue
-    new-instance v0, Ljava/lang/RuntimeException;
-
-    const-string v1, "Not implemented. Must override in a subclass."
-
-    invoke-direct {v0, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;)V
-
-    throw v0
+.method public abstract sendBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
 .end method
 
-.method public abstract sendBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
+.method public abstract sendBroadcast(Landroid/content/Intent;Ljava/lang/String;I)V
+.end method
+
+.method public abstract sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+.end method
+
+.method public abstract sendBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;)V
 .end method
 
 .method public abstract sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;)V
 .end method
 
+.method public abstract sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;ILandroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+.end method
+
 .method public abstract sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+.end method
+
+.method public abstract sendOrderedBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
 .end method
 
 .method public abstract sendStickyBroadcast(Landroid/content/Intent;)V
 .end method
 
+.method public abstract sendStickyBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+.end method
+
 .method public abstract sendStickyOrderedBroadcast(Landroid/content/Intent;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+.end method
+
+.method public abstract sendStickyOrderedBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
 .end method
 
 .method public abstract setTheme(I)V
@@ -581,10 +650,57 @@
 .method public abstract startActivities([Landroid/content/Intent;Landroid/os/Bundle;)V
 .end method
 
+.method public startActivitiesAsUser([Landroid/content/Intent;Landroid/os/Bundle;Landroid/os/UserHandle;)V
+    .locals 2
+    .parameter "intents"
+    .parameter "options"
+    .parameter "userHandle"
+
+    .prologue
+    new-instance v0, Ljava/lang/RuntimeException;
+
+    const-string v1, "Not implemented. Must override in a subclass."
+
+    invoke-direct {v0, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+.end method
+
 .method public abstract startActivity(Landroid/content/Intent;)V
 .end method
 
 .method public abstract startActivity(Landroid/content/Intent;Landroid/os/Bundle;)V
+.end method
+
+.method public startActivityAsUser(Landroid/content/Intent;Landroid/os/Bundle;Landroid/os/UserHandle;)V
+    .locals 2
+    .parameter "intent"
+    .parameter "options"
+    .parameter "userId"
+
+    .prologue
+    new-instance v0, Ljava/lang/RuntimeException;
+
+    const-string v1, "Not implemented. Must override in a subclass."
+
+    invoke-direct {v0, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+.end method
+
+.method public startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
+    .locals 2
+    .parameter "intent"
+    .parameter "user"
+
+    .prologue
+    new-instance v0, Ljava/lang/RuntimeException;
+
+    const-string v1, "Not implemented. Must override in a subclass."
+
+    invoke-direct {v0, v1}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;)V
+
+    throw v0
 .end method
 
 .method public abstract startInstrumentation(Landroid/content/ComponentName;Ljava/lang/String;Landroid/os/Bundle;)Z
@@ -609,7 +725,13 @@
 .method public abstract startService(Landroid/content/Intent;)Landroid/content/ComponentName;
 .end method
 
+.method public abstract startServiceAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)Landroid/content/ComponentName;
+.end method
+
 .method public abstract stopService(Landroid/content/Intent;)Z
+.end method
+
+.method public abstract stopServiceAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)Z
 .end method
 
 .method public abstract unbindService(Landroid/content/ServiceConnection;)V

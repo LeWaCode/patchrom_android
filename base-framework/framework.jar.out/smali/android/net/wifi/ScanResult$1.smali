@@ -40,15 +40,33 @@
 
 # virtual methods
 .method public createFromParcel(Landroid/os/Parcel;)Landroid/net/wifi/ScanResult;
-    .locals 6
+    .locals 10
     .parameter "in"
 
     .prologue
-    new-instance v0, Landroid/net/wifi/ScanResult;
+    const/4 v1, 0x0
 
-    invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
+    .local v1, wifiSsid:Landroid/net/wifi/WifiSsid;
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v0
+
+    const/4 v2, 0x1
+
+    if-ne v0, v2, :cond_0
+
+    sget-object v0, Landroid/net/wifi/WifiSsid;->CREATOR:Landroid/os/Parcelable$Creator;
+
+    invoke-interface {v0, p1}, Landroid/os/Parcelable$Creator;->createFromParcel(Landroid/os/Parcel;)Ljava/lang/Object;
 
     move-result-object v1
+
+    .end local v1           #wifiSsid:Landroid/net/wifi/WifiSsid;
+    check-cast v1, Landroid/net/wifi/WifiSsid;
+
+    .restart local v1       #wifiSsid:Landroid/net/wifi/WifiSsid;
+    :cond_0
+    new-instance v0, Landroid/net/wifi/ScanResult;
 
     invoke-virtual {p1}, Landroid/os/Parcel;->readString()Ljava/lang/String;
 
@@ -66,7 +84,19 @@
 
     move-result v5
 
-    invoke-direct/range {v0 .. v5}, Landroid/net/wifi/ScanResult;-><init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II)V
+    invoke-virtual {p1}, Landroid/os/Parcel;->readLong()J
+
+    move-result-wide v6
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v8
+
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
+
+    move-result v9
+
+    invoke-direct/range {v0 .. v9}, Landroid/net/wifi/ScanResult;-><init>(Landroid/net/wifi/WifiSsid;Ljava/lang/String;Ljava/lang/String;IIJII)V
 
     return-object v0
 .end method

@@ -30,8 +30,6 @@
 
 .field height:I
 
-.field imageWallpaperComponent:Landroid/content/ComponentName;
-
 .field imageWallpaperPending:Z
 
 .field lastDiedTime:J
@@ -55,11 +53,11 @@
 
 # direct methods
 .method constructor <init>(I)V
-    .locals 4
+    .locals 3
     .parameter "userId"
 
     .prologue
-    const/4 v3, -0x1
+    const/4 v1, -0x1
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -67,25 +65,15 @@
 
     iput-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->name:Ljava/lang/String;
 
-    new-instance v0, Landroid/content/ComponentName;
-
-    const-string v1, "com.android.systemui"
-
-    const-string v2, "com.android.systemui.ImageWallpaper"
-
-    invoke-direct {v0, v1, v2}, Landroid/content/ComponentName;-><init>(Ljava/lang/String;Ljava/lang/String;)V
-
-    iput-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->imageWallpaperComponent:Landroid/content/ComponentName;
-
     new-instance v0, Landroid/os/RemoteCallbackList;
 
     invoke-direct {v0}, Landroid/os/RemoteCallbackList;-><init>()V
 
     iput-object v0, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->callbacks:Landroid/os/RemoteCallbackList;
 
-    iput v3, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->width:I
+    iput v1, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->width:I
 
-    iput v3, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->height:I
+    iput v1, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->height:I
 
     iput p1, p0, Lcom/android/server/WallpaperManagerService$WallpaperData;->userId:I
 

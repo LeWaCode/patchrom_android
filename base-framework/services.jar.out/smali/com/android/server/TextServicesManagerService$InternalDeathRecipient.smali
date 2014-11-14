@@ -64,7 +64,7 @@
     return-void
 .end method
 
-.method static synthetic access$900(Lcom/android/server/TextServicesManagerService$InternalDeathRecipient;)Lcom/android/server/TextServicesManagerService$SpellCheckerBindGroup;
+.method static synthetic access$1100(Lcom/android/server/TextServicesManagerService$InternalDeathRecipient;)Lcom/android/server/TextServicesManagerService$SpellCheckerBindGroup;
     .locals 1
     .parameter "x0"
 

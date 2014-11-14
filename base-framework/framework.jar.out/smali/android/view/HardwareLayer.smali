@@ -51,6 +51,9 @@
 
 
 # virtual methods
+.method abstract clearStorage()V
+.end method
+
 .method abstract copyInto(Landroid/graphics/Bitmap;)Z
 .end method
 
@@ -58,9 +61,6 @@
 .end method
 
 .method abstract end(Landroid/graphics/Canvas;)V
-.end method
-
-.method abstract flush()V
 .end method
 
 .method abstract getCanvas()Landroid/view/HardwareCanvas;
@@ -105,10 +105,10 @@
 .method abstract isValid()Z
 .end method
 
-.method abstract redraw(Landroid/view/DisplayList;Landroid/graphics/Rect;)V
+.method abstract redrawLater(Landroid/view/DisplayList;Landroid/graphics/Rect;)V
 .end method
 
-.method abstract resize(II)V
+.method abstract resize(II)Z
 .end method
 
 .method setDisplayList(Landroid/view/DisplayList;)V
@@ -121,10 +121,24 @@
     return-void
 .end method
 
+.method setLayerPaint(Landroid/graphics/Paint;)V
+    .locals 0
+    .parameter "paint"
+
+    .prologue
+    return-void
+.end method
+
+.method abstract setOpaque(Z)V
+.end method
+
 .method abstract setTransform(Landroid/graphics/Matrix;)V
 .end method
 
 .method abstract start(Landroid/graphics/Canvas;)Landroid/view/HardwareCanvas;
+.end method
+
+.method abstract start(Landroid/graphics/Canvas;Landroid/graphics/Rect;)Landroid/view/HardwareCanvas;
 .end method
 
 .method update(IIZ)V

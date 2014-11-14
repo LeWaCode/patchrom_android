@@ -127,6 +127,62 @@
     return-void
 .end method
 
+.method public static convertQuartSecToDecDegrees(I)D
+    .locals 4
+    .parameter "quartSec"
+
+    .prologue
+    int-to-double v0, p0
+
+    invoke-static {v0, v1}, Ljava/lang/Double;->isNaN(D)Z
+
+    move-result v0
+
+    if-nez v0, :cond_0
+
+    const v0, -0x278d00
+
+    if-lt p0, v0, :cond_0
+
+    const v0, 0x278d00
+
+    if-le p0, v0, :cond_1
+
+    :cond_0
+    new-instance v0, Ljava/lang/IllegalArgumentException;
+
+    new-instance v1, Ljava/lang/StringBuilder;
+
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "Invalid coordiante value:"
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-direct {v0, v1}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+
+    :cond_1
+    int-to-double v0, p0
+
+    const-wide v2, 0x40cc200000000000L
+
+    div-double/2addr v0, v2
+
+    return-wide v0
+.end method
+
 .method private static equalsHandlesNulls(Ljava/lang/Object;Ljava/lang/Object;)Z
     .locals 1
     .parameter "a"

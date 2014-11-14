@@ -6,16 +6,8 @@
 .implements Landroid/os/Parcelable;
 
 
-# annotations
-.annotation system Ldalvik/annotation/MemberClasses;
-    value = {
-        Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
-    }
-.end annotation
-
-
 # static fields
-.field public static final CREATOR:Landroid/os/Parcelable$Creator;
+.field public static final CREATOR:Landroid/os/Parcelable$Creator; = null
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Landroid/os/Parcelable$Creator",
@@ -26,13 +18,17 @@
     .end annotation
 .end field
 
+.field public static final MAX_GROUP_OWNER_INTENT:I = 0xf
+
+.field public static final MIN_GROUP_OWNER_INTENT:I
+
 
 # instance fields
 .field public deviceAddress:Ljava/lang/String;
 
 .field public groupOwnerIntent:I
 
-.field public persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+.field public netId:I
 
 .field public wps:Landroid/net/wifi/WpsInfo;
 
@@ -57,13 +53,17 @@
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
+    const-string v0, ""
+
+    iput-object v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->deviceAddress:Ljava/lang/String;
+
     const/4 v0, -0x1
 
     iput v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->groupOwnerIntent:I
 
-    sget-object v0, Landroid/net/wifi/p2p/WifiP2pConfig$Persist;->SYSTEM_DEFAULT:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    const/4 v0, -0x2
 
-    iput-object v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iput v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
     new-instance v0, Landroid/net/wifi/WpsInfo;
 
@@ -87,13 +87,17 @@
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
+    const-string v0, ""
+
+    iput-object v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->deviceAddress:Ljava/lang/String;
+
     const/4 v0, -0x1
 
     iput v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->groupOwnerIntent:I
 
-    sget-object v0, Landroid/net/wifi/p2p/WifiP2pConfig$Persist;->SYSTEM_DEFAULT:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    const/4 v0, -0x2
 
-    iput-object v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iput v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
     if-eqz p1, :cond_0
 
@@ -113,9 +117,9 @@
 
     iput v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->groupOwnerIntent:I
 
-    iget-object v0, p1, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iget v0, p1, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
-    iput-object v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iput v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
     :cond_0
     return-void
@@ -139,13 +143,17 @@
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
+    const-string v4, ""
+
+    iput-object v4, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->deviceAddress:Ljava/lang/String;
+
     const/4 v4, -0x1
 
     iput v4, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->groupOwnerIntent:I
 
-    sget-object v4, Landroid/net/wifi/p2p/WifiP2pConfig$Persist;->SYSTEM_DEFAULT:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    const/4 v4, -0x2
 
-    iput-object v4, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iput v4, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
     const-string v4, " "
 
@@ -259,8 +267,6 @@
 
     goto :goto_1
 
-    nop
-
     :pswitch_data_0
     .packed-switch 0x1
         :pswitch_1
@@ -280,6 +286,17 @@
     const/4 v0, 0x0
 
     return v0
+.end method
+
+.method invalidate()V
+    .locals 1
+
+    .prologue
+    const-string v0, ""
+
+    iput-object v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->deviceAddress:Ljava/lang/String;
+
+    return-void
 .end method
 
 .method public toString()Ljava/lang/String;
@@ -327,13 +344,9 @@
 
     move-result-object v1
 
-    iget-object v2, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iget v2, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
-    invoke-virtual {v2}, Landroid/net/wifi/p2p/WifiP2pConfig$Persist;->toString()Ljava/lang/String;
-
-    move-result-object v2
-
-    invoke-virtual {v1, v2}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuffer;->append(I)Ljava/lang/StringBuffer;
 
     invoke-virtual {v0}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
 
@@ -360,13 +373,9 @@
 
     invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
-    iget-object v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->persist:Landroid/net/wifi/p2p/WifiP2pConfig$Persist;
+    iget v0, p0, Landroid/net/wifi/p2p/WifiP2pConfig;->netId:I
 
-    invoke-virtual {v0}, Landroid/net/wifi/p2p/WifiP2pConfig$Persist;->name()Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeString(Ljava/lang/String;)V
+    invoke-virtual {p1, v0}, Landroid/os/Parcel;->writeInt(I)V
 
     return-void
 .end method

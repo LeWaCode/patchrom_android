@@ -40,17 +40,63 @@
 
 # virtual methods
 .method public createFromParcel(Landroid/os/Parcel;)Landroid/telephony/CellInfo;
-    .locals 2
+    .locals 3
     .parameter "in"
 
     .prologue
-    new-instance v0, Landroid/telephony/CellInfo;
+    invoke-virtual {p1}, Landroid/os/Parcel;->readInt()I
 
-    const/4 v1, 0x0
+    move-result v0
 
-    invoke-direct {v0, p1, v1}, Landroid/telephony/CellInfo;-><init>(Landroid/os/Parcel;Landroid/telephony/CellInfo$1;)V
+    .local v0, type:I
+    packed-switch v0, :pswitch_data_0
 
-    return-object v0
+    new-instance v1, Ljava/lang/RuntimeException;
+
+    const-string v2, "Bad CellInfo Parcel"
+
+    invoke-direct {v1, v2}, Ljava/lang/RuntimeException;-><init>(Ljava/lang/String;)V
+
+    throw v1
+
+    :pswitch_0
+    invoke-static {p1}, Landroid/telephony/CellInfoGsm;->createFromParcelBody(Landroid/os/Parcel;)Landroid/telephony/CellInfoGsm;
+
+    move-result-object v1
+
+    :goto_0
+    return-object v1
+
+    :pswitch_1
+    invoke-static {p1}, Landroid/telephony/CellInfoCdma;->createFromParcelBody(Landroid/os/Parcel;)Landroid/telephony/CellInfoCdma;
+
+    move-result-object v1
+
+    goto :goto_0
+
+    :pswitch_2
+    invoke-static {p1}, Landroid/telephony/CellInfoLte;->createFromParcelBody(Landroid/os/Parcel;)Landroid/telephony/CellInfoLte;
+
+    move-result-object v1
+
+    goto :goto_0
+
+    :pswitch_3
+    invoke-static {p1}, Landroid/telephony/CellInfoWcdma;->createFromParcelBody(Landroid/os/Parcel;)Landroid/telephony/CellInfoWcdma;
+
+    move-result-object v1
+
+    goto :goto_0
+
+    nop
+
+    :pswitch_data_0
+    .packed-switch 0x1
+        :pswitch_0
+        :pswitch_1
+        :pswitch_2
+        :pswitch_3
+    .end packed-switch
 .end method
 
 .method public bridge synthetic createFromParcel(Landroid/os/Parcel;)Ljava/lang/Object;

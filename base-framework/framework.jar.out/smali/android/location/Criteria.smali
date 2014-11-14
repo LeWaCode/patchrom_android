@@ -265,6 +265,88 @@
     return p1
 .end method
 
+.method private static accuracyToString(I)Ljava/lang/String;
+    .locals 1
+    .parameter "accuracy"
+
+    .prologue
+    packed-switch p0, :pswitch_data_0
+
+    const-string v0, "???"
+
+    :goto_0
+    return-object v0
+
+    :pswitch_0
+    const-string v0, "---"
+
+    goto :goto_0
+
+    :pswitch_1
+    const-string v0, "HIGH"
+
+    goto :goto_0
+
+    :pswitch_2
+    const-string v0, "MEDIUM"
+
+    goto :goto_0
+
+    :pswitch_3
+    const-string v0, "LOW"
+
+    goto :goto_0
+
+    :pswitch_data_0
+    .packed-switch 0x0
+        :pswitch_0
+        :pswitch_3
+        :pswitch_2
+        :pswitch_1
+    .end packed-switch
+.end method
+
+.method private static powerToString(I)Ljava/lang/String;
+    .locals 1
+    .parameter "power"
+
+    .prologue
+    packed-switch p0, :pswitch_data_0
+
+    const-string v0, "???"
+
+    :goto_0
+    return-object v0
+
+    :pswitch_0
+    const-string v0, "NO_REQ"
+
+    goto :goto_0
+
+    :pswitch_1
+    const-string v0, "LOW"
+
+    goto :goto_0
+
+    :pswitch_2
+    const-string v0, "MEDIUM"
+
+    goto :goto_0
+
+    :pswitch_3
+    const-string v0, "HIGH"
+
+    goto :goto_0
+
+    :pswitch_data_0
+    .packed-switch 0x0
+        :pswitch_0
+        :pswitch_1
+        :pswitch_2
+        :pswitch_3
+    .end packed-switch
+.end method
+
 
 # virtual methods
 .method public describeContents()I
@@ -680,6 +762,54 @@
     iput p1, p0, Landroid/location/Criteria;->mVerticalAccuracy:I
 
     return-void
+.end method
+
+.method public toString()Ljava/lang/String;
+    .locals 3
+
+    .prologue
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    .local v0, s:Ljava/lang/StringBuilder;
+    const-string v1, "Criteria[power="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget v2, p0, Landroid/location/Criteria;->mPowerRequirement:I
+
+    invoke-static {v2}, Landroid/location/Criteria;->powerToString(I)Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const-string v1, " acc="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v1
+
+    iget v2, p0, Landroid/location/Criteria;->mHorizontalAccuracy:I
+
+    invoke-static {v2}, Landroid/location/Criteria;->accuracyToString(I)Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    const/16 v1, 0x5d
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    return-object v1
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V

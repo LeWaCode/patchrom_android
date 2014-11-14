@@ -21,6 +21,8 @@
 
 
 # instance fields
+.field public canDisableShutterSound:Z
+
 .field public facing:I
 
 .field public orientation:I

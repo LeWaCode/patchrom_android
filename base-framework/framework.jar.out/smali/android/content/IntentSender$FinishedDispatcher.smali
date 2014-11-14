@@ -54,7 +54,7 @@
 
 
 # virtual methods
-.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
+.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
     .locals 1
     .parameter "intent"
     .parameter "resultCode"
@@ -62,6 +62,7 @@
     .parameter "extras"
     .parameter "serialized"
     .parameter "sticky"
+    .parameter "sendingUser"
 
     .prologue
     iput-object p1, p0, Landroid/content/IntentSender$FinishedDispatcher;->mIntent:Landroid/content/Intent;

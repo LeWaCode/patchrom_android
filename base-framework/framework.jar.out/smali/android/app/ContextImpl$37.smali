@@ -26,18 +26,30 @@
 
 
 # virtual methods
-.method public getService(Landroid/app/ContextImpl;)Ljava/lang/Object;
-    .locals 1
+.method public createService(Landroid/app/ContextImpl;)Ljava/lang/Object;
+    .locals 4
     .parameter "ctx"
 
     .prologue
-    iget-object v0, p1, Landroid/app/ContextImpl;->mPackageInfo:Landroid/app/LoadedApk;
+    const-string v2, "wifi"
 
-    iget-object v0, v0, Landroid/app/LoadedApk;->mCompatibilityInfo:Landroid/view/CompatibilityInfoHolder;
-
-    invoke-static {v0}, Landroid/view/WindowManagerImpl;->getDefault(Landroid/view/CompatibilityInfoHolder;)Landroid/view/WindowManager;
+    invoke-static {v2}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
 
     move-result-object v0
 
-    return-object v0
+    .local v0, b:Landroid/os/IBinder;
+    invoke-static {v0}, Landroid/net/wifi/IWifiManager$Stub;->asInterface(Landroid/os/IBinder;)Landroid/net/wifi/IWifiManager;
+
+    move-result-object v1
+
+    .local v1, service:Landroid/net/wifi/IWifiManager;
+    new-instance v2, Landroid/net/wifi/WifiManager;
+
+    invoke-virtual {p1}, Landroid/app/ContextImpl;->getOuterContext()Landroid/content/Context;
+
+    move-result-object v3
+
+    invoke-direct {v2, v3, v1}, Landroid/net/wifi/WifiManager;-><init>(Landroid/content/Context;Landroid/net/wifi/IWifiManager;)V
+
+    return-object v2
 .end method

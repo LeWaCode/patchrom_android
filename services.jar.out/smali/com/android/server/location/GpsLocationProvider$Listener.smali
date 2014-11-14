@@ -20,14 +20,12 @@
 # instance fields
 .field final mListener:Landroid/location/IGpsStatusListener;
 
-.field mSensors:I
-
 .field final synthetic this$0:Lcom/android/server/location/GpsLocationProvider;
 
 
 # direct methods
 .method constructor <init>(Lcom/android/server/location/GpsLocationProvider;Landroid/location/IGpsStatusListener;)V
-    .locals 1
+    .locals 0
     .parameter
     .parameter "listener"
 
@@ -35,10 +33,6 @@
     iput-object p1, p0, Lcom/android/server/location/GpsLocationProvider$Listener;->this$0:Lcom/android/server/location/GpsLocationProvider;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
-
-    const/4 v0, 0x0
-
-    iput v0, p0, Lcom/android/server/location/GpsLocationProvider$Listener;->mSensors:I
 
     iput-object p2, p0, Lcom/android/server/location/GpsLocationProvider$Listener;->mListener:Landroid/location/IGpsStatusListener;
 
@@ -51,6 +45,19 @@
     .locals 2
 
     .prologue
+    invoke-static {}, Lcom/android/server/location/GpsLocationProvider;->access$100()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_0
+
+    const-string v0, "GpsLocationProvider"
+
+    const-string v1, "GPS status listener died"
+
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    :cond_0
     iget-object v0, p0, Lcom/android/server/location/GpsLocationProvider$Listener;->this$0:Lcom/android/server/location/GpsLocationProvider;
 
     #getter for: Lcom/android/server/location/GpsLocationProvider;->mListeners:Ljava/util/ArrayList;
@@ -76,7 +83,7 @@
 
     iget-object v0, p0, Lcom/android/server/location/GpsLocationProvider$Listener;->mListener:Landroid/location/IGpsStatusListener;
 
-    if-eqz v0, :cond_0
+    if-eqz v0, :cond_1
 
     iget-object v0, p0, Lcom/android/server/location/GpsLocationProvider$Listener;->mListener:Landroid/location/IGpsStatusListener;
 
@@ -88,7 +95,7 @@
 
     invoke-interface {v0, p0, v1}, Landroid/os/IBinder;->unlinkToDeath(Landroid/os/IBinder$DeathRecipient;I)Z
 
-    :cond_0
+    :cond_1
     return-void
 
     :catchall_0

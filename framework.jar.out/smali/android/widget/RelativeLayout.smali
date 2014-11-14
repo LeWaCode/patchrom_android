@@ -24,17 +24,25 @@
 
 .field public static final ALIGN_BOTTOM:I = 0x8
 
+.field public static final ALIGN_END:I = 0x13
+
 .field public static final ALIGN_LEFT:I = 0x5
 
 .field public static final ALIGN_PARENT_BOTTOM:I = 0xc
+
+.field public static final ALIGN_PARENT_END:I = 0x15
 
 .field public static final ALIGN_PARENT_LEFT:I = 0x9
 
 .field public static final ALIGN_PARENT_RIGHT:I = 0xb
 
+.field public static final ALIGN_PARENT_START:I = 0x14
+
 .field public static final ALIGN_PARENT_TOP:I = 0xa
 
 .field public static final ALIGN_RIGHT:I = 0x7
+
+.field public static final ALIGN_START:I = 0x12
 
 .field public static final ALIGN_TOP:I = 0x6
 
@@ -46,11 +54,11 @@
 
 .field public static final CENTER_VERTICAL:I = 0xf
 
-.field private static final DEBUG_GRAPH:Z = false
+.field private static final DEFAULT_WIDTH:I = 0x10000
+
+.field public static final END_OF:I = 0x11
 
 .field public static final LEFT_OF:I = 0x0
-
-.field private static final LOG_TAG:Ljava/lang/String; = "RelativeLayout"
 
 .field public static final RIGHT_OF:I = 0x1
 
@@ -58,12 +66,16 @@
 
 .field private static final RULES_VERTICAL:[I = null
 
+.field public static final START_OF:I = 0x10
+
 .field public static final TRUE:I = -0x1
 
-.field private static final VERB_COUNT:I = 0x10
+.field private static final VERB_COUNT:I = 0x16
 
 
 # instance fields
+.field private mAllowBrokenMeasureSpecs:Z
+
 .field private mBaselineView:Landroid/view/View;
 
 .field private final mContentBounds:Landroid/graphics/Rect;
@@ -77,6 +89,8 @@
 .field private mHasBaselineAlignedChild:Z
 
 .field private mIgnoreGravity:I
+
+.field private mMeasureVerticalWithPaddingMargin:Z
 
 .field private final mSelfBounds:Landroid/graphics/Rect;
 
@@ -109,7 +123,7 @@
 
     sput-object v0, Landroid/widget/RelativeLayout;->RULES_VERTICAL:[I
 
-    const/4 v0, 0x4
+    const/16 v0, 0x8
 
     new-array v0, v0, [I
 
@@ -118,8 +132,6 @@
     sput-object v0, Landroid/widget/RelativeLayout;->RULES_HORIZONTAL:[I
 
     return-void
-
-    nop
 
     :array_0
     .array-data 0x4
@@ -136,6 +148,10 @@
         0x1t 0x0t 0x0t 0x0t
         0x5t 0x0t 0x0t 0x0t
         0x7t 0x0t 0x0t 0x0t
+        0x10t 0x0t 0x0t 0x0t
+        0x11t 0x0t 0x0t 0x0t
+        0x12t 0x0t 0x0t 0x0t
+        0x13t 0x0t 0x0t 0x0t
     .end array-data
 .end method
 
@@ -152,7 +168,7 @@
 
     iput-object v1, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
 
-    const/16 v0, 0x33
+    const v0, 0x800033
 
     iput v0, p0, Landroid/widget/RelativeLayout;->mGravity:I
 
@@ -170,19 +186,17 @@
 
     iput-object v1, p0, Landroid/widget/RelativeLayout;->mTopToBottomLeftToRightSet:Ljava/util/SortedSet;
 
-    new-array v0, v2, [Landroid/view/View;
-
-    iput-object v0, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
-
-    new-array v0, v2, [Landroid/view/View;
-
-    iput-object v0, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
-
     new-instance v0, Landroid/widget/RelativeLayout$DependencyGraph;
 
     invoke-direct {v0, v1}, Landroid/widget/RelativeLayout$DependencyGraph;-><init>(Landroid/widget/RelativeLayout$1;)V
 
     iput-object v0, p0, Landroid/widget/RelativeLayout;->mGraph:Landroid/widget/RelativeLayout$DependencyGraph;
+
+    iput-boolean v2, p0, Landroid/widget/RelativeLayout;->mAllowBrokenMeasureSpecs:Z
+
+    iput-boolean v2, p0, Landroid/widget/RelativeLayout;->mMeasureVerticalWithPaddingMargin:Z
+
+    invoke-direct {p0, p1}, Landroid/widget/RelativeLayout;->queryCompatibilityModes(Landroid/content/Context;)V
 
     return-void
 .end method
@@ -201,7 +215,7 @@
 
     iput-object v1, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
 
-    const/16 v0, 0x33
+    const v0, 0x800033
 
     iput v0, p0, Landroid/widget/RelativeLayout;->mGravity:I
 
@@ -219,21 +233,19 @@
 
     iput-object v1, p0, Landroid/widget/RelativeLayout;->mTopToBottomLeftToRightSet:Ljava/util/SortedSet;
 
-    new-array v0, v2, [Landroid/view/View;
-
-    iput-object v0, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
-
-    new-array v0, v2, [Landroid/view/View;
-
-    iput-object v0, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
-
     new-instance v0, Landroid/widget/RelativeLayout$DependencyGraph;
 
     invoke-direct {v0, v1}, Landroid/widget/RelativeLayout$DependencyGraph;-><init>(Landroid/widget/RelativeLayout$1;)V
 
     iput-object v0, p0, Landroid/widget/RelativeLayout;->mGraph:Landroid/widget/RelativeLayout$DependencyGraph;
 
+    iput-boolean v2, p0, Landroid/widget/RelativeLayout;->mAllowBrokenMeasureSpecs:Z
+
+    iput-boolean v2, p0, Landroid/widget/RelativeLayout;->mMeasureVerticalWithPaddingMargin:Z
+
     invoke-direct {p0, p1, p2}, Landroid/widget/RelativeLayout;->initFromAttributes(Landroid/content/Context;Landroid/util/AttributeSet;)V
+
+    invoke-direct {p0, p1}, Landroid/widget/RelativeLayout;->queryCompatibilityModes(Landroid/content/Context;)V
 
     return-void
 .end method
@@ -253,7 +265,7 @@
 
     iput-object v1, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
 
-    const/16 v0, 0x33
+    const v0, 0x800033
 
     iput v0, p0, Landroid/widget/RelativeLayout;->mGravity:I
 
@@ -271,48 +283,51 @@
 
     iput-object v1, p0, Landroid/widget/RelativeLayout;->mTopToBottomLeftToRightSet:Ljava/util/SortedSet;
 
-    new-array v0, v2, [Landroid/view/View;
-
-    iput-object v0, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
-
-    new-array v0, v2, [Landroid/view/View;
-
-    iput-object v0, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
-
     new-instance v0, Landroid/widget/RelativeLayout$DependencyGraph;
 
     invoke-direct {v0, v1}, Landroid/widget/RelativeLayout$DependencyGraph;-><init>(Landroid/widget/RelativeLayout$1;)V
 
     iput-object v0, p0, Landroid/widget/RelativeLayout;->mGraph:Landroid/widget/RelativeLayout$DependencyGraph;
 
+    iput-boolean v2, p0, Landroid/widget/RelativeLayout;->mAllowBrokenMeasureSpecs:Z
+
+    iput-boolean v2, p0, Landroid/widget/RelativeLayout;->mMeasureVerticalWithPaddingMargin:Z
+
     invoke-direct {p0, p1, p2}, Landroid/widget/RelativeLayout;->initFromAttributes(Landroid/content/Context;Landroid/util/AttributeSet;)V
+
+    invoke-direct {p0, p1}, Landroid/widget/RelativeLayout;->queryCompatibilityModes(Landroid/content/Context;)V
 
     return-void
 .end method
 
 .method private alignBaseline(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;)V
-    .locals 9
+    .locals 10
     .parameter "child"
     .parameter "params"
 
     .prologue
-    const/4 v7, 0x4
+    const/4 v8, 0x4
 
-    const/4 v8, -0x1
+    const/4 v9, -0x1
 
-    invoke-virtual {p2}, Landroid/widget/RelativeLayout$LayoutParams;->getRules()[I
+    invoke-virtual {p0}, Landroid/widget/RelativeLayout;->getLayoutDirection()I
 
-    move-result-object v6
+    move-result v4
 
-    .local v6, rules:[I
-    invoke-direct {p0, v6, v7}, Landroid/widget/RelativeLayout;->getRelatedViewBaseline([II)I
+    .local v4, layoutDirection:I
+    invoke-virtual {p2, v4}, Landroid/widget/RelativeLayout$LayoutParams;->getRules(I)[I
+
+    move-result-object v7
+
+    .local v7, rules:[I
+    invoke-direct {p0, v7, v8}, Landroid/widget/RelativeLayout;->getRelatedViewBaseline([II)I
 
     move-result v0
 
     .local v0, anchorBaseline:I
-    if-eq v0, v8, :cond_1
+    if-eq v0, v9, :cond_1
 
-    invoke-direct {p0, v6, v7}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
+    invoke-direct {p0, v7, v8}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
 
     move-result-object v1
 
@@ -322,55 +337,55 @@
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
     invoke-static {v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v7
+    move-result v8
 
-    add-int v5, v7, v0
+    add-int v6, v8, v0
 
-    .local v5, offset:I
+    .local v6, offset:I
     invoke-virtual {p1}, Landroid/view/View;->getBaseline()I
 
     move-result v2
 
     .local v2, baseline:I
-    if-eq v2, v8, :cond_0
+    if-eq v2, v9, :cond_0
 
-    sub-int/2addr v5, v2
+    sub-int/2addr v6, v2
 
     :cond_0
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v7
+    move-result v8
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v9
+
+    sub-int v3, v8, v9
+
+    .local v3, height:I
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
+    invoke-static {p2, v6}, Landroid/widget/RelativeLayout$LayoutParams;->access$402(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
     invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v8
 
-    sub-int v3, v7, v8
-
-    .local v3, height:I
-    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static {p2, v5}, Landroid/widget/RelativeLayout$LayoutParams;->access$402(Landroid/widget/RelativeLayout$LayoutParams;I)I
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v7
-
-    add-int/2addr v7, v3
+    add-int/2addr v8, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2, v7}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v8}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     .end local v1           #anchorParams:Landroid/widget/RelativeLayout$LayoutParams;
     .end local v2           #baseline:I
     .end local v3           #height:I
-    .end local v5           #offset:I
+    .end local v6           #offset:I
     :cond_1
-    iget-object v7, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
+    iget-object v8, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
 
-    if-nez v7, :cond_3
+    if-nez v8, :cond_3
 
     iput-object p1, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
 
@@ -379,50 +394,50 @@
     return-void
 
     :cond_3
-    iget-object v7, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
+    iget-object v8, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
 
-    invoke-virtual {v7}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
+    invoke-virtual {v8}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
-    move-result-object v4
+    move-result-object v5
 
-    check-cast v4, Landroid/widget/RelativeLayout$LayoutParams;
+    check-cast v5, Landroid/widget/RelativeLayout$LayoutParams;
 
-    .local v4, lp:Landroid/widget/RelativeLayout$LayoutParams;
+    .local v5, lp:Landroid/widget/RelativeLayout$LayoutParams;
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
     invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v7
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static {v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
-
     move-result v8
 
-    if-lt v7, v8, :cond_4
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
+    invoke-static {v5}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v9
+
+    if-lt v8, v9, :cond_4
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
     invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v7
+    move-result v8
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static {v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v5}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v9
+
+    if-ne v8, v9, :cond_2
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v8
 
-    if-ne v7, v8, :cond_2
-
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v5}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v7
+    move-result v9
 
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v8
-
-    if-ge v7, v8, :cond_2
+    if-ge v8, v9, :cond_2
 
     :cond_4
     iput-object p1, p0, Landroid/widget/RelativeLayout;->mBaselineView:Landroid/view/View;
@@ -430,34 +445,30 @@
     goto :goto_0
 .end method
 
-.method private applyHorizontalSizeRules(Landroid/widget/RelativeLayout$LayoutParams;I)V
-    .locals 8
+.method private applyHorizontalSizeRules(Landroid/widget/RelativeLayout$LayoutParams;I[I)V
+    .locals 7
     .parameter "childParams"
     .parameter "myWidth"
+    .parameter "rules"
 
     .prologue
-    const/4 v7, 0x7
+    const/4 v6, 0x7
 
-    const/4 v6, 0x5
+    const/4 v5, 0x5
 
-    const/4 v5, 0x1
+    const/4 v4, 0x1
 
-    const/4 v3, 0x0
+    const/4 v2, 0x0
 
-    const/4 v2, -0x1
+    const/4 v1, -0x1
 
-    invoke-virtual {p1}, Landroid/widget/RelativeLayout$LayoutParams;->getRules()[I
-
-    move-result-object v1
-
-    .local v1, rules:[I
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
-    invoke-direct {p0, v1, v3}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
+    invoke-direct {p0, p3, v2}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
 
     move-result-object v0
 
@@ -465,210 +476,210 @@
     if-eqz v0, :cond_6
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v2
+    move-result v1
 
-    iget v3, v0, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
+    iget v2, v0, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
-    iget v4, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
-    add-int/2addr v3, v4
+    add-int/2addr v2, v3
 
-    sub-int/2addr v2, v3
+    sub-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_0
     :goto_0
-    invoke-direct {p0, v1, v5}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
+    invoke-direct {p0, p3, v4}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
 
     move-result-object v0
 
     if-eqz v0, :cond_7
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v2
+    move-result v1
 
-    iget v3, v0, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+    iget v2, v0, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
-    iget v4, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
-
-    add-int/2addr v3, v4
+    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
     add-int/2addr v2, v3
 
+    add-int/2addr v1, v2
+
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_1
     :goto_1
-    invoke-direct {p0, v1, v6}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
+    invoke-direct {p0, p3, v5}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
 
     move-result-object v0
 
     if-eqz v0, :cond_8
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v2
+    move-result v1
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
-    add-int/2addr v2, v3
+    add-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_2
     :goto_2
-    invoke-direct {p0, v1, v7}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
+    invoke-direct {p0, p3, v6}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
 
     move-result-object v0
 
     if-eqz v0, :cond_9
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v2
+    move-result v1
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
-    sub-int/2addr v2, v3
+    sub-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_3
     :goto_3
-    const/16 v2, 0x9
+    const/16 v1, 0x9
 
-    aget v2, v1, v2
+    aget v1, p3, v1
 
-    if-eqz v2, :cond_4
+    if-eqz v1, :cond_4
 
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
+    iget v1, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
-    add-int/2addr v2, v3
+    add-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_4
-    const/16 v2, 0xb
+    const/16 v1, 0xb
 
-    aget v2, v1, v2
+    aget v1, p3, v1
 
-    if-eqz v2, :cond_5
+    if-eqz v1, :cond_5
 
     if-ltz p2, :cond_5
 
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingRight:I
+    iget v1, p0, Landroid/widget/RelativeLayout;->mPaddingRight:I
 
-    sub-int v2, p2, v2
+    sub-int v1, p2, v1
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
-    sub-int/2addr v2, v3
+    sub-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_5
     return-void
 
     :cond_6
-    iget-boolean v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
+    iget-boolean v1, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
 
-    if-eqz v2, :cond_0
+    if-eqz v1, :cond_0
 
-    aget v2, v1, v3
+    aget v1, p3, v2
 
-    if-eqz v2, :cond_0
+    if-eqz v1, :cond_0
 
     if-ltz p2, :cond_0
 
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingRight:I
+    iget v1, p0, Landroid/widget/RelativeLayout;->mPaddingRight:I
 
-    sub-int v2, p2, v2
+    sub-int v1, p2, v1
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
-    sub-int/2addr v2, v3
+    sub-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_0
 
     :cond_7
-    iget-boolean v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
+    iget-boolean v1, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
 
-    if-eqz v2, :cond_1
+    if-eqz v1, :cond_1
 
-    aget v2, v1, v5
+    aget v1, p3, v4
 
-    if-eqz v2, :cond_1
+    if-eqz v1, :cond_1
 
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
+    iget v1, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
-    add-int/2addr v2, v3
+    add-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_1
 
     :cond_8
-    iget-boolean v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
+    iget-boolean v1, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
 
-    if-eqz v2, :cond_2
+    if-eqz v1, :cond_2
 
-    aget v2, v1, v6
+    aget v1, p3, v5
 
-    if-eqz v2, :cond_2
+    if-eqz v1, :cond_2
 
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
+    iget v1, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
-    add-int/2addr v2, v3
+    add-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_2
 
     :cond_9
-    iget-boolean v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
+    iget-boolean v1, p1, Landroid/widget/RelativeLayout$LayoutParams;->alignWithParent:Z
 
-    if-eqz v2, :cond_3
+    if-eqz v1, :cond_3
 
-    aget v2, v1, v7
+    aget v1, p3, v6
 
-    if-eqz v2, :cond_3
+    if-eqz v1, :cond_3
 
     if-ltz p2, :cond_3
 
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingRight:I
+    iget v1, p0, Landroid/widget/RelativeLayout;->mPaddingRight:I
 
-    sub-int v2, p2, v2
+    sub-int v1, p2, v1
 
-    iget v3, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+    iget v2, p1, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
-    sub-int/2addr v2, v3
+    sub-int/2addr v1, v2
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_3
 .end method
@@ -698,7 +709,7 @@
     invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$402(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     invoke-direct {p0, v1, v3}, Landroid/widget/RelativeLayout;->getRelatedViewParams([II)Landroid/widget/RelativeLayout$LayoutParams;
 
@@ -721,7 +732,7 @@
     sub-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_0
     :goto_0
@@ -732,7 +743,7 @@
     if-eqz v0, :cond_8
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -776,7 +787,7 @@
     if-eqz v0, :cond_a
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v0}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -785,7 +796,7 @@
     sub-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_3
     :goto_3
@@ -822,7 +833,7 @@
     sub-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_5
     const/4 v2, 0x4
@@ -858,7 +869,7 @@
     sub-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_0
 
@@ -922,69 +933,69 @@
     sub-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_3
 .end method
 
-.method private centerHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
+.method private static centerHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
     .locals 3
     .parameter "child"
     .parameter "params"
     .parameter "myWidth"
 
     .prologue
-    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+    invoke-virtual {p0}, Landroid/view/View;->getMeasuredWidth()I
 
     move-result v0
 
     .local v0, childWidth:I
-    sub-int v2, p3, v0
+    sub-int v2, p2, v0
 
     div-int/lit8 v1, v2, 0x2
 
     .local v1, left:I
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     add-int v2, v1, v0
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     return-void
 .end method
 
-.method private centerVertical(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
+.method private static centerVertical(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
     .locals 3
     .parameter "child"
     .parameter "params"
     .parameter "myHeight"
 
     .prologue
-    invoke-virtual {p1}, Landroid/view/View;->getMeasuredHeight()I
+    invoke-virtual {p0}, Landroid/view/View;->getMeasuredHeight()I
 
     move-result v0
 
     .local v0, childHeight:I
-    sub-int v2, p3, v0
+    sub-int v2, p2, v0
 
     div-int/lit8 v1, v2, 0x2
 
     .local v1, top:I
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static {p2, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$402(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$402(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     add-int v2, v1, v0
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p1, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     return-void
 .end method
 
 .method private getChildMeasureSpec(IIIIIIII)I
-    .locals 6
+    .locals 7
     .parameter "childStart"
     .parameter "childEnd"
     .parameter "childSize"
@@ -995,6 +1006,33 @@
     .parameter "mySize"
 
     .prologue
+    const/4 v6, 0x0
+
+    if-gez p8, :cond_1
+
+    iget-boolean v5, p0, Landroid/widget/RelativeLayout;->mAllowBrokenMeasureSpecs:Z
+
+    if-nez v5, :cond_1
+
+    if-ltz p3, :cond_0
+
+    const/high16 v5, 0x4000
+
+    invoke-static {p3, v5}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+
+    move-result v5
+
+    :goto_0
+    return v5
+
+    :cond_0
+    invoke-static {v6, v6}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+
+    move-result v5
+
+    goto :goto_0
+
+    :cond_1
     const/4 v0, 0x0
 
     .local v0, childSpecMode:I
@@ -1007,85 +1045,85 @@
     move v3, p2
 
     .local v3, tempEnd:I
-    if-gez v4, :cond_0
+    if-gez v4, :cond_2
 
     add-int v4, p6, p4
 
-    :cond_0
-    if-gez v3, :cond_1
+    :cond_2
+    if-gez v3, :cond_3
 
     sub-int v5, p8, p7
 
     sub-int v3, v5, p5
 
-    :cond_1
+    :cond_3
     sub-int v2, v3, v4
 
     .local v2, maxAvailable:I
-    if-ltz p1, :cond_3
+    if-ltz p1, :cond_5
 
-    if-ltz p2, :cond_3
+    if-ltz p2, :cond_5
 
     const/high16 v0, 0x4000
 
     move v1, v2
 
-    :cond_2
-    :goto_0
+    :cond_4
+    :goto_1
     invoke-static {v1, v0}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
 
     move-result v5
 
-    return v5
+    goto :goto_0
 
-    :cond_3
-    if-ltz p3, :cond_5
+    :cond_5
+    if-ltz p3, :cond_7
 
     const/high16 v0, 0x4000
 
-    if-ltz v2, :cond_4
+    if-ltz v2, :cond_6
 
     invoke-static {v2, p3}, Ljava/lang/Math;->min(II)I
 
     move-result v1
 
-    goto :goto_0
+    goto :goto_1
 
-    :cond_4
+    :cond_6
     move v1, p3
 
-    goto :goto_0
+    goto :goto_1
 
-    :cond_5
+    :cond_7
     const/4 v5, -0x1
 
-    if-ne p3, v5, :cond_6
+    if-ne p3, v5, :cond_8
 
     const/high16 v0, 0x4000
 
     move v1, v2
 
-    goto :goto_0
+    goto :goto_1
 
-    :cond_6
+    :cond_8
     const/4 v5, -0x2
 
-    if-ne p3, v5, :cond_2
+    if-ne p3, v5, :cond_4
 
-    if-ltz v2, :cond_7
+    if-ltz v2, :cond_9
 
     const/high16 v0, -0x8000
 
     move v1, v2
 
-    goto :goto_0
+    goto :goto_1
 
-    :cond_7
+    :cond_9
     const/4 v0, 0x0
 
     const/4 v1, 0x0
 
-    goto :goto_0
+    goto :goto_1
 .end method
 
 .method private getRelatedView([II)Landroid/view/View;
@@ -1144,7 +1182,11 @@
 
     check-cast v3, Landroid/widget/RelativeLayout$LayoutParams;
 
-    invoke-virtual {v3}, Landroid/widget/RelativeLayout$LayoutParams;->getRules()[I
+    invoke-virtual {v2}, Landroid/view/View;->getLayoutDirection()I
+
+    move-result v5
+
+    invoke-virtual {v3, v5}, Landroid/widget/RelativeLayout$LayoutParams;->getRules(I)[I
 
     move-result-object p1
 
@@ -1295,12 +1337,12 @@
 
     .prologue
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v1
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -1329,7 +1371,7 @@
     move-result v1
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -1358,7 +1400,7 @@
 .end method
 
 .method private measureChildHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;II)V
-    .locals 11
+    .locals 12
     .parameter "child"
     .parameter "params"
     .parameter "myWidth"
@@ -1366,12 +1408,12 @@
 
     .prologue
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v1
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -1394,15 +1436,51 @@
     move-result v10
 
     .local v10, childWidthMeasureSpec:I
-    iget v0, p2, Landroid/widget/RelativeLayout$LayoutParams;->width:I
+    move/from16 v11, p4
 
-    const/4 v1, -0x1
+    .local v11, maxHeight:I
+    iget-boolean v0, p0, Landroid/widget/RelativeLayout;->mMeasureVerticalWithPaddingMargin:Z
 
-    if-ne v0, v1, :cond_0
+    if-eqz v0, :cond_0
 
-    const/high16 v0, 0x4000
+    const/4 v0, 0x0
 
-    invoke-static {p4, v0}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+    iget v1, p0, Landroid/widget/RelativeLayout;->mPaddingTop:I
+
+    sub-int v1, p4, v1
+
+    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingBottom:I
+
+    sub-int/2addr v1, v2
+
+    iget v2, p2, Landroid/widget/RelativeLayout$LayoutParams;->topMargin:I
+
+    sub-int/2addr v1, v2
+
+    iget v2, p2, Landroid/widget/RelativeLayout$LayoutParams;->bottomMargin:I
+
+    sub-int/2addr v1, v2
+
+    invoke-static {v0, v1}, Ljava/lang/Math;->max(II)I
+
+    move-result v11
+
+    :cond_0
+    if-gez p4, :cond_2
+
+    iget-boolean v0, p0, Landroid/widget/RelativeLayout;->mAllowBrokenMeasureSpecs:Z
+
+    if-nez v0, :cond_2
+
+    iget v0, p2, Landroid/widget/RelativeLayout$LayoutParams;->height:I
+
+    if-ltz v0, :cond_1
+
+    iget v0, p2, Landroid/widget/RelativeLayout$LayoutParams;->height:I
+
+    const/high16 v1, 0x4000
+
+    invoke-static {v0, v1}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
 
     move-result v9
 
@@ -1413,10 +1491,40 @@
     return-void
 
     .end local v9           #childHeightMeasureSpec:I
-    :cond_0
+    :cond_1
+    const/4 v0, 0x0
+
+    const/4 v1, 0x0
+
+    invoke-static {v0, v1}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+
+    move-result v9
+
+    .restart local v9       #childHeightMeasureSpec:I
+    goto :goto_0
+
+    .end local v9           #childHeightMeasureSpec:I
+    :cond_2
+    iget v0, p2, Landroid/widget/RelativeLayout$LayoutParams;->width:I
+
+    const/4 v1, -0x1
+
+    if-ne v0, v1, :cond_3
+
+    const/high16 v0, 0x4000
+
+    invoke-static {v11, v0}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+
+    move-result v9
+
+    .restart local v9       #childHeightMeasureSpec:I
+    goto :goto_0
+
+    .end local v9           #childHeightMeasureSpec:I
+    :cond_3
     const/high16 v0, -0x8000
 
-    invoke-static {p4, v0}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
+    invoke-static {v11, v0}, Landroid/view/View$MeasureSpec;->makeMeasureSpec(II)I
 
     move-result v9
 
@@ -1425,180 +1533,219 @@
 .end method
 
 .method private positionChildHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;IZ)Z
-    .locals 4
+    .locals 5
     .parameter "child"
     .parameter "params"
     .parameter "myWidth"
     .parameter "wrapContent"
 
     .prologue
-    const/4 v1, 0x1
+    const/4 v2, 0x1
 
-    invoke-virtual {p2}, Landroid/widget/RelativeLayout$LayoutParams;->getRules()[I
+    invoke-virtual {p0}, Landroid/widget/RelativeLayout;->getLayoutDirection()I
 
-    move-result-object v0
+    move-result v0
 
-    .local v0, rules:[I
+    .local v0, layoutDirection:I
+    invoke-virtual {p2, v0}, Landroid/widget/RelativeLayout$LayoutParams;->getRules(I)[I
+
+    move-result-object v1
+
+    .local v1, rules:[I
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    if-gez v2, :cond_1
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
     invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    if-ltz v2, :cond_1
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
 
     move-result v3
 
-    sub-int/2addr v2, v3
+    if-gez v3, :cond_1
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v3
+
+    if-ltz v3, :cond_1
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v3
+
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v4
+
+    sub-int/2addr v3, v4
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     :cond_0
     :goto_0
-    const/16 v2, 0xb
+    const/16 v3, 0x15
 
-    aget v2, v0, v2
+    aget v3, v1, v3
 
-    if-eqz v2, :cond_6
+    if-eqz v3, :cond_7
 
     :goto_1
-    return v1
+    return v2
 
     :cond_1
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    if-ltz v2, :cond_2
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
     invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    if-gez v2, :cond_2
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
 
     move-result v3
 
-    add-int/2addr v2, v3
+    if-ltz v3, :cond_2
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v3
+
+    if-gez v3, :cond_2
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v3
+
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v4
+
+    add-int/2addr v3, v4
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_0
 
     :cond_2
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    if-gez v2, :cond_0
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
     invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    move-result v2
+    move-result v3
 
-    if-gez v2, :cond_0
+    if-gez v3, :cond_0
 
-    const/16 v2, 0xd
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
-    aget v2, v0, v2
+    move-result v3
 
-    if-nez v2, :cond_3
+    if-gez v3, :cond_0
 
-    const/16 v2, 0xe
+    const/16 v3, 0xd
 
-    aget v2, v0, v2
+    aget v3, v1, v3
 
-    if-eqz v2, :cond_5
+    if-nez v3, :cond_3
+
+    const/16 v3, 0xe
+
+    aget v3, v1, v3
+
+    if-eqz v3, :cond_5
 
     :cond_3
     if-nez p4, :cond_4
 
-    invoke-direct {p0, p1, p2, p3}, Landroid/widget/RelativeLayout;->centerHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
+    invoke-static {p1, p2, p3}, Landroid/widget/RelativeLayout;->centerHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
 
     goto :goto_1
 
     :cond_4
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
+    iget v3, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
 
-    iget v3, p2, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
+    iget v4, p2, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
-    add-int/2addr v2, v3
+    add-int/2addr v3, v4
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v3
 
-    add-int/2addr v2, v3
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v4
+
+    add-int/2addr v3, v4
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_1
 
     :cond_5
-    iget v2, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
-
-    iget v3, p2, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
-
-    add-int/2addr v2, v3
-
-    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
-
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
-
-    move-result v2
-
-    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+    invoke-virtual {p0}, Landroid/widget/RelativeLayout;->isLayoutRtl()Z
 
     move-result v3
 
-    add-int/2addr v2, v3
+    if-eqz v3, :cond_6
+
+    iget v3, p0, Landroid/widget/RelativeLayout;->mPaddingRight:I
+
+    sub-int v3, p3, v3
+
+    iget v4, p2, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+
+    sub-int/2addr v3, v4
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v3
+
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v4
+
+    sub-int/2addr v3, v4
+
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_0
 
     :cond_6
-    const/4 v1, 0x0
+    iget v3, p0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
 
-    goto :goto_1
+    iget v4, p2, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
+
+    add-int/2addr v3, v4
+
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v3
+
+    invoke-virtual {p1}, Landroid/view/View;->getMeasuredWidth()I
+
+    move-result v4
+
+    add-int/2addr v3, v4
+
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static {p2, v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    goto/16 :goto_0
+
+    :cond_7
+    const/4 v2, 0x0
+
+    goto/16 :goto_1
 .end method
 
 .method private positionChildVertical(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;IZ)Z
@@ -1624,14 +1771,14 @@
     if-gez v2, :cond_1
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
     if-ltz v2, :cond_1
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -1664,7 +1811,7 @@
     if-ltz v2, :cond_2
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -1682,7 +1829,7 @@
     add-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_0
 
@@ -1695,7 +1842,7 @@
     if-gez v2, :cond_0
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {p2}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v2
 
@@ -1716,7 +1863,7 @@
     :cond_3
     if-nez p4, :cond_4
 
-    invoke-direct {p0, p1, p2, p3}, Landroid/widget/RelativeLayout;->centerVertical(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
+    invoke-static {p1, p2, p3}, Landroid/widget/RelativeLayout;->centerVertical(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
 
     goto :goto_1
 
@@ -1742,7 +1889,7 @@
     add-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_1
 
@@ -1768,7 +1915,7 @@
     add-int/2addr v2, v3
 
     #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    invoke-static {p2, v2}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_0
 
@@ -1778,72 +1925,125 @@
     goto :goto_1
 .end method
 
+.method private queryCompatibilityModes(Landroid/content/Context;)V
+    .locals 4
+    .parameter "context"
+
+    .prologue
+    const/4 v2, 0x1
+
+    const/4 v3, 0x0
+
+    invoke-virtual {p1}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
+
+    move-result-object v1
+
+    iget v0, v1, Landroid/content/pm/ApplicationInfo;->targetSdkVersion:I
+
+    .local v0, version:I
+    const/16 v1, 0x11
+
+    if-gt v0, v1, :cond_0
+
+    move v1, v2
+
+    :goto_0
+    iput-boolean v1, p0, Landroid/widget/RelativeLayout;->mAllowBrokenMeasureSpecs:Z
+
+    const/16 v1, 0x12
+
+    if-lt v0, v1, :cond_1
+
+    :goto_1
+    iput-boolean v2, p0, Landroid/widget/RelativeLayout;->mMeasureVerticalWithPaddingMargin:Z
+
+    return-void
+
+    :cond_0
+    move v1, v3
+
+    goto :goto_0
+
+    :cond_1
+    move v2, v3
+
+    goto :goto_1
+.end method
+
 .method private sortChildren()V
-    .locals 6
+    .locals 5
 
     .prologue
     invoke-virtual {p0}, Landroid/widget/RelativeLayout;->getChildCount()I
 
-    move-result v1
+    move-result v0
 
-    .local v1, count:I
-    iget-object v4, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
+    .local v0, count:I
+    iget-object v3, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
 
-    array-length v4, v4
+    if-eqz v3, :cond_0
 
-    if-eq v4, v1, :cond_0
+    iget-object v3, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
 
-    new-array v4, v1, [Landroid/view/View;
+    array-length v3, v3
 
-    iput-object v4, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
+    if-eq v3, v0, :cond_1
 
     :cond_0
-    iget-object v4, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
+    new-array v3, v0, [Landroid/view/View;
 
-    array-length v4, v4
-
-    if-eq v4, v1, :cond_1
-
-    new-array v4, v1, [Landroid/view/View;
-
-    iput-object v4, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
+    iput-object v3, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
 
     :cond_1
-    iget-object v2, p0, Landroid/widget/RelativeLayout;->mGraph:Landroid/widget/RelativeLayout$DependencyGraph;
+    iget-object v3, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
 
-    .local v2, graph:Landroid/widget/RelativeLayout$DependencyGraph;
-    invoke-virtual {v2}, Landroid/widget/RelativeLayout$DependencyGraph;->clear()V
+    if-eqz v3, :cond_2
 
-    const/4 v3, 0x0
+    iget-object v3, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
 
-    .local v3, i:I
+    array-length v3, v3
+
+    if-eq v3, v0, :cond_3
+
+    :cond_2
+    new-array v3, v0, [Landroid/view/View;
+
+    iput-object v3, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
+
+    :cond_3
+    iget-object v1, p0, Landroid/widget/RelativeLayout;->mGraph:Landroid/widget/RelativeLayout$DependencyGraph;
+
+    .local v1, graph:Landroid/widget/RelativeLayout$DependencyGraph;
+    invoke-virtual {v1}, Landroid/widget/RelativeLayout$DependencyGraph;->clear()V
+
+    const/4 v2, 0x0
+
+    .local v2, i:I
     :goto_0
-    if-ge v3, v1, :cond_2
+    if-ge v2, v0, :cond_4
 
-    invoke-virtual {p0, v3}, Landroid/widget/RelativeLayout;->getChildAt(I)Landroid/view/View;
+    invoke-virtual {p0, v2}, Landroid/widget/RelativeLayout;->getChildAt(I)Landroid/view/View;
 
-    move-result-object v0
+    move-result-object v3
 
-    .local v0, child:Landroid/view/View;
-    invoke-virtual {v2, v0}, Landroid/widget/RelativeLayout$DependencyGraph;->add(Landroid/view/View;)V
+    invoke-virtual {v1, v3}, Landroid/widget/RelativeLayout$DependencyGraph;->add(Landroid/view/View;)V
 
-    add-int/lit8 v3, v3, 0x1
+    add-int/lit8 v2, v2, 0x1
 
     goto :goto_0
 
-    .end local v0           #child:Landroid/view/View;
-    :cond_2
-    iget-object v4, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
+    :cond_4
+    iget-object v3, p0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
 
-    sget-object v5, Landroid/widget/RelativeLayout;->RULES_VERTICAL:[I
+    sget-object v4, Landroid/widget/RelativeLayout;->RULES_VERTICAL:[I
 
-    invoke-virtual {v2, v4, v5}, Landroid/widget/RelativeLayout$DependencyGraph;->getSortedViews([Landroid/view/View;[I)V
+    invoke-virtual {v1, v3, v4}, Landroid/widget/RelativeLayout$DependencyGraph;->getSortedViews([Landroid/view/View;[I)V
 
-    iget-object v4, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
+    iget-object v3, p0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
 
-    sget-object v5, Landroid/widget/RelativeLayout;->RULES_HORIZONTAL:[I
+    sget-object v4, Landroid/widget/RelativeLayout;->RULES_HORIZONTAL:[I
 
-    invoke-virtual {v2, v4, v5}, Landroid/widget/RelativeLayout$DependencyGraph;->getSortedViews([Landroid/view/View;[I)V
+    invoke-virtual {v1, v3, v4}, Landroid/widget/RelativeLayout$DependencyGraph;->getSortedViews([Landroid/view/View;[I)V
 
     return-void
 .end method
@@ -2123,7 +2323,7 @@
 
     .local v3, st:Landroid/widget/RelativeLayout$LayoutParams;
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
@@ -2133,12 +2333,12 @@
     move-result v5
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v6
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static {v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static {v3}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v7
 
@@ -2156,7 +2356,7 @@
 .end method
 
 .method protected onMeasure(II)V
-    .locals 41
+    .locals 43
     .parameter "widthMeasureSpec"
     .parameter "heightMeasureSpec"
 
@@ -2182,17 +2382,17 @@
     const/16 v26, -0x1
 
     .local v26, myHeight:I
-    const/16 v37, 0x0
+    const/16 v39, 0x0
 
-    .local v37, width:I
+    .local v39, width:I
     const/16 v16, 0x0
 
     .local v16, height:I
     invoke-static/range {p1 .. p1}, Landroid/view/View$MeasureSpec;->getMode(I)I
 
-    move-result v38
+    move-result v40
 
-    .local v38, widthMode:I
+    .local v40, widthMode:I
     invoke-static/range {p2 .. p2}, Landroid/view/View$MeasureSpec;->getMode(I)I
 
     move-result v17
@@ -2200,17 +2400,17 @@
     .local v17, heightMode:I
     invoke-static/range {p1 .. p1}, Landroid/view/View$MeasureSpec;->getSize(I)I
 
-    move-result v39
+    move-result v41
 
-    .local v39, widthSize:I
+    .local v41, widthSize:I
     invoke-static/range {p2 .. p2}, Landroid/view/View$MeasureSpec;->getSize(I)I
 
     move-result v18
 
     .local v18, heightSize:I
-    if-eqz v38, :cond_1
+    if-eqz v40, :cond_1
 
-    move/from16 v27, v39
+    move/from16 v27, v41
 
     :cond_1
     if-eqz v17, :cond_2
@@ -2220,11 +2420,11 @@
     :cond_2
     const/high16 v4, 0x4000
 
-    move/from16 v0, v38
+    move/from16 v0, v40
 
     if-ne v0, v4, :cond_3
 
-    move/from16 v37, v27
+    move/from16 v39, v27
 
     :cond_3
     const/high16 v4, 0x4000
@@ -2254,11 +2454,11 @@
     and-int v15, v4, v5
 
     .local v15, gravity:I
-    const/4 v4, 0x3
+    const v4, 0x800003
 
-    if-eq v15, v4, :cond_8
+    if-eq v15, v4, :cond_9
 
-    if-eqz v15, :cond_8
+    if-eqz v15, :cond_9
 
     const/16 v19, 0x1
 
@@ -2272,23 +2472,23 @@
 
     const/16 v4, 0x30
 
-    if-eq v15, v4, :cond_9
+    if-eq v15, v4, :cond_a
 
-    if-eqz v15, :cond_9
+    if-eqz v15, :cond_a
 
-    const/16 v34, 0x1
+    const/16 v36, 0x1
 
-    .local v34, verticalGravity:Z
+    .local v36, verticalGravity:Z
     :goto_1
     const v25, 0x7fffffff
 
     .local v25, left:I
-    const v33, 0x7fffffff
+    const v35, 0x7fffffff
 
-    .local v33, top:I
-    const/high16 v31, -0x8000
+    .local v35, top:I
+    const/high16 v32, -0x8000
 
-    .local v31, right:I
+    .local v32, right:I
     const/high16 v10, -0x8000
 
     .local v10, bottom:I
@@ -2300,7 +2500,7 @@
     .local v29, offsetVerticalAxis:Z
     if-nez v19, :cond_5
 
-    if-eqz v34, :cond_6
+    if-eqz v36, :cond_6
 
     :cond_5
     move-object/from16 v0, p0
@@ -2324,9 +2524,9 @@
     :cond_6
     const/high16 v4, 0x4000
 
-    move/from16 v0, v38
+    move/from16 v0, v40
 
-    if-eq v0, v4, :cond_a
+    if-eq v0, v4, :cond_b
 
     const/16 v24, 0x1
 
@@ -2336,20 +2536,40 @@
 
     move/from16 v0, v17
 
-    if-eq v0, v4, :cond_b
+    if-eq v0, v4, :cond_c
 
     const/16 v23, 0x1
 
     .local v23, isWrapContentHeight:Z
     :goto_3
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->getLayoutDirection()I
+
+    move-result v9
+
+    .local v9, layoutDirection:I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->isLayoutRtl()Z
+
+    move-result v4
+
+    if-eqz v4, :cond_7
+
+    const/4 v4, -0x1
+
+    move/from16 v0, v27
+
+    if-ne v0, v4, :cond_7
+
+    const/high16 v27, 0x1
+
+    :cond_7
     move-object/from16 v0, p0
 
     iget-object v0, v0, Landroid/widget/RelativeLayout;->mSortedHorizontalChildren:[Landroid/view/View;
 
-    move-object/from16 v36, v0
+    move-object/from16 v38, v0
 
-    .local v36, views:[Landroid/view/View;
-    move-object/from16 v0, v36
+    .local v38, views:[Landroid/view/View;
+    move-object/from16 v0, v38
 
     array-length v14, v0
 
@@ -2360,9 +2580,9 @@
     :goto_4
     move/from16 v0, v21
 
-    if-ge v0, v14, :cond_c
+    if-ge v0, v14, :cond_d
 
-    aget-object v11, v36, v21
+    aget-object v11, v38, v21
 
     .local v11, child:Landroid/view/View;
     invoke-virtual {v11}, Landroid/view/View;->getVisibility()I
@@ -2371,26 +2591,35 @@
 
     const/16 v5, 0x8
 
-    if-eq v4, v5, :cond_7
+    if-eq v4, v5, :cond_8
 
     invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
-    move-result-object v30
+    move-result-object v31
 
-    check-cast v30, Landroid/widget/RelativeLayout$LayoutParams;
+    check-cast v31, Landroid/widget/RelativeLayout$LayoutParams;
 
-    .local v30, params:Landroid/widget/RelativeLayout$LayoutParams;
+    .local v31, params:Landroid/widget/RelativeLayout$LayoutParams;
+    move-object/from16 v0, v31
+
+    invoke-virtual {v0, v9}, Landroid/widget/RelativeLayout$LayoutParams;->getRules(I)[I
+
+    move-result-object v33
+
+    .local v33, rules:[I
     move-object/from16 v0, p0
 
-    move-object/from16 v1, v30
+    move-object/from16 v1, v31
 
     move/from16 v2, v27
 
-    invoke-direct {v0, v1, v2}, Landroid/widget/RelativeLayout;->applyHorizontalSizeRules(Landroid/widget/RelativeLayout$LayoutParams;I)V
+    move-object/from16 v3, v33
+
+    invoke-direct {v0, v1, v2, v3}, Landroid/widget/RelativeLayout;->applyHorizontalSizeRules(Landroid/widget/RelativeLayout$LayoutParams;I[I)V
 
     move-object/from16 v0, p0
 
-    move-object/from16 v1, v30
+    move-object/from16 v1, v31
 
     move/from16 v2, v27
 
@@ -2400,7 +2629,7 @@
 
     move-object/from16 v0, p0
 
-    move-object/from16 v1, v30
+    move-object/from16 v1, v31
 
     move/from16 v2, v27
 
@@ -2410,16 +2639,18 @@
 
     move-result v4
 
-    if-eqz v4, :cond_7
+    if-eqz v4, :cond_8
 
     const/16 v28, 0x1
 
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    :cond_7
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .end local v33           #rules:[I
+    :cond_8
     add-int/lit8 v21, v21, 0x1
 
     goto :goto_4
 
+    .end local v9           #layoutDirection:I
     .end local v10           #bottom:I
     .end local v11           #child:Landroid/view/View;
     .end local v14           #count:I
@@ -2430,62 +2661,76 @@
     .end local v25           #left:I
     .end local v28           #offsetHorizontalAxis:Z
     .end local v29           #offsetVerticalAxis:Z
-    .end local v31           #right:I
-    .end local v33           #top:I
-    .end local v34           #verticalGravity:Z
-    .end local v36           #views:[Landroid/view/View;
-    :cond_8
+    .end local v32           #right:I
+    .end local v35           #top:I
+    .end local v36           #verticalGravity:Z
+    .end local v38           #views:[Landroid/view/View;
+    :cond_9
     const/16 v19, 0x0
 
     goto/16 :goto_0
 
     .restart local v19       #horizontalGravity:Z
-    :cond_9
-    const/16 v34, 0x0
+    :cond_a
+    const/16 v36, 0x0
 
-    goto :goto_1
+    goto/16 :goto_1
 
     .restart local v10       #bottom:I
     .restart local v25       #left:I
     .restart local v28       #offsetHorizontalAxis:Z
     .restart local v29       #offsetVerticalAxis:Z
-    .restart local v31       #right:I
-    .restart local v33       #top:I
-    .restart local v34       #verticalGravity:Z
-    :cond_a
+    .restart local v32       #right:I
+    .restart local v35       #top:I
+    .restart local v36       #verticalGravity:Z
+    :cond_b
     const/16 v24, 0x0
 
     goto :goto_2
 
     .restart local v24       #isWrapContentWidth:Z
-    :cond_b
+    :cond_c
     const/16 v23, 0x0
 
     goto :goto_3
 
+    .restart local v9       #layoutDirection:I
     .restart local v14       #count:I
     .restart local v21       #i:I
     .restart local v23       #isWrapContentHeight:Z
-    .restart local v36       #views:[Landroid/view/View;
-    :cond_c
+    .restart local v38       #views:[Landroid/view/View;
+    :cond_d
     move-object/from16 v0, p0
 
     iget-object v0, v0, Landroid/widget/RelativeLayout;->mSortedVerticalChildren:[Landroid/view/View;
 
-    move-object/from16 v36, v0
+    move-object/from16 v38, v0
 
-    move-object/from16 v0, v36
+    move-object/from16 v0, v38
 
     array-length v14, v0
 
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->getContext()Landroid/content/Context;
+
+    move-result-object v4
+
+    invoke-virtual {v4}, Landroid/content/Context;->getApplicationInfo()Landroid/content/pm/ApplicationInfo;
+
+    move-result-object v4
+
+    iget v0, v4, Landroid/content/pm/ApplicationInfo;->targetSdkVersion:I
+
+    move/from16 v34, v0
+
+    .local v34, targetSdkVersion:I
     const/16 v21, 0x0
 
     :goto_5
     move/from16 v0, v21
 
-    if-ge v0, v14, :cond_14
+    if-ge v0, v14, :cond_19
 
-    aget-object v11, v36, v21
+    aget-object v11, v38, v21
 
     .restart local v11       #child:Landroid/view/View;
     invoke-virtual {v11}, Landroid/view/View;->getVisibility()I
@@ -2494,18 +2739,18 @@
 
     const/16 v5, 0x8
 
-    if-eq v4, v5, :cond_13
+    if-eq v4, v5, :cond_14
 
     invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
-    move-result-object v30
+    move-result-object v31
 
-    check-cast v30, Landroid/widget/RelativeLayout$LayoutParams;
+    check-cast v31, Landroid/widget/RelativeLayout$LayoutParams;
 
-    .restart local v30       #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
     move-object/from16 v0, p0
 
-    move-object/from16 v1, v30
+    move-object/from16 v1, v31
 
     move/from16 v2, v26
 
@@ -2513,7 +2758,7 @@
 
     move-object/from16 v0, p0
 
-    move-object/from16 v1, v30
+    move-object/from16 v1, v31
 
     move/from16 v2, v27
 
@@ -2523,7 +2768,7 @@
 
     move-object/from16 v0, p0
 
-    move-object/from16 v1, v30
+    move-object/from16 v1, v31
 
     move/from16 v2, v26
 
@@ -2533,29 +2778,50 @@
 
     move-result v4
 
-    if-eqz v4, :cond_d
+    if-eqz v4, :cond_e
 
     const/16 v29, 0x1
 
-    :cond_d
-    if-eqz v24, :cond_e
+    :cond_e
+    if-eqz v24, :cond_f
 
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->isLayoutRtl()Z
 
     move-result v4
 
-    move/from16 v0, v37
+    if-eqz v4, :cond_16
+
+    const/16 v4, 0x13
+
+    move/from16 v0, v34
+
+    if-ge v0, v4, :cond_15
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v4
+
+    sub-int v4, v27, v4
+
+    move/from16 v0, v39
 
     invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    move-result v37
+    move-result v39
 
-    :cond_e
-    if-eqz v23, :cond_f
+    :cond_f
+    :goto_6
+    if-eqz v23, :cond_10
+
+    const/16 v4, 0x13
+
+    move/from16 v0, v34
+
+    if-ge v0, v4, :cond_18
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
@@ -2565,20 +2831,21 @@
 
     move-result v16
 
-    :cond_f
+    :cond_10
+    :goto_7
     move-object/from16 v0, v22
 
-    if-ne v11, v0, :cond_10
+    if-ne v11, v0, :cond_11
 
-    if-eqz v34, :cond_11
+    if-eqz v36, :cond_12
 
-    :cond_10
+    :cond_11
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
     iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
@@ -2591,53 +2858,53 @@
     move-result v25
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
     iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->topMargin:I
 
     sub-int/2addr v4, v5
 
-    move/from16 v0, v33
+    move/from16 v0, v35
 
     invoke-static {v0, v4}, Ljava/lang/Math;->min(II)I
 
-    move-result v33
-
-    :cond_11
-    move-object/from16 v0, v22
-
-    if-ne v11, v0, :cond_12
-
-    if-eqz v19, :cond_13
+    move-result v35
 
     :cond_12
+    move-object/from16 v0, v22
+
+    if-ne v11, v0, :cond_13
+
+    if-eqz v19, :cond_14
+
+    :cond_13
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
     iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
     add-int/2addr v4, v5
 
-    move/from16 v0, v31
+    move/from16 v0, v32
 
     invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    move-result v31
+    move-result v32
 
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
     iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->bottomMargin:I
 
@@ -2647,198 +2914,107 @@
 
     move-result v10
 
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    :cond_13
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    :cond_14
     add-int/lit8 v21, v21, 0x1
 
     goto/16 :goto_5
 
-    .end local v11           #child:Landroid/view/View;
-    :cond_14
-    move-object/from16 v0, p0
-
-    iget-boolean v4, v0, Landroid/widget/RelativeLayout;->mHasBaselineAlignedChild:Z
-
-    if-eqz v4, :cond_19
-
-    const/16 v21, 0x0
-
-    :goto_6
-    move/from16 v0, v21
-
-    if-ge v0, v14, :cond_19
-
-    move-object/from16 v0, p0
-
-    move/from16 v1, v21
-
-    invoke-virtual {v0, v1}, Landroid/widget/RelativeLayout;->getChildAt(I)Landroid/view/View;
-
-    move-result-object v11
-
-    .restart local v11       #child:Landroid/view/View;
-    invoke-virtual {v11}, Landroid/view/View;->getVisibility()I
-
-    move-result v4
-
-    const/16 v5, 0x8
-
-    if-eq v4, v5, :cond_18
-
-    invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
-
-    move-result-object v30
-
-    check-cast v30, Landroid/widget/RelativeLayout$LayoutParams;
-
-    .restart local v30       #params:Landroid/widget/RelativeLayout$LayoutParams;
-    move-object/from16 v0, p0
-
-    move-object/from16 v1, v30
-
-    invoke-direct {v0, v11, v1}, Landroid/widget/RelativeLayout;->alignBaseline(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;)V
-
-    move-object/from16 v0, v22
-
-    if-ne v11, v0, :cond_15
-
-    if-eqz v34, :cond_16
-
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
     :cond_15
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    sub-int v4, v27, v4
+
+    move-object/from16 v0, v31
 
     iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
     sub-int/2addr v4, v5
 
-    move/from16 v0, v25
+    move/from16 v0, v39
 
-    invoke-static {v0, v4}, Ljava/lang/Math;->min(II)I
+    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    move-result v25
+    move-result v39
 
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+    goto :goto_6
+
+    :cond_16
+    const/16 v4, 0x13
+
+    move/from16 v0, v34
+
+    if-ge v0, v4, :cond_17
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    move/from16 v0, v39
 
-    iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->topMargin:I
+    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    sub-int/2addr v4, v5
+    move-result v39
 
-    move/from16 v0, v33
-
-    invoke-static {v0, v4}, Ljava/lang/Math;->min(II)I
-
-    move-result v33
-
-    :cond_16
-    move-object/from16 v0, v22
-
-    if-ne v11, v0, :cond_17
-
-    if-eqz v19, :cond_18
+    goto :goto_6
 
     :cond_17
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
     iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
 
     add-int/2addr v4, v5
 
-    move/from16 v0, v31
+    move/from16 v0, v39
 
     invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    move-result v31
+    move-result v39
 
+    goto/16 :goto_6
+
+    :cond_18
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
     iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->bottomMargin:I
 
     add-int/2addr v4, v5
 
-    invoke-static {v10, v4}, Ljava/lang/Math;->max(II)I
+    move/from16 v0, v16
 
-    move-result v10
+    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    :cond_18
-    add-int/lit8 v21, v21, 0x1
+    move-result v16
 
-    goto :goto_6
+    goto/16 :goto_7
 
     .end local v11           #child:Landroid/view/View;
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
     :cond_19
-    if-eqz v24, :cond_1e
-
     move-object/from16 v0, p0
 
-    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingRight:I
+    iget-boolean v4, v0, Landroid/widget/RelativeLayout;->mHasBaselineAlignedChild:Z
 
-    add-int v37, v37, v4
-
-    move-object/from16 v0, p0
-
-    iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
-
-    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->width:I
-
-    if-ltz v4, :cond_1a
-
-    move-object/from16 v0, p0
-
-    iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
-
-    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->width:I
-
-    move/from16 v0, v37
-
-    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
-
-    move-result v37
-
-    :cond_1a
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->getSuggestedMinimumWidth()I
-
-    move-result v4
-
-    move/from16 v0, v37
-
-    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
-
-    move-result v37
-
-    move/from16 v0, v37
-
-    move/from16 v1, p1
-
-    invoke-static {v0, v1}, Landroid/widget/RelativeLayout;->resolveSize(II)I
-
-    move-result v37
-
-    if-eqz v28, :cond_1e
+    if-eqz v4, :cond_1e
 
     const/16 v21, 0x0
 
-    :goto_7
+    :goto_8
     move/from16 v0, v21
 
     if-ge v0, v14, :cond_1e
@@ -2858,108 +3034,129 @@
 
     const/16 v5, 0x8
 
-    if-eq v4, v5, :cond_1c
+    if-eq v4, v5, :cond_1d
 
     invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
-    move-result-object v30
+    move-result-object v31
 
-    check-cast v30, Landroid/widget/RelativeLayout$LayoutParams;
+    check-cast v31, Landroid/widget/RelativeLayout$LayoutParams;
 
-    .restart local v30       #params:Landroid/widget/RelativeLayout$LayoutParams;
-    invoke-virtual/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->getRules()[I
-
-    move-result-object v32
-
-    .local v32, rules:[I
-    const/16 v4, 0xd
-
-    aget v4, v32, v4
-
-    if-nez v4, :cond_1b
-
-    const/16 v4, 0xe
-
-    aget v4, v32, v4
-
-    if-eqz v4, :cond_1d
-
-    :cond_1b
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
     move-object/from16 v0, p0
 
-    move-object/from16 v1, v30
+    move-object/from16 v1, v31
 
-    move/from16 v2, v37
+    invoke-direct {v0, v11, v1}, Landroid/widget/RelativeLayout;->alignBaseline(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;)V
 
-    invoke-direct {v0, v11, v1, v2}, Landroid/widget/RelativeLayout;->centerHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
+    move-object/from16 v0, v22
 
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    .end local v32           #rules:[I
-    :cond_1c
-    :goto_8
-    add-int/lit8 v21, v21, 0x1
+    if-ne v11, v0, :cond_1a
 
-    goto :goto_7
+    if-eqz v36, :cond_1b
 
-    .restart local v30       #params:Landroid/widget/RelativeLayout$LayoutParams;
-    .restart local v32       #rules:[I
-    :cond_1d
-    const/16 v4, 0xb
-
-    aget v4, v32, v4
-
-    if-eqz v4, :cond_1c
-
-    invoke-virtual {v11}, Landroid/view/View;->getMeasuredWidth()I
-
-    move-result v13
-
-    .local v13, childWidth:I
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingRight:I
-
-    sub-int v4, v37, v4
-
-    sub-int/2addr v4, v13
-
-    move-object/from16 v0, v30
-
-    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static {v0, v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
-
+    :cond_1a
     #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    add-int/2addr v4, v13
+    move-object/from16 v0, v31
 
-    move-object/from16 v0, v30
+    iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->leftMargin:I
 
-    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
-    invoke-static {v0, v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    sub-int/2addr v4, v5
+
+    move/from16 v0, v25
+
+    invoke-static {v0, v4}, Ljava/lang/Math;->min(II)I
+
+    move-result v25
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v4
+
+    move-object/from16 v0, v31
+
+    iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->topMargin:I
+
+    sub-int/2addr v4, v5
+
+    move/from16 v0, v35
+
+    invoke-static {v0, v4}, Ljava/lang/Math;->min(II)I
+
+    move-result v35
+
+    :cond_1b
+    move-object/from16 v0, v22
+
+    if-ne v11, v0, :cond_1c
+
+    if-eqz v19, :cond_1d
+
+    :cond_1c
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$200(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v4
+
+    move-object/from16 v0, v31
+
+    iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->rightMargin:I
+
+    add-int/2addr v4, v5
+
+    move/from16 v0, v32
+
+    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
+
+    move-result v32
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$300(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v4
+
+    move-object/from16 v0, v31
+
+    iget v5, v0, Landroid/widget/RelativeLayout$LayoutParams;->bottomMargin:I
+
+    add-int/2addr v4, v5
+
+    invoke-static {v10, v4}, Ljava/lang/Math;->max(II)I
+
+    move-result v10
+
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    :cond_1d
+    add-int/lit8 v21, v21, 0x1
 
     goto :goto_8
 
     .end local v11           #child:Landroid/view/View;
-    .end local v13           #childWidth:I
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    .end local v32           #rules:[I
     :cond_1e
-    if-eqz v23, :cond_23
+    if-eqz v24, :cond_23
 
     move-object/from16 v0, p0
 
-    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingBottom:I
+    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingRight:I
 
-    add-int v16, v16, v4
+    add-int v39, v39, v4
 
     move-object/from16 v0, p0
 
     iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
 
-    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->height:I
+    if-eqz v4, :cond_1f
+
+    move-object/from16 v0, p0
+
+    iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
+
+    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->width:I
 
     if-ltz v4, :cond_1f
 
@@ -2967,34 +3164,34 @@
 
     iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
 
-    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->height:I
+    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->width:I
 
-    move/from16 v0, v16
+    move/from16 v0, v39
 
     invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    move-result v16
+    move-result v39
 
     :cond_1f
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->getSuggestedMinimumHeight()I
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->getSuggestedMinimumWidth()I
 
     move-result v4
 
-    move/from16 v0, v16
+    move/from16 v0, v39
 
     invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    move-result v16
+    move-result v39
 
-    move/from16 v0, v16
+    move/from16 v0, v39
 
-    move/from16 v1, p2
+    move/from16 v1, p1
 
     invoke-static {v0, v1}, Landroid/widget/RelativeLayout;->resolveSize(II)I
 
-    move-result v16
+    move-result v39
 
-    if-eqz v29, :cond_23
+    if-eqz v28, :cond_23
 
     const/16 v21, 0x0
 
@@ -3022,162 +3219,146 @@
 
     invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
-    move-result-object v30
+    move-result-object v31
 
-    check-cast v30, Landroid/widget/RelativeLayout$LayoutParams;
+    check-cast v31, Landroid/widget/RelativeLayout$LayoutParams;
 
-    .restart local v30       #params:Landroid/widget/RelativeLayout$LayoutParams;
-    invoke-virtual/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->getRules()[I
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
+    move-object/from16 v0, v31
 
-    move-result-object v32
+    invoke-virtual {v0, v9}, Landroid/widget/RelativeLayout$LayoutParams;->getRules(I)[I
 
-    .restart local v32       #rules:[I
+    move-result-object v33
+
+    .restart local v33       #rules:[I
     const/16 v4, 0xd
 
-    aget v4, v32, v4
+    aget v4, v33, v4
 
     if-nez v4, :cond_20
 
-    const/16 v4, 0xf
+    const/16 v4, 0xe
 
-    aget v4, v32, v4
+    aget v4, v33, v4
 
     if-eqz v4, :cond_22
 
     :cond_20
-    move-object/from16 v0, p0
+    move-object/from16 v0, v31
 
-    move-object/from16 v1, v30
+    move/from16 v1, v39
 
-    move/from16 v2, v16
+    invoke-static {v11, v0, v1}, Landroid/widget/RelativeLayout;->centerHorizontal(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
 
-    invoke-direct {v0, v11, v1, v2}, Landroid/widget/RelativeLayout;->centerVertical(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
-
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    .end local v32           #rules:[I
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .end local v33           #rules:[I
     :cond_21
     :goto_a
     add-int/lit8 v21, v21, 0x1
 
     goto :goto_9
 
-    .restart local v30       #params:Landroid/widget/RelativeLayout$LayoutParams;
-    .restart local v32       #rules:[I
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .restart local v33       #rules:[I
     :cond_22
-    const/16 v4, 0xc
+    const/16 v4, 0xb
 
-    aget v4, v32, v4
+    aget v4, v33, v4
 
     if-eqz v4, :cond_21
 
-    invoke-virtual {v11}, Landroid/view/View;->getMeasuredHeight()I
+    invoke-virtual {v11}, Landroid/view/View;->getMeasuredWidth()I
 
-    move-result v12
+    move-result v13
 
-    .local v12, childHeight:I
+    .local v13, childWidth:I
     move-object/from16 v0, p0
 
-    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingBottom:I
+    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingRight:I
 
-    sub-int v4, v16, v4
+    sub-int v4, v39, v4
 
-    sub-int/2addr v4, v12
+    sub-int/2addr v4, v13
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
-    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static {v0, v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$402(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static {v0, v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$102(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
-    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
-    invoke-static/range {v30 .. v30}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mLeft:I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$100(Landroid/widget/RelativeLayout$LayoutParams;)I
 
     move-result v4
 
-    add-int/2addr v4, v12
+    add-int/2addr v4, v13
 
-    move-object/from16 v0, v30
+    move-object/from16 v0, v31
 
-    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mRight:I
     invoke-static {v0, v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$202(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
     goto :goto_a
 
     .end local v11           #child:Landroid/view/View;
-    .end local v12           #childHeight:I
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    .end local v32           #rules:[I
+    .end local v13           #childWidth:I
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .end local v33           #rules:[I
     :cond_23
-    if-nez v19, :cond_24
+    if-eqz v23, :cond_28
 
-    if-eqz v34, :cond_28
+    move-object/from16 v0, p0
+
+    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingBottom:I
+
+    add-int v16, v16, v4
+
+    move-object/from16 v0, p0
+
+    iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
+
+    if-eqz v4, :cond_24
+
+    move-object/from16 v0, p0
+
+    iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
+
+    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->height:I
+
+    if-ltz v4, :cond_24
+
+    move-object/from16 v0, p0
+
+    iget-object v4, v0, Landroid/widget/RelativeLayout;->mLayoutParams:Landroid/view/ViewGroup$LayoutParams;
+
+    iget v4, v4, Landroid/view/ViewGroup$LayoutParams;->height:I
+
+    move/from16 v0, v16
+
+    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
+
+    move-result v16
 
     :cond_24
-    move-object/from16 v0, p0
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->getSuggestedMinimumHeight()I
 
-    iget-object v7, v0, Landroid/widget/RelativeLayout;->mSelfBounds:Landroid/graphics/Rect;
+    move-result v4
 
-    .local v7, selfBounds:Landroid/graphics/Rect;
-    move-object/from16 v0, p0
+    move/from16 v0, v16
 
-    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
+    invoke-static {v0, v4}, Ljava/lang/Math;->max(II)I
 
-    move-object/from16 v0, p0
+    move-result v16
 
-    iget v5, v0, Landroid/widget/RelativeLayout;->mPaddingTop:I
+    move/from16 v0, v16
 
-    move-object/from16 v0, p0
+    move/from16 v1, p2
 
-    iget v6, v0, Landroid/widget/RelativeLayout;->mPaddingRight:I
+    invoke-static {v0, v1}, Landroid/widget/RelativeLayout;->resolveSize(II)I
 
-    sub-int v6, v37, v6
+    move-result v16
 
-    move-object/from16 v0, p0
+    if-eqz v29, :cond_28
 
-    iget v0, v0, Landroid/widget/RelativeLayout;->mPaddingBottom:I
-
-    move/from16 v40, v0
-
-    sub-int v40, v16, v40
-
-    move/from16 v0, v40
-
-    invoke-virtual {v7, v4, v5, v6, v0}, Landroid/graphics/Rect;->set(IIII)V
-
-    move-object/from16 v0, p0
-
-    iget-object v8, v0, Landroid/widget/RelativeLayout;->mContentBounds:Landroid/graphics/Rect;
-
-    .local v8, contentBounds:Landroid/graphics/Rect;
-    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->getResolvedLayoutDirection()I
-
-    move-result v9
-
-    .local v9, layoutDirection:I
-    move-object/from16 v0, p0
-
-    iget v4, v0, Landroid/widget/RelativeLayout;->mGravity:I
-
-    sub-int v5, v31, v25
-
-    sub-int v6, v10, v33
-
-    invoke-static/range {v4 .. v9}, Landroid/view/Gravity;->apply(IIILandroid/graphics/Rect;Landroid/graphics/Rect;I)V
-
-    iget v4, v8, Landroid/graphics/Rect;->left:I
-
-    sub-int v20, v4, v25
-
-    .local v20, horizontalOffset:I
-    iget v4, v8, Landroid/graphics/Rect;->top:I
-
-    sub-int v35, v4, v33
-
-    .local v35, verticalOffset:I
-    if-nez v20, :cond_25
-
-    if-eqz v35, :cond_28
-
-    :cond_25
     const/16 v21, 0x0
 
     :goto_b
@@ -3200,64 +3381,301 @@
 
     const/16 v5, 0x8
 
-    if-eq v4, v5, :cond_27
-
-    move-object/from16 v0, v22
-
-    if-eq v11, v0, :cond_27
+    if-eq v4, v5, :cond_26
 
     invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
-    move-result-object v30
+    move-result-object v31
 
-    check-cast v30, Landroid/widget/RelativeLayout$LayoutParams;
+    check-cast v31, Landroid/widget/RelativeLayout$LayoutParams;
 
-    .restart local v30       #params:Landroid/widget/RelativeLayout$LayoutParams;
-    if-eqz v19, :cond_26
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
+    move-object/from16 v0, v31
 
-    move-object/from16 v0, v30
+    invoke-virtual {v0, v9}, Landroid/widget/RelativeLayout$LayoutParams;->getRules(I)[I
 
-    move/from16 v1, v20
+    move-result-object v33
 
-    invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$312(Landroid/widget/RelativeLayout$LayoutParams;I)I
+    .restart local v33       #rules:[I
+    const/16 v4, 0xd
 
-    move-object/from16 v0, v30
+    aget v4, v33, v4
+
+    if-nez v4, :cond_25
+
+    const/16 v4, 0xf
+
+    aget v4, v33, v4
+
+    if-eqz v4, :cond_27
+
+    :cond_25
+    move-object/from16 v0, v31
+
+    move/from16 v1, v16
+
+    invoke-static {v11, v0, v1}, Landroid/widget/RelativeLayout;->centerVertical(Landroid/view/View;Landroid/widget/RelativeLayout$LayoutParams;I)V
+
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .end local v33           #rules:[I
+    :cond_26
+    :goto_c
+    add-int/lit8 v21, v21, 0x1
+
+    goto :goto_b
+
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .restart local v33       #rules:[I
+    :cond_27
+    const/16 v4, 0xc
+
+    aget v4, v33, v4
+
+    if-eqz v4, :cond_26
+
+    invoke-virtual {v11}, Landroid/view/View;->getMeasuredHeight()I
+
+    move-result v12
+
+    .local v12, childHeight:I
+    move-object/from16 v0, p0
+
+    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingBottom:I
+
+    sub-int v4, v16, v4
+
+    sub-int/2addr v4, v12
+
+    move-object/from16 v0, v31
+
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
+    invoke-static {v0, v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$402(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    #getter for: Landroid/widget/RelativeLayout$LayoutParams;->mTop:I
+    invoke-static/range {v31 .. v31}, Landroid/widget/RelativeLayout$LayoutParams;->access$400(Landroid/widget/RelativeLayout$LayoutParams;)I
+
+    move-result v4
+
+    add-int/2addr v4, v12
+
+    move-object/from16 v0, v31
+
+    #setter for: Landroid/widget/RelativeLayout$LayoutParams;->mBottom:I
+    invoke-static {v0, v4}, Landroid/widget/RelativeLayout$LayoutParams;->access$302(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    goto :goto_c
+
+    .end local v11           #child:Landroid/view/View;
+    .end local v12           #childHeight:I
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    .end local v33           #rules:[I
+    :cond_28
+    if-nez v19, :cond_29
+
+    if-eqz v36, :cond_2d
+
+    :cond_29
+    move-object/from16 v0, p0
+
+    iget-object v7, v0, Landroid/widget/RelativeLayout;->mSelfBounds:Landroid/graphics/Rect;
+
+    .local v7, selfBounds:Landroid/graphics/Rect;
+    move-object/from16 v0, p0
+
+    iget v4, v0, Landroid/widget/RelativeLayout;->mPaddingLeft:I
+
+    move-object/from16 v0, p0
+
+    iget v5, v0, Landroid/widget/RelativeLayout;->mPaddingTop:I
+
+    move-object/from16 v0, p0
+
+    iget v6, v0, Landroid/widget/RelativeLayout;->mPaddingRight:I
+
+    sub-int v6, v39, v6
+
+    move-object/from16 v0, p0
+
+    iget v0, v0, Landroid/widget/RelativeLayout;->mPaddingBottom:I
+
+    move/from16 v42, v0
+
+    sub-int v42, v16, v42
+
+    move/from16 v0, v42
+
+    invoke-virtual {v7, v4, v5, v6, v0}, Landroid/graphics/Rect;->set(IIII)V
+
+    move-object/from16 v0, p0
+
+    iget-object v8, v0, Landroid/widget/RelativeLayout;->mContentBounds:Landroid/graphics/Rect;
+
+    .local v8, contentBounds:Landroid/graphics/Rect;
+    move-object/from16 v0, p0
+
+    iget v4, v0, Landroid/widget/RelativeLayout;->mGravity:I
+
+    sub-int v5, v32, v25
+
+    sub-int v6, v10, v35
+
+    invoke-static/range {v4 .. v9}, Landroid/view/Gravity;->apply(IIILandroid/graphics/Rect;Landroid/graphics/Rect;I)V
+
+    iget v4, v8, Landroid/graphics/Rect;->left:I
+
+    sub-int v20, v4, v25
+
+    .local v20, horizontalOffset:I
+    iget v4, v8, Landroid/graphics/Rect;->top:I
+
+    sub-int v37, v4, v35
+
+    .local v37, verticalOffset:I
+    if-nez v20, :cond_2a
+
+    if-eqz v37, :cond_2d
+
+    :cond_2a
+    const/16 v21, 0x0
+
+    :goto_d
+    move/from16 v0, v21
+
+    if-ge v0, v14, :cond_2d
+
+    move-object/from16 v0, p0
+
+    move/from16 v1, v21
+
+    invoke-virtual {v0, v1}, Landroid/widget/RelativeLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v11
+
+    .restart local v11       #child:Landroid/view/View;
+    invoke-virtual {v11}, Landroid/view/View;->getVisibility()I
+
+    move-result v4
+
+    const/16 v5, 0x8
+
+    if-eq v4, v5, :cond_2c
+
+    move-object/from16 v0, v22
+
+    if-eq v11, v0, :cond_2c
+
+    invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
+
+    move-result-object v31
+
+    check-cast v31, Landroid/widget/RelativeLayout$LayoutParams;
+
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
+    if-eqz v19, :cond_2b
+
+    move-object/from16 v0, v31
 
     move/from16 v1, v20
 
     invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$112(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
-    :cond_26
-    if-eqz v34, :cond_27
+    move-object/from16 v0, v31
 
-    move-object/from16 v0, v30
-
-    move/from16 v1, v35
-
-    invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$412(Landroid/widget/RelativeLayout$LayoutParams;I)I
-
-    move-object/from16 v0, v30
-
-    move/from16 v1, v35
+    move/from16 v1, v20
 
     invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$212(Landroid/widget/RelativeLayout$LayoutParams;I)I
 
-    .end local v30           #params:Landroid/widget/RelativeLayout$LayoutParams;
-    :cond_27
+    :cond_2b
+    if-eqz v36, :cond_2c
+
+    move-object/from16 v0, v31
+
+    move/from16 v1, v37
+
+    invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$412(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    move-object/from16 v0, v31
+
+    move/from16 v1, v37
+
+    invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$312(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    :cond_2c
     add-int/lit8 v21, v21, 0x1
 
-    goto :goto_b
+    goto :goto_d
 
     .end local v7           #selfBounds:Landroid/graphics/Rect;
     .end local v8           #contentBounds:Landroid/graphics/Rect;
-    .end local v9           #layoutDirection:I
     .end local v11           #child:Landroid/view/View;
     .end local v20           #horizontalOffset:I
-    .end local v35           #verticalOffset:I
-    :cond_28
+    .end local v37           #verticalOffset:I
+    :cond_2d
+    invoke-virtual/range {p0 .. p0}, Landroid/widget/RelativeLayout;->isLayoutRtl()Z
+
+    move-result v4
+
+    if-eqz v4, :cond_2f
+
+    sub-int v30, v27, v39
+
+    .local v30, offsetWidth:I
+    const/16 v21, 0x0
+
+    :goto_e
+    move/from16 v0, v21
+
+    if-ge v0, v14, :cond_2f
+
     move-object/from16 v0, p0
 
-    move/from16 v1, v37
+    move/from16 v1, v21
+
+    invoke-virtual {v0, v1}, Landroid/widget/RelativeLayout;->getChildAt(I)Landroid/view/View;
+
+    move-result-object v11
+
+    .restart local v11       #child:Landroid/view/View;
+    invoke-virtual {v11}, Landroid/view/View;->getVisibility()I
+
+    move-result v4
+
+    const/16 v5, 0x8
+
+    if-eq v4, v5, :cond_2e
+
+    invoke-virtual {v11}, Landroid/view/View;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
+
+    move-result-object v31
+
+    check-cast v31, Landroid/widget/RelativeLayout$LayoutParams;
+
+    .restart local v31       #params:Landroid/widget/RelativeLayout$LayoutParams;
+    move-object/from16 v0, v31
+
+    move/from16 v1, v30
+
+    invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$120(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    move-object/from16 v0, v31
+
+    move/from16 v1, v30
+
+    invoke-static {v0, v1}, Landroid/widget/RelativeLayout$LayoutParams;->access$220(Landroid/widget/RelativeLayout$LayoutParams;I)I
+
+    .end local v31           #params:Landroid/widget/RelativeLayout$LayoutParams;
+    :cond_2e
+    add-int/lit8 v21, v21, 0x1
+
+    goto :goto_e
+
+    .end local v11           #child:Landroid/view/View;
+    .end local v30           #offsetWidth:I
+    :cond_2f
+    move-object/from16 v0, p0
+
+    move/from16 v1, v39
 
     move/from16 v2, v16
 

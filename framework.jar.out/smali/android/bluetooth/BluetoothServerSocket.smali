@@ -57,6 +57,52 @@
     return-void
 .end method
 
+.method constructor <init>(IZZLandroid/os/ParcelUuid;)V
+    .locals 8
+    .parameter "type"
+    .parameter "auth"
+    .parameter "encrypt"
+    .parameter "uuid"
+    .annotation system Ldalvik/annotation/Throws;
+        value = {
+            Ljava/io/IOException;
+        }
+    .end annotation
+
+    .prologue
+    const/4 v2, -0x1
+
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    new-instance v0, Landroid/bluetooth/BluetoothSocket;
+
+    const/4 v5, 0x0
+
+    move v1, p1
+
+    move v3, p2
+
+    move v4, p3
+
+    move v6, v2
+
+    move-object v7, p4
+
+    invoke-direct/range {v0 .. v7}, Landroid/bluetooth/BluetoothSocket;-><init>(IIZZLandroid/bluetooth/BluetoothDevice;ILandroid/os/ParcelUuid;)V
+
+    iput-object v0, p0, Landroid/bluetooth/BluetoothServerSocket;->mSocket:Landroid/bluetooth/BluetoothSocket;
+
+    iget-object v0, p0, Landroid/bluetooth/BluetoothServerSocket;->mSocket:Landroid/bluetooth/BluetoothSocket;
+
+    invoke-virtual {v0}, Landroid/bluetooth/BluetoothSocket;->getPort()I
+
+    move-result v0
+
+    iput v0, p0, Landroid/bluetooth/BluetoothServerSocket;->mChannel:I
+
+    return-void
+.end method
+
 
 # virtual methods
 .method public accept()Landroid/bluetooth/BluetoothSocket;
@@ -178,4 +224,16 @@
     monitor-exit p0
 
     throw v0
+.end method
+
+.method setServiceName(Ljava/lang/String;)V
+    .locals 1
+    .parameter "ServiceName"
+
+    .prologue
+    iget-object v0, p0, Landroid/bluetooth/BluetoothServerSocket;->mSocket:Landroid/bluetooth/BluetoothSocket;
+
+    invoke-virtual {v0, p1}, Landroid/bluetooth/BluetoothSocket;->setServiceName(Ljava/lang/String;)V
+
+    return-void
 .end method

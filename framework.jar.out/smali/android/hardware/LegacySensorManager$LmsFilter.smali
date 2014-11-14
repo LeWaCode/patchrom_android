@@ -27,7 +27,7 @@
 # instance fields
 .field private mIndex:I
 
-.field private mT:[F
+.field private mT:[J
 
 .field private mV:[F
 
@@ -45,9 +45,9 @@
 
     iput-object v0, p0, Landroid/hardware/LegacySensorManager$LmsFilter;->mV:[F
 
-    new-array v0, v1, [F
+    new-array v0, v1, [J
 
-    iput-object v0, p0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[F
+    iput-object v0, p0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[J
 
     const/16 v0, 0xc
 
@@ -59,54 +59,43 @@
 
 # virtual methods
 .method public filter(JF)F
-    .locals 23
+    .locals 24
     .parameter "time"
     .parameter "in"
 
     .prologue
-    move/from16 v17, p3
+    move/from16 v16, p3
 
-    .local v17, v:F
+    .local v16, v:F
     const v15, 0x3089705f
 
     .local v15, ns:F
-    move-wide/from16 v0, p1
-
-    long-to-float v0, v0
-
-    move/from16 v19, v0
-
-    const v20, 0x3089705f
-
-    mul-float v16, v19, v20
-
-    .local v16, t:F
     move-object/from16 v0, p0
 
     iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mV:[F
 
-    move-object/from16 v19, v0
+    move-object/from16 v18, v0
 
     move-object/from16 v0, p0
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v20, v0
+    move/from16 v19, v0
 
-    aget v18, v19, v20
+    aget v17, v18, v19
 
-    .local v18, v1:F
-    sub-float v19, v17, v18
+    .local v17, v1:F
+    sub-float v18, v16, v17
 
-    const/high16 v20, 0x4334
+    const/high16 v19, 0x4334
 
-    cmpl-float v19, v19, v20
+    cmpl-float v18, v18, v19
 
-    if-lez v19, :cond_2
+    if-lez v18, :cond_2
 
-    const/high16 v19, 0x43b4
+    const/high16 v18, 0x43b4
 
-    sub-float v17, v17, v19
+    sub-float v16, v16, v18
 
     :cond_0
     :goto_0
@@ -114,11 +103,11 @@
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v19, v0
+    move/from16 v18, v0
 
-    add-int/lit8 v19, v19, 0x1
+    add-int/lit8 v18, v18, 0x1
 
-    move/from16 v0, v19
+    move/from16 v0, v18
 
     move-object/from16 v1, p0
 
@@ -128,19 +117,19 @@
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v19, v0
+    move/from16 v18, v0
 
-    const/16 v20, 0x18
+    const/16 v19, 0x18
 
-    move/from16 v0, v19
+    move/from16 v0, v18
 
-    move/from16 v1, v20
+    move/from16 v1, v19
 
     if-lt v0, v1, :cond_1
 
-    const/16 v19, 0xc
+    const/16 v18, 0xc
 
-    move/from16 v0, v19
+    move/from16 v0, v18
 
     move-object/from16 v1, p0
 
@@ -151,61 +140,61 @@
 
     iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mV:[F
 
-    move-object/from16 v19, v0
+    move-object/from16 v18, v0
 
     move-object/from16 v0, p0
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v20, v0
+    move/from16 v19, v0
 
-    aput v17, v19, v20
+    aput v16, v18, v19
 
     move-object/from16 v0, p0
 
-    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[F
+    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[J
 
-    move-object/from16 v19, v0
+    move-object/from16 v18, v0
 
     move-object/from16 v0, p0
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v20, v0
+    move/from16 v19, v0
 
-    aput v16, v19, v20
+    aput-wide p1, v18, v19
 
     move-object/from16 v0, p0
 
     iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mV:[F
 
-    move-object/from16 v19, v0
+    move-object/from16 v18, v0
 
     move-object/from16 v0, p0
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v20, v0
+    move/from16 v19, v0
 
-    add-int/lit8 v20, v20, -0xc
+    add-int/lit8 v19, v19, -0xc
 
-    aput v17, v19, v20
+    aput v16, v18, v19
 
     move-object/from16 v0, p0
 
-    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[F
+    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[J
 
-    move-object/from16 v19, v0
+    move-object/from16 v18, v0
 
     move-object/from16 v0, p0
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v20, v0
+    move/from16 v19, v0
 
-    add-int/lit8 v20, v20, -0xc
+    add-int/lit8 v19, v19, -0xc
 
-    aput v16, v19, v20
+    aput-wide p1, v18, v19
 
     const/4 v6, 0x0
 
@@ -226,9 +215,9 @@
 
     .local v13, i:I
     :goto_1
-    const/16 v19, 0xb
+    const/16 v18, 0xb
 
-    move/from16 v0, v19
+    move/from16 v0, v18
 
     if-ge v13, v0, :cond_3
 
@@ -236,91 +225,115 @@
 
     iget v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mIndex:I
 
-    move/from16 v19, v0
+    move/from16 v18, v0
 
-    add-int/lit8 v19, v19, -0x1
+    add-int/lit8 v18, v18, -0x1
 
-    sub-int v14, v19, v13
+    sub-int v14, v18, v13
 
     .local v14, j:I
     move-object/from16 v0, p0
 
     iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mV:[F
 
-    move-object/from16 v19, v0
+    move-object/from16 v18, v0
 
-    aget v8, v19, v14
+    aget v8, v18, v14
 
     .local v8, Z:F
-    const/high16 v19, 0x3f00
+    move-object/from16 v0, p0
+
+    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[J
+
+    move-object/from16 v18, v0
+
+    aget-wide v18, v18, v14
+
+    const-wide/16 v20, 0x2
+
+    div-long v18, v18, v20
 
     move-object/from16 v0, p0
 
-    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[F
-
-    move-object/from16 v20, v0
-
-    aget v20, v20, v14
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[F
-
-    move-object/from16 v21, v0
-
-    add-int/lit8 v22, v14, 0x1
-
-    aget v21, v21, v22
-
-    add-float v20, v20, v21
-
-    mul-float v19, v19, v20
-
-    sub-float v7, v19, v16
-
-    .local v7, T:F
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[F
-
-    move-object/from16 v19, v0
-
-    aget v19, v19, v14
-
-    move-object/from16 v0, p0
-
-    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[F
+    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[J
 
     move-object/from16 v20, v0
 
     add-int/lit8 v21, v14, 0x1
 
-    aget v20, v20, v21
+    aget-wide v20, v20, v21
 
-    sub-float v11, v19, v20
+    const-wide/16 v22, 0x2
+
+    div-long v20, v20, v22
+
+    add-long v18, v18, v20
+
+    sub-long v18, v18, p1
+
+    move-wide/from16 v0, v18
+
+    long-to-float v0, v0
+
+    move/from16 v18, v0
+
+    const v19, 0x3089705f
+
+    mul-float v7, v18, v19
+
+    .local v7, T:F
+    move-object/from16 v0, p0
+
+    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[J
+
+    move-object/from16 v18, v0
+
+    aget-wide v18, v18, v14
+
+    move-object/from16 v0, p0
+
+    iget-object v0, v0, Landroid/hardware/LegacySensorManager$LmsFilter;->mT:[J
+
+    move-object/from16 v20, v0
+
+    add-int/lit8 v21, v14, 0x1
+
+    aget-wide v20, v20, v21
+
+    sub-long v18, v18, v20
+
+    move-wide/from16 v0, v18
+
+    long-to-float v0, v0
+
+    move/from16 v18, v0
+
+    const v19, 0x3089705f
+
+    mul-float v11, v18, v19
 
     .local v11, dT:F
     mul-float/2addr v11, v11
 
-    mul-float v19, v8, v11
+    mul-float v18, v8, v11
 
-    add-float v2, v2, v19
+    add-float v2, v2, v18
 
-    mul-float v19, v7, v11
+    mul-float v18, v7, v11
 
-    mul-float v19, v19, v7
+    mul-float v18, v18, v7
 
-    add-float v3, v3, v19
+    add-float v3, v3, v18
 
-    mul-float v19, v7, v11
+    mul-float v18, v7, v11
 
-    add-float v4, v4, v19
+    add-float v4, v4, v18
 
-    mul-float v19, v7, v11
+    mul-float v18, v7, v11
 
-    mul-float v19, v19, v8
+    mul-float v18, v18, v8
 
-    add-float v5, v5, v19
+    add-float v5, v5, v18
 
     add-float/2addr v6, v11
 
@@ -339,17 +352,17 @@
     .end local v13           #i:I
     .end local v14           #j:I
     :cond_2
-    sub-float v19, v18, v17
+    sub-float v18, v17, v16
 
-    const/high16 v20, 0x4334
+    const/high16 v19, 0x4334
 
-    cmpl-float v19, v19, v20
+    cmpl-float v18, v18, v19
 
-    if-lez v19, :cond_0
+    if-lez v18, :cond_0
 
-    const/high16 v19, 0x43b4
+    const/high16 v18, 0x43b4
 
-    add-float v17, v17, v19
+    add-float v16, v16, v18
 
     goto/16 :goto_0
 
@@ -360,102 +373,102 @@
     .restart local v6       #E:F
     .restart local v13       #i:I
     :cond_3
-    mul-float v19, v2, v3
+    mul-float v18, v2, v3
 
-    mul-float v20, v4, v5
+    mul-float v19, v4, v5
+
+    add-float v18, v18, v19
+
+    mul-float v19, v6, v3
+
+    mul-float v20, v4, v4
 
     add-float v19, v19, v20
 
-    mul-float v20, v6, v3
-
-    mul-float v21, v4, v4
-
-    add-float v20, v20, v21
-
-    div-float v10, v19, v20
+    div-float v10, v18, v19
 
     .local v10, b:F
-    mul-float v19, v6, v10
+    mul-float v18, v6, v10
 
-    sub-float v19, v19, v2
+    sub-float v18, v18, v2
 
-    div-float v9, v19, v4
+    div-float v9, v18, v4
 
     .local v9, a:F
-    const v19, 0x3da3d70a
+    const v18, 0x3da3d70a
 
-    mul-float v19, v19, v9
+    mul-float v18, v18, v9
 
-    add-float v12, v10, v19
+    add-float v12, v10, v18
 
     .local v12, f:F
-    const v19, 0x3b360b61
+    const v18, 0x3b360b61
 
-    mul-float v12, v12, v19
+    mul-float v12, v12, v18
 
-    const/16 v19, 0x0
+    const/16 v18, 0x0
 
-    cmpl-float v19, v12, v19
+    cmpl-float v18, v12, v18
 
-    if-ltz v19, :cond_6
+    if-ltz v18, :cond_6
 
-    move/from16 v19, v12
+    move/from16 v18, v12
 
     :goto_2
-    const/high16 v20, 0x3f00
-
-    cmpl-float v19, v19, v20
-
-    if-ltz v19, :cond_4
-
     const/high16 v19, 0x3f00
 
-    add-float v19, v19, v12
+    cmpl-float v18, v18, v19
 
-    move/from16 v0, v19
+    if-ltz v18, :cond_4
+
+    const/high16 v18, 0x3f00
+
+    add-float v18, v18, v12
+
+    move/from16 v0, v18
 
     float-to-double v0, v0
 
-    move-wide/from16 v19, v0
+    move-wide/from16 v18, v0
 
-    invoke-static/range {v19 .. v20}, Ljava/lang/Math;->ceil(D)D
+    invoke-static/range {v18 .. v19}, Ljava/lang/Math;->ceil(D)D
 
-    move-result-wide v19
+    move-result-wide v18
 
-    move-wide/from16 v0, v19
+    move-wide/from16 v0, v18
 
     double-to-float v0, v0
 
-    move/from16 v19, v0
+    move/from16 v18, v0
 
-    sub-float v19, v12, v19
-
-    const/high16 v20, 0x3f80
-
-    add-float v12, v19, v20
-
-    :cond_4
-    const/16 v19, 0x0
-
-    cmpg-float v19, v12, v19
-
-    if-gez v19, :cond_5
+    sub-float v18, v12, v18
 
     const/high16 v19, 0x3f80
 
-    add-float v12, v12, v19
+    add-float v12, v18, v19
+
+    :cond_4
+    const/16 v18, 0x0
+
+    cmpg-float v18, v12, v18
+
+    if-gez v18, :cond_5
+
+    const/high16 v18, 0x3f80
+
+    add-float v12, v12, v18
 
     :cond_5
-    const/high16 v19, 0x43b4
+    const/high16 v18, 0x43b4
 
-    mul-float v12, v12, v19
+    mul-float v12, v12, v18
 
     return v12
 
     :cond_6
     neg-float v0, v12
 
-    move/from16 v19, v0
+    move/from16 v18, v0
 
     goto :goto_2
 .end method

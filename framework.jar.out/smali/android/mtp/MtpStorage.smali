@@ -19,11 +19,13 @@
 
 # direct methods
 .method public constructor <init>(Landroid/os/storage/StorageVolume;Landroid/content/Context;)V
-    .locals 2
+    .locals 4
     .parameter "volume"
     .parameter "context"
 
     .prologue
+    const-wide/16 v2, 0x400
+
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     invoke-virtual {p1}, Landroid/os/storage/StorageVolume;->getStorageId()I
@@ -57,6 +59,10 @@
     move-result v0
 
     int-to-long v0, v0
+
+    mul-long/2addr v0, v2
+
+    mul-long/2addr v0, v2
 
     iput-wide v0, p0, Landroid/mtp/MtpStorage;->mReserveSpace:J
 

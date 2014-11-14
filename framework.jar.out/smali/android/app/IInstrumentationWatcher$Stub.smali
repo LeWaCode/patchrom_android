@@ -168,6 +168,8 @@
     :goto_2
     invoke-virtual {p0, v0, v1, v2}, Landroid/app/IInstrumentationWatcher$Stub;->instrumentationStatus(Landroid/content/ComponentName;ILandroid/os/Bundle;)V
 
+    invoke-virtual {p3}, Landroid/os/Parcel;->writeNoException()V
+
     goto :goto_0
 
     .end local v0           #_arg0:Landroid/content/ComponentName;
@@ -232,6 +234,8 @@
     .restart local v2       #_arg2:Landroid/os/Bundle;
     :goto_4
     invoke-virtual {p0, v0, v1, v2}, Landroid/app/IInstrumentationWatcher$Stub;->instrumentationFinished(Landroid/content/ComponentName;ILandroid/os/Bundle;)V
+
+    invoke-virtual {p3}, Landroid/os/Parcel;->writeNoException()V
 
     goto :goto_0
 

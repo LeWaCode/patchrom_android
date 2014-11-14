@@ -57,6 +57,8 @@
 
 .field mMinWidth:I
 
+.field mMirrorForRtl:Z
+
 .field private mNoInvalidate:Z
 
 .field private mOnlyIndeterminate:Z
@@ -144,6 +146,8 @@
     const/4 v3, 0x0
 
     invoke-direct {p0, p1, p2, p3}, Landroid/view/View;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V
+
+    iput-boolean v3, p0, Landroid/widget/ProgressBar;->mMirrorForRtl:Z
 
     new-instance v5, Ljava/util/ArrayList;
 
@@ -335,6 +339,16 @@
     :cond_4
     invoke-virtual {p0, v3}, Landroid/widget/ProgressBar;->setIndeterminate(Z)V
 
+    const/16 v3, 0xf
+
+    iget-boolean v4, p0, Landroid/widget/ProgressBar;->mMirrorForRtl:Z
+
+    invoke-virtual {v0, v3, v4}, Landroid/content/res/TypedArray;->getBoolean(IZ)Z
+
+    move-result v3
+
+    iput-boolean v3, p0, Landroid/widget/ProgressBar;->mMirrorForRtl:Z
+
     invoke-virtual {v0}, Landroid/content/res/TypedArray;->recycle()V
 
     return-void
@@ -421,6 +435,20 @@
     invoke-virtual {v5, p1}, Landroid/graphics/drawable/LayerDrawable;->findDrawableByLayerId(I)Landroid/graphics/drawable/Drawable;
 
     move-result-object v3
+
+    if-eqz v3, :cond_0
+
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->canResolveLayoutDirection()Z
+
+    move-result v5
+
+    if-eqz v5, :cond_0
+
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->getLayoutDirection()I
+
+    move-result v5
+
+    invoke-virtual {v3, v5}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
 
     :cond_0
     const v5, 0x461c4000
@@ -966,144 +994,177 @@
 .end method
 
 .method private updateDrawableBounds(II)V
-    .locals 13
+    .locals 15
     .parameter "w"
     .parameter "h"
 
     .prologue
-    const/4 v12, 0x0
+    iget v12, p0, Landroid/widget/ProgressBar;->mPaddingRight:I
 
-    iget v10, p0, Landroid/widget/ProgressBar;->mPaddingRight:I
+    iget v13, p0, Landroid/widget/ProgressBar;->mPaddingLeft:I
 
-    sub-int v10, p1, v10
+    add-int/2addr v12, v13
 
-    iget v11, p0, Landroid/widget/ProgressBar;->mPaddingLeft:I
+    sub-int p1, p1, v12
 
-    sub-int v7, v10, v11
+    iget v12, p0, Landroid/widget/ProgressBar;->mPaddingTop:I
 
-    .local v7, right:I
-    iget v10, p0, Landroid/widget/ProgressBar;->mPaddingBottom:I
+    iget v13, p0, Landroid/widget/ProgressBar;->mPaddingBottom:I
 
-    sub-int v10, p2, v10
+    add-int/2addr v12, v13
 
-    iget v11, p0, Landroid/widget/ProgressBar;->mPaddingTop:I
+    sub-int p2, p2, v12
 
-    sub-int v0, v10, v11
+    move/from16 v8, p1
 
-    .local v0, bottom:I
-    const/4 v8, 0x0
+    .local v8, right:I
+    move/from16 v1, p2
 
-    .local v8, top:I
-    const/4 v6, 0x0
+    .local v1, bottom:I
+    const/4 v10, 0x0
 
-    .local v6, left:I
-    iget-object v10, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+    .local v10, top:I
+    const/4 v7, 0x0
 
-    if-eqz v10, :cond_1
+    .local v7, left:I
+    iget-object v12, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
 
-    iget-boolean v10, p0, Landroid/widget/ProgressBar;->mOnlyIndeterminate:Z
+    if-eqz v12, :cond_2
 
-    if-eqz v10, :cond_0
+    iget-boolean v12, p0, Landroid/widget/ProgressBar;->mOnlyIndeterminate:Z
 
-    iget-object v10, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+    if-eqz v12, :cond_0
 
-    instance-of v10, v10, Landroid/graphics/drawable/AnimationDrawable;
+    iget-object v12, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
 
-    if-nez v10, :cond_0
+    instance-of v12, v12, Landroid/graphics/drawable/AnimationDrawable;
 
-    iget-object v10, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+    if-nez v12, :cond_0
 
-    invoke-virtual {v10}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+    iget-object v12, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v12}, Landroid/graphics/drawable/Drawable;->getIntrinsicWidth()I
+
+    move-result v6
+
+    .local v6, intrinsicWidth:I
+    iget-object v12, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v12}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
 
     move-result v5
 
-    .local v5, intrinsicWidth:I
-    iget-object v10, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+    .local v5, intrinsicHeight:I
+    int-to-float v12, v6
 
-    invoke-virtual {v10}, Landroid/graphics/drawable/Drawable;->getIntrinsicHeight()I
+    int-to-float v13, v5
 
-    move-result v4
+    div-float v4, v12, v13
 
-    .local v4, intrinsicHeight:I
-    int-to-float v10, v5
+    .local v4, intrinsicAspect:F
+    move/from16 v0, p1
 
-    int-to-float v11, v4
+    int-to-float v12, v0
 
-    div-float v3, v10, v11
+    move/from16 v0, p2
 
-    .local v3, intrinsicAspect:F
-    int-to-float v10, p1
+    int-to-float v13, v0
 
-    int-to-float v11, p2
+    div-float v2, v12, v13
 
-    div-float v1, v10, v11
+    .local v2, boundAspect:F
+    cmpl-float v12, v4, v2
 
-    .local v1, boundAspect:F
-    cmpl-float v10, v3, v1
+    if-eqz v12, :cond_0
 
-    if-eqz v10, :cond_0
+    cmpl-float v12, v2, v4
 
-    cmpl-float v10, v1, v3
+    if-lez v12, :cond_4
 
-    if-lez v10, :cond_3
+    move/from16 v0, p2
 
-    int-to-float v10, p2
+    int-to-float v12, v0
 
-    mul-float/2addr v10, v3
+    mul-float/2addr v12, v4
 
-    float-to-int v9, v10
+    float-to-int v11, v12
 
-    .local v9, width:I
-    sub-int v10, p1, v9
+    .local v11, width:I
+    sub-int v12, p1, v11
 
-    div-int/lit8 v6, v10, 0x2
+    div-int/lit8 v7, v12, 0x2
 
-    add-int v7, v6, v9
+    add-int v8, v7, v11
 
-    .end local v1           #boundAspect:F
-    .end local v3           #intrinsicAspect:F
-    .end local v4           #intrinsicHeight:I
-    .end local v5           #intrinsicWidth:I
-    .end local v9           #width:I
+    .end local v2           #boundAspect:F
+    .end local v4           #intrinsicAspect:F
+    .end local v5           #intrinsicHeight:I
+    .end local v6           #intrinsicWidth:I
+    .end local v11           #width:I
     :cond_0
     :goto_0
-    iget-object v10, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->isLayoutRtl()Z
 
-    invoke-virtual {v10, v6, v8, v7, v0}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+    move-result v12
 
+    if-eqz v12, :cond_1
+
+    iget-boolean v12, p0, Landroid/widget/ProgressBar;->mMirrorForRtl:Z
+
+    if-eqz v12, :cond_1
+
+    move v9, v7
+
+    .local v9, tempLeft:I
+    sub-int v7, p1, v8
+
+    sub-int v8, p1, v9
+
+    .end local v9           #tempLeft:I
     :cond_1
-    iget-object v10, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
+    iget-object v12, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
 
-    if-eqz v10, :cond_2
-
-    iget-object v10, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
-
-    invoke-virtual {v10, v12, v12, v7, v0}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+    invoke-virtual {v12, v7, v10, v8, v1}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
 
     :cond_2
+    iget-object v12, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
+
+    if-eqz v12, :cond_3
+
+    iget-object v12, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
+
+    const/4 v13, 0x0
+
+    const/4 v14, 0x0
+
+    invoke-virtual {v12, v13, v14, v8, v1}, Landroid/graphics/drawable/Drawable;->setBounds(IIII)V
+
+    :cond_3
     return-void
 
-    .restart local v1       #boundAspect:F
-    .restart local v3       #intrinsicAspect:F
-    .restart local v4       #intrinsicHeight:I
-    .restart local v5       #intrinsicWidth:I
-    :cond_3
-    int-to-float v10, p1
+    .restart local v2       #boundAspect:F
+    .restart local v4       #intrinsicAspect:F
+    .restart local v5       #intrinsicHeight:I
+    .restart local v6       #intrinsicWidth:I
+    :cond_4
+    move/from16 v0, p1
 
-    const/high16 v11, 0x3f80
+    int-to-float v12, v0
 
-    div-float/2addr v11, v3
+    const/high16 v13, 0x3f80
 
-    mul-float/2addr v10, v11
+    div-float/2addr v13, v4
 
-    float-to-int v2, v10
+    mul-float/2addr v12, v13
 
-    .local v2, height:I
-    sub-int v10, p2, v2
+    float-to-int v3, v12
 
-    div-int/lit8 v8, v10, 0x2
+    .local v3, height:I
+    sub-int v12, p2, v3
 
-    add-int v0, v8, v2
+    div-int/lit8 v10, v12, 0x2
+
+    add-int v1, v10, v3
 
     goto :goto_0
 .end method
@@ -1298,35 +1359,6 @@
     iget-object v0, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
 
     return-object v0
-.end method
-
-.method public getResolvedLayoutDirection(Landroid/graphics/drawable/Drawable;)I
-    .locals 1
-    .parameter "who"
-
-    .prologue
-    iget-object v0, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
-
-    if-eq p1, v0, :cond_0
-
-    iget-object v0, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
-
-    if-ne p1, v0, :cond_1
-
-    :cond_0
-    invoke-virtual {p0}, Landroid/widget/ProgressBar;->getResolvedLayoutDirection()I
-
-    move-result v0
-
-    :goto_0
-    return v0
-
-    :cond_1
-    invoke-super {p0, p1}, Landroid/view/View;->getResolvedLayoutDirection(Landroid/graphics/drawable/Drawable;)I
-
-    move-result v0
-
-    goto :goto_0
 .end method
 
 .method public declared-synchronized getSecondaryProgress()I
@@ -1698,7 +1730,23 @@
 
     invoke-virtual {p1}, Landroid/graphics/Canvas;->save()I
 
-    iget v4, p0, Landroid/widget/ProgressBar;->mPaddingLeft:I
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->isLayoutRtl()Z
+
+    move-result v4
+
+    if-eqz v4, :cond_2
+
+    iget-boolean v4, p0, Landroid/widget/ProgressBar;->mMirrorForRtl:Z
+
+    if-eqz v4, :cond_2
+
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->getWidth()I
+
+    move-result v4
+
+    iget v5, p0, Landroid/widget/ProgressBar;->mPaddingRight:I
+
+    sub-int/2addr v4, v5
 
     int-to-float v4, v4
 
@@ -1708,6 +1756,13 @@
 
     invoke-virtual {p1, v4, v5}, Landroid/graphics/Canvas;->translate(FF)V
 
+    const/high16 v4, -0x4080
+
+    const/high16 v5, 0x3f80
+
+    invoke-virtual {p1, v4, v5}, Landroid/graphics/Canvas;->scale(FF)V
+
+    :goto_0
     invoke-virtual {p0}, Landroid/widget/ProgressBar;->getDrawingTime()J
 
     move-result-wide v2
@@ -1727,7 +1782,7 @@
 
     invoke-virtual {v4}, Landroid/view/animation/Transformation;->getAlpha()F
     :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_1
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     move-result v1
 
@@ -1745,7 +1800,7 @@
 
     invoke-virtual {v0, v4}, Landroid/graphics/drawable/Drawable;->setLevel(I)Z
     :try_end_1
-    .catchall {:try_start_1 .. :try_end_1} :catchall_0
+    .catchall {:try_start_1 .. :try_end_1} :catchall_1
 
     const/4 v4, 0x0
 
@@ -1777,7 +1832,7 @@
 
     iput-boolean v4, p0, Landroid/widget/ProgressBar;->mShouldStartAnimationDrawable:Z
     :try_end_2
-    .catchall {:try_start_2 .. :try_end_2} :catchall_1
+    .catchall {:try_start_2 .. :try_end_2} :catchall_0
 
     .end local v2           #time:J
     :cond_1
@@ -1786,29 +1841,44 @@
     return-void
 
     .restart local v0       #d:Landroid/graphics/drawable/Drawable;
-    .restart local v1       #scale:F
-    .restart local v2       #time:J
-    :catchall_0
-    move-exception v4
-
-    const/4 v5, 0x0
-
+    :cond_2
     :try_start_3
-    iput-boolean v5, p0, Landroid/widget/ProgressBar;->mInDrawing:Z
+    iget v4, p0, Landroid/widget/ProgressBar;->mPaddingLeft:I
 
-    throw v4
+    int-to-float v4, v4
+
+    iget v5, p0, Landroid/widget/ProgressBar;->mPaddingTop:I
+
+    int-to-float v5, v5
+
+    invoke-virtual {p1, v4, v5}, Landroid/graphics/Canvas;->translate(FF)V
     :try_end_3
-    .catchall {:try_start_3 .. :try_end_3} :catchall_1
+    .catchall {:try_start_3 .. :try_end_3} :catchall_0
+
+    goto :goto_0
 
     .end local v0           #d:Landroid/graphics/drawable/Drawable;
-    .end local v1           #scale:F
-    .end local v2           #time:J
-    :catchall_1
+    :catchall_0
     move-exception v4
 
     monitor-exit p0
 
     throw v4
+
+    .restart local v0       #d:Landroid/graphics/drawable/Drawable;
+    .restart local v1       #scale:F
+    .restart local v2       #time:J
+    :catchall_1
+    move-exception v4
+
+    const/4 v5, 0x0
+
+    :try_start_4
+    iput-boolean v5, p0, Landroid/widget/ProgressBar;->mInDrawing:Z
+
+    throw v4
+    :try_end_4
+    .catchall {:try_start_4 .. :try_end_4} :catchall_0
 .end method
 
 .method public onInitializeAccessibilityEvent(Landroid/view/accessibility/AccessibilityEvent;)V
@@ -1978,6 +2048,40 @@
     invoke-direct {p0}, Landroid/widget/ProgressBar;->scheduleAccessibilityEventSender()V
 
     :cond_0
+    return-void
+.end method
+
+.method public onResolveDrawables(I)V
+    .locals 2
+    .parameter "layoutDirection"
+
+    .prologue
+    iget-object v0, p0, Landroid/widget/ProgressBar;->mCurrentDrawable:Landroid/graphics/drawable/Drawable;
+
+    .local v0, d:Landroid/graphics/drawable/Drawable;
+    if-eqz v0, :cond_0
+
+    invoke-virtual {v0, p1}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
+
+    :cond_0
+    iget-object v1, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+
+    if-eqz v1, :cond_1
+
+    iget-object v1, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v1, p1}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
+
+    :cond_1
+    iget-object v1, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
+
+    if-eqz v1, :cond_2
+
+    iget-object v1, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {v1, p1}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
+
+    :cond_2
     return-void
 .end method
 
@@ -2155,7 +2259,7 @@
 .end method
 
 .method public setIndeterminateDrawable(Landroid/graphics/drawable/Drawable;)V
-    .locals 1
+    .locals 2
     .parameter "d"
 
     .prologue
@@ -2166,15 +2270,34 @@
     :cond_0
     iput-object p1, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
 
-    iget-boolean v0, p0, Landroid/widget/ProgressBar;->mIndeterminate:Z
+    iget-object v0, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
 
     if-eqz v0, :cond_1
+
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->canResolveLayoutDirection()Z
+
+    move-result v0
+
+    if-eqz v0, :cond_1
+
+    iget-object v0, p0, Landroid/widget/ProgressBar;->mIndeterminateDrawable:Landroid/graphics/drawable/Drawable;
+
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->getLayoutDirection()I
+
+    move-result v1
+
+    invoke-virtual {v0, v1}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
+
+    :cond_1
+    iget-boolean v0, p0, Landroid/widget/ProgressBar;->mIndeterminate:Z
+
+    if-eqz v0, :cond_2
 
     iput-object p1, p0, Landroid/widget/ProgressBar;->mCurrentDrawable:Landroid/graphics/drawable/Drawable;
 
     invoke-virtual {p0}, Landroid/widget/ProgressBar;->postInvalidate()V
 
-    :cond_1
+    :cond_2
     return-void
 .end method
 
@@ -2354,11 +2477,11 @@
 
     iget-object v2, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
 
-    if-eqz v2, :cond_3
+    if-eqz v2, :cond_4
 
     iget-object v2, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
 
-    if-eq p1, v2, :cond_3
+    if-eq p1, v2, :cond_4
 
     iget-object v2, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
 
@@ -2370,10 +2493,23 @@
 
     .local v1, needUpdate:Z
     :goto_0
-    if-eqz p1, :cond_0
+    if-eqz p1, :cond_1
 
     invoke-virtual {p1, p0}, Landroid/graphics/drawable/Drawable;->setCallback(Landroid/graphics/drawable/Drawable$Callback;)V
 
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->canResolveLayoutDirection()Z
+
+    move-result v2
+
+    if-eqz v2, :cond_0
+
+    invoke-virtual {p0}, Landroid/widget/ProgressBar;->getLayoutDirection()I
+
+    move-result v2
+
+    invoke-virtual {p1, v2}, Landroid/graphics/drawable/Drawable;->setLayoutDirection(I)V
+
+    :cond_0
     invoke-virtual {p1}, Landroid/graphics/drawable/Drawable;->getMinimumHeight()I
 
     move-result v0
@@ -2381,26 +2517,26 @@
     .local v0, drawableHeight:I
     iget v2, p0, Landroid/widget/ProgressBar;->mMaxHeight:I
 
-    if-ge v2, v0, :cond_0
+    if-ge v2, v0, :cond_1
 
     iput v0, p0, Landroid/widget/ProgressBar;->mMaxHeight:I
 
     invoke-virtual {p0}, Landroid/widget/ProgressBar;->requestLayout()V
 
     .end local v0           #drawableHeight:I
-    :cond_0
+    :cond_1
     iput-object p1, p0, Landroid/widget/ProgressBar;->mProgressDrawable:Landroid/graphics/drawable/Drawable;
 
     iget-boolean v2, p0, Landroid/widget/ProgressBar;->mIndeterminate:Z
 
-    if-nez v2, :cond_1
+    if-nez v2, :cond_2
 
     iput-object p1, p0, Landroid/widget/ProgressBar;->mCurrentDrawable:Landroid/graphics/drawable/Drawable;
 
     invoke-virtual {p0}, Landroid/widget/ProgressBar;->postInvalidate()V
 
-    :cond_1
-    if-eqz v1, :cond_2
+    :cond_2
+    if-eqz v1, :cond_3
 
     invoke-virtual {p0}, Landroid/widget/ProgressBar;->getWidth()I
 
@@ -2426,11 +2562,11 @@
 
     invoke-direct {p0, v2, v3, v4, v4}, Landroid/widget/ProgressBar;->doRefreshProgress(IIZZ)V
 
-    :cond_2
+    :cond_3
     return-void
 
     .end local v1           #needUpdate:Z
-    :cond_3
+    :cond_4
     const/4 v1, 0x0
 
     .restart local v1       #needUpdate:Z

@@ -136,7 +136,7 @@
     .parameter "attrs"
 
     .prologue
-    const v0, 0x10103c1
+    const v0, 0x1010402
 
     invoke-direct {p0, p1, p2, v0}, Landroid/widget/StackView;-><init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V
 

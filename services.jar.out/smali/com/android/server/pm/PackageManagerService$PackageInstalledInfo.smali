@@ -17,6 +17,10 @@
 # instance fields
 .field name:Ljava/lang/String;
 
+.field newUsers:[I
+
+.field origUsers:[I
+
 .field pkg:Landroid/content/pm/PackageParser$Package;
 
 .field removedInfo:Lcom/android/server/pm/PackageManagerService$PackageRemovedInfo;

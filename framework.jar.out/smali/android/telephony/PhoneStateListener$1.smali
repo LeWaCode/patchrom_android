@@ -90,11 +90,21 @@
     return-void
 .end method
 
-.method public onCellInfoChanged(Landroid/telephony/CellInfo;)V
+.method public onCellInfoChanged(Ljava/util/List;)V
     .locals 3
-    .parameter "cellInfo"
+    .parameter
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/List",
+            "<",
+            "Landroid/telephony/CellInfo;",
+            ">;)V"
+        }
+    .end annotation
 
     .prologue
+    .local p1, cellInfo:Ljava/util/List;,"Ljava/util/List<Landroid/telephony/CellInfo;>;"
     const/4 v2, 0x0
 
     iget-object v0, p0, Landroid/telephony/PhoneStateListener$1;->this$0:Landroid/telephony/PhoneStateListener;
@@ -103,7 +113,7 @@
 
     const/16 v1, 0x400
 
-    invoke-static {v0, v1, v2, v2}, Landroid/os/Message;->obtain(Landroid/os/Handler;III)Landroid/os/Message;
+    invoke-static {v0, v1, v2, v2, p1}, Landroid/os/Message;->obtain(Landroid/os/Handler;IIILjava/lang/Object;)Landroid/os/Message;
 
     move-result-object v0
 

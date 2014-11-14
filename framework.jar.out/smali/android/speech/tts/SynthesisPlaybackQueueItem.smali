@@ -406,18 +406,28 @@
 
     iget-object v2, p0, Landroid/speech/tts/SynthesisPlaybackQueueItem;->mAudioTrack:Landroid/speech/tts/BlockingAudioTrack;
 
-    invoke-virtual {v2}, Landroid/speech/tts/BlockingAudioTrack;->init()V
+    invoke-virtual {v2}, Landroid/speech/tts/BlockingAudioTrack;->init()Z
 
+    move-result v2
+
+    if-nez v2, :cond_0
+
+    invoke-interface {v1}, Landroid/speech/tts/TextToSpeechService$UtteranceProgressDispatcher;->dispatchOnError()V
+
+    :goto_0
+    return-void
+
+    :cond_0
     const/4 v0, 0x0
 
     .local v0, buffer:[B
-    :goto_0
+    :goto_1
     :try_start_0
     invoke-direct {p0}, Landroid/speech/tts/SynthesisPlaybackQueueItem;->take()[B
 
     move-result-object v0
 
-    if-eqz v0, :cond_0
+    if-eqz v0, :cond_1
 
     iget-object v2, p0, Landroid/speech/tts/SynthesisPlaybackQueueItem;->mAudioTrack:Landroid/speech/tts/BlockingAudioTrack;
 
@@ -429,33 +439,33 @@
     :try_end_0
     .catch Ljava/lang/InterruptedException; {:try_start_0 .. :try_end_0} :catch_0
 
-    goto :goto_0
+    goto :goto_1
 
     :catch_0
     move-exception v2
 
-    :cond_0
+    :cond_1
     iget-object v2, p0, Landroid/speech/tts/SynthesisPlaybackQueueItem;->mAudioTrack:Landroid/speech/tts/BlockingAudioTrack;
 
     invoke-virtual {v2}, Landroid/speech/tts/BlockingAudioTrack;->waitAndRelease()V
 
     iget-boolean v2, p0, Landroid/speech/tts/SynthesisPlaybackQueueItem;->mIsError:Z
 
-    if-eqz v2, :cond_1
+    if-eqz v2, :cond_2
 
     invoke-interface {v1}, Landroid/speech/tts/TextToSpeechService$UtteranceProgressDispatcher;->dispatchOnError()V
 
-    :goto_1
+    :goto_2
     iget-object v2, p0, Landroid/speech/tts/SynthesisPlaybackQueueItem;->mLogger:Landroid/speech/tts/EventLogger;
 
     invoke-virtual {v2}, Landroid/speech/tts/EventLogger;->onWriteData()V
 
-    return-void
+    goto :goto_0
 
-    :cond_1
+    :cond_2
     invoke-interface {v1}, Landroid/speech/tts/TextToSpeechService$UtteranceProgressDispatcher;->dispatchOnDone()V
 
-    goto :goto_1
+    goto :goto_2
 .end method
 
 .method stop(Z)V

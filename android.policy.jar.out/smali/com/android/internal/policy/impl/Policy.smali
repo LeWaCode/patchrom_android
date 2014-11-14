@@ -41,7 +41,7 @@
 
     const/4 v6, 0x3
 
-    const-string v7, "com.android.internal.policy.impl.PhoneWindow$ContextMenuCallback"
+    const-string v7, "com.android.internal.policy.impl.PhoneWindow$DialogMenuCallback"
 
     aput-object v7, v5, v6
 
@@ -150,14 +150,11 @@
 .method public makeNewLayoutInflater(Landroid/content/Context;)Landroid/view/LayoutInflater;
     .locals 1
     .parameter "context"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
-    new-instance v0, Lcom/android/internal/policy/impl/LewaPhoneLayoutInflater;
+    new-instance v0, Lcom/android/internal/policy/impl/PhoneLayoutInflater;
 
-    invoke-direct {v0, p1}, Lcom/android/internal/policy/impl/LewaPhoneLayoutInflater;-><init>(Landroid/content/Context;)V
+    invoke-direct {v0, p1}, Lcom/android/internal/policy/impl/PhoneLayoutInflater;-><init>(Landroid/content/Context;)V
 
     return-object v0
 .end method
@@ -176,9 +173,6 @@
 
 .method public makeNewWindowManager()Landroid/view/WindowManagerPolicy;
     .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->CHANGE_CODE:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 
     .prologue
     new-instance v0, Lcom/android/internal/policy/impl/LewaPhoneWindowManager;

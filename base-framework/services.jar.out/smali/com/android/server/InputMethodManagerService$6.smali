@@ -3,7 +3,7 @@
 .source "InputMethodManagerService.java"
 
 # interfaces
-.implements Landroid/content/DialogInterface$OnClickListener;
+.implements Landroid/widget/CompoundButton$OnCheckedChangeListener;
 
 
 # annotations
@@ -36,125 +36,24 @@
 
 
 # virtual methods
-.method public onClick(Landroid/content/DialogInterface;I)V
-    .locals 5
-    .parameter "dialog"
-    .parameter "which"
+.method public onCheckedChanged(Landroid/widget/CompoundButton;Z)V
+    .locals 1
+    .parameter "buttonView"
+    .parameter "isChecked"
 
     .prologue
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
+    iget-object v0, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
 
-    iget-object v3, v2, Lcom/android/server/InputMethodManagerService;->mMethodMap:Ljava/util/HashMap;
+    #getter for: Lcom/android/server/InputMethodManagerService;->mWindowManagerService:Lcom/android/server/wm/WindowManagerService;
+    invoke-static {v0}, Lcom/android/server/InputMethodManagerService;->access$1200(Lcom/android/server/InputMethodManagerService;)Lcom/android/server/wm/WindowManagerService;
 
-    monitor-enter v3
+    move-result-object v0
 
-    :try_start_0
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
+    invoke-virtual {v0, p2}, Lcom/android/server/wm/WindowManagerService;->setHardKeyboardEnabled(Z)V
 
-    #getter for: Lcom/android/server/InputMethodManagerService;->mIms:[Landroid/view/inputmethod/InputMethodInfo;
-    invoke-static {v2}, Lcom/android/server/InputMethodManagerService;->access$1100(Lcom/android/server/InputMethodManagerService;)[Landroid/view/inputmethod/InputMethodInfo;
+    iget-object v0, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
 
-    move-result-object v2
+    invoke-virtual {v0}, Lcom/android/server/InputMethodManagerService;->hideInputMethodMenu()V
 
-    if-eqz v2, :cond_0
-
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
-
-    #getter for: Lcom/android/server/InputMethodManagerService;->mIms:[Landroid/view/inputmethod/InputMethodInfo;
-    invoke-static {v2}, Lcom/android/server/InputMethodManagerService;->access$1100(Lcom/android/server/InputMethodManagerService;)[Landroid/view/inputmethod/InputMethodInfo;
-
-    move-result-object v2
-
-    array-length v2, v2
-
-    if-le v2, p2, :cond_0
-
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
-
-    #getter for: Lcom/android/server/InputMethodManagerService;->mSubtypeIds:[I
-    invoke-static {v2}, Lcom/android/server/InputMethodManagerService;->access$1200(Lcom/android/server/InputMethodManagerService;)[I
-
-    move-result-object v2
-
-    if-eqz v2, :cond_0
-
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
-
-    #getter for: Lcom/android/server/InputMethodManagerService;->mSubtypeIds:[I
-    invoke-static {v2}, Lcom/android/server/InputMethodManagerService;->access$1200(Lcom/android/server/InputMethodManagerService;)[I
-
-    move-result-object v2
-
-    array-length v2, v2
-
-    if-gt v2, p2, :cond_1
-
-    :cond_0
-    monitor-exit v3
-
-    :goto_0
     return-void
-
-    :cond_1
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
-
-    #getter for: Lcom/android/server/InputMethodManagerService;->mIms:[Landroid/view/inputmethod/InputMethodInfo;
-    invoke-static {v2}, Lcom/android/server/InputMethodManagerService;->access$1100(Lcom/android/server/InputMethodManagerService;)[Landroid/view/inputmethod/InputMethodInfo;
-
-    move-result-object v2
-
-    aget-object v0, v2, p2
-
-    .local v0, im:Landroid/view/inputmethod/InputMethodInfo;
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
-
-    #getter for: Lcom/android/server/InputMethodManagerService;->mSubtypeIds:[I
-    invoke-static {v2}, Lcom/android/server/InputMethodManagerService;->access$1200(Lcom/android/server/InputMethodManagerService;)[I
-
-    move-result-object v2
-
-    aget v1, v2, p2
-
-    .local v1, subtypeId:I
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
-
-    invoke-virtual {v2}, Lcom/android/server/InputMethodManagerService;->hideInputMethodMenu()V
-
-    if-eqz v0, :cond_4
-
-    if-ltz v1, :cond_2
-
-    invoke-virtual {v0}, Landroid/view/inputmethod/InputMethodInfo;->getSubtypeCount()I
-
-    move-result v2
-
-    if-lt v1, v2, :cond_3
-
-    :cond_2
-    const/4 v1, -0x1
-
-    :cond_3
-    iget-object v2, p0, Lcom/android/server/InputMethodManagerService$6;->this$0:Lcom/android/server/InputMethodManagerService;
-
-    invoke-virtual {v0}, Landroid/view/inputmethod/InputMethodInfo;->getId()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-virtual {v2, v4, v1}, Lcom/android/server/InputMethodManagerService;->setInputMethodLocked(Ljava/lang/String;I)V
-
-    :cond_4
-    monitor-exit v3
-
-    goto :goto_0
-
-    .end local v0           #im:Landroid/view/inputmethod/InputMethodInfo;
-    .end local v1           #subtypeId:I
-    :catchall_0
-    move-exception v2
-
-    monitor-exit v3
-    :try_end_0
-    .catchall {:try_start_0 .. :try_end_0} :catchall_0
-
-    throw v2
 .end method

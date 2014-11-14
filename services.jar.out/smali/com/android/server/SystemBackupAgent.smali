@@ -6,17 +6,17 @@
 # static fields
 .field private static final TAG:Ljava/lang/String; = "SystemBackupAgent"
 
-.field private static final WALLPAPER_IMAGE:Ljava/lang/String; = "/data/system/users/0/wallpaper"
+.field private static final WALLPAPER_IMAGE:Ljava/lang/String; = null
 
-.field private static final WALLPAPER_IMAGE_DIR:Ljava/lang/String; = "/data/system/users/0"
+.field private static final WALLPAPER_IMAGE_DIR:Ljava/lang/String; = null
 
 .field private static final WALLPAPER_IMAGE_FILENAME:Ljava/lang/String; = "wallpaper"
 
 .field private static final WALLPAPER_IMAGE_KEY:Ljava/lang/String; = "/data/data/com.android.settings/files/wallpaper"
 
-.field private static final WALLPAPER_INFO:Ljava/lang/String; = "/data/system/users/0/wallpaper_info.xml"
+.field private static final WALLPAPER_INFO:Ljava/lang/String; = null
 
-.field private static final WALLPAPER_INFO_DIR:Ljava/lang/String; = "/data/system/users/0"
+.field private static final WALLPAPER_INFO_DIR:Ljava/lang/String; = null
 
 .field private static final WALLPAPER_INFO_FILENAME:Ljava/lang/String; = "wallpaper_info.xml"
 
@@ -24,6 +24,43 @@
 
 
 # direct methods
+.method static constructor <clinit>()V
+    .locals 2
+
+    .prologue
+    const/4 v1, 0x0
+
+    invoke-static {v1}, Landroid/os/Environment;->getUserSystemDirectory(I)Ljava/io/File;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v0
+
+    sput-object v0, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE_DIR:Ljava/lang/String;
+
+    sget-object v0, Landroid/app/backup/WallpaperBackupHelper;->WALLPAPER_IMAGE:Ljava/lang/String;
+
+    sput-object v0, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
+
+    invoke-static {v1}, Landroid/os/Environment;->getUserSystemDirectory(I)Ljava/io/File;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/io/File;->getAbsolutePath()Ljava/lang/String;
+
+    move-result-object v0
+
+    sput-object v0, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO_DIR:Ljava/lang/String;
+
+    sget-object v0, Landroid/app/backup/WallpaperBackupHelper;->WALLPAPER_INFO:Ljava/lang/String;
+
+    sput-object v0, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
+
+    return-void
+.end method
+
 .method public constructor <init>()V
     .locals 0
 
@@ -46,9 +83,9 @@
 
     const-string v1, "r"
 
-    const-string v3, "/data/system/users/0"
+    sget-object v3, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO_DIR:Ljava/lang/String;
 
-    const-string v4, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v4, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
 
     invoke-virtual {p1}, Landroid/app/backup/FullBackupDataOutput;->getData()Landroid/app/backup/BackupDataOutput;
 
@@ -62,9 +99,9 @@
 
     const-string v1, "r"
 
-    const-string v3, "/data/system/users/0"
+    sget-object v3, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE_DIR:Ljava/lang/String;
 
-    const-string v4, "/data/system/users/0/wallpaper"
+    sget-object v4, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     invoke-virtual {p1}, Landroid/app/backup/FullBackupDataOutput;->getData()Landroid/app/backup/BackupDataOutput;
 
@@ -106,11 +143,11 @@
     .local v2, wallpaper:Lcom/android/server/WallpaperManagerService;
     new-array v0, v6, [Ljava/lang/String;
 
-    const-string v3, "/data/system/users/0/wallpaper"
+    sget-object v3, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     aput-object v3, v0, v4
 
-    const-string v3, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v3, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
 
     aput-object v3, v0, v5
 
@@ -147,7 +184,7 @@
     new-array v0, v5, [Ljava/lang/String;
 
     .end local v0           #files:[Ljava/lang/String;
-    const-string v3, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v3, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
 
     aput-object v3, v0, v4
 
@@ -213,11 +250,11 @@
 
     new-array v4, v6, [Ljava/lang/String;
 
-    const-string v5, "/data/system/users/0/wallpaper"
+    sget-object v5, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     aput-object v5, v4, v7
 
-    const-string v5, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v5, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
 
     aput-object v5, v4, v8
 
@@ -241,7 +278,7 @@
 
     new-array v4, v8, [Ljava/lang/String;
 
-    const-string v5, "/data/system/users/0/wallpaper"
+    sget-object v5, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     aput-object v5, v4, v7
 
@@ -287,7 +324,7 @@
 
     new-instance v2, Ljava/io/File;
 
-    const-string v3, "/data/system/users/0/wallpaper"
+    sget-object v3, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     invoke-direct {v2, v3}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
@@ -295,7 +332,7 @@
 
     new-instance v2, Ljava/io/File;
 
-    const-string v3, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v3, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
 
     invoke-direct {v2, v3}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
@@ -385,7 +422,7 @@
     new-instance v9, Ljava/io/File;
 
     .end local v9           #outFile:Ljava/io/File;
-    const-string v1, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v1, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
 
     invoke-direct {v9, v1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
@@ -486,7 +523,7 @@
     new-instance v9, Ljava/io/File;
 
     .end local v9           #outFile:Ljava/io/File;
-    const-string v1, "/data/system/users/0/wallpaper"
+    sget-object v1, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     invoke-direct {v9, v1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
@@ -503,7 +540,7 @@
 
     new-instance v1, Ljava/io/File;
 
-    const-string v2, "/data/system/users/0/wallpaper"
+    sget-object v2, Lcom/android/server/SystemBackupAgent;->WALLPAPER_IMAGE:Ljava/lang/String;
 
     invoke-direct {v1, v2}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
@@ -511,7 +548,7 @@
 
     new-instance v1, Ljava/io/File;
 
-    const-string v2, "/data/system/users/0/wallpaper_info.xml"
+    sget-object v2, Lcom/android/server/SystemBackupAgent;->WALLPAPER_INFO:Ljava/lang/String;
 
     invoke-direct {v1, v2}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 

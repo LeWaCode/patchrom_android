@@ -309,11 +309,19 @@
 
 .field public static final Theme_DeviceDefault_Light_NoActionBar_Fullscreen:I = 0x103012d
 
+.field public static final Theme_DeviceDefault_Light_NoActionBar_Overscan:I = 0x10301e0
+
+.field public static final Theme_DeviceDefault_Light_NoActionBar_TranslucentDecor:I = 0x10301e4
+
 .field public static final Theme_DeviceDefault_Light_Panel:I = 0x103013b
 
 .field public static final Theme_DeviceDefault_NoActionBar:I = 0x1030129
 
 .field public static final Theme_DeviceDefault_NoActionBar_Fullscreen:I = 0x103012a
+
+.field public static final Theme_DeviceDefault_NoActionBar_Overscan:I = 0x10301df
+
+.field public static final Theme_DeviceDefault_NoActionBar_TranslucentDecor:I = 0x10301e3
 
 .field public static final Theme_DeviceDefault_Panel:I = 0x103013a
 
@@ -359,11 +367,19 @@
 
 .field public static final Theme_Holo_Light_NoActionBar_Fullscreen:I = 0x10300f1
 
+.field public static final Theme_Holo_Light_NoActionBar_Overscan:I = 0x10301de
+
+.field public static final Theme_Holo_Light_NoActionBar_TranslucentDecor:I = 0x10301e2
+
 .field public static final Theme_Holo_Light_Panel:I = 0x103007c
 
 .field public static final Theme_Holo_NoActionBar:I = 0x103006c
 
 .field public static final Theme_Holo_NoActionBar_Fullscreen:I = 0x103006d
+
+.field public static final Theme_Holo_NoActionBar_Overscan:I = 0x10301dd
+
+.field public static final Theme_Holo_NoActionBar_TranslucentDecor:I = 0x10301e1
 
 .field public static final Theme_Holo_Panel:I = 0x103007b
 
@@ -487,6 +503,8 @@
 
 .field public static final Widget_DeviceDefault_CalendarView:I = 0x103016e
 
+.field public static final Widget_DeviceDefault_CheckedTextView:I = 0x10301db
+
 .field public static final Widget_DeviceDefault_CompoundButton_CheckBox:I = 0x1030148
 
 .field public static final Widget_DeviceDefault_CompoundButton_RadioButton:I = 0x1030159
@@ -552,6 +570,8 @@
 .field public static final Widget_DeviceDefault_Light_Button_Toggle:I = 0x1030178
 
 .field public static final Widget_DeviceDefault_Light_CalendarView:I = 0x103019e
+
+.field public static final Widget_DeviceDefault_Light_CheckedTextView:I = 0x10301dc
 
 .field public static final Widget_DeviceDefault_Light_CompoundButton_CheckBox:I = 0x103017c
 
@@ -723,6 +743,8 @@
 
 .field public static final Widget_Holo_CalendarView:I = 0x10300ec
 
+.field public static final Widget_Holo_CheckedTextView:I = 0x10301d9
+
 .field public static final Widget_Holo_CompoundButton_CheckBox:I = 0x1030091
 
 .field public static final Widget_Holo_CompoundButton_RadioButton:I = 0x10300a2
@@ -788,6 +810,8 @@
 .field public static final Widget_Holo_Light_Button_Toggle:I = 0x10300b9
 
 .field public static final Widget_Holo_Light_CalendarView:I = 0x10300ed
+
+.field public static final Widget_Holo_Light_CheckedTextView:I = 0x10301da
 
 .field public static final Widget_Holo_Light_CompoundButton_CheckBox:I = 0x10300bc
 

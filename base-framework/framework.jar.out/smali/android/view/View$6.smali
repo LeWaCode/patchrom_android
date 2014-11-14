@@ -41,7 +41,7 @@
     .parameter "object"
 
     .prologue
-    invoke-virtual {p1}, Landroid/view/View;->getTranslationY()F
+    invoke-virtual {p1}, Landroid/view/View;->getX()F
 
     move-result v0
 
@@ -73,7 +73,7 @@
     .parameter "value"
 
     .prologue
-    invoke-virtual {p1, p2}, Landroid/view/View;->setTranslationY(F)V
+    invoke-virtual {p1, p2}, Landroid/view/View;->setX(F)V
 
     return-void
 .end method

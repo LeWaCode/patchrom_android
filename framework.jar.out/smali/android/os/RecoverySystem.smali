@@ -503,6 +503,24 @@
 
     move-result-object v2
 
+    const-string v3, "\n--locale="
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v3
+
+    invoke-virtual {v3}, Ljava/util/Locale;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v2
+
     invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
     move-result-object v0
@@ -514,7 +532,7 @@
 .end method
 
 .method public static rebootWipeCache(Landroid/content/Context;)V
-    .locals 1
+    .locals 2
     .parameter "context"
     .annotation system Ldalvik/annotation/Throws;
         value = {
@@ -523,7 +541,31 @@
     .end annotation
 
     .prologue
-    const-string v0, "--wipe_cache"
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v1, "--wipe_cache\n--locale="
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v1
+
+    invoke-virtual {v1}, Ljava/util/Locale;->toString()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
 
     invoke-static {p0, v0}, Landroid/os/RecoverySystem;->bootCommand(Landroid/content/Context;Ljava/lang/String;)V
 
@@ -531,7 +573,7 @@
 .end method
 
 .method public static rebootWipeUserData(Landroid/content/Context;)V
-    .locals 9
+    .locals 10
     .parameter "context"
     .annotation system Ldalvik/annotation/Throws;
         value = {
@@ -540,13 +582,13 @@
     .end annotation
 
     .prologue
-    const/4 v4, 0x0
+    const/4 v5, 0x0
 
-    new-instance v8, Landroid/os/ConditionVariable;
+    new-instance v9, Landroid/os/ConditionVariable;
 
-    invoke-direct {v8}, Landroid/os/ConditionVariable;-><init>()V
+    invoke-direct {v9}, Landroid/os/ConditionVariable;-><init>()V
 
-    .local v8, condition:Landroid/os/ConditionVariable;
+    .local v9, condition:Landroid/os/ConditionVariable;
     new-instance v1, Landroid/content/Intent;
 
     const-string v0, "android.intent.action.MASTER_CLEAR_NOTIFICATION"
@@ -554,25 +596,51 @@
     invoke-direct {v1, v0}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
 
     .local v1, intent:Landroid/content/Intent;
-    const-string v2, "android.permission.MASTER_CLEAR"
+    sget-object v2, Landroid/os/UserHandle;->OWNER:Landroid/os/UserHandle;
 
-    new-instance v3, Landroid/os/RecoverySystem$1;
+    const-string v3, "android.permission.MASTER_CLEAR"
 
-    invoke-direct {v3, v8}, Landroid/os/RecoverySystem$1;-><init>(Landroid/os/ConditionVariable;)V
+    new-instance v4, Landroid/os/RecoverySystem$1;
 
-    const/4 v5, 0x0
+    invoke-direct {v4, v9}, Landroid/os/RecoverySystem$1;-><init>(Landroid/os/ConditionVariable;)V
+
+    const/4 v6, 0x0
 
     move-object v0, p0
 
-    move-object v6, v4
+    move-object v7, v5
 
-    move-object v7, v4
+    move-object v8, v5
 
-    invoke-virtual/range {v0 .. v7}, Landroid/content/Context;->sendOrderedBroadcast(Landroid/content/Intent;Ljava/lang/String;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
+    invoke-virtual/range {v0 .. v8}, Landroid/content/Context;->sendOrderedBroadcastAsUser(Landroid/content/Intent;Landroid/os/UserHandle;Ljava/lang/String;Landroid/content/BroadcastReceiver;Landroid/os/Handler;ILjava/lang/String;Landroid/os/Bundle;)V
 
-    invoke-virtual {v8}, Landroid/os/ConditionVariable;->block()V
+    invoke-virtual {v9}, Landroid/os/ConditionVariable;->block()V
 
-    const-string v0, "--wipe_data"
+    new-instance v0, Ljava/lang/StringBuilder;
+
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v2, "--wipe_data\n--locale="
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v2
+
+    invoke-virtual {v2}, Ljava/util/Locale;->toString()Ljava/lang/String;
+
+    move-result-object v2
+
+    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v0
 
     invoke-static {p0, v0}, Landroid/os/RecoverySystem;->bootCommand(Landroid/content/Context;Ljava/lang/String;)V
 

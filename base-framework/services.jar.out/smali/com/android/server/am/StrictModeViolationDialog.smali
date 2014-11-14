@@ -1,4 +1,4 @@
-.class Lcom/android/server/am/StrictModeViolationDialog;
+.class final Lcom/android/server/am/StrictModeViolationDialog;
 .super Lcom/android/server/am/BaseErrorDialog;
 .source "StrictModeViolationDialog.java"
 
@@ -20,11 +20,14 @@
 
 .field private final mResult:Lcom/android/server/am/AppErrorResult;
 
+.field private final mService:Lcom/android/server/am/ActivityManagerService;
+
 
 # direct methods
-.method public constructor <init>(Landroid/content/Context;Lcom/android/server/am/AppErrorResult;Lcom/android/server/am/ProcessRecord;)V
+.method public constructor <init>(Landroid/content/Context;Lcom/android/server/am/ActivityManagerService;Lcom/android/server/am/AppErrorResult;Lcom/android/server/am/ProcessRecord;)V
     .locals 7
     .parameter "context"
+    .parameter "service"
     .parameter "result"
     .parameter "app"
 
@@ -46,13 +49,15 @@
     move-result-object v1
 
     .local v1, res:Landroid/content/res/Resources;
-    iput-object p3, p0, Lcom/android/server/am/StrictModeViolationDialog;->mProc:Lcom/android/server/am/ProcessRecord;
+    iput-object p2, p0, Lcom/android/server/am/StrictModeViolationDialog;->mService:Lcom/android/server/am/ActivityManagerService;
 
-    iput-object p2, p0, Lcom/android/server/am/StrictModeViolationDialog;->mResult:Lcom/android/server/am/AppErrorResult;
+    iput-object p4, p0, Lcom/android/server/am/StrictModeViolationDialog;->mProc:Lcom/android/server/am/ProcessRecord;
 
-    iget-object v2, p3, Lcom/android/server/am/ProcessRecord;->pkgList:Ljava/util/HashSet;
+    iput-object p3, p0, Lcom/android/server/am/StrictModeViolationDialog;->mResult:Lcom/android/server/am/AppErrorResult;
 
-    invoke-virtual {v2}, Ljava/util/HashSet;->size()I
+    iget-object v2, p4, Lcom/android/server/am/ProcessRecord;->pkgList:Landroid/util/ArrayMap;
+
+    invoke-virtual {v2}, Landroid/util/ArrayMap;->size()I
 
     move-result v2
 
@@ -62,7 +67,7 @@
 
     move-result-object v2
 
-    iget-object v3, p3, Lcom/android/server/am/ProcessRecord;->info:Landroid/content/pm/ApplicationInfo;
+    iget-object v3, p4, Lcom/android/server/am/ProcessRecord;->info:Landroid/content/pm/ApplicationInfo;
 
     invoke-virtual {v2, v3}, Landroid/content/pm/PackageManager;->getApplicationLabel(Landroid/content/pm/ApplicationInfo;)Ljava/lang/CharSequence;
 
@@ -71,7 +76,7 @@
     .local v0, name:Ljava/lang/CharSequence;
     if-eqz v0, :cond_1
 
-    const v2, 0x10403e1
+    const v2, 0x104040e
 
     const/4 v3, 0x2
 
@@ -83,7 +88,7 @@
 
     aput-object v4, v3, v5
 
-    iget-object v4, p3, Lcom/android/server/am/ProcessRecord;->info:Landroid/content/pm/ApplicationInfo;
+    iget-object v4, p4, Lcom/android/server/am/ProcessRecord;->info:Landroid/content/pm/ApplicationInfo;
 
     iget-object v4, v4, Landroid/content/pm/ApplicationInfo;->processName:Ljava/lang/String;
 
@@ -100,7 +105,7 @@
 
     const/4 v2, -0x1
 
-    const v3, 0x104043b
+    const v3, 0x1040470
 
     invoke-virtual {v1, v3}, Landroid/content/res/Resources;->getText(I)Ljava/lang/CharSequence;
 
@@ -114,13 +119,13 @@
 
     invoke-virtual {p0, v2, v3, v4}, Lcom/android/server/am/StrictModeViolationDialog;->setButton(ILjava/lang/CharSequence;Landroid/os/Message;)V
 
-    iget-object v2, p3, Lcom/android/server/am/ProcessRecord;->errorReportReceiver:Landroid/content/ComponentName;
+    iget-object v2, p4, Lcom/android/server/am/ProcessRecord;->errorReportReceiver:Landroid/content/ComponentName;
 
     if-eqz v2, :cond_0
 
     const/4 v2, -0x2
 
-    const v3, 0x10403d8
+    const v3, 0x1040405
 
     invoke-virtual {v1, v3}, Landroid/content/res/Resources;->getText(I)Ljava/lang/CharSequence;
 
@@ -135,7 +140,7 @@
     invoke-virtual {p0, v2, v3, v4}, Lcom/android/server/am/StrictModeViolationDialog;->setButton(ILjava/lang/CharSequence;Landroid/os/Message;)V
 
     :cond_0
-    const v2, 0x10403cf
+    const v2, 0x10403fc
 
     invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getText(I)Ljava/lang/CharSequence;
 
@@ -147,9 +152,9 @@
 
     move-result-object v2
 
-    const/high16 v3, 0x4000
+    const/16 v3, 0x100
 
-    invoke-virtual {v2, v3}, Landroid/view/Window;->addFlags(I)V
+    invoke-virtual {v2, v3}, Landroid/view/Window;->addPrivateFlags(I)V
 
     invoke-virtual {p0}, Lcom/android/server/am/StrictModeViolationDialog;->getWindow()Landroid/view/Window;
 
@@ -165,7 +170,7 @@
 
     move-result-object v3
 
-    iget-object v4, p3, Lcom/android/server/am/ProcessRecord;->info:Landroid/content/pm/ApplicationInfo;
+    iget-object v4, p4, Lcom/android/server/am/ProcessRecord;->info:Landroid/content/pm/ApplicationInfo;
 
     iget-object v4, v4, Landroid/content/pm/ApplicationInfo;->processName:Ljava/lang/String;
 
@@ -195,10 +200,10 @@
 
     .end local v0           #name:Ljava/lang/CharSequence;
     :cond_1
-    iget-object v0, p3, Lcom/android/server/am/ProcessRecord;->processName:Ljava/lang/String;
+    iget-object v0, p4, Lcom/android/server/am/ProcessRecord;->processName:Ljava/lang/String;
 
     .restart local v0       #name:Ljava/lang/CharSequence;
-    const v2, 0x10403e2
+    const v2, 0x104040f
 
     new-array v3, v6, [Ljava/lang/Object;
 
@@ -217,7 +222,17 @@
     goto :goto_0
 .end method
 
-.method static synthetic access$000(Lcom/android/server/am/StrictModeViolationDialog;)Lcom/android/server/am/ProcessRecord;
+.method static synthetic access$000(Lcom/android/server/am/StrictModeViolationDialog;)Lcom/android/server/am/ActivityManagerService;
+    .locals 1
+    .parameter "x0"
+
+    .prologue
+    iget-object v0, p0, Lcom/android/server/am/StrictModeViolationDialog;->mService:Lcom/android/server/am/ActivityManagerService;
+
+    return-object v0
+.end method
+
+.method static synthetic access$100(Lcom/android/server/am/StrictModeViolationDialog;)Lcom/android/server/am/ProcessRecord;
     .locals 1
     .parameter "x0"
 
@@ -227,7 +242,7 @@
     return-object v0
 .end method
 
-.method static synthetic access$100(Lcom/android/server/am/StrictModeViolationDialog;)Lcom/android/server/am/AppErrorResult;
+.method static synthetic access$200(Lcom/android/server/am/StrictModeViolationDialog;)Lcom/android/server/am/AppErrorResult;
     .locals 1
     .parameter "x0"
 

@@ -174,6 +174,114 @@
     goto :goto_0
 .end method
 
+.method public getCreatorPackage()Ljava/lang/String;
+    .locals 3
+
+    .prologue
+    :try_start_0
+    invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
+
+    move-result-object v1
+
+    iget-object v2, p0, Landroid/content/IntentSender;->mTarget:Landroid/content/IIntentSender;
+
+    invoke-interface {v1, v2}, Landroid/app/IActivityManager;->getPackageForIntentSender(Landroid/content/IIntentSender;)Ljava/lang/String;
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v1
+
+    :goto_0
+    return-object v1
+
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    const/4 v1, 0x0
+
+    goto :goto_0
+.end method
+
+.method public getCreatorUid()I
+    .locals 3
+
+    .prologue
+    :try_start_0
+    invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
+
+    move-result-object v1
+
+    iget-object v2, p0, Landroid/content/IntentSender;->mTarget:Landroid/content/IIntentSender;
+
+    invoke-interface {v1, v2}, Landroid/app/IActivityManager;->getUidForIntentSender(Landroid/content/IIntentSender;)I
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v1
+
+    :goto_0
+    return v1
+
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    const/4 v1, -0x1
+
+    goto :goto_0
+.end method
+
+.method public getCreatorUserHandle()Landroid/os/UserHandle;
+    .locals 5
+
+    .prologue
+    const/4 v3, 0x0
+
+    :try_start_0
+    invoke-static {}, Landroid/app/ActivityManagerNative;->getDefault()Landroid/app/IActivityManager;
+
+    move-result-object v2
+
+    iget-object v4, p0, Landroid/content/IntentSender;->mTarget:Landroid/content/IIntentSender;
+
+    invoke-interface {v2, v4}, Landroid/app/IActivityManager;->getUidForIntentSender(Landroid/content/IIntentSender;)I
+
+    move-result v1
+
+    .local v1, uid:I
+    if-lez v1, :cond_0
+
+    new-instance v2, Landroid/os/UserHandle;
+
+    invoke-static {v1}, Landroid/os/UserHandle;->getUserId(I)I
+
+    move-result v4
+
+    invoke-direct {v2, v4}, Landroid/os/UserHandle;-><init>(I)V
+    :try_end_0
+    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+
+    .end local v1           #uid:I
+    :goto_0
+    return-object v2
+
+    .restart local v1       #uid:I
+    :cond_0
+    move-object v2, v3
+
+    goto :goto_0
+
+    .end local v1           #uid:I
+    :catch_0
+    move-exception v0
+
+    .local v0, e:Landroid/os/RemoteException;
+    move-object v2, v3
+
+    goto :goto_0
+.end method
+
 .method public getTarget()Landroid/content/IIntentSender;
     .locals 1
 
@@ -185,6 +293,8 @@
 
 .method public getTargetPackage()Ljava/lang/String;
     .locals 3
+    .annotation runtime Ljava/lang/Deprecated;
+    .end annotation
 
     .prologue
     :try_start_0

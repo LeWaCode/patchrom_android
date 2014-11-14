@@ -61,14 +61,15 @@
 
 
 # virtual methods
-.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
-    .locals 8
+.method public performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
+    .locals 9
     .parameter "intent"
     .parameter "resultCode"
     .parameter "data"
     .parameter "extras"
     .parameter "ordered"
     .parameter "sticky"
+    .parameter "sendingUser"
 
     .prologue
     iget-object v2, p0, Landroid/app/LoadedApk$ReceiverDispatcher$InnerReceiver;->mDispatcher:Ljava/lang/ref/WeakReference;
@@ -94,7 +95,9 @@
 
     move v6, p6
 
-    invoke-virtual/range {v0 .. v6}, Landroid/app/LoadedApk$ReceiverDispatcher;->performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZ)V
+    move/from16 v7, p7
+
+    invoke-virtual/range {v0 .. v7}, Landroid/app/LoadedApk$ReceiverDispatcher;->performReceive(Landroid/content/Intent;ILjava/lang/String;Landroid/os/Bundle;ZZI)V
 
     :goto_0
     return-void
@@ -130,9 +133,9 @@
     goto :goto_0
 
     :catch_0
-    move-exception v7
+    move-exception v8
 
-    .local v7, e:Landroid/os/RemoteException;
+    .local v8, e:Landroid/os/RemoteException;
     const-string v2, "ActivityThread"
 
     const-string v3, "Couldn\'t finish broadcast to unregistered receiver"

@@ -86,7 +86,7 @@
     iget-object v0, p0, Landroid/widget/TextView$ChangeWatcher;->this$0:Landroid/widget/TextView;
 
     #getter for: Landroid/widget/TextView;->mContext:Landroid/content/Context;
-    invoke-static {v0}, Landroid/widget/TextView;->access$400(Landroid/widget/TextView;)Landroid/content/Context;
+    invoke-static {v0}, Landroid/widget/TextView;->access$500(Landroid/widget/TextView;)Landroid/content/Context;
 
     move-result-object v0
 
@@ -98,7 +98,7 @@
 
     move-result v0
 
-    if-eqz v0, :cond_0
+    if-eqz v0, :cond_2
 
     iget-object v0, p0, Landroid/widget/TextView$ChangeWatcher;->this$0:Landroid/widget/TextView;
 
@@ -107,7 +107,7 @@
     move-result v0
 
     #calls: Landroid/widget/TextView;->isPasswordInputType(I)Z
-    invoke-static {v0}, Landroid/widget/TextView;->access$500(I)Z
+    invoke-static {v0}, Landroid/widget/TextView;->access$600(I)Z
 
     move-result v0
 
@@ -116,23 +116,34 @@
     iget-object v0, p0, Landroid/widget/TextView$ChangeWatcher;->this$0:Landroid/widget/TextView;
 
     #calls: Landroid/widget/TextView;->hasPasswordTransformationMethod()Z
-    invoke-static {v0}, Landroid/widget/TextView;->access$600(Landroid/widget/TextView;)Z
+    invoke-static {v0}, Landroid/widget/TextView;->access$700(Landroid/widget/TextView;)Z
 
     move-result v0
 
-    if-nez v0, :cond_0
+    if-eqz v0, :cond_1
 
+    :cond_0
+    iget-object v0, p0, Landroid/widget/TextView$ChangeWatcher;->this$0:Landroid/widget/TextView;
+
+    #calls: Landroid/widget/TextView;->shouldSpeakPasswordsForAccessibility()Z
+    invoke-static {v0}, Landroid/widget/TextView;->access$800(Landroid/widget/TextView;)Z
+
+    move-result v0
+
+    if-eqz v0, :cond_2
+
+    :cond_1
     invoke-virtual {p1}, Ljava/lang/Object;->toString()Ljava/lang/String;
 
     move-result-object v0
 
     iput-object v0, p0, Landroid/widget/TextView$ChangeWatcher;->mBeforeText:Ljava/lang/CharSequence;
 
-    :cond_0
+    :cond_2
     iget-object v0, p0, Landroid/widget/TextView$ChangeWatcher;->this$0:Landroid/widget/TextView;
 
     #calls: Landroid/widget/TextView;->sendBeforeTextChanged(Ljava/lang/CharSequence;III)V
-    invoke-static {v0, p1, p2, p3, p4}, Landroid/widget/TextView;->access$700(Landroid/widget/TextView;Ljava/lang/CharSequence;III)V
+    invoke-static {v0, p1, p2, p3, p4}, Landroid/widget/TextView;->access$900(Landroid/widget/TextView;Ljava/lang/CharSequence;III)V
 
     return-void
 .end method
@@ -235,7 +246,7 @@
     iget-object v0, p0, Landroid/widget/TextView$ChangeWatcher;->this$0:Landroid/widget/TextView;
 
     #getter for: Landroid/widget/TextView;->mContext:Landroid/content/Context;
-    invoke-static {v0}, Landroid/widget/TextView;->access$800(Landroid/widget/TextView;)Landroid/content/Context;
+    invoke-static {v0}, Landroid/widget/TextView;->access$1000(Landroid/widget/TextView;)Landroid/content/Context;
 
     move-result-object v0
 

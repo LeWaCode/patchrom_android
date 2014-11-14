@@ -180,7 +180,7 @@
     iget-object v2, p0, Lcom/android/server/net/NetworkStatsService$DropBoxNonMonotonicObserver;->this$0:Lcom/android/server/net/NetworkStatsService;
 
     #getter for: Lcom/android/server/net/NetworkStatsService;->mContext:Landroid/content/Context;
-    invoke-static {v2}, Lcom/android/server/net/NetworkStatsService;->access$1200(Lcom/android/server/net/NetworkStatsService;)Landroid/content/Context;
+    invoke-static {v2}, Lcom/android/server/net/NetworkStatsService;->access$1300(Lcom/android/server/net/NetworkStatsService;)Landroid/content/Context;
 
     move-result-object v2
 

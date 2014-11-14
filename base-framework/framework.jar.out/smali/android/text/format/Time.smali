@@ -76,6 +76,8 @@
 
 .field private static sTimeOnlyFormat:Ljava/lang/String;
 
+.field private static sZeroDigit:C
+
 
 # instance fields
 .field public allDay:Z
@@ -373,6 +375,65 @@
     goto :goto_0
 .end method
 
+.method private localizeDigits(Ljava/lang/String;)Ljava/lang/String;
+    .locals 6
+    .parameter "s"
+
+    .prologue
+    invoke-virtual {p1}, Ljava/lang/String;->length()I
+
+    move-result v2
+
+    .local v2, length:I
+    sget-char v5, Landroid/text/format/Time;->sZeroDigit:C
+
+    add-int/lit8 v3, v5, -0x30
+
+    .local v3, offsetToLocalizedDigits:I
+    new-instance v4, Ljava/lang/StringBuilder;
+
+    invoke-direct {v4, v2}, Ljava/lang/StringBuilder;-><init>(I)V
+
+    .local v4, result:Ljava/lang/StringBuilder;
+    const/4 v1, 0x0
+
+    .local v1, i:I
+    :goto_0
+    if-ge v1, v2, :cond_1
+
+    invoke-virtual {p1, v1}, Ljava/lang/String;->charAt(I)C
+
+    move-result v0
+
+    .local v0, ch:C
+    const/16 v5, 0x30
+
+    if-lt v0, v5, :cond_0
+
+    const/16 v5, 0x39
+
+    if-gt v0, v5, :cond_0
+
+    add-int v5, v0, v3
+
+    int-to-char v0, v5
+
+    :cond_0
+    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
+
+    add-int/lit8 v1, v1, 0x1
+
+    goto :goto_0
+
+    .end local v0           #ch:C
+    :cond_1
+    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v5
+
+    return-object v5
+.end method
+
 .method private static native nativeCompare(Landroid/text/format/Time;Landroid/text/format/Time;)I
 .end method
 
@@ -478,13 +539,13 @@
 .end method
 
 .method public format(Ljava/lang/String;)Ljava/lang/String;
-    .locals 6
+    .locals 7
     .parameter "format"
 
     .prologue
-    const-class v3, Landroid/text/format/Time;
+    const-class v5, Landroid/text/format/Time;
 
-    monitor-enter v3
+    monitor-enter v5
 
     :try_start_0
     invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
@@ -492,624 +553,137 @@
     move-result-object v0
 
     .local v0, locale:Ljava/util/Locale;
-    sget-object v2, Landroid/text/format/Time;->sLocale:Ljava/util/Locale;
+    sget-object v4, Landroid/text/format/Time;->sLocale:Ljava/util/Locale;
 
-    if-eqz v2, :cond_0
+    if-eqz v4, :cond_0
 
     if-eqz v0, :cond_0
 
-    sget-object v2, Landroid/text/format/Time;->sLocale:Ljava/util/Locale;
+    sget-object v4, Landroid/text/format/Time;->sLocale:Ljava/util/Locale;
 
-    invoke-virtual {v0, v2}, Ljava/util/Locale;->equals(Ljava/lang/Object;)Z
+    invoke-virtual {v0, v4}, Ljava/util/Locale;->equals(Ljava/lang/Object;)Z
 
-    move-result v2
+    move-result v4
 
-    if-nez v2, :cond_1
+    if-nez v4, :cond_1
 
     :cond_0
-    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
+    invoke-static {v0}, Llibcore/icu/LocaleData;->get(Ljava/util/Locale;)Llibcore/icu/LocaleData;
 
     move-result-object v1
 
-    .local v1, r:Landroid/content/res/Resources;
-    const/16 v2, 0xc
+    .local v1, localeData:Llibcore/icu/LocaleData;
+    iget-object v4, v1, Llibcore/icu/LocaleData;->amPm:[Ljava/lang/String;
 
-    new-array v2, v2, [Ljava/lang/String;
+    const/4 v6, 0x0
 
-    const/4 v4, 0x0
+    aget-object v4, v4, v6
 
-    const v5, 0x1040045
+    sput-object v4, Landroid/text/format/Time;->sAm:Ljava/lang/String;
 
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    iget-object v4, v1, Llibcore/icu/LocaleData;->amPm:[Ljava/lang/String;
 
-    move-result-object v5
+    const/4 v6, 0x1
 
-    aput-object v5, v2, v4
+    aget-object v4, v4, v6
 
-    const/4 v4, 0x1
+    sput-object v4, Landroid/text/format/Time;->sPm:Ljava/lang/String;
 
-    const v5, 0x1040046
+    iget-char v4, v1, Llibcore/icu/LocaleData;->zeroDigit:C
 
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    sput-char v4, Landroid/text/format/Time;->sZeroDigit:C
 
-    move-result-object v5
+    iget-object v4, v1, Llibcore/icu/LocaleData;->shortMonthNames:[Ljava/lang/String;
 
-    aput-object v5, v2, v4
+    sput-object v4, Landroid/text/format/Time;->sShortMonths:[Ljava/lang/String;
 
-    const/4 v4, 0x2
+    iget-object v4, v1, Llibcore/icu/LocaleData;->longMonthNames:[Ljava/lang/String;
 
-    const v5, 0x1040047
+    sput-object v4, Landroid/text/format/Time;->sLongMonths:[Ljava/lang/String;
 
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    iget-object v4, v1, Llibcore/icu/LocaleData;->longStandAloneMonthNames:[Ljava/lang/String;
 
-    move-result-object v5
+    sput-object v4, Landroid/text/format/Time;->sLongStandaloneMonths:[Ljava/lang/String;
 
-    aput-object v5, v2, v4
+    iget-object v4, v1, Llibcore/icu/LocaleData;->shortWeekdayNames:[Ljava/lang/String;
 
-    const/4 v4, 0x3
+    sput-object v4, Landroid/text/format/Time;->sShortWeekdays:[Ljava/lang/String;
 
-    const v5, 0x1040048
+    iget-object v4, v1, Llibcore/icu/LocaleData;->longWeekdayNames:[Ljava/lang/String;
 
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    sput-object v4, Landroid/text/format/Time;->sLongWeekdays:[Ljava/lang/String;
 
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x4
-
-    const v5, 0x1040049
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x5
-
-    const v5, 0x104004a
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x6
-
-    const v5, 0x104004b
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x7
-
-    const v5, 0x104004c
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0x8
-
-    const v5, 0x104004d
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0x9
-
-    const v5, 0x104004e
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0xa
-
-    const v5, 0x104004f
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0xb
-
-    const v5, 0x1040050
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    sput-object v2, Landroid/text/format/Time;->sShortMonths:[Ljava/lang/String;
-
-    const/16 v2, 0xc
-
-    new-array v2, v2, [Ljava/lang/String;
-
-    const/4 v4, 0x0
-
-    const v5, 0x1040039
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x1
-
-    const v5, 0x104003a
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x2
-
-    const v5, 0x104003b
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x3
-
-    const v5, 0x104003c
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x4
-
-    const v5, 0x104003d
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x5
-
-    const v5, 0x104003e
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x6
-
-    const v5, 0x104003f
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x7
-
-    const v5, 0x1040040
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0x8
-
-    const v5, 0x1040041
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0x9
-
-    const v5, 0x1040042
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0xa
-
-    const v5, 0x1040043
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0xb
-
-    const v5, 0x1040044
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    sput-object v2, Landroid/text/format/Time;->sLongMonths:[Ljava/lang/String;
-
-    const/16 v2, 0xc
-
-    new-array v2, v2, [Ljava/lang/String;
-
-    const/4 v4, 0x0
-
-    const v5, 0x104002d
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x1
-
-    const v5, 0x104002e
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x2
-
-    const v5, 0x104002f
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x3
-
-    const v5, 0x1040030
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x4
-
-    const v5, 0x1040031
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x5
-
-    const v5, 0x1040032
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x6
-
-    const v5, 0x1040033
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x7
-
-    const v5, 0x1040034
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0x8
-
-    const v5, 0x1040035
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0x9
-
-    const v5, 0x1040036
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0xa
-
-    const v5, 0x1040037
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/16 v4, 0xb
-
-    const v5, 0x1040038
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    sput-object v2, Landroid/text/format/Time;->sLongStandaloneMonths:[Ljava/lang/String;
-
-    const/4 v2, 0x7
-
-    new-array v2, v2, [Ljava/lang/String;
-
-    const/4 v4, 0x0
-
-    const v5, 0x1040064
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x1
-
-    const v5, 0x1040065
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x2
-
-    const v5, 0x1040066
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x3
-
-    const v5, 0x1040067
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x4
-
-    const v5, 0x1040068
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x5
-
-    const v5, 0x1040069
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x6
-
-    const v5, 0x104006a
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    sput-object v2, Landroid/text/format/Time;->sShortWeekdays:[Ljava/lang/String;
-
-    const/4 v2, 0x7
-
-    new-array v2, v2, [Ljava/lang/String;
-
-    const/4 v4, 0x0
-
-    const v5, 0x104005d
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x1
-
-    const v5, 0x104005e
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x2
-
-    const v5, 0x104005f
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x3
-
-    const v5, 0x1040060
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x4
-
-    const v5, 0x1040061
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x5
-
-    const v5, 0x1040062
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    const/4 v4, 0x6
-
-    const v5, 0x1040063
-
-    invoke-virtual {v1, v5}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v5
-
-    aput-object v5, v2, v4
-
-    sput-object v2, Landroid/text/format/Time;->sLongWeekdays:[Ljava/lang/String;
-
-    const v2, 0x1040087
-
-    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    invoke-static {}, Landroid/content/res/Resources;->getSystem()Landroid/content/res/Resources;
 
     move-result-object v2
 
-    sput-object v2, Landroid/text/format/Time;->sTimeOnlyFormat:Ljava/lang/String;
+    .local v2, r:Landroid/content/res/Resources;
+    const v4, 0x104003d
 
-    const v2, 0x1040086
+    invoke-virtual {v2, v4}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
 
-    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    move-result-object v4
 
-    move-result-object v2
+    sput-object v4, Landroid/text/format/Time;->sTimeOnlyFormat:Ljava/lang/String;
 
-    sput-object v2, Landroid/text/format/Time;->sDateOnlyFormat:Ljava/lang/String;
+    const v4, 0x104003c
 
-    const v2, 0x1040088
+    invoke-virtual {v2, v4}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
 
-    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    move-result-object v4
 
-    move-result-object v2
+    sput-object v4, Landroid/text/format/Time;->sDateOnlyFormat:Ljava/lang/String;
 
-    sput-object v2, Landroid/text/format/Time;->sDateTimeFormat:Ljava/lang/String;
+    const v4, 0x104003e
 
-    const v2, 0x1040079
+    invoke-virtual {v2, v4}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
 
-    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
+    move-result-object v4
 
-    move-result-object v2
-
-    sput-object v2, Landroid/text/format/Time;->sAm:Ljava/lang/String;
-
-    const v2, 0x104007a
-
-    invoke-virtual {v1, v2}, Landroid/content/res/Resources;->getString(I)Ljava/lang/String;
-
-    move-result-object v2
-
-    sput-object v2, Landroid/text/format/Time;->sPm:Ljava/lang/String;
+    sput-object v4, Landroid/text/format/Time;->sDateTimeFormat:Ljava/lang/String;
 
     sput-object v0, Landroid/text/format/Time;->sLocale:Ljava/util/Locale;
 
-    .end local v1           #r:Landroid/content/res/Resources;
+    .end local v1           #localeData:Llibcore/icu/LocaleData;
+    .end local v2           #r:Landroid/content/res/Resources;
     :cond_1
     invoke-direct {p0, p1}, Landroid/text/format/Time;->format1(Ljava/lang/String;)Ljava/lang/String;
 
-    move-result-object v2
+    move-result-object v3
 
-    monitor-exit v3
+    .local v3, result:Ljava/lang/String;
+    sget-char v4, Landroid/text/format/Time;->sZeroDigit:C
 
-    return-object v2
+    const/16 v6, 0x30
+
+    if-eq v4, v6, :cond_2
+
+    invoke-direct {p0, v3}, Landroid/text/format/Time;->localizeDigits(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v3
+
+    :cond_2
+    monitor-exit v5
+
+    return-object v3
 
     .end local v0           #locale:Ljava/util/Locale;
+    .end local v3           #result:Ljava/lang/String;
     :catchall_0
-    move-exception v2
+    move-exception v4
 
-    monitor-exit v3
+    monitor-exit v5
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    throw v2
+    throw v4
 .end method
 
 .method public native format2445()Ljava/lang/String;
 .end method
 
 .method public format3339(Z)Ljava/lang/String;
-    .locals 9
+    .locals 10
     .parameter "allDay"
 
     .prologue
@@ -1180,37 +754,39 @@
     div-int/lit16 v1, v3, 0xe10
 
     .local v1, hours:I
-    const-string v5, "%s%s%02d:%02d"
+    sget-object v5, Ljava/util/Locale;->US:Ljava/util/Locale;
 
-    const/4 v6, 0x4
+    const-string v6, "%s%s%02d:%02d"
 
-    new-array v6, v6, [Ljava/lang/Object;
+    const/4 v7, 0x4
 
-    const/4 v7, 0x0
+    new-array v7, v7, [Ljava/lang/Object;
 
-    aput-object v0, v6, v7
+    const/4 v8, 0x0
 
-    const/4 v7, 0x1
+    aput-object v0, v7, v8
 
-    aput-object v4, v6, v7
+    const/4 v8, 0x1
 
-    const/4 v7, 0x2
+    aput-object v4, v7, v8
+
+    const/4 v8, 0x2
 
     invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
-    move-result-object v8
+    move-result-object v9
 
-    aput-object v8, v6, v7
+    aput-object v9, v7, v8
 
-    const/4 v7, 0x3
+    const/4 v8, 0x3
 
     invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
-    move-result-object v8
+    move-result-object v9
 
-    aput-object v8, v6, v7
+    aput-object v9, v7, v8
 
-    invoke-static {v5, v6}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    invoke-static {v5, v6, v7}, Ljava/lang/String;->format(Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v5
 
@@ -1443,15 +1019,26 @@
 .end method
 
 .method public parse(Ljava/lang/String;)Z
-    .locals 1
+    .locals 2
     .parameter "s"
 
     .prologue
+    if-nez p1, :cond_0
+
+    new-instance v0, Ljava/lang/NullPointerException;
+
+    const-string v1, "time string is null"
+
+    invoke-direct {v0, v1}, Ljava/lang/NullPointerException;-><init>(Ljava/lang/String;)V
+
+    throw v0
+
+    :cond_0
     invoke-direct {p0, p1}, Landroid/text/format/Time;->nativeParse(Ljava/lang/String;)Z
 
     move-result v0
 
-    if-eqz v0, :cond_0
+    if-eqz v0, :cond_1
 
     const-string v0, "UTC"
 
@@ -1462,7 +1049,7 @@
     :goto_0
     return v0
 
-    :cond_0
+    :cond_1
     const/4 v0, 0x0
 
     goto :goto_0

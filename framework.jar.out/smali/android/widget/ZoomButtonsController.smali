@@ -306,7 +306,7 @@
     invoke-direct {v2, v4, v4}, Landroid/view/WindowManager$LayoutParams;-><init>(II)V
 
     .local v2, lp:Landroid/view/WindowManager$LayoutParams;
-    const/16 v3, 0x33
+    const v3, 0x800033
 
     iput v3, v2, Landroid/view/WindowManager$LayoutParams;->gravity:I
 
@@ -328,7 +328,7 @@
 
     iput v3, v2, Landroid/view/WindowManager$LayoutParams;->format:I
 
-    const v3, 0x10301e7
+    const v3, 0x10301f3
 
     iput v3, v2, Landroid/view/WindowManager$LayoutParams;->windowAnimations:I
 
@@ -358,11 +358,11 @@
     check-cast v1, Landroid/view/LayoutInflater;
 
     .local v1, inflater:Landroid/view/LayoutInflater;
-    const v3, 0x10900cc
+    const v3, 0x10900c8
 
     invoke-virtual {v1, v3, v0}, Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;)Landroid/view/View;
 
-    const v3, 0x1020368
+    const v3, 0x102037f
 
     invoke-virtual {v0, v3}, Landroid/widget/FrameLayout;->findViewById(I)Landroid/view/View;
 
@@ -728,7 +728,7 @@
     .local v2, viewRoot:Landroid/view/ViewRootImpl;
     if-eqz v2, :cond_0
 
-    invoke-virtual {v2, p1}, Landroid/view/ViewRootImpl;->dispatchKey(Landroid/view/KeyEvent;)V
+    invoke-virtual {v2, p1}, Landroid/view/ViewRootImpl;->dispatchInputEvent(Landroid/view/InputEvent;)V
 
     goto :goto_0
 .end method

@@ -3,12 +3,12 @@
 .source "WindowManagerService.java"
 
 # interfaces
-.implements Landroid/view/WindowManagerPolicy$OnKeyguardExitResult;
+.implements Ljava/lang/Runnable;
 
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = Lcom/android/server/wm/WindowManagerService;->exitKeyguardSecurely(Landroid/view/IOnKeyguardExitResult;)V
+    value = Lcom/android/server/wm/WindowManagerService;->initPolicy(Landroid/os/Handler;)V
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -20,19 +20,14 @@
 # instance fields
 .field final synthetic this$0:Lcom/android/server/wm/WindowManagerService;
 
-.field final synthetic val$callback:Landroid/view/IOnKeyguardExitResult;
-
 
 # direct methods
-.method constructor <init>(Lcom/android/server/wm/WindowManagerService;Landroid/view/IOnKeyguardExitResult;)V
+.method constructor <init>(Lcom/android/server/wm/WindowManagerService;)V
     .locals 0
-    .parameter
     .parameter
 
     .prologue
     iput-object p1, p0, Lcom/android/server/wm/WindowManagerService$3;->this$0:Lcom/android/server/wm/WindowManagerService;
-
-    iput-object p2, p0, Lcom/android/server/wm/WindowManagerService$3;->val$callback:Landroid/view/IOnKeyguardExitResult;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -41,23 +36,51 @@
 
 
 # virtual methods
-.method public onKeyguardExitResult(Z)V
-    .locals 1
-    .parameter "success"
+.method public run()V
+    .locals 4
 
     .prologue
-    :try_start_0
-    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$3;->val$callback:Landroid/view/IOnKeyguardExitResult;
+    invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
 
-    invoke-interface {v0, p1}, Landroid/view/IOnKeyguardExitResult;->onKeyguardExitResult(Z)V
-    :try_end_0
-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+    move-result-object v0
 
-    :goto_0
+    invoke-static {}, Landroid/os/Looper;->myLooper()Landroid/os/Looper;
+
+    move-result-object v1
+
+    invoke-static {v0, v1}, Lcom/android/internal/view/WindowManagerPolicyThread;->set(Ljava/lang/Thread;Landroid/os/Looper;)V
+
+    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$3;->this$0:Lcom/android/server/wm/WindowManagerService;
+
+    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mPolicy:Landroid/view/WindowManagerPolicy;
+
+    iget-object v1, p0, Lcom/android/server/wm/WindowManagerService$3;->this$0:Lcom/android/server/wm/WindowManagerService;
+
+    iget-object v1, v1, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
+
+    iget-object v2, p0, Lcom/android/server/wm/WindowManagerService$3;->this$0:Lcom/android/server/wm/WindowManagerService;
+
+    iget-object v3, p0, Lcom/android/server/wm/WindowManagerService$3;->this$0:Lcom/android/server/wm/WindowManagerService;
+
+    invoke-interface {v0, v1, v2, v3}, Landroid/view/WindowManagerPolicy;->init(Landroid/content/Context;Landroid/view/IWindowManager;Landroid/view/WindowManagerPolicy$WindowManagerFuncs;)V
+
+    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService$3;->this$0:Lcom/android/server/wm/WindowManagerService;
+
+    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mAnimator:Lcom/android/server/wm/WindowAnimator;
+
+    iget-object v1, p0, Lcom/android/server/wm/WindowManagerService$3;->this$0:Lcom/android/server/wm/WindowManagerService;
+
+    iget-object v1, v1, Lcom/android/server/wm/WindowManagerService;->mPolicy:Landroid/view/WindowManagerPolicy;
+
+    invoke-interface {v1}, Landroid/view/WindowManagerPolicy;->getAboveUniverseLayer()I
+
+    move-result v1
+
+    mul-int/lit16 v1, v1, 0x2710
+
+    add-int/lit16 v1, v1, 0x3e8
+
+    iput v1, v0, Lcom/android/server/wm/WindowAnimator;->mAboveUniverseLayer:I
+
     return-void
-
-    :catch_0
-    move-exception v0
-
-    goto :goto_0
 .end method

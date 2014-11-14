@@ -42,12 +42,6 @@
 
 .field public static final FILE_TYPE_JPEG:I = 0x1f
 
-.field public static final FILE_TYPE_LEWA_THEME:I = 0x384
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end field
-
 .field public static final FILE_TYPE_M3U:I = 0x29
 
 .field public static final FILE_TYPE_M4A:I = 0x2
@@ -239,6 +233,16 @@
     sput-object v0, Landroid/media/MediaFile;->sFormatToMimeTypeMap:Ljava/util/HashMap;
 
     const-string v0, "MP3"
+
+    const/4 v1, 0x1
+
+    const-string v2, "audio/mpeg"
+
+    const/16 v3, 0x3009
+
+    invoke-static {v0, v1, v2, v3}, Landroid/media/MediaFile;->addFileType(Ljava/lang/String;ILjava/lang/String;I)V
+
+    const-string v0, "MPGA"
 
     const/4 v1, 0x1
 
@@ -764,8 +768,6 @@
 
     invoke-static {v0, v1, v2}, Landroid/media/MediaFile;->addFileType(Ljava/lang/String;ILjava/lang/String;)V
 
-    invoke-static {}, Landroid/media/MediaFile;->addLewaThemeFileType()V
-
     return-void
 .end method
 
@@ -841,24 +843,6 @@
     return-void
 .end method
 
-.method private static addLewaThemeFileType()V
-    .locals 3
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    const-string v0, "LWT"
-
-    const/16 v1, 0x384
-
-    const-string v2, "application/lewa-theme"
-
-    invoke-static {v0, v1, v2}, Landroid/media/MediaFile;->addFileType(Ljava/lang/String;ILjava/lang/String;)V
-
-    return-void
-.end method
-
 .method public static getFileTitle(Ljava/lang/String;)Ljava/lang/String;
     .locals 3
     .parameter "path"
@@ -906,13 +890,13 @@
 .end method
 
 .method public static getFileType(Ljava/lang/String;)Landroid/media/MediaFile$MediaFileType;
-    .locals 3
+    .locals 4
     .parameter "path"
 
     .prologue
-    const-string v1, "."
+    const/16 v1, 0x2e
 
-    invoke-virtual {p0, v1}, Ljava/lang/String;->lastIndexOf(Ljava/lang/String;)I
+    invoke-virtual {p0, v1}, Ljava/lang/String;->lastIndexOf(I)I
 
     move-result v0
 
@@ -933,7 +917,9 @@
 
     move-result-object v2
 
-    invoke-virtual {v2}, Ljava/lang/String;->toUpperCase()Ljava/lang/String;
+    sget-object v3, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
+
+    invoke-virtual {v2, v3}, Ljava/lang/String;->toUpperCase(Ljava/util/Locale;)Ljava/lang/String;
 
     move-result-object v2
 
@@ -942,32 +928,6 @@
     move-result-object v1
 
     check-cast v1, Landroid/media/MediaFile$MediaFileType;
-
-    goto :goto_0
-.end method
-
-.method public static getFileTypeBySuffix(Ljava/lang/String;)I
-    .locals 2
-    .parameter "filename"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    invoke-static {p0}, Landroid/media/MediaFile;->getFileType(Ljava/lang/String;)Landroid/media/MediaFile$MediaFileType;
-
-    move-result-object v0
-
-    .local v0, mdeiaFileType:Landroid/media/MediaFile$MediaFileType;
-    if-nez v0, :cond_0
-
-    const/4 v1, -0x1
-
-    :goto_0
-    return v1
-
-    :cond_0
-    iget v1, v0, Landroid/media/MediaFile$MediaFileType;->fileType:I
 
     goto :goto_0
 .end method
@@ -1002,7 +962,7 @@
 .end method
 
 .method public static getFormatCode(Ljava/lang/String;Ljava/lang/String;)I
-    .locals 4
+    .locals 5
     .parameter "fileName"
     .parameter "mimeType"
 
@@ -1042,6 +1002,12 @@
 
     invoke-virtual {p0, v3}, Ljava/lang/String;->substring(I)Ljava/lang/String;
 
+    move-result-object v3
+
+    sget-object v4, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
+
+    invoke-virtual {v3, v4}, Ljava/lang/String;->toUpperCase(Ljava/util/Locale;)Ljava/lang/String;
+
     move-result-object v0
 
     .local v0, extension:Ljava/lang/String;
@@ -1066,32 +1032,6 @@
     .end local v2           #value:Ljava/lang/Integer;
     :cond_1
     const/16 v3, 0x3000
-
-    goto :goto_0
-.end method
-
-.method public static getMimeTypeBySuffix(Ljava/lang/String;)Ljava/lang/String;
-    .locals 2
-    .parameter "filename"
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    invoke-static {p0}, Landroid/media/MediaFile;->getFileType(Ljava/lang/String;)Landroid/media/MediaFile$MediaFileType;
-
-    move-result-object v0
-
-    .local v0, mdeiaFileType:Landroid/media/MediaFile$MediaFileType;
-    if-nez v0, :cond_0
-
-    const/4 v1, 0x0
-
-    :goto_0
-    return-object v1
-
-    :cond_0
-    iget-object v1, v0, Landroid/media/MediaFile$MediaFileType;->mimeType:Ljava/lang/String;
 
     goto :goto_0
 .end method

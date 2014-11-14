@@ -34,39 +34,24 @@
 
 # virtual methods
 .method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
-    .locals 2
+    .locals 3
     .parameter "context"
     .parameter "intent"
 
     .prologue
-    iget-object v0, p0, Lcom/android/server/UiModeManagerService$2;->this$0:Lcom/android/server/UiModeManagerService;
+    const-string v1, "android.intent.extra.DOCK_STATE"
 
-    invoke-virtual {v0}, Lcom/android/server/UiModeManagerService;->isDoingNightMode()Z
+    const/4 v2, 0x0
 
-    move-result v0
-
-    if-eqz v0, :cond_0
-
-    iget-object v0, p0, Lcom/android/server/UiModeManagerService$2;->this$0:Lcom/android/server/UiModeManagerService;
-
-    #getter for: Lcom/android/server/UiModeManagerService;->mNightMode:I
-    invoke-static {v0}, Lcom/android/server/UiModeManagerService;->access$300(Lcom/android/server/UiModeManagerService;)I
+    invoke-virtual {p2, v1, v2}, Landroid/content/Intent;->getIntExtra(Ljava/lang/String;I)I
 
     move-result v0
 
-    if-nez v0, :cond_0
+    .local v0, state:I
+    iget-object v1, p0, Lcom/android/server/UiModeManagerService$2;->this$0:Lcom/android/server/UiModeManagerService;
 
-    iget-object v0, p0, Lcom/android/server/UiModeManagerService$2;->this$0:Lcom/android/server/UiModeManagerService;
+    #calls: Lcom/android/server/UiModeManagerService;->updateDockState(I)V
+    invoke-static {v1, v0}, Lcom/android/server/UiModeManagerService;->access$100(Lcom/android/server/UiModeManagerService;I)V
 
-    #getter for: Lcom/android/server/UiModeManagerService;->mHandler:Landroid/os/Handler;
-    invoke-static {v0}, Lcom/android/server/UiModeManagerService;->access$400(Lcom/android/server/UiModeManagerService;)Landroid/os/Handler;
-
-    move-result-object v0
-
-    const/4 v1, 0x0
-
-    invoke-virtual {v0, v1}, Landroid/os/Handler;->sendEmptyMessage(I)Z
-
-    :cond_0
     return-void
 .end method

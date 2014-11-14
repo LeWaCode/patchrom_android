@@ -137,7 +137,7 @@
     .local v0, contentResolver:Landroid/content/ContentResolver;
     const-string v1, "sampling_profiler_ms"
 
-    invoke-static {v1}, Landroid/provider/Settings$Secure;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
+    invoke-static {v1}, Landroid/provider/Settings$Global;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v1
 

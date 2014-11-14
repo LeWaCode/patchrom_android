@@ -14,6 +14,8 @@
 # instance fields
 .field final mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
 
+.field final mForceDefaultOrientation:Z
+
 .field final mInnerRect:Landroid/graphics/Rect;
 
 .field final mOuterRect:Landroid/graphics/Rect;
@@ -24,12 +26,14 @@
 
 
 # direct methods
-.method public constructor <init>(Landroid/view/SurfaceSession;Landroid/graphics/Rect;Landroid/graphics/Rect;I)V
-    .locals 11
+.method public constructor <init>(Landroid/view/SurfaceSession;Landroid/graphics/Rect;Landroid/graphics/Rect;IIZ)V
+    .locals 13
     .parameter "session"
     .parameter "outer"
     .parameter "inner"
     .parameter "layer"
+    .parameter "layerStack"
+    .parameter "forceDefaultOrientation"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/view/Surface$OutOfResourcesException;
@@ -39,169 +43,207 @@
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    new-instance v0, Landroid/graphics/Matrix;
+    new-instance v1, Landroid/graphics/Matrix;
 
-    invoke-direct {v0}, Landroid/graphics/Matrix;-><init>()V
+    invoke-direct {v1}, Landroid/graphics/Matrix;-><init>()V
 
-    iput-object v0, p0, Lcom/android/server/wm/BlackFrame;->mTmpMatrix:Landroid/graphics/Matrix;
+    iput-object v1, p0, Lcom/android/server/wm/BlackFrame;->mTmpMatrix:Landroid/graphics/Matrix;
 
-    const/16 v0, 0x9
+    const/16 v1, 0x9
 
-    new-array v0, v0, [F
+    new-array v1, v1, [F
 
-    iput-object v0, p0, Lcom/android/server/wm/BlackFrame;->mTmpFloats:[F
+    iput-object v1, p0, Lcom/android/server/wm/BlackFrame;->mTmpFloats:[F
 
-    const/4 v0, 0x4
+    const/4 v1, 0x4
 
-    new-array v0, v0, [Lcom/android/server/wm/BlackFrame$BlackSurface;
+    new-array v1, v1, [Lcom/android/server/wm/BlackFrame$BlackSurface;
 
-    iput-object v0, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
-
-    const/4 v8, 0x0
-
-    .local v8, success:Z
-    new-instance v0, Landroid/graphics/Rect;
-
-    invoke-direct {v0, p2}, Landroid/graphics/Rect;-><init>(Landroid/graphics/Rect;)V
-
-    iput-object v0, p0, Lcom/android/server/wm/BlackFrame;->mOuterRect:Landroid/graphics/Rect;
-
-    new-instance v0, Landroid/graphics/Rect;
-
-    invoke-direct {v0, p3}, Landroid/graphics/Rect;-><init>(Landroid/graphics/Rect;)V
-
-    iput-object v0, p0, Lcom/android/server/wm/BlackFrame;->mInnerRect:Landroid/graphics/Rect;
-
-    :try_start_0
-    iget v0, p2, Landroid/graphics/Rect;->top:I
-
-    iget v1, p3, Landroid/graphics/Rect;->top:I
-
-    if-ge v0, v1, :cond_0
-
-    iget-object v9, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+    iput-object v1, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
 
     const/4 v10, 0x0
 
-    new-instance v0, Lcom/android/server/wm/BlackFrame$BlackSurface;
+    .local v10, success:Z
+    move/from16 v0, p6
 
-    iget v4, p2, Landroid/graphics/Rect;->left:I
+    iput-boolean v0, p0, Lcom/android/server/wm/BlackFrame;->mForceDefaultOrientation:Z
 
-    iget v5, p2, Landroid/graphics/Rect;->top:I
+    new-instance v1, Landroid/graphics/Rect;
 
-    iget v6, p3, Landroid/graphics/Rect;->right:I
+    invoke-direct {v1, p2}, Landroid/graphics/Rect;-><init>(Landroid/graphics/Rect;)V
 
-    iget v7, p3, Landroid/graphics/Rect;->top:I
+    iput-object v1, p0, Lcom/android/server/wm/BlackFrame;->mOuterRect:Landroid/graphics/Rect;
 
-    move-object v1, p0
+    new-instance v1, Landroid/graphics/Rect;
 
-    move-object v2, p1
+    move-object/from16 v0, p3
 
-    move v3, p4
+    invoke-direct {v1, v0}, Landroid/graphics/Rect;-><init>(Landroid/graphics/Rect;)V
 
-    invoke-direct/range {v0 .. v7}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIII)V
+    iput-object v1, p0, Lcom/android/server/wm/BlackFrame;->mInnerRect:Landroid/graphics/Rect;
 
-    aput-object v0, v9, v10
+    :try_start_0
+    iget v1, p2, Landroid/graphics/Rect;->top:I
+
+    move-object/from16 v0, p3
+
+    iget v2, v0, Landroid/graphics/Rect;->top:I
+
+    if-ge v1, v2, :cond_0
+
+    iget-object v11, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+
+    const/4 v12, 0x0
+
+    new-instance v1, Lcom/android/server/wm/BlackFrame$BlackSurface;
+
+    iget v5, p2, Landroid/graphics/Rect;->left:I
+
+    iget v6, p2, Landroid/graphics/Rect;->top:I
+
+    move-object/from16 v0, p3
+
+    iget v7, v0, Landroid/graphics/Rect;->right:I
+
+    move-object/from16 v0, p3
+
+    iget v8, v0, Landroid/graphics/Rect;->top:I
+
+    move-object v2, p0
+
+    move-object v3, p1
+
+    move/from16 v4, p4
+
+    move/from16 v9, p5
+
+    invoke-direct/range {v1 .. v9}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIIII)V
+
+    aput-object v1, v11, v12
 
     :cond_0
-    iget v0, p2, Landroid/graphics/Rect;->left:I
+    iget v1, p2, Landroid/graphics/Rect;->left:I
 
-    iget v1, p3, Landroid/graphics/Rect;->left:I
+    move-object/from16 v0, p3
 
-    if-ge v0, v1, :cond_1
+    iget v2, v0, Landroid/graphics/Rect;->left:I
 
-    iget-object v9, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+    if-ge v1, v2, :cond_1
 
-    const/4 v10, 0x1
+    iget-object v11, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
 
-    new-instance v0, Lcom/android/server/wm/BlackFrame$BlackSurface;
+    const/4 v12, 0x1
 
-    iget v4, p2, Landroid/graphics/Rect;->left:I
+    new-instance v1, Lcom/android/server/wm/BlackFrame$BlackSurface;
 
-    iget v5, p3, Landroid/graphics/Rect;->top:I
+    iget v5, p2, Landroid/graphics/Rect;->left:I
 
-    iget v6, p3, Landroid/graphics/Rect;->left:I
+    move-object/from16 v0, p3
 
-    iget v7, p2, Landroid/graphics/Rect;->bottom:I
+    iget v6, v0, Landroid/graphics/Rect;->top:I
 
-    move-object v1, p0
+    move-object/from16 v0, p3
 
-    move-object v2, p1
+    iget v7, v0, Landroid/graphics/Rect;->left:I
 
-    move v3, p4
+    iget v8, p2, Landroid/graphics/Rect;->bottom:I
 
-    invoke-direct/range {v0 .. v7}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIII)V
+    move-object v2, p0
 
-    aput-object v0, v9, v10
+    move-object v3, p1
+
+    move/from16 v4, p4
+
+    move/from16 v9, p5
+
+    invoke-direct/range {v1 .. v9}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIIII)V
+
+    aput-object v1, v11, v12
 
     :cond_1
-    iget v0, p2, Landroid/graphics/Rect;->bottom:I
+    iget v1, p2, Landroid/graphics/Rect;->bottom:I
 
-    iget v1, p3, Landroid/graphics/Rect;->bottom:I
+    move-object/from16 v0, p3
 
-    if-le v0, v1, :cond_2
+    iget v2, v0, Landroid/graphics/Rect;->bottom:I
 
-    iget-object v9, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+    if-le v1, v2, :cond_2
 
-    const/4 v10, 0x2
+    iget-object v11, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
 
-    new-instance v0, Lcom/android/server/wm/BlackFrame$BlackSurface;
+    const/4 v12, 0x2
 
-    iget v4, p3, Landroid/graphics/Rect;->left:I
+    new-instance v1, Lcom/android/server/wm/BlackFrame$BlackSurface;
 
-    iget v5, p3, Landroid/graphics/Rect;->bottom:I
+    move-object/from16 v0, p3
 
-    iget v6, p2, Landroid/graphics/Rect;->right:I
+    iget v5, v0, Landroid/graphics/Rect;->left:I
 
-    iget v7, p2, Landroid/graphics/Rect;->bottom:I
+    move-object/from16 v0, p3
 
-    move-object v1, p0
+    iget v6, v0, Landroid/graphics/Rect;->bottom:I
 
-    move-object v2, p1
+    iget v7, p2, Landroid/graphics/Rect;->right:I
 
-    move v3, p4
+    iget v8, p2, Landroid/graphics/Rect;->bottom:I
 
-    invoke-direct/range {v0 .. v7}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIII)V
+    move-object v2, p0
 
-    aput-object v0, v9, v10
+    move-object v3, p1
+
+    move/from16 v4, p4
+
+    move/from16 v9, p5
+
+    invoke-direct/range {v1 .. v9}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIIII)V
+
+    aput-object v1, v11, v12
 
     :cond_2
-    iget v0, p2, Landroid/graphics/Rect;->right:I
+    iget v1, p2, Landroid/graphics/Rect;->right:I
 
-    iget v1, p3, Landroid/graphics/Rect;->right:I
+    move-object/from16 v0, p3
 
-    if-le v0, v1, :cond_3
+    iget v2, v0, Landroid/graphics/Rect;->right:I
 
-    iget-object v9, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+    if-le v1, v2, :cond_3
 
-    const/4 v10, 0x3
+    iget-object v11, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
 
-    new-instance v0, Lcom/android/server/wm/BlackFrame$BlackSurface;
+    const/4 v12, 0x3
 
-    iget v4, p3, Landroid/graphics/Rect;->right:I
+    new-instance v1, Lcom/android/server/wm/BlackFrame$BlackSurface;
 
-    iget v5, p2, Landroid/graphics/Rect;->top:I
+    move-object/from16 v0, p3
 
-    iget v6, p2, Landroid/graphics/Rect;->right:I
+    iget v5, v0, Landroid/graphics/Rect;->right:I
 
-    iget v7, p3, Landroid/graphics/Rect;->bottom:I
+    iget v6, p2, Landroid/graphics/Rect;->top:I
 
-    move-object v1, p0
+    iget v7, p2, Landroid/graphics/Rect;->right:I
 
-    move-object v2, p1
+    move-object/from16 v0, p3
 
-    move v3, p4
+    iget v8, v0, Landroid/graphics/Rect;->bottom:I
 
-    invoke-direct/range {v0 .. v7}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIII)V
+    move-object v2, p0
 
-    aput-object v0, v9, v10
+    move-object v3, p1
+
+    move/from16 v4, p4
+
+    move/from16 v9, p5
+
+    invoke-direct/range {v1 .. v9}, Lcom/android/server/wm/BlackFrame$BlackSurface;-><init>(Lcom/android/server/wm/BlackFrame;Landroid/view/SurfaceSession;IIIIII)V
+
+    aput-object v1, v11, v12
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
     :cond_3
-    const/4 v8, 0x1
+    const/4 v10, 0x1
 
-    if-nez v8, :cond_4
+    if-nez v10, :cond_4
 
     invoke-virtual {p0}, Lcom/android/server/wm/BlackFrame;->kill()V
 
@@ -209,14 +251,14 @@
     return-void
 
     :catchall_0
-    move-exception v0
+    move-exception v1
 
-    if-nez v8, :cond_5
+    if-nez v10, :cond_5
 
     invoke-virtual {p0}, Lcom/android/server/wm/BlackFrame;->kill()V
 
     :cond_5
-    throw v0
+    throw v1
 .end method
 
 
@@ -284,9 +326,9 @@
 
     aget-object v1, v1, v0
 
-    iget-object v1, v1, Lcom/android/server/wm/BlackFrame$BlackSurface;->surface:Landroid/view/Surface;
+    iget-object v1, v1, Lcom/android/server/wm/BlackFrame$BlackSurface;->surface:Landroid/view/SurfaceControl;
 
-    invoke-virtual {v1}, Landroid/view/Surface;->hide()V
+    invoke-virtual {v1}, Landroid/view/SurfaceControl;->hide()V
 
     :cond_0
     add-int/lit8 v0, v0, 0x1
@@ -326,9 +368,9 @@
 
     aget-object v1, v1, v0
 
-    iget-object v1, v1, Lcom/android/server/wm/BlackFrame$BlackSurface;->surface:Landroid/view/Surface;
+    iget-object v1, v1, Lcom/android/server/wm/BlackFrame$BlackSurface;->surface:Landroid/view/SurfaceControl;
 
-    invoke-virtual {v1}, Landroid/view/Surface;->destroy()V
+    invoke-virtual {v1}, Landroid/view/SurfaceControl;->destroy()V
 
     iget-object v1, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
 
@@ -399,7 +441,7 @@
 
     invoke-virtual {p2, v2}, Ljava/io/PrintWriter;->print(Ljava/lang/String;)V
 
-    iget-object v2, v0, Lcom/android/server/wm/BlackFrame$BlackSurface;->surface:Landroid/view/Surface;
+    iget-object v2, v0, Lcom/android/server/wm/BlackFrame$BlackSurface;->surface:Landroid/view/SurfaceControl;
 
     invoke-virtual {p2, v2}, Ljava/io/PrintWriter;->print(Ljava/lang/Object;)V
 
@@ -425,6 +467,42 @@
 
     .end local v0           #bs:Lcom/android/server/wm/BlackFrame$BlackSurface;
     :cond_0
+    return-void
+.end method
+
+.method public setAlpha(F)V
+    .locals 2
+    .parameter "alpha"
+
+    .prologue
+    const/4 v0, 0x0
+
+    .local v0, i:I
+    :goto_0
+    iget-object v1, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+
+    array-length v1, v1
+
+    if-ge v0, v1, :cond_1
+
+    iget-object v1, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+
+    aget-object v1, v1, v0
+
+    if-eqz v1, :cond_0
+
+    iget-object v1, p0, Lcom/android/server/wm/BlackFrame;->mBlackSurfaces:[Lcom/android/server/wm/BlackFrame$BlackSurface;
+
+    aget-object v1, v1, v0
+
+    invoke-virtual {v1, p1}, Lcom/android/server/wm/BlackFrame$BlackSurface;->setAlpha(F)V
+
+    :cond_0
+    add-int/lit8 v0, v0, 0x1
+
+    goto :goto_0
+
+    :cond_1
     return-void
 .end method
 

@@ -28,7 +28,9 @@
 
 .field static final TRANSACTION_attachEngine:I = 0x1
 
-.field static final TRANSACTION_setWallpaper:I = 0x2
+.field static final TRANSACTION_engineShown:I = 0x2
+
+.field static final TRANSACTION_setWallpaper:I = 0x3
 
 
 # direct methods
@@ -150,6 +152,27 @@
 
     invoke-virtual {p2, v3}, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
 
+    invoke-virtual {p2}, Landroid/os/Parcel;->readStrongBinder()Landroid/os/IBinder;
+
+    move-result-object v3
+
+    invoke-static {v3}, Landroid/service/wallpaper/IWallpaperEngine$Stub;->asInterface(Landroid/os/IBinder;)Landroid/service/wallpaper/IWallpaperEngine;
+
+    move-result-object v0
+
+    .restart local v0       #_arg0:Landroid/service/wallpaper/IWallpaperEngine;
+    invoke-virtual {p0, v0}, Landroid/service/wallpaper/IWallpaperConnection$Stub;->engineShown(Landroid/service/wallpaper/IWallpaperEngine;)V
+
+    invoke-virtual {p3}, Landroid/os/Parcel;->writeNoException()V
+
+    goto :goto_0
+
+    .end local v0           #_arg0:Landroid/service/wallpaper/IWallpaperEngine;
+    :sswitch_3
+    const-string v3, "android.service.wallpaper.IWallpaperConnection"
+
+    invoke-virtual {p2, v3}, Landroid/os/Parcel;->enforceInterface(Ljava/lang/String;)V
+
     invoke-virtual {p2}, Landroid/os/Parcel;->readString()Ljava/lang/String;
 
     move-result-object v0
@@ -183,6 +206,7 @@
     .sparse-switch
         0x1 -> :sswitch_1
         0x2 -> :sswitch_2
+        0x3 -> :sswitch_3
         0x5f4e5446 -> :sswitch_0
     .end sparse-switch
 .end method

@@ -20,11 +20,11 @@
 # instance fields
 .field final synthetic this$0:Landroid/widget/RemoteViewsAdapter;
 
-.field final synthetic val$key:Landroid/util/Pair;
+.field final synthetic val$key:Landroid/widget/RemoteViewsAdapter$RemoteViewsCacheKey;
 
 
 # direct methods
-.method constructor <init>(Landroid/widget/RemoteViewsAdapter;Landroid/util/Pair;)V
+.method constructor <init>(Landroid/widget/RemoteViewsAdapter;Landroid/widget/RemoteViewsAdapter$RemoteViewsCacheKey;)V
     .locals 0
     .parameter
     .parameter
@@ -32,7 +32,7 @@
     .prologue
     iput-object p1, p0, Landroid/widget/RemoteViewsAdapter$1;->this$0:Landroid/widget/RemoteViewsAdapter;
 
-    iput-object p2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/util/Pair;
+    iput-object p2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/widget/RemoteViewsAdapter$RemoteViewsCacheKey;
 
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
@@ -45,18 +45,18 @@
     .locals 3
 
     .prologue
-    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1300()Ljava/util/HashMap;
+    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1500()Ljava/util/HashMap;
 
     move-result-object v1
 
     monitor-enter v1
 
     :try_start_0
-    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1300()Ljava/util/HashMap;
+    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1500()Ljava/util/HashMap;
 
     move-result-object v0
 
-    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/util/Pair;
+    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/widget/RemoteViewsAdapter$RemoteViewsCacheKey;
 
     invoke-virtual {v0, v2}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 
@@ -64,20 +64,20 @@
 
     if-eqz v0, :cond_0
 
-    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1300()Ljava/util/HashMap;
+    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1500()Ljava/util/HashMap;
 
     move-result-object v0
 
-    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/util/Pair;
+    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/widget/RemoteViewsAdapter$RemoteViewsCacheKey;
 
     invoke-virtual {v0, v2}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
 
     :cond_0
-    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1400()Ljava/util/HashMap;
+    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1600()Ljava/util/HashMap;
 
     move-result-object v0
 
-    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/util/Pair;
+    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/widget/RemoteViewsAdapter$RemoteViewsCacheKey;
 
     invoke-virtual {v0, v2}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 
@@ -85,11 +85,11 @@
 
     if-eqz v0, :cond_1
 
-    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1400()Ljava/util/HashMap;
+    invoke-static {}, Landroid/widget/RemoteViewsAdapter;->access$1600()Ljava/util/HashMap;
 
     move-result-object v0
 
-    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/util/Pair;
+    iget-object v2, p0, Landroid/widget/RemoteViewsAdapter$1;->val$key:Landroid/widget/RemoteViewsAdapter$RemoteViewsCacheKey;
 
     invoke-virtual {v0, v2}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
 

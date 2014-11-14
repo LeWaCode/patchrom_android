@@ -24,6 +24,8 @@
 
 .field public static final DISPLAY_SHOW_TITLE:I = 0x8
 
+.field public static final DISPLAY_TITLE_MULTIPLE_LINES:I = 0x20
+
 .field public static final DISPLAY_USE_LOGO:I = 0x1
 
 .field public static final NAVIGATION_MODE_LIST:I = 0x1
@@ -81,12 +83,6 @@
 .method public abstract getSelectedTab()Landroid/app/ActionBar$Tab;
 .end method
 
-.method public abstract getSplitHeight()I
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end method
-
 .method public abstract getSubtitle()Ljava/lang/CharSequence;
 .end method
 
@@ -111,19 +107,16 @@
 .method public abstract hide()V
 .end method
 
-.method public abstract hideSplit()V
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end method
-
-.method public abstract hideSplitNoAnimation()V
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-.end method
-
 .method public abstract isShowing()Z
+.end method
+
+.method public isTitleTruncated()Z
+    .locals 1
+
+    .prologue
+    const/4 v0, 0x0
+
+    return v0
 .end method
 
 .method public abstract newTab()Landroid/app/ActionBar$Tab;
@@ -177,6 +170,38 @@
 .method public abstract setDisplayUseLogoEnabled(Z)V
 .end method
 
+.method public setHomeActionContentDescription(I)V
+    .locals 0
+    .parameter "resId"
+
+    .prologue
+    return-void
+.end method
+
+.method public setHomeActionContentDescription(Ljava/lang/CharSequence;)V
+    .locals 0
+    .parameter "description"
+
+    .prologue
+    return-void
+.end method
+
+.method public setHomeAsUpIndicator(I)V
+    .locals 0
+    .parameter "resId"
+
+    .prologue
+    return-void
+.end method
+
+.method public setHomeAsUpIndicator(Landroid/graphics/drawable/Drawable;)V
+    .locals 0
+    .parameter "indicator"
+
+    .prologue
+    return-void
+.end method
+
 .method public setHomeButtonEnabled(Z)V
     .locals 0
     .parameter "enabled"
@@ -201,12 +226,6 @@
 .end method
 
 .method public abstract setNavigationMode(I)V
-.end method
-
-.method public abstract setScrollState(I)V
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
 .end method
 
 .method public abstract setSelectedNavigationItem(I)V
@@ -250,6 +269,30 @@
 .end method
 
 .method public abstract smoothScrollTabIndicator(IFI)V
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end method
+
+.method public abstract hideSplit()V
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end method
+
+.method public abstract hideSplitNoAnimation()V
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end method
+
+.method public abstract setScrollState(I)V
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+.end method
+
+.method public abstract getSplitHeight()I
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation

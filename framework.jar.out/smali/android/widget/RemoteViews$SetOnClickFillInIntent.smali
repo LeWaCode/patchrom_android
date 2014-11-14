@@ -23,8 +23,6 @@
 
 .field final synthetic this$0:Landroid/widget/RemoteViews;
 
-.field viewId:I
-
 
 # direct methods
 .method public constructor <init>(Landroid/widget/RemoteViews;ILandroid/content/Intent;)V
@@ -121,7 +119,7 @@
     :cond_2
     if-ne v1, p1, :cond_3
 
-    const v2, 0x1020239
+    const v2, 0x1020258
 
     iget-object v3, p0, Landroid/widget/RemoteViews$SetOnClickFillInIntent;->fillInIntent:Landroid/content/Intent;
 
@@ -130,8 +128,6 @@
     goto :goto_0
 
     :cond_3
-    if-eqz v1, :cond_0
-
     iget-object v2, p0, Landroid/widget/RemoteViews$SetOnClickFillInIntent;->fillInIntent:Landroid/content/Intent;
 
     if-eqz v2, :cond_0
@@ -144,6 +140,15 @@
     invoke-virtual {v1, v0}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
 
     goto :goto_0
+.end method
+
+.method public getActionName()Ljava/lang/String;
+    .locals 1
+
+    .prologue
+    const-string v0, "SetOnClickFillInIntent"
+
+    return-object v0
 .end method
 
 .method public writeToParcel(Landroid/os/Parcel;I)V

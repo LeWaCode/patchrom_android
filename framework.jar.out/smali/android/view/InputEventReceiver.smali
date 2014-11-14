@@ -78,9 +78,13 @@
 
     iput-object v0, p0, Landroid/view/InputEventReceiver;->mMessageQueue:Landroid/os/MessageQueue;
 
-    iget-object v0, p0, Landroid/view/InputEventReceiver;->mMessageQueue:Landroid/os/MessageQueue;
+    new-instance v0, Ljava/lang/ref/WeakReference;
 
-    invoke-static {p0, p1, v0}, Landroid/view/InputEventReceiver;->nativeInit(Landroid/view/InputEventReceiver;Landroid/view/InputChannel;Landroid/os/MessageQueue;)I
+    invoke-direct {v0, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
+
+    iget-object v1, p0, Landroid/view/InputEventReceiver;->mMessageQueue:Landroid/os/MessageQueue;
+
+    invoke-static {v0, p1, v1}, Landroid/view/InputEventReceiver;->nativeInit(Ljava/lang/ref/WeakReference;Landroid/view/InputChannel;Landroid/os/MessageQueue;)I
 
     move-result v0
 
@@ -123,7 +127,50 @@
     return-void
 .end method
 
-.method private static native nativeConsumeBatchedInputEvents(IJ)V
+.method private dispose(Z)V
+    .locals 2
+    .parameter "finalized"
+
+    .prologue
+    const/4 v1, 0x0
+
+    iget-object v0, p0, Landroid/view/InputEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
+
+    if-eqz v0, :cond_1
+
+    if-eqz p1, :cond_0
+
+    iget-object v0, p0, Landroid/view/InputEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
+
+    invoke-virtual {v0}, Ldalvik/system/CloseGuard;->warnIfOpen()V
+
+    :cond_0
+    iget-object v0, p0, Landroid/view/InputEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
+
+    invoke-virtual {v0}, Ldalvik/system/CloseGuard;->close()V
+
+    :cond_1
+    iget v0, p0, Landroid/view/InputEventReceiver;->mReceiverPtr:I
+
+    if-eqz v0, :cond_2
+
+    iget v0, p0, Landroid/view/InputEventReceiver;->mReceiverPtr:I
+
+    invoke-static {v0}, Landroid/view/InputEventReceiver;->nativeDispose(I)V
+
+    const/4 v0, 0x0
+
+    iput v0, p0, Landroid/view/InputEventReceiver;->mReceiverPtr:I
+
+    :cond_2
+    iput-object v1, p0, Landroid/view/InputEventReceiver;->mInputChannel:Landroid/view/InputChannel;
+
+    iput-object v1, p0, Landroid/view/InputEventReceiver;->mMessageQueue:Landroid/os/MessageQueue;
+
+    return-void
+.end method
+
+.method private static native nativeConsumeBatchedInputEvents(IJ)Z
 .end method
 
 .method private static native nativeDispose(I)V
@@ -132,12 +179,24 @@
 .method private static native nativeFinishInputEvent(IIZ)V
 .end method
 
-.method private static native nativeInit(Landroid/view/InputEventReceiver;Landroid/view/InputChannel;Landroid/os/MessageQueue;)I
+.method private static native nativeInit(Ljava/lang/ref/WeakReference;Landroid/view/InputChannel;Landroid/os/MessageQueue;)I
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/lang/ref/WeakReference",
+            "<",
+            "Landroid/view/InputEventReceiver;",
+            ">;",
+            "Landroid/view/InputChannel;",
+            "Landroid/os/MessageQueue;",
+            ")I"
+        }
+    .end annotation
 .end method
 
 
 # virtual methods
-.method public final consumeBatchedInputEvents(J)V
+.method public final consumeBatchedInputEvents(J)Z
     .locals 2
     .parameter "frameTimeNanos"
 
@@ -152,48 +211,28 @@
 
     invoke-static {v0, v1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
 
+    const/4 v0, 0x0
+
     :goto_0
-    return-void
+    return v0
 
     :cond_0
     iget v0, p0, Landroid/view/InputEventReceiver;->mReceiverPtr:I
 
-    invoke-static {v0, p1, p2}, Landroid/view/InputEventReceiver;->nativeConsumeBatchedInputEvents(IJ)V
+    invoke-static {v0, p1, p2}, Landroid/view/InputEventReceiver;->nativeConsumeBatchedInputEvents(IJ)Z
+
+    move-result v0
 
     goto :goto_0
 .end method
 
 .method public dispose()V
-    .locals 2
+    .locals 1
 
     .prologue
-    const/4 v1, 0x0
-
-    iget-object v0, p0, Landroid/view/InputEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
-
-    if-eqz v0, :cond_0
-
-    iget-object v0, p0, Landroid/view/InputEventReceiver;->mCloseGuard:Ldalvik/system/CloseGuard;
-
-    invoke-virtual {v0}, Ldalvik/system/CloseGuard;->close()V
-
-    :cond_0
-    iget v0, p0, Landroid/view/InputEventReceiver;->mReceiverPtr:I
-
-    if-eqz v0, :cond_1
-
-    iget v0, p0, Landroid/view/InputEventReceiver;->mReceiverPtr:I
-
-    invoke-static {v0}, Landroid/view/InputEventReceiver;->nativeDispose(I)V
-
     const/4 v0, 0x0
 
-    iput v0, p0, Landroid/view/InputEventReceiver;->mReceiverPtr:I
-
-    :cond_1
-    iput-object v1, p0, Landroid/view/InputEventReceiver;->mInputChannel:Landroid/view/InputChannel;
-
-    iput-object v1, p0, Landroid/view/InputEventReceiver;->mMessageQueue:Landroid/os/MessageQueue;
+    invoke-direct {p0, v0}, Landroid/view/InputEventReceiver;->dispose(Z)V
 
     return-void
 .end method
@@ -207,8 +246,10 @@
     .end annotation
 
     .prologue
+    const/4 v0, 0x1
+
     :try_start_0
-    invoke-virtual {p0}, Landroid/view/InputEventReceiver;->dispose()V
+    invoke-direct {p0, v0}, Landroid/view/InputEventReceiver;->dispose(Z)V
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
@@ -303,7 +344,7 @@
     .prologue
     const-wide/16 v0, -0x1
 
-    invoke-virtual {p0, v0, v1}, Landroid/view/InputEventReceiver;->consumeBatchedInputEvents(J)V
+    invoke-virtual {p0, v0, v1}, Landroid/view/InputEventReceiver;->consumeBatchedInputEvents(J)Z
 
     return-void
 .end method

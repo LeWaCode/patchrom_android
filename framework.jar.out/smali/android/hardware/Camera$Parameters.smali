@@ -207,6 +207,8 @@
 
 .field public static final SCENE_MODE_FIREWORKS:Ljava/lang/String; = "fireworks"
 
+.field public static final SCENE_MODE_HDR:Ljava/lang/String; = "hdr"
+
 .field public static final SCENE_MODE_LANDSCAPE:Ljava/lang/String; = "landscape"
 
 .field public static final SCENE_MODE_NIGHT:Ljava/lang/String; = "night"
@@ -266,7 +268,7 @@
 
 # direct methods
 .method private constructor <init>(Landroid/hardware/Camera;)V
-    .locals 1
+    .locals 2
     .parameter
 
     .prologue
@@ -276,7 +278,9 @@
 
     new-instance v0, Ljava/util/HashMap;
 
-    invoke-direct {v0}, Ljava/util/HashMap;-><init>()V
+    const/16 v1, 0x40
+
+    invoke-direct {v0, v1}, Ljava/util/HashMap;-><init>(I)V
 
     iput-object v0, p0, Landroid/hardware/Camera$Parameters;->mMap:Ljava/util/HashMap;
 
@@ -662,7 +666,7 @@
 .end method
 
 .method private split(Ljava/lang/String;)Ljava/util/ArrayList;
-    .locals 3
+    .locals 5
     .parameter "str"
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -679,36 +683,46 @@
     .prologue
     if-nez p1, :cond_1
 
-    const/4 v0, 0x0
+    const/4 v3, 0x0
 
     :cond_0
-    return-object v0
+    return-object v3
 
     :cond_1
-    new-instance v1, Ljava/util/StringTokenizer;
+    new-instance v2, Landroid/text/TextUtils$SimpleStringSplitter;
 
-    const-string v2, ","
+    const/16 v4, 0x2c
 
-    invoke-direct {v1, p1, v2}, Ljava/util/StringTokenizer;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-direct {v2, v4}, Landroid/text/TextUtils$SimpleStringSplitter;-><init>(C)V
 
-    .local v1, tokenizer:Ljava/util/StringTokenizer;
-    new-instance v0, Ljava/util/ArrayList;
+    .local v2, splitter:Landroid/text/TextUtils$StringSplitter;
+    invoke-interface {v2, p1}, Landroid/text/TextUtils$StringSplitter;->setString(Ljava/lang/String;)V
 
-    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+    new-instance v3, Ljava/util/ArrayList;
 
-    .local v0, substrings:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Ljava/lang/String;>;"
+    invoke-direct {v3}, Ljava/util/ArrayList;-><init>()V
+
+    .local v3, substrings:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Ljava/lang/String;>;"
+    invoke-interface {v2}, Landroid/text/TextUtils$StringSplitter;->iterator()Ljava/util/Iterator;
+
+    move-result-object v0
+
+    .local v0, i$:Ljava/util/Iterator;
     :goto_0
-    invoke-virtual {v1}, Ljava/util/StringTokenizer;->hasMoreElements()Z
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 
-    move-result v2
+    move-result v4
 
-    if-eqz v2, :cond_0
+    if-eqz v4, :cond_0
 
-    invoke-virtual {v1}, Ljava/util/StringTokenizer;->nextToken()Ljava/lang/String;
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
-    move-result-object v2
+    move-result-object v1
 
-    invoke-virtual {v0, v2}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+    check-cast v1, Ljava/lang/String;
+
+    .local v1, s:Ljava/lang/String;
+    invoke-virtual {v3, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     goto :goto_0
 .end method
@@ -916,7 +930,7 @@
 .end method
 
 .method private splitFloat(Ljava/lang/String;[F)V
-    .locals 5
+    .locals 6
     .parameter "str"
     .parameter "output"
 
@@ -927,47 +941,56 @@
     return-void
 
     :cond_1
-    new-instance v3, Ljava/util/StringTokenizer;
+    new-instance v4, Landroid/text/TextUtils$SimpleStringSplitter;
 
-    const-string v4, ","
+    const/16 v5, 0x2c
 
-    invoke-direct {v3, p1, v4}, Ljava/util/StringTokenizer;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-direct {v4, v5}, Landroid/text/TextUtils$SimpleStringSplitter;-><init>(C)V
 
-    .local v3, tokenizer:Ljava/util/StringTokenizer;
-    const/4 v0, 0x0
+    .local v4, splitter:Landroid/text/TextUtils$StringSplitter;
+    invoke-interface {v4, p1}, Landroid/text/TextUtils$StringSplitter;->setString(Ljava/lang/String;)V
 
-    .local v0, index:I
-    :goto_0
-    invoke-virtual {v3}, Ljava/util/StringTokenizer;->hasMoreElements()Z
+    const/4 v1, 0x0
 
-    move-result v4
-
-    if-eqz v4, :cond_0
-
-    invoke-virtual {v3}, Ljava/util/StringTokenizer;->nextToken()Ljava/lang/String;
-
-    move-result-object v2
-
-    .local v2, token:Ljava/lang/String;
-    add-int/lit8 v1, v0, 0x1
-
-    .end local v0           #index:I
     .local v1, index:I
-    invoke-static {v2}, Ljava/lang/Float;->parseFloat(Ljava/lang/String;)F
+    invoke-interface {v4}, Landroid/text/TextUtils$StringSplitter;->iterator()Ljava/util/Iterator;
 
-    move-result v4
+    move-result-object v0
 
-    aput v4, p2, v0
+    .local v0, i$:Ljava/util/Iterator;
+    :goto_0
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 
-    move v0, v1
+    move-result v5
+
+    if-eqz v5, :cond_0
+
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v3
+
+    check-cast v3, Ljava/lang/String;
+
+    .local v3, s:Ljava/lang/String;
+    add-int/lit8 v2, v1, 0x1
 
     .end local v1           #index:I
-    .restart local v0       #index:I
+    .local v2, index:I
+    invoke-static {v3}, Ljava/lang/Float;->parseFloat(Ljava/lang/String;)F
+
+    move-result v5
+
+    aput v5, p2, v1
+
+    move v1, v2
+
+    .end local v2           #index:I
+    .restart local v1       #index:I
     goto :goto_0
 .end method
 
 .method private splitInt(Ljava/lang/String;)Ljava/util/ArrayList;
-    .locals 5
+    .locals 6
     .parameter "str"
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -982,68 +1005,77 @@
     .end annotation
 
     .prologue
-    const/4 v3, 0x0
+    const/4 v4, 0x0
 
     if-nez p1, :cond_1
 
-    move-object v0, v3
+    move-object v3, v4
 
     :cond_0
     :goto_0
-    return-object v0
+    return-object v3
 
     :cond_1
-    new-instance v2, Ljava/util/StringTokenizer;
+    new-instance v2, Landroid/text/TextUtils$SimpleStringSplitter;
 
-    const-string v4, ","
+    const/16 v5, 0x2c
 
-    invoke-direct {v2, p1, v4}, Ljava/util/StringTokenizer;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-direct {v2, v5}, Landroid/text/TextUtils$SimpleStringSplitter;-><init>(C)V
 
-    .local v2, tokenizer:Ljava/util/StringTokenizer;
-    new-instance v0, Ljava/util/ArrayList;
+    .local v2, splitter:Landroid/text/TextUtils$StringSplitter;
+    invoke-interface {v2, p1}, Landroid/text/TextUtils$StringSplitter;->setString(Ljava/lang/String;)V
 
-    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+    new-instance v3, Ljava/util/ArrayList;
 
-    .local v0, substrings:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Ljava/lang/Integer;>;"
+    invoke-direct {v3}, Ljava/util/ArrayList;-><init>()V
+
+    .local v3, substrings:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Ljava/lang/Integer;>;"
+    invoke-interface {v2}, Landroid/text/TextUtils$StringSplitter;->iterator()Ljava/util/Iterator;
+
+    move-result-object v0
+
+    .local v0, i$:Ljava/util/Iterator;
     :goto_1
-    invoke-virtual {v2}, Ljava/util/StringTokenizer;->hasMoreElements()Z
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 
-    move-result v4
+    move-result v5
 
-    if-eqz v4, :cond_2
+    if-eqz v5, :cond_2
 
-    invoke-virtual {v2}, Ljava/util/StringTokenizer;->nextToken()Ljava/lang/String;
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
     move-result-object v1
 
-    .local v1, token:Ljava/lang/String;
+    check-cast v1, Ljava/lang/String;
+
+    .local v1, s:Ljava/lang/String;
     invoke-static {v1}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
 
-    move-result v4
+    move-result v5
 
-    invoke-static {v4}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+    invoke-static {v5}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
-    move-result-object v4
+    move-result-object v5
 
-    invoke-virtual {v0, v4}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+    invoke-virtual {v3, v5}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     goto :goto_1
 
-    .end local v1           #token:Ljava/lang/String;
+    .end local v1           #s:Ljava/lang/String;
     :cond_2
-    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
 
-    move-result v4
+    move-result v5
 
-    if-nez v4, :cond_0
+    if-nez v5, :cond_0
 
-    move-object v0, v3
+    move-object v3, v4
 
     goto :goto_0
 .end method
 
 .method private splitInt(Ljava/lang/String;[I)V
-    .locals 5
+    .locals 6
     .parameter "str"
     .parameter "output"
 
@@ -1054,42 +1086,51 @@
     return-void
 
     :cond_1
-    new-instance v3, Ljava/util/StringTokenizer;
+    new-instance v4, Landroid/text/TextUtils$SimpleStringSplitter;
 
-    const-string v4, ","
+    const/16 v5, 0x2c
 
-    invoke-direct {v3, p1, v4}, Ljava/util/StringTokenizer;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-direct {v4, v5}, Landroid/text/TextUtils$SimpleStringSplitter;-><init>(C)V
 
-    .local v3, tokenizer:Ljava/util/StringTokenizer;
-    const/4 v0, 0x0
+    .local v4, splitter:Landroid/text/TextUtils$StringSplitter;
+    invoke-interface {v4, p1}, Landroid/text/TextUtils$StringSplitter;->setString(Ljava/lang/String;)V
 
-    .local v0, index:I
-    :goto_0
-    invoke-virtual {v3}, Ljava/util/StringTokenizer;->hasMoreElements()Z
+    const/4 v1, 0x0
 
-    move-result v4
-
-    if-eqz v4, :cond_0
-
-    invoke-virtual {v3}, Ljava/util/StringTokenizer;->nextToken()Ljava/lang/String;
-
-    move-result-object v2
-
-    .local v2, token:Ljava/lang/String;
-    add-int/lit8 v1, v0, 0x1
-
-    .end local v0           #index:I
     .local v1, index:I
-    invoke-static {v2}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+    invoke-interface {v4}, Landroid/text/TextUtils$StringSplitter;->iterator()Ljava/util/Iterator;
 
-    move-result v4
+    move-result-object v0
 
-    aput v4, p2, v0
+    .local v0, i$:Ljava/util/Iterator;
+    :goto_0
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 
-    move v0, v1
+    move-result v5
+
+    if-eqz v5, :cond_0
+
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v3
+
+    check-cast v3, Ljava/lang/String;
+
+    .local v3, s:Ljava/lang/String;
+    add-int/lit8 v2, v1, 0x1
 
     .end local v1           #index:I
-    .restart local v0       #index:I
+    .local v2, index:I
+    invoke-static {v3}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+
+    move-result v5
+
+    aput v5, p2, v1
+
+    move v1, v2
+
+    .end local v2           #index:I
+    .restart local v1       #index:I
     goto :goto_0
 .end method
 
@@ -1227,7 +1268,7 @@
 .end method
 
 .method private splitSize(Ljava/lang/String;)Ljava/util/ArrayList;
-    .locals 5
+    .locals 7
     .parameter "str"
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -1242,61 +1283,72 @@
     .end annotation
 
     .prologue
-    const/4 v3, 0x0
+    const/4 v5, 0x0
 
     if-nez p1, :cond_1
 
-    move-object v1, v3
+    move-object v3, v5
 
     :cond_0
     :goto_0
-    return-object v1
+    return-object v3
 
     :cond_1
-    new-instance v2, Ljava/util/StringTokenizer;
+    new-instance v4, Landroid/text/TextUtils$SimpleStringSplitter;
 
-    const-string v4, ","
+    const/16 v6, 0x2c
 
-    invoke-direct {v2, p1, v4}, Ljava/util/StringTokenizer;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-direct {v4, v6}, Landroid/text/TextUtils$SimpleStringSplitter;-><init>(C)V
 
-    .local v2, tokenizer:Ljava/util/StringTokenizer;
-    new-instance v1, Ljava/util/ArrayList;
+    .local v4, splitter:Landroid/text/TextUtils$StringSplitter;
+    invoke-interface {v4, p1}, Landroid/text/TextUtils$StringSplitter;->setString(Ljava/lang/String;)V
 
-    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
+    new-instance v3, Ljava/util/ArrayList;
 
-    .local v1, sizeList:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/hardware/Camera$Size;>;"
-    :cond_2
-    :goto_1
-    invoke-virtual {v2}, Ljava/util/StringTokenizer;->hasMoreElements()Z
+    invoke-direct {v3}, Ljava/util/ArrayList;-><init>()V
 
-    move-result v4
-
-    if-eqz v4, :cond_3
-
-    invoke-virtual {v2}, Ljava/util/StringTokenizer;->nextToken()Ljava/lang/String;
-
-    move-result-object v4
-
-    invoke-direct {p0, v4}, Landroid/hardware/Camera$Parameters;->strToSize(Ljava/lang/String;)Landroid/hardware/Camera$Size;
+    .local v3, sizeList:Ljava/util/ArrayList;,"Ljava/util/ArrayList<Landroid/hardware/Camera$Size;>;"
+    invoke-interface {v4}, Landroid/text/TextUtils$StringSplitter;->iterator()Ljava/util/Iterator;
 
     move-result-object v0
 
-    .local v0, size:Landroid/hardware/Camera$Size;
-    if-eqz v0, :cond_2
+    .local v0, i$:Ljava/util/Iterator;
+    :cond_2
+    :goto_1
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 
-    invoke-virtual {v1, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+    move-result v6
+
+    if-eqz v6, :cond_3
+
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v1
+
+    check-cast v1, Ljava/lang/String;
+
+    .local v1, s:Ljava/lang/String;
+    invoke-direct {p0, v1}, Landroid/hardware/Camera$Parameters;->strToSize(Ljava/lang/String;)Landroid/hardware/Camera$Size;
+
+    move-result-object v2
+
+    .local v2, size:Landroid/hardware/Camera$Size;
+    if-eqz v2, :cond_2
+
+    invoke-virtual {v3, v2}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     goto :goto_1
 
-    .end local v0           #size:Landroid/hardware/Camera$Size;
+    .end local v1           #s:Ljava/lang/String;
+    .end local v2           #size:Landroid/hardware/Camera$Size;
     :cond_3
-    invoke-virtual {v1}, Ljava/util/ArrayList;->size()I
+    invoke-virtual {v3}, Ljava/util/ArrayList;->size()I
 
-    move-result v4
+    move-result v6
 
-    if-nez v4, :cond_0
+    if-nez v6, :cond_0
 
-    move-object v1, v3
+    move-object v3, v5
 
     goto :goto_0
 .end method
@@ -1495,7 +1547,9 @@
     .prologue
     new-instance v0, Ljava/lang/StringBuilder;
 
-    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+    const/16 v3, 0x80
+
+    invoke-direct {v0, v3}, Ljava/lang/StringBuilder;-><init>(I)V
 
     .local v0, flattened:Ljava/lang/StringBuilder;
     iget-object v3, p0, Landroid/hardware/Camera$Parameters;->mMap:Ljava/util/HashMap;
@@ -3641,69 +3695,78 @@
 .end method
 
 .method public unflatten(Ljava/lang/String;)V
-    .locals 6
+    .locals 7
     .parameter "flattened"
 
     .prologue
-    iget-object v5, p0, Landroid/hardware/Camera$Parameters;->mMap:Ljava/util/HashMap;
+    iget-object v6, p0, Landroid/hardware/Camera$Parameters;->mMap:Ljava/util/HashMap;
 
-    invoke-virtual {v5}, Ljava/util/HashMap;->clear()V
+    invoke-virtual {v6}, Ljava/util/HashMap;->clear()V
 
-    new-instance v3, Ljava/util/StringTokenizer;
+    new-instance v4, Landroid/text/TextUtils$SimpleStringSplitter;
 
-    const-string v5, ";"
+    const/16 v6, 0x3b
 
-    invoke-direct {v3, p1, v5}, Ljava/util/StringTokenizer;-><init>(Ljava/lang/String;Ljava/lang/String;)V
+    invoke-direct {v4, v6}, Landroid/text/TextUtils$SimpleStringSplitter;-><init>(C)V
 
-    .local v3, tokenizer:Ljava/util/StringTokenizer;
-    :cond_0
-    :goto_0
-    invoke-virtual {v3}, Ljava/util/StringTokenizer;->hasMoreElements()Z
+    .local v4, splitter:Landroid/text/TextUtils$StringSplitter;
+    invoke-interface {v4, p1}, Landroid/text/TextUtils$StringSplitter;->setString(Ljava/lang/String;)V
 
-    move-result v5
-
-    if-eqz v5, :cond_1
-
-    invoke-virtual {v3}, Ljava/util/StringTokenizer;->nextToken()Ljava/lang/String;
-
-    move-result-object v1
-
-    .local v1, kv:Ljava/lang/String;
-    const/16 v5, 0x3d
-
-    invoke-virtual {v1, v5}, Ljava/lang/String;->indexOf(I)I
-
-    move-result v2
-
-    .local v2, pos:I
-    const/4 v5, -0x1
-
-    if-eq v2, v5, :cond_0
-
-    const/4 v5, 0x0
-
-    invoke-virtual {v1, v5, v2}, Ljava/lang/String;->substring(II)Ljava/lang/String;
+    invoke-interface {v4}, Landroid/text/TextUtils$StringSplitter;->iterator()Ljava/util/Iterator;
 
     move-result-object v0
 
-    .local v0, k:Ljava/lang/String;
-    add-int/lit8 v5, v2, 0x1
+    .local v0, i$:Ljava/util/Iterator;
+    :cond_0
+    :goto_0
+    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 
-    invoke-virtual {v1, v5}, Ljava/lang/String;->substring(I)Ljava/lang/String;
+    move-result v6
 
-    move-result-object v4
+    if-eqz v6, :cond_1
 
-    .local v4, v:Ljava/lang/String;
-    iget-object v5, p0, Landroid/hardware/Camera$Parameters;->mMap:Ljava/util/HashMap;
+    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
-    invoke-virtual {v5, v0, v4}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    move-result-object v2
+
+    check-cast v2, Ljava/lang/String;
+
+    .local v2, kv:Ljava/lang/String;
+    const/16 v6, 0x3d
+
+    invoke-virtual {v2, v6}, Ljava/lang/String;->indexOf(I)I
+
+    move-result v3
+
+    .local v3, pos:I
+    const/4 v6, -0x1
+
+    if-eq v3, v6, :cond_0
+
+    const/4 v6, 0x0
+
+    invoke-virtual {v2, v6, v3}, Ljava/lang/String;->substring(II)Ljava/lang/String;
+
+    move-result-object v1
+
+    .local v1, k:Ljava/lang/String;
+    add-int/lit8 v6, v3, 0x1
+
+    invoke-virtual {v2, v6}, Ljava/lang/String;->substring(I)Ljava/lang/String;
+
+    move-result-object v5
+
+    .local v5, v:Ljava/lang/String;
+    iget-object v6, p0, Landroid/hardware/Camera$Parameters;->mMap:Ljava/util/HashMap;
+
+    invoke-virtual {v6, v1, v5}, Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 
     goto :goto_0
 
-    .end local v0           #k:Ljava/lang/String;
-    .end local v1           #kv:Ljava/lang/String;
-    .end local v2           #pos:I
-    .end local v4           #v:Ljava/lang/String;
+    .end local v1           #k:Ljava/lang/String;
+    .end local v2           #kv:Ljava/lang/String;
+    .end local v3           #pos:I
+    .end local v5           #v:Ljava/lang/String;
     :cond_1
     return-void
 .end method

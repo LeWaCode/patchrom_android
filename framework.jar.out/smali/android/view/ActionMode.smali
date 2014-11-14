@@ -24,17 +24,16 @@
     .end annotation
 .end field
 
-
-# instance fields
-.field private mTag:Ljava/lang/Object;
-
-.field private mTitleOptionalHint:Z
-
 .field protected selectAll:Z
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_FIELD:Landroid/annotation/LewaHook$LewaHookType;
     .end annotation
 .end field
+
+# instance fields
+.field private mTag:Ljava/lang/Object;
+
+.field private mTitleOptionalHint:Z
 
 
 # direct methods
@@ -63,28 +62,6 @@
 .end method
 
 .method public abstract getMenuInflater()Landroid/view/MenuInflater;
-.end method
-
-.method public getSelectionMode()I
-    .locals 1
-    .annotation build Landroid/annotation/LewaHook;
-        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
-    .end annotation
-
-    .prologue
-    iget-boolean v0, p0, Landroid/view/ActionMode;->selectAll:Z
-
-    if-eqz v0, :cond_0
-
-    const/4 v0, 0x1
-
-    :goto_0
-    return v0
-
-    :cond_0
-    const/4 v0, 0x2
-
-    goto :goto_0
 .end method
 
 .method public abstract getSubtitle()Ljava/lang/CharSequence;
@@ -135,6 +112,60 @@
 .method public abstract setCustomView(Landroid/view/View;)V
 .end method
 
+.method public abstract setSubtitle(I)V
+.end method
+
+.method public abstract setSubtitle(Ljava/lang/CharSequence;)V
+.end method
+
+.method public setTag(Ljava/lang/Object;)V
+    .locals 0
+    .parameter "tag"
+
+    .prologue
+    iput-object p1, p0, Landroid/view/ActionMode;->mTag:Ljava/lang/Object;
+
+    return-void
+.end method
+
+.method public abstract setTitle(I)V
+.end method
+
+.method public abstract setTitle(Ljava/lang/CharSequence;)V
+.end method
+
+.method public setTitleOptionalHint(Z)V
+    .locals 0
+    .parameter "titleOptional"
+
+    .prologue
+    iput-boolean p1, p0, Landroid/view/ActionMode;->mTitleOptionalHint:Z
+
+    return-void
+.end method
+
+.method public getSelectionMode()I
+    .locals 1
+    .annotation build Landroid/annotation/LewaHook;
+        value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
+    .end annotation
+
+    .prologue
+    iget-boolean v0, p0, Landroid/view/ActionMode;->selectAll:Z
+
+    if-eqz v0, :cond_0
+
+    const/4 v0, 0x1
+
+    :goto_0
+    return v0
+
+    :cond_0
+    const/4 v0, 0x2
+
+    goto :goto_0
+.end method
+
 .method public abstract setRightActionButtonDrawable(Landroid/graphics/drawable/Drawable;)V
     .annotation build Landroid/annotation/LewaHook;
         value = .enum Landroid/annotation/LewaHook$LewaHookType;->NEW_METHOD:Landroid/annotation/LewaHook$LewaHookType;
@@ -174,36 +205,4 @@
     const/4 v0, 0x0
 
     goto :goto_0
-.end method
-
-.method public abstract setSubtitle(I)V
-.end method
-
-.method public abstract setSubtitle(Ljava/lang/CharSequence;)V
-.end method
-
-.method public setTag(Ljava/lang/Object;)V
-    .locals 0
-    .parameter "tag"
-
-    .prologue
-    iput-object p1, p0, Landroid/view/ActionMode;->mTag:Ljava/lang/Object;
-
-    return-void
-.end method
-
-.method public abstract setTitle(I)V
-.end method
-
-.method public abstract setTitle(Ljava/lang/CharSequence;)V
-.end method
-
-.method public setTitleOptionalHint(Z)V
-    .locals 0
-    .parameter "titleOptional"
-
-    .prologue
-    iput-boolean p1, p0, Landroid/view/ActionMode;->mTitleOptionalHint:Z
-
-    return-void
 .end method

@@ -437,7 +437,7 @@
     .parameter "savedInstanceState"
 
     .prologue
-    const v0, 0x1090089
+    const v0, 0x109007d
 
     const/4 v1, 0x0
 

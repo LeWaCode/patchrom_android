@@ -80,6 +80,22 @@
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
+    if-nez p1, :cond_0
+
+    const/4 v0, 0x0
+
+    iput v0, p0, Landroid/graphics/RectF;->bottom:F
+
+    iput v0, p0, Landroid/graphics/RectF;->right:F
+
+    iput v0, p0, Landroid/graphics/RectF;->top:F
+
+    iput v0, p0, Landroid/graphics/RectF;->left:F
+
+    :goto_0
+    return-void
+
+    :cond_0
     iget v0, p1, Landroid/graphics/Rect;->left:I
 
     int-to-float v0, v0
@@ -104,7 +120,7 @@
 
     iput v0, p0, Landroid/graphics/RectF;->bottom:F
 
-    return-void
+    goto :goto_0
 .end method
 
 .method public constructor <init>(Landroid/graphics/RectF;)V
@@ -114,6 +130,22 @@
     .prologue
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
+    if-nez p1, :cond_0
+
+    const/4 v0, 0x0
+
+    iput v0, p0, Landroid/graphics/RectF;->bottom:F
+
+    iput v0, p0, Landroid/graphics/RectF;->right:F
+
+    iput v0, p0, Landroid/graphics/RectF;->top:F
+
+    iput v0, p0, Landroid/graphics/RectF;->left:F
+
+    :goto_0
+    return-void
+
+    :cond_0
     iget v0, p1, Landroid/graphics/RectF;->left:F
 
     iput v0, p0, Landroid/graphics/RectF;->left:F
@@ -130,7 +162,7 @@
 
     iput v0, p0, Landroid/graphics/RectF;->bottom:F
 
-    return-void
+    goto :goto_0
 .end method
 
 .method public static intersects(Landroid/graphics/RectF;Landroid/graphics/RectF;)Z

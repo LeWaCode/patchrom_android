@@ -54,9 +54,10 @@
     return-object v0
 .end method
 
-.method public onRfcommChannelFound(I)V
+.method public onBluetoothStateChange(II)V
     .locals 5
-    .parameter "channel"
+    .parameter "prevState"
+    .parameter "newState"
     .annotation system Ldalvik/annotation/Throws;
         value = {
             Landroid/os/RemoteException;
@@ -80,6 +81,8 @@
     invoke-virtual {v0, v2}, Landroid/os/Parcel;->writeInterfaceToken(Ljava/lang/String;)V
 
     invoke-virtual {v0, p1}, Landroid/os/Parcel;->writeInt(I)V
+
+    invoke-virtual {v0, p2}, Landroid/os/Parcel;->writeInt(I)V
 
     iget-object v2, p0, Landroid/bluetooth/IBluetoothCallback$Stub$Proxy;->mRemote:Landroid/os/IBinder;
 

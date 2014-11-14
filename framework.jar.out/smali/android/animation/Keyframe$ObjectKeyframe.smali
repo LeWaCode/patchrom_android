@@ -72,11 +72,16 @@
 
     invoke-virtual {p0}, Landroid/animation/Keyframe$ObjectKeyframe;->getFraction()F
 
-    move-result v1
+    move-result v2
 
-    iget-object v2, p0, Landroid/animation/Keyframe$ObjectKeyframe;->mValue:Ljava/lang/Object;
+    iget-boolean v1, p0, Landroid/animation/Keyframe$ObjectKeyframe;->mHasValue:Z
 
-    invoke-direct {v0, v1, v2}, Landroid/animation/Keyframe$ObjectKeyframe;-><init>(FLjava/lang/Object;)V
+    if-eqz v1, :cond_0
+
+    iget-object v1, p0, Landroid/animation/Keyframe$ObjectKeyframe;->mValue:Ljava/lang/Object;
+
+    :goto_0
+    invoke-direct {v0, v2, v1}, Landroid/animation/Keyframe$ObjectKeyframe;-><init>(FLjava/lang/Object;)V
 
     .local v0, kfClone:Landroid/animation/Keyframe$ObjectKeyframe;
     invoke-virtual {p0}, Landroid/animation/Keyframe$ObjectKeyframe;->getInterpolator()Landroid/animation/TimeInterpolator;
@@ -86,6 +91,12 @@
     invoke-virtual {v0, v1}, Landroid/animation/Keyframe$ObjectKeyframe;->setInterpolator(Landroid/animation/TimeInterpolator;)V
 
     return-object v0
+
+    .end local v0           #kfClone:Landroid/animation/Keyframe$ObjectKeyframe;
+    :cond_0
+    const/4 v1, 0x0
+
+    goto :goto_0
 .end method
 
 .method public bridge synthetic clone()Landroid/animation/Keyframe;

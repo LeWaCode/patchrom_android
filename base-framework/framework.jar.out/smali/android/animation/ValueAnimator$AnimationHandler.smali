@@ -1,4 +1,4 @@
-.class Landroid/animation/ValueAnimator$AnimationHandler;
+.class public Landroid/animation/ValueAnimator$AnimationHandler;
 .super Ljava/lang/Object;
 .source "ValueAnimator.java"
 
@@ -12,7 +12,7 @@
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
-    accessFlags = 0xa
+    accessFlags = 0xc
     name = "AnimationHandler"
 .end annotation
 
@@ -20,7 +20,7 @@
 # instance fields
 .field private mAnimationScheduled:Z
 
-.field private final mAnimations:Ljava/util/ArrayList;
+.field protected final mAnimations:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/ArrayList",
@@ -33,7 +33,7 @@
 
 .field private final mChoreographer:Landroid/view/Choreographer;
 
-.field private final mDelayedAnims:Ljava/util/ArrayList;
+.field protected final mDelayedAnims:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/ArrayList",
@@ -55,7 +55,7 @@
     .end annotation
 .end field
 
-.field private final mPendingAnimations:Ljava/util/ArrayList;
+.field protected final mPendingAnimations:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/ArrayList",
@@ -67,6 +67,17 @@
 .end field
 
 .field private final mReadyAnims:Ljava/util/ArrayList;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "Ljava/util/ArrayList",
+            "<",
+            "Landroid/animation/ValueAnimator;",
+            ">;"
+        }
+    .end annotation
+.end field
+
+.field private final mTmpAnimations:Ljava/util/ArrayList;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/ArrayList",
@@ -90,6 +101,12 @@
     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
 
     iput-object v0, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mAnimations:Ljava/util/ArrayList;
+
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    iput-object v0, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mTmpAnimations:Ljava/util/ArrayList;
 
     new-instance v0, Ljava/util/ArrayList;
 
@@ -132,36 +149,6 @@
     invoke-direct {p0}, Landroid/animation/ValueAnimator$AnimationHandler;-><init>()V
 
     return-void
-.end method
-
-.method static synthetic access$500(Landroid/animation/ValueAnimator$AnimationHandler;)Ljava/util/ArrayList;
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    iget-object v0, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mPendingAnimations:Ljava/util/ArrayList;
-
-    return-object v0
-.end method
-
-.method static synthetic access$600(Landroid/animation/ValueAnimator$AnimationHandler;)Ljava/util/ArrayList;
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    iget-object v0, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mDelayedAnims:Ljava/util/ArrayList;
-
-    return-object v0
-.end method
-
-.method static synthetic access$700(Landroid/animation/ValueAnimator$AnimationHandler;)Ljava/util/ArrayList;
-    .locals 1
-    .parameter "x0"
-
-    .prologue
-    iget-object v0, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mAnimations:Ljava/util/ArrayList;
-
-    return-object v0
 .end method
 
 .method private doAnimationFrame(J)V
@@ -336,9 +323,29 @@
     const/4 v2, 0x0
 
     :goto_4
+    if-ge v2, v3, :cond_7
+
+    iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mTmpAnimations:Ljava/util/ArrayList;
+
+    iget-object v8, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mAnimations:Ljava/util/ArrayList;
+
+    invoke-virtual {v8, v2}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v8
+
+    invoke-virtual {v7, v8}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_4
+
+    :cond_7
+    const/4 v2, 0x0
+
+    :goto_5
     if-ge v2, v3, :cond_9
 
-    iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mAnimations:Ljava/util/ArrayList;
+    iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mTmpAnimations:Ljava/util/ArrayList;
 
     invoke-virtual {v7, v2}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
 
@@ -347,40 +354,35 @@
     check-cast v0, Landroid/animation/ValueAnimator;
 
     .restart local v0       #anim:Landroid/animation/ValueAnimator;
+    iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mAnimations:Ljava/util/ArrayList;
+
+    invoke-virtual {v7, v0}, Ljava/util/ArrayList;->contains(Ljava/lang/Object;)Z
+
+    move-result v7
+
+    if-eqz v7, :cond_8
+
     invoke-virtual {v0, p1, p2}, Landroid/animation/ValueAnimator;->doAnimationFrame(J)Z
 
     move-result v7
 
-    if-eqz v7, :cond_7
+    if-eqz v7, :cond_8
 
     iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mEndingAnims:Ljava/util/ArrayList;
 
     invoke-virtual {v7, v0}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
-    :cond_7
-    iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mAnimations:Ljava/util/ArrayList;
-
-    invoke-virtual {v7}, Ljava/util/ArrayList;->size()I
-
-    move-result v7
-
-    if-ne v7, v3, :cond_8
-
+    :cond_8
     add-int/lit8 v2, v2, 0x1
 
-    goto :goto_4
-
-    :cond_8
-    add-int/lit8 v3, v3, -0x1
-
-    iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mEndingAnims:Ljava/util/ArrayList;
-
-    invoke-virtual {v7, v0}, Ljava/util/ArrayList;->remove(Ljava/lang/Object;)Z
-
-    goto :goto_4
+    goto :goto_5
 
     .end local v0           #anim:Landroid/animation/ValueAnimator;
     :cond_9
+    iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mTmpAnimations:Ljava/util/ArrayList;
+
+    invoke-virtual {v7}, Ljava/util/ArrayList;->clear()V
+
     iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mEndingAnims:Ljava/util/ArrayList;
 
     invoke-virtual {v7}, Ljava/util/ArrayList;->size()I
@@ -391,7 +393,7 @@
 
     const/4 v2, 0x0
 
-    :goto_5
+    :goto_6
     iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mEndingAnims:Ljava/util/ArrayList;
 
     invoke-virtual {v7}, Ljava/util/ArrayList;->size()I
@@ -413,7 +415,7 @@
 
     add-int/lit8 v2, v2, 0x1
 
-    goto :goto_5
+    goto :goto_6
 
     :cond_a
     iget-object v7, p0, Landroid/animation/ValueAnimator$AnimationHandler;->mEndingAnims:Ljava/util/ArrayList;
