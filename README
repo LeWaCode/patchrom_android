@@ -1,3 +1,4 @@
 BRANCH=kitkat
-JAR_OUTS=android.policy.jar.out framework.jar.out services.jar.out framework2.jar.out telephony-common.jar
+PLATFORM=v19
+JAR_OUTS=android.policy.jar.out framework.jar.out services.jar.out telephony-common.jar.out framework2.jar.out
 
